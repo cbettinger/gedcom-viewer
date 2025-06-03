@@ -1,0 +1,6 @@
+.DS_Store
+/*.html
+/*.pdf
+/*.svg
+pom.xml.versionsBackup
+target/

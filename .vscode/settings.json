@@ -1,0 +1,6 @@
+{
+	"java.compile.nullAnalysis.mode": "automatic",
+	"java.configuration.updateBuildConfiguration": "automatic",
+	"java.format.settings.url": ".vscode/java-formatter.xml",
+	"terminal.integrated.defaultProfile.windows": "Command Prompt",
+}

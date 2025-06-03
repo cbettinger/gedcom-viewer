@@ -1,0 +1,38 @@
+body {
+	font-family: Arial, Helvetica, sans-serif;
+
+	margin: 0;
+	padding: 0;
+
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+.map-marker-tooltip {
+	line-height: 1.4rem;
+}
+
+.map-marker-tooltip h1 {
+	font-size: 120%;
+	margin: 0 0 10px 0;
+	padding: 0;
+}
+
+.map-marker-tooltip span {
+	display: inline-block;
+}
+
+.map-marker-tooltip img {
+	max-width: 300px;
+}
+
+.map-marker-tooltip .number {
+	min-width: 1.5rem;
+}
+
+.map-marker-tooltip .sign {
+	min-width: 0.5rem;
+}
