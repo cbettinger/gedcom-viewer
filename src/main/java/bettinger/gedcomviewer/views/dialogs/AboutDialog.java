@@ -25,6 +25,9 @@ public class AboutDialog extends JDialog {
 		add(new JScrollPane(textPane), BorderLayout.CENTER);
 
 		final var sb = new StringBuilder();
+		HTMLUtils.appendLineBreak(sb);
+		HTMLUtils.appendImage(sb, AboutDialog.class.getClassLoader().getResource("./icons/gedcom-viewer-icon.png").toString(), 100);
+		HTMLUtils.appendLineBreak(sb);
 		HTMLUtils.appendH1(sb, Constants.APP_NAME);
 		HTMLUtils.appendLine(sb, HTMLUtils.createStrong(String.format(Format.SPACED, I18N.get("Version"), Constants.APP_VERSION)));
 		HTMLUtils.appendLineBreak(sb);
