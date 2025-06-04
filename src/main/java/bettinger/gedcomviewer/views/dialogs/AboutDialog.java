@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.JDialog;
 import javax.swing.JScrollPane;
+import javax.swing.border.EmptyBorder;
 
 import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.Format;
@@ -21,13 +22,13 @@ public class AboutDialog extends JDialog {
 		setLayout(new BorderLayout());
 
 		final var textPane = new HTMLTextPane();
+		textPane.setBorder(new EmptyBorder(4 * Constants.BORDER_SIZE, 4 * Constants.BORDER_SIZE, 4 * Constants.BORDER_SIZE, 4 * Constants.BORDER_SIZE));
 		textPane.setFocusable(false);
 		add(new JScrollPane(textPane), BorderLayout.CENTER);
 
 		final var sb = new StringBuilder();
-		HTMLUtils.appendLineBreak(sb);
 		HTMLUtils.appendImage(sb, AboutDialog.class.getClassLoader().getResource("./icons/gedcom-viewer-icon.png").toString(), 100);
-		HTMLUtils.appendLineBreak(sb);
+		HTMLUtils.appendLineBreaks(sb, 2);
 		HTMLUtils.appendH1(sb, Constants.APP_NAME);
 		HTMLUtils.appendLine(sb, HTMLUtils.createStrong(String.format(Format.SPACED, I18N.get("Version"), Constants.APP_VERSION)));
 		HTMLUtils.appendLineBreak(sb);
