@@ -1,5 +1,3 @@
-# ISC License
-
 Copyright © 2022 Christian Bettinger (<c.bettinger@live.de>)
                & Miriam Bettinger (<miriam.bettinger@icloud.com>)
 
