@@ -42,6 +42,10 @@ public interface FileUtils {
 		return new File(filePath);
 	}
 
+	public static boolean exists(final File file) {
+		return file.exists() && !file.isDirectory() && file.canRead();
+	}
+
 	public static String getDirectoryPath(final File file) {
 		return getPath(file.getParentFile());
 	}
