@@ -8,7 +8,6 @@ The aim of this project is to realize a cross-platform and multi-language viewer
 * Display of locations and individual's movements within a map
 * Quick overview of the source qualities
 * Export to HTML or PDF (including media)
-* GEDCOM 5 validation
 * Conversion to GEDCOM 7 file format
 * Languages: English, German, French
 

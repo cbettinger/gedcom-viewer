@@ -24,10 +24,10 @@ import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.Preferences;
 import bettinger.gedcomviewer.model.GEDCOM;
+import bettinger.gedcomviewer.model.GEDCOM.GEDCOMEvent;
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.model.LineageMode;
 import bettinger.gedcomviewer.model.Record;
-import bettinger.gedcomviewer.model.GEDCOM.GEDCOMEvent;
 import bettinger.gedcomviewer.utils.FileUtils;
 import bettinger.gedcomviewer.views.icons.MaterialIcons;
 import jiconfont.swing.IconFontSwing;
@@ -205,16 +205,6 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 		exportDescendantsMenuItem.addActionListener(this);
 		exportMenu.add(exportDescendantsMenuItem);
 		enableOnIndividualIsSelectedItems.add(exportDescendantsMenuItem);
-
-		final var toolsMenu = new JMenu(I18N.get("Tools"));
-		add(toolsMenu);
-
-		final var validateMenuItem = new JMenuItem(String.format(Format.TRAILING_TRIPLE_DOT, I18N.get("Validate")));
-		validateMenuItem.setIcon(IconFontSwing.buildIcon(MaterialIcons.CHECK, Constants.MENU_ICON_SIZE));
-		validateMenuItem.setActionCommand("VALIDATE");
-		validateMenuItem.addActionListener(this);
-		toolsMenu.add(validateMenuItem);
-		enableOnFileIsLoadedItems.add(validateMenuItem);
 
 		final var viewMenu = new JMenu(I18N.get("View"));
 		add(viewMenu);

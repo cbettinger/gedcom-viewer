@@ -121,10 +121,5 @@
 			<artifactId>gedcom-5to7</artifactId>
 			<version>1.0.2</version>
 		</dependency>
-		<dependency>
-			<groupId>gedinline</groupId>
-			<artifactId>gedinline</artifactId>
-			<version>4.0.0</version>
-		</dependency>
 	</dependencies>
 </project>
