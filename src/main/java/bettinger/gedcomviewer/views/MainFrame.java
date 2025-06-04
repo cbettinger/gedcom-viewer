@@ -131,6 +131,8 @@ public class MainFrame extends Frame {
 				JOptionPane.showMessageDialog(MainFrame.getInstance(), I18N.get("RestartToApplyChanges"), I18N.get("Language"), JOptionPane.OK_OPTION);
 			}
 		});
+
+		gedcom.unload();
 	}
 
 	private String buildTitle(final GEDCOM gedcom) {
