@@ -1,3 +1,5 @@
+<img src="src/main/resources/icons/gedcom-viewer-icon.png" width="100" height="100" style="float: left; margin-right: 2em;" />
+
 # GEDCOM Viewer
 
 The aim of this project is to realize a cross-platform and multi-language viewer for GEDCOM 5 files in Java, whose GUI is closely based on the GEDCOM specification and yet is easy to use.
