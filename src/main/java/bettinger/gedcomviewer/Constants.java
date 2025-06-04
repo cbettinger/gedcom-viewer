@@ -21,6 +21,7 @@ public abstract class Constants {
 	public static final int DEFAULT_LARGE_MODAL_DIALOG_HEIGHT = DEFAULT_FRAME_HEIGHT / 2;
 
 	public static final int BORDER_SIZE = 5;
+	public static final int PANEL_MARGIN = 4 * BORDER_SIZE;
 
 	public static final int MENU_ICON_SIZE = 14;
 	public static final int TOOLBAR_ICON_SIZE = SystemInfo.isMacOS ? 16 : 22;
