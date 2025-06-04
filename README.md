@@ -1,4 +1,4 @@
-<img src="src/main/resources/icons/gedcom-viewer-icon.png" width="100" height="100" style="float: left; margin-right: 2em;" />
+<img src="src/main/resources/icons/gedcom-viewer-icon.png" width="100" height="100" />
 
 # GEDCOM Viewer
 
