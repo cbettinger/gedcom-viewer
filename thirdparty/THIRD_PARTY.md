@@ -20,7 +20,7 @@ The following third-party software products and media assets are redistributed a
 ## BSD 2-Clause License
 * leaflet: Copyright (c) 2010-2025 Volodymyr Agafonkin, Copyright (c) 2010-2011 CloudMade, https://github.com/Leaflet/Leaflet
 
-## GNU General Public License 2 with Classpath Exception (https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
+## GNU General Public License 2 with Classpath Exception
 * openjfx: Copyright (C) 1989, 1991 Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA, https://github.com/openjdk/jfx
 
 ## GNU Lesser General Public License 3
