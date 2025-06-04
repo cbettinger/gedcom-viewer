@@ -133,7 +133,11 @@ class MediaManager {
 		return image == null ? null : imageClips.get(image);
 	}
 
-	public List<Image> getPortraits() {
+	public Map<Media, Rectangle> getPortraits() {
+		return portraits;
+	}
+
+	public List<Image> getPortraitImages() {
 		List<Image> result = new ArrayList<Image>();
 
 		for (Map.Entry<Media, Rectangle> entry : portraits.entrySet()) {
