@@ -3,6 +3,7 @@ package bettinger.gedcomviewer.views;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -59,6 +61,12 @@ public class MainFrame extends Frame {
 	private final MainStatusBar statusBar;
 
 	private MainFrame() {
+		try {
+			setIconImage(ImageIO.read(new File("./src/main/resources/icons/gedcom-viewer-icon.png")));	// TODO: test on macOS
+		} catch (IOException _) {
+			// intentionally left blank
+		}
+
 		IconFontSwing.register(MaterialIcons.getIconFont());
 
 		setJMenuBar(new MainMenuBar());
