@@ -5,7 +5,7 @@ import com.formdev.flatlaf.util.SystemInfo;
 public abstract class Constants {
 
 	public static final String APP_NAME = "GEDCOM Viewer";
-	public static final String APP_VERSION = "1.0.0";
+	public static final String APP_VERSION = "1.0.0-pre";
 	public static final String APP_URL = "https://github.com/cbettinger/gedcom-viewer";
 
 	public static final int DEFAULT_FRAME_WIDTH = 1920;
