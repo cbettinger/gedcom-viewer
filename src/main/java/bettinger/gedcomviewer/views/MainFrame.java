@@ -1,6 +1,7 @@
 package bettinger.gedcomviewer.views;
 
 import java.awt.BorderLayout;
+import java.awt.Taskbar;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
@@ -62,7 +63,9 @@ public class MainFrame extends Frame {
 
 	private MainFrame() {
 		try {
-			setIconImage(ImageIO.read(new File("./src/main/resources/icons/gedcom-viewer-icon.png")));	// TODO: test on macOS
+			final var icon = ImageIO.read(new File("./src/main/resources/icons/gedcom-viewer-icon.png"));
+			setIconImage(icon);
+			Taskbar.getTaskbar().setIconImage(icon);
 		} catch (IOException _) {
 			// intentionally left blank
 		}
