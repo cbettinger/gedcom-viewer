@@ -6,7 +6,7 @@
 	<name>GEDCOM Viewer</name>
 	<groupId>bettinger</groupId>
 	<artifactId>gedcom-viewer</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.0-pre</version>
 	<packaging>jar</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
