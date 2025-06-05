@@ -34,7 +34,7 @@ public class WebViewPanel extends JFXPanel {
 		this(true, null);
 	}
 
-	public WebViewPanel(final boolean isZoomable, final String resource) {
+	public WebViewPanel(final boolean isZoomable, final String resourceFolder) {
 		this.isZoomable = isZoomable;
 		this.zoom = 100;
 
@@ -74,7 +74,7 @@ public class WebViewPanel extends JFXPanel {
 
 			webView.getEngine().setOnAlert(event -> Logger.getLogger(WebViewPanel.class.getName()).log(Level.INFO, event.getData()));
 
-			webEngine.load(WebViewPanel.class.getClassLoader().getResource(resource == null || resource.isEmpty() ? "./webview/index.html" : resource).toString());
+			webEngine.load(getClass().getClassLoader().getResource(String.format("webview/%s/index.html", resourceFolder == null || resourceFolder.isEmpty() ? "default" : resourceFolder)).toString());
 
 			this.setScene(new Scene(root));
 		});

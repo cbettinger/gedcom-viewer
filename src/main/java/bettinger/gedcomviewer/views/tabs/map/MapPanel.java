@@ -51,7 +51,7 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 
 	@SuppressWarnings("unused")
 	public MapPanel() {
-		super(false, "./map/index.html");
+		super(false, "map");
 
 		setEnabled(false);
 

@@ -38,7 +38,7 @@ public abstract class I18N {
 	}
 
 	private static ResourceBundle getBundle() {
-		return ResourceBundle.getBundle(FILENAME, getCurrentLocale());	// TODO: test with jar
+		return ResourceBundle.getBundle(FILENAME, getCurrentLocale());
 	}
 
 	public static String get(final String key) {

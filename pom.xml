@@ -58,6 +58,7 @@
 									<directory>src/main/resources</directory>
 									<includes>
 										<include>icons/gedcom-viewer-icon.png</include>
+										<include>webview/**</include>
 									</includes>
 								</resource>
 							</resources>
