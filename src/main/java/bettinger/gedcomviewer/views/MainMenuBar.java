@@ -16,6 +16,7 @@ import javax.swing.KeyStroke;
 import javax.swing.text.DefaultEditorKit;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import com.formdev.flatlaf.util.SystemInfo;
 import com.google.common.eventbus.Subscribe;
 
 import bettinger.gedcomviewer.Constants;
@@ -240,14 +241,16 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 		lineageGroup.add(maleLineCheckbox);
 		lineageMenu.add(maleLineCheckbox);
 
-		final var helpMenu = new JMenu(I18N.get("Help"));
-		add(helpMenu);
+		if (!SystemInfo.isMacOS) {
+			final var helpMenu = new JMenu(I18N.get("Help"));
+			add(helpMenu);
 
-		final var aboutMenuItem = new JMenuItem(String.format(Format.TRAILING_TRIPLE_DOT, I18N.get("About")));
-		aboutMenuItem.setIcon(IconFontSwing.buildIcon(MaterialIcons.INFO_OUTLINE, Constants.MENU_ICON_SIZE));
-		aboutMenuItem.setActionCommand("SHOW_ABOUT");
-		aboutMenuItem.addActionListener(this);
-		helpMenu.add(aboutMenuItem);
+			final var aboutMenuItem = new JMenuItem(String.format(Format.TRAILING_TRIPLE_DOT, I18N.get("About")));
+			aboutMenuItem.setIcon(IconFontSwing.buildIcon(MaterialIcons.INFO_OUTLINE, Constants.MENU_ICON_SIZE));
+			aboutMenuItem.setActionCommand("SHOW_ABOUT");
+			aboutMenuItem.addActionListener(this);
+			helpMenu.add(aboutMenuItem);
+		}
 
 		Events.register(new Object() {
 
