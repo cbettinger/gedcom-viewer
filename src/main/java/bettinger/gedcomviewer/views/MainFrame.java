@@ -63,7 +63,7 @@ public class MainFrame extends Frame {
 
 	private MainFrame() {
 		try {
-			final var icon = ImageIO.read(new File("./src/main/resources/icons/gedcom-viewer-icon.png"));
+			final var icon = ImageIO.read(getClass().getClassLoader().getResource("icons/gedcom-viewer-icon.png"));
 			setIconImage(icon);
 			Taskbar.getTaskbar().setIconImage(icon);
 		} catch (IOException _) {
