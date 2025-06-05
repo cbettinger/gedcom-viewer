@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -58,16 +59,22 @@ public class MainFrame extends Frame {
 
 	private final GEDCOM gedcom = new GEDCOM();
 
+	private final URL iconURL;
+
 	private final TabbedPane tabbedPane;
 	private final MainStatusBar statusBar;
 
 	private MainFrame() {
-		try {
-			final var icon = ImageIO.read(getClass().getClassLoader().getResource("icons/gedcom-viewer-icon.png"));
-			setIconImage(icon);
-			Taskbar.getTaskbar().setIconImage(icon);
-		} catch (IOException _) {
-			// intentionally left blank
+		iconURL = getClass().getClassLoader().getResource("icons/gedcom-viewer-icon.png");
+
+		if (iconURL != null) {
+			try {
+				final var icon = ImageIO.read(iconURL);
+				setIconImage(icon);
+				Taskbar.getTaskbar().setIconImage(icon);
+			} catch (IOException _) {
+				// intentionally left blank
+			}
 		}
 
 		IconFontSwing.register(MaterialIcons.getIconFont());
@@ -489,6 +496,10 @@ public class MainFrame extends Frame {
 
 	public static MainFrame getInstance() {
 		return instance;
+	}
+
+	public static URL getIconURL() {
+		return instance != null ? instance.iconURL : null;
 	}
 
 	public static void create() {
