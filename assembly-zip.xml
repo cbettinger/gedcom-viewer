@@ -11,6 +11,7 @@
 		<file>
 			<source>${project.build.directory}/${project.artifactId}-${project.version}.jar</source>
 			<outputDirectory>/</outputDirectory>
+			<destName>${project.artifactId}.jar</destName>
 		</file>
 		<file>
 			<source>${project.basedir}/LICENSE</source>
@@ -33,7 +34,7 @@
 	</fileSets>
 	<dependencySets>
 		<dependencySet>
-			<outputDirectory>lib</outputDirectory>
+			<outputDirectory>libs</outputDirectory>
 			<excludes>
 				<exclude>${project.groupId}:${project.artifactId}:jar:*</exclude>
 			</excludes>

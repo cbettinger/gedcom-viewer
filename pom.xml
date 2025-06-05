@@ -23,7 +23,7 @@
 						<manifest>
 							<mainClass>bettinger.gedcomviewer.Main</mainClass>
 							<addClasspath>true</addClasspath>
-							<classpathPrefix>lib/</classpathPrefix>
+							<classpathPrefix>libs/</classpathPrefix>
 						</manifest>
 						<manifestEntries>
 							<url>https://github.com/cbettinger/gedcom-viewer</url>
