@@ -2,7 +2,6 @@ package bettinger.gedcomviewer;
 
 import java.awt.Image;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
