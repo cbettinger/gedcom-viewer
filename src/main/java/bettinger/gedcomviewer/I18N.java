@@ -51,11 +51,9 @@ public abstract class I18N {
 	}
 
 	public static ImageIcon getLocaleIcon(final Locale locale, final int size) {
-		final var inputStream = I18N.class.getClassLoader().getResourceAsStream(String.format("locales/%s.png", locale.getLanguage()));
-
 		byte[] data;
 		try {
-			data = inputStream.readAllBytes();
+			data = I18N.class.getClassLoader().getResourceAsStream(String.format("locales/%s.png", locale.getLanguage())).readAllBytes();
 		} catch (IOException _) {
 			return null;
 		}
