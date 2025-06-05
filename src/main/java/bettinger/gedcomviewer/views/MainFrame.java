@@ -71,7 +71,9 @@ public class MainFrame extends Frame {
 			try {
 				final var icon = ImageIO.read(iconURL);
 				setIconImage(icon);
-				Taskbar.getTaskbar().setIconImage(icon);
+				if (SystemInfo.isMacOS) {
+					Taskbar.getTaskbar().setIconImage(icon);
+				}
 			} catch (IOException _) {
 				// intentionally left blank
 			}
