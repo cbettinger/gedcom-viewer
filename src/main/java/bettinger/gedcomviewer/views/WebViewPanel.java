@@ -30,6 +30,10 @@ public class WebViewPanel extends JFXPanel {
 
 	protected JSObject js;
 
+	public WebViewPanel() {
+		this(true, null);
+	}
+
 	public WebViewPanel(final boolean isZoomable, final String resource) {
 		this.isZoomable = isZoomable;
 		this.zoom = 100;
