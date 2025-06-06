@@ -3,28 +3,28 @@ package bettinger.gedcomviewer.tools.portraitcomparison.model;
 import java.awt.Image;
 
 public class FacialFeatureSimilarity {
-    private final float maxSimilarity;
-    private final float avgSimilarity;
-    private final Image targetPersonImage;
-    private final Image otherPersonImage;
+    private final double maxSimilarity;
+    private final double avgSimilarity;
+    private final String maxMatchTargetFileName;
+    private final String maxMatchAncestorFileName;
 
-    public FacialFeatureSimilarity(float maxSimilarity, float avgSimilarity, Image targetPersonImage, Image otherPersonImage) {
+    public FacialFeatureSimilarity(double maxSimilarity, double avgSimilarity, String maxMatchTargetFileName, String maxMatchAncestorFileName) {
         this.maxSimilarity = maxSimilarity;
         this.avgSimilarity = avgSimilarity;
-        this.targetPersonImage = targetPersonImage;
-        this.otherPersonImage = otherPersonImage;
+        this.maxMatchTargetFileName = maxMatchTargetFileName;
+        this.maxMatchAncestorFileName = maxMatchAncestorFileName;
     }
     
-    public float getMaxSimilarity() {
+    public double getMaxSimilarity() {
         return maxSimilarity;
     }
 
-    public float getAvgSimilarity() {
+    public double getAvgSimilarity() {
         return avgSimilarity;
     }
 
-    public Image getTargetPersonImage() {
-        return targetPersonImage;
+    public String getMaxMatchTargetFileName() {
+        return maxMatchTargetFileName;
     }
 
     public Image getOtherPersonImage() {
