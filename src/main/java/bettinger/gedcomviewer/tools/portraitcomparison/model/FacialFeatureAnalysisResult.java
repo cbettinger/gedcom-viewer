@@ -4,9 +4,9 @@ import java.util.HashMap;
 
 public class FacialFeatureAnalysisResult {
     private final HashMap<String, FacialFeatureSimilarity> personSimilarities;
-    private final HashMap<String[], Float> pathSimilarities;
+    private final HashMap<AncestralLine, Float> pathSimilarities;
 
-    public FacialFeatureAnalysisResult(HashMap<String, FacialFeatureSimilarity> personSimilarities, HashMap<String[], Float> pathSimilarities) {
+    public FacialFeatureAnalysisResult(HashMap<String, FacialFeatureSimilarity> personSimilarities, HashMap<AncestralLine, Float> pathSimilarities) {
         this.personSimilarities = personSimilarities;
         this.pathSimilarities = pathSimilarities;
     }
@@ -15,7 +15,7 @@ public class FacialFeatureAnalysisResult {
         return personSimilarities;
     }
 
-    public HashMap<String[], Float> getPathSimilarities() {
+    public HashMap<AncestralLine, Float> getPathSimilarities() {
         return pathSimilarities;
     }
 }
