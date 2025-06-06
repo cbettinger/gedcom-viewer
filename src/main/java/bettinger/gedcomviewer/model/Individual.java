@@ -575,14 +575,17 @@ public class Individual extends IndividualFamilyCommonStructure {
 		HTMLUtils.appendH1(sb, nickname.isEmpty() ? name : String.format(Format.STRING_WITH_QUOTED_SUFFIX, name, nickname));
 
 		if (!(options.contains(HTMLOption.NO_CONFIDENTIAL_DATA) && isConfidential(this))) {
+			var wasAppended = false;
+
 			final var alternativeNames = getAlternativeNames();
 			if (!alternativeNames.isEmpty()) {
 				HTMLUtils.appendText(sb, alternativeNames);
+				wasAppended = true;
 			}
 
 			final var lifeData = formatLifeData(this, false);
 			if (!lifeData.isEmpty()) {
-				HTMLUtils.appendTextAfterLineBreaks(sb, lifeData, 2);
+				HTMLUtils.appendTextAfterLineBreaks(sb, lifeData, wasAppended ? 2 : 0);
 			}
 
 			if (!occupations.isEmpty()) {
