@@ -31,22 +31,10 @@ function addMap() {
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 	});
 
-	let waterColorBaseLayer = L.tileLayer("https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg", {
-		attribution: '&copy; <a href="http://stamen.com">Stamen Design</a> (<a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>)',
-		maxZoom: 14,
-		ext: "jpg",
-	});
-
-	let waterColorLabelLayer = L.tileLayer("https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png", {
-		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | &copy; <a href="https://carto.com/attributions">CARTO</a>',
-		maxZoom: 14,
-	});
-
 	L.control.layers({
 		MapBox: mapBoxLayer,
 		Voyager: voyagerLayer,
 		OSM: osmLayer,
-		Watercolor: L.layerGroup([waterColorBaseLayer, waterColorLabelLayer]),
 	}).addTo(map);
 }
 
