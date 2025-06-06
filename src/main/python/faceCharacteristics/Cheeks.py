@@ -9,4 +9,4 @@ class Cheeks(TwoElementalFacePart):
     rightAdditionalFaces = [[192, 216, 207], [217, 126, 209], [111, 117, 228], [192, 215, 58]]
 
     def __init__(self, faceLandmarks):
-        super().__init__('Wangen', faceLandmarks, 'rechte Wange', 'linke Wange', Cheeks.rightIndices, Cheeks.leftIndices, 229, 449, 216, 436, Cheeks.rightAdditionalFaces, Cheeks.leftAdditionalFaces, classifier1=XGB_CLASSIFIERS['cheeks']['first'], classifier2=XGB_CLASSIFIERS['cheeks']['second'])
+        super().__init__('Wangen', faceLandmarks, 'rechte Wange', 'linke Wange', Cheeks.rightIndices, Cheeks.leftIndices, 229, 449, 216, 436, Cheeks.rightAdditionalFaces, Cheeks.leftAdditionalFaces, classifier1=XGB_CLASSIFIERS['CHEEKS']['first'], classifier2=XGB_CLASSIFIERS['CHEEKS']['second'])

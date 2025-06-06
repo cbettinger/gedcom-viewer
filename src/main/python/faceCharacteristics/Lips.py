@@ -6,4 +6,4 @@ class Lips(TwoElementalFacePart):
     lowerLipIndices = [61, 146, 91, 181, 84, 17, 314, 405, 321, 375, 291, 308, 324, 318, 402, 317, 14, 87, 178, 88, 95, 78, 306, 325, 307, 319, 320, 403, 404, 316, 315, 15, 16, 86, 85, 179, 180, 89, 90, 77, 96, 76, 62, 292]
 
     def __init__(self, faceLandmarks):
-        super().__init__('Lippen', faceLandmarks, 'Oberlippe', 'Unterlippe', Lips.upperLipIndices, Lips.lowerLipIndices, 0, 14, 13, 17, None, None, classifier1=XGB_CLASSIFIERS['lips']['first'], classifier2=XGB_CLASSIFIERS['lips']['second'])
+        super().__init__('Lippen', faceLandmarks, 'Oberlippe', 'Unterlippe', Lips.upperLipIndices, Lips.lowerLipIndices, 0, 14, 13, 17, None, None, classifier1=XGB_CLASSIFIERS['LIPS']['first'], classifier2=XGB_CLASSIFIERS['LIPS']['second'])

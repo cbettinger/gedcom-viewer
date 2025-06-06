@@ -9,4 +9,4 @@ class Eyebrows(TwoElementalFacePart):
     rightAdditionalFaces = [[108, 107, 9], [46, 124, 225]]
 
     def __init__(self, faceLandmarks):
-        super().__init__('Augenbrauen', faceLandmarks, 'rechte Augenbraue', 'linke Augenbraue', Eyebrows.rightIndices, Eyebrows.leftIndices, 66, 296, 65, 295, Eyebrows.rightAdditionalFaces, Eyebrows.leftAdditionalFaces, classifier1=XGB_CLASSIFIERS['eyebrows']['first'], classifier2=XGB_CLASSIFIERS['eyebrows']['second'])
+        super().__init__('Augenbrauen', faceLandmarks, 'rechte Augenbraue', 'linke Augenbraue', Eyebrows.rightIndices, Eyebrows.leftIndices, 66, 296, 65, 295, Eyebrows.rightAdditionalFaces, Eyebrows.leftAdditionalFaces, classifier1=XGB_CLASSIFIERS['EYEBROWS']['first'], classifier2=XGB_CLASSIFIERS['EYEBROWS']['second'])
