@@ -33,7 +33,7 @@ public class FacialFeatureSimilarity {
         return maxMatchAncestorFileName;
     }
 
-    public FacialFeatureSimilarity fromJSON(final JsonNode json) {
+    public static FacialFeatureSimilarity fromJSON(final JsonNode json) {
         return new FacialFeatureSimilarity(json.get("maxSimilarity").asDouble(), json.get("avgSimilarity").asDouble(), json.get("maxMatchImgTarget").asText(), json.get("maxMatchImgAncestor").asText());
     }
 }
