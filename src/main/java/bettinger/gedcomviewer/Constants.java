@@ -29,5 +29,11 @@ public abstract class Constants {
 	public static final int PREVIEW_IMAGE_WIDTH = 350;
 	public static final int PORTRAIT_WIDTH = 200;
 
+	public static final int MIN_FACE_COMPARISON_DEPTH = 1;
+	public static final int MAX_FACE_COMPARISON_DEPTH = 50;
+
+	public static final int MIN_NUM_PORTRAITS_FOR_FACE_COMPARISON = 1;
+	public static final int MAX_NUM_PORTRAITS_FOR_FACE_COMPARISON = 5;
+
 	private Constants() {}
 }
