@@ -2,6 +2,8 @@ package bettinger.gedcomviewer.tools.portraitcomparison.model;
 
 import java.awt.Image;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 public class FacialFeatureSimilarity {
     private final double maxSimilarity;
     private final double avgSimilarity;
@@ -30,5 +32,8 @@ public class FacialFeatureSimilarity {
     public String getMaxMatchAncestorFileName() {
         return maxMatchAncestorFileName;
     }
+
+    public FacialFeatureSimilarity fromJSON(final JsonNode json) {
+        return new FacialFeatureSimilarity(json.get("maxSimilarity").asDouble(), json.get("avgSimilarity").asDouble(), json.get("maxMatchImgTarget").asText(), json.get("maxMatchImgAncestor").asText());
     }
 }
