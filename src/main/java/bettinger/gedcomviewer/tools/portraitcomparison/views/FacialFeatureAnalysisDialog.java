@@ -1,0 +1,53 @@
+package bettinger.gedcomviewer.tools.portraitcomparison.views;
+
+import java.awt.BorderLayout;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+
+import bettinger.gedcomviewer.Constants;
+import bettinger.gedcomviewer.I18N;
+import bettinger.gedcomviewer.model.Individual;
+import bettinger.gedcomviewer.views.HTMLTextPane;
+import bettinger.gedcomviewer.views.IntegerPicker;
+import bettinger.gedcomviewer.views.MainFrame;
+import bettinger.gedcomviewer.views.VBox;
+import bettinger.gedcomviewer.views.icons.MaterialIcons;
+import jiconfont.swing.IconFontSwing;
+
+public class FacialFeatureAnalysisDialog extends JDialog {
+
+	private final HTMLTextPane infoPane;
+    private final IntegerPicker maxDepthPicker;
+    private final IntegerPicker maxNumPortraitsPicker;
+    private final JButton startButton;
+
+	public FacialFeatureAnalysisDialog(final Individual individual) {
+		setTitle(I18N.get("FacialFeatureAnalysis"));
+		setModal(true);
+
+		setLayout(new BorderLayout());
+
+        this.startButton = new JButton(I18N.get("StartFacialFeatureAnalysis"), IconFontSwing.buildIcon(MaterialIcons.PLAY_ARROW, Constants.BUTTON_ICON_SIZE));
+
+		this.infoPane = new HTMLTextPane();
+        this.infoPane.setText(I18N.get("FacialFeatureAnalysisStartInfo"));
+        this.maxDepthPicker = new IntegerPicker(I18N.get("MaxFacialFeatureComparisonDepth"), Constants.MIN_FACE_COMPARISON_DEPTH, Constants.MAX_FACE_COMPARISON_DEPTH);
+        this.maxNumPortraitsPicker = new IntegerPicker(I18N.get("MaxNumPortraitsPerPerson"), Constants.MIN_NUM_PORTRAITS_FOR_FACE_COMPARISON, Constants.MAX_NUM_PORTRAITS_FOR_FACE_COMPARISON);
+
+        var vBox = new VBox();
+        vBox.add(this.maxDepthPicker);
+        vBox.add(this.maxNumPortraitsPicker);
+
+		add(this.infoPane, BorderLayout.PAGE_START);
+        add(vBox, BorderLayout.CENTER);
+        add(this.startButton, BorderLayout.PAGE_END);
+
+		pack();
+
+		setSize(Constants.DEFAULT_MODAL_DIALOG_WIDTH, Constants.DEFAULT_MODAL_DIALOG_HEIGHT);
+		setLocationRelativeTo(MainFrame.getInstance());
+
+		setVisible(true);
+	}
+}
