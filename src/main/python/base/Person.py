@@ -8,7 +8,7 @@ class Person(BinaryTreeItem):
 
     PERSONS = {}
 
-    def __init__(self, id, portraits, imgFileRootDir, father=None, mother=None, maxNumPortraits=MAX_IMAGES_PER_PERSON):
+    def __init__(self, id, portraits, father=None, mother=None, maxNumPortraits=MAX_IMAGES_PER_PERSON):
         super().__init__('ID', id, 'Father', 'Mother', father, mother)
         Person.PERSONS.update({str(id): self})
 
@@ -19,11 +19,10 @@ class Person(BinaryTreeItem):
                 if maxNumPortraits is not None and len(self.faces) == maxNumPortraits:
                     print('Für Individuum {} sind mehr Fotos verfügbar als verwendet werden. Es werden die folgenden Fotos genutzt: {}'.format(id, usedFiles))
                     break
-                fname = p.get('filePath')
-                filePath = os.sep.join([imgFileRootDir, fname])
+                filePath = p.get('filePath')
                 try:
                     self.faces.append(Face(Image(filePath, p.get('boxPoints')), FACE_CHARACTERISTICS_OF_INTEREST))
-                    usedFiles.append(fname)
+                    usedFiles.append(filePath)
                 except Exception as e:
                     print(filePath, 'konnte nicht geladen werden oder es war kein Gesicht erkennbar ({})'.format(e))
 
@@ -31,8 +30,8 @@ class Person(BinaryTreeItem):
         return len(self.faces) > 0
     
     @classmethod
-    def fromJSON(cls, jsonObject, imageDirPath, maxNumPortraits=None):
+    def fromJSON(cls, jsonObject, maxNumPortraits=None):
         if jsonObject is None or jsonObject.get('id') in Person.PERSONS.keys():
             return None
         else:
-            return Person(jsonObject.get("id"), jsonObject.get("portraits"), imageDirPath, Person.fromJSON(jsonObject.get("father"), imageDirPath, maxNumPortraits), Person.fromJSON(jsonObject.get("mother"), imageDirPath, maxNumPortraits), maxNumPortraits)
+            return Person(jsonObject.get("id"), jsonObject.get("portraits"), Person.fromJSON(jsonObject.get("father"), maxNumPortraits), Person.fromJSON(jsonObject.get("mother"), maxNumPortraits), maxNumPortraits)

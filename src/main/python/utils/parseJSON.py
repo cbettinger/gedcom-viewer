@@ -10,6 +10,6 @@ def parseFile(filePath):
     rootDir = os.path.dirname(filePath)
     return Person.fromJSON(parsedObject, rootDir)
 
-def parseString(jsonString, imageDirPath, maxNumPortraits=MAX_IMAGES_PER_PERSON):
+def parseString(jsonString, maxNumPortraits=MAX_IMAGES_PER_PERSON):
     parsedObject = json.loads(jsonString)
-    return Person.fromJSON(parsedObject, imageDirPath, maxNumPortraits)
+    return Person.fromJSON(parsedObject, maxNumPortraits)
