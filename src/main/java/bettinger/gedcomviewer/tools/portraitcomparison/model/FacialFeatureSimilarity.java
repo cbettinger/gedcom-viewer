@@ -27,7 +27,8 @@ public class FacialFeatureSimilarity {
         return maxMatchTargetFileName;
     }
 
-    public Image getOtherPersonImage() {
-        return otherPersonImage;
+    public String getMaxMatchAncestorFileName() {
+        return maxMatchAncestorFileName;
+    }
     }
 }
