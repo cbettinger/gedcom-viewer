@@ -177,6 +177,7 @@ public class Individual extends IndividualFamilyCommonStructure {
 		return getPlace(getPrimaryBaptism());
 	}
 
+	@JsonProperty
 	public Location getBaptismLocation() {
 		final var primaryFact = getPrimaryBaptism();
 		return primaryFact == null ? null : primaryFact.getLocation();
