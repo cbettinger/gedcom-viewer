@@ -25,6 +25,7 @@ public abstract class Constants {
 	public static final int MENU_ICON_SIZE = 14;
 	public static final int TOOLBAR_ICON_SIZE = SystemInfo.isMacOS ? 16 : 22;
 	public static final int TAB_ICON_SIZE = 22;
+	public static final int BUTTON_ICON_SIZE = 22;
 
 	public static final int PREVIEW_IMAGE_WIDTH = 350;
 	public static final int PORTRAIT_WIDTH = 200;
