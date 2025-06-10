@@ -1,5 +1,7 @@
 package bettinger.gedcomviewer;
 
+import java.awt.Color;
+
 import com.formdev.flatlaf.util.SystemInfo;
 
 public abstract class Constants {
@@ -35,6 +37,8 @@ public abstract class Constants {
 
 	public static final int MIN_NUM_PORTRAITS_FOR_FACE_COMPARISON = 1;
 	public static final int MAX_NUM_PORTRAITS_FOR_FACE_COMPARISON = 5;
+
+	public static final Color DEFAULT_CONTENT_COLOR = Color.WHITE;
 
 	private Constants() {}
 }
