@@ -263,6 +263,11 @@ public class GEDCOM {
 		return locations;
 	}
 
+	void addPlace(final Location location) {
+		locations.add(location);
+		addRecord(location);
+	}
+
 	public List<Individual> getIndividuals(final String filter) {
 		return filter(getIndividuals(), filter);
 	}

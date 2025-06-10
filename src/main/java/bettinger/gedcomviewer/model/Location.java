@@ -2,6 +2,7 @@ package bettinger.gedcomviewer.model;
 
 import java.awt.Rectangle;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -23,6 +24,7 @@ import bettinger.gedcomviewer.utils.TagUtils;
 public class Location extends Structure implements RegularRecord, NoteContainer, MediaContainer {
 
 	static final String TAG = "_LOC";
+	static final String TAG_PLACE = "PLAC";
 
 	private final RecordManager recordManager;
 	private final NoteManager noteManager;
@@ -37,6 +39,8 @@ public class Location extends Structure implements RegularRecord, NoteContainer,
 	@JsonProperty
 	private final String imageURL;
 
+	private final boolean isStructure;
+
 	Location(final GEDCOM gedcom, final GedcomTag tag) {
 		super(gedcom, tag.getId(), null);
 
@@ -48,6 +52,24 @@ public class Location extends Structure implements RegularRecord, NoteContainer,
 		this.latitude = parseLatitude(tag);
 		this.longitude = parseLongitude(tag);
 		this.imageURL = getPrimaryImageURL(false);
+
+		this.isStructure = true;
+	}
+
+	Location(final GEDCOM gedcom, final String place) {	// TODO: do not show id in task bar
+		super(gedcom, constructId(TAG_PLACE, place), null);
+
+		this.recordManager = new RecordManager(this, gedcom, LocalDateTime.now());	// TODO: parse from lastly changed IFCS
+		this.noteManager = new NoteManager(this, gedcom, new ArrayList<>());
+		this.mediaManager = new MediaManager(this, gedcom, new ArrayList<>());
+
+		this.name = place;
+		this.latitude = 0.0f;	// TODO: parse from map child tag
+		this.longitude = 0.0f;
+		this.imageURL = getPrimaryImageURL(false);
+
+		this.isStructure = false;
+		gedcom.addPlace(this);
 	}
 
 	/* #region container */
@@ -113,6 +135,10 @@ public class Location extends Structure implements RegularRecord, NoteContainer,
 	/* #endregion */
 
 	/* #region getter & setter */
+	boolean isStructure() {
+		return isStructure;
+	}
+
 	public String getName() {
 		return name;
 	}

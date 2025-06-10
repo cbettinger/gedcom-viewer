@@ -22,7 +22,7 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 	private final org.folg.gedcom.model.EventFact wrappedFact;
 
 	private final Date date;
-	private final Location location;
+	private Location location;
 
 	Fact(final GEDCOM gedcom, final org.folg.gedcom.model.EventFact eventFact, final Structure parentStructure) {
 		super(gedcom, eventFact.getTag(), eventFact, parentStructure);
@@ -37,6 +37,15 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 
 		final var locationTag = getFirstExtensionTag(Location.TAG);
 		this.location = locationTag == null ? null : (Location) gedcom.getRecord(locationTag.getRef());
+
+		final var place = getPlace();
+		if (this.location == null && !place.isEmpty()) {
+			this.location = gedcom.getLocations().stream().filter(l -> !l.isStructure() && l.getName().equals(place)).findFirst().orElse(null);
+			if (this.location == null) {
+				this.location = new Location(gedcom, place);
+			}
+		}
+
 		if (this.location != null) {
 			this.location.addReference(this);
 		}
