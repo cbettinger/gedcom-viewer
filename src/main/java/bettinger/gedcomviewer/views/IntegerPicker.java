@@ -6,6 +6,8 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
+import bettinger.gedcomviewer.Constants;
+
 public class IntegerPicker extends JPanel{
 
     private final HTMLTextPane labelPane;
@@ -14,8 +16,9 @@ public class IntegerPicker extends JPanel{
     public IntegerPicker(String label, int min, int max) {
         super();
         
-        setLayout(new FlowLayout(FlowLayout.LEFT));
-
+        setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        setBackground(Constants.DEFAULT_CONTENT_COLOR);
+        
         SpinnerNumberModel spinnerModel = new SpinnerNumberModel(max, min, max, 1);
         this.labelPane = new HTMLTextPane();
         this.labelPane.setText(label);
