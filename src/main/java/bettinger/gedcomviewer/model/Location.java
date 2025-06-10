@@ -250,10 +250,23 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 		}
 	}
 
-	private static String parseMapCoordinate(final GedcomTag mapTag, final String dimension) {	// TODO: parse standard conforming values
+	private static String parseMapCoordinate(final GedcomTag mapTag, final String dimension) {
 		if (mapTag != null) {
-			final var value = TagUtils.parseChildTagValue(mapTag, dimension);
-			return value == null ? UNKNOWN_STRING : value;
+			var value = TagUtils.parseChildTagValue(mapTag, dimension);
+
+			if (value == null) {
+				return UNKNOWN_STRING;
+			} else if (value.startsWith("N")) {
+				value = value.replaceFirst("N", "");
+			} else if (value.startsWith("S")) {
+				value = value.replaceFirst("S", "-");
+			} else if (value.startsWith("W")) {
+				value = value.replaceFirst("W", "-");
+			} else if (value.startsWith("E")) {
+				value = value.replaceFirst("E", "");
+			}
+
+			return value;
 		}
 
 		return UNKNOWN_STRING;
