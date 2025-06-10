@@ -1,6 +1,7 @@
 package bettinger.gedcomviewer.model;
 
 import java.awt.Rectangle;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -20,6 +21,7 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 	private final SourceCitationManager sourceCitationManager;
 
 	private final org.folg.gedcom.model.EventFact wrappedFact;
+	private final IndividualFamilyCommonStructure individualOrFamily;
 
 	private final Date date;
 	private Location location;
@@ -32,6 +34,7 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 		this.sourceCitationManager = new SourceCitationManager(this, gedcom);
 
 		this.wrappedFact = eventFact;
+		this.individualOrFamily = parentStructure;
 
 		this.date = new Date(eventFact.getDate());
 
@@ -104,6 +107,10 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 	/* #endregion */
 
 	/* #region getter & setter */
+	public LocalDateTime getLastChange() {
+		return individualOrFamily.getLastChange();
+	}
+
 	public String getTag() {
 		final var tag = wrappedFact.getTag();
 		return tag == null ? "" : tag;

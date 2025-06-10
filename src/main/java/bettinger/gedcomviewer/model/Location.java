@@ -3,6 +3,7 @@ package bettinger.gedcomviewer.model;
 import java.awt.Rectangle;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -59,7 +60,7 @@ public class Location extends Structure implements RegularRecord, NoteContainer,
 	Location(final GEDCOM gedcom, final String place) {	// TODO: do not show id in task bar
 		super(gedcom, constructId(TAG_PLACE, place), null);
 
-		this.recordManager = new RecordManager(this, gedcom, LocalDateTime.now());	// TODO: parse from lastly changed IFCS
+		this.recordManager = new RecordManager(this, gedcom, LocalDateTime.now());
 		this.noteManager = new NoteManager(this, gedcom, new ArrayList<>());
 		this.mediaManager = new MediaManager(this, gedcom, new ArrayList<>());
 
@@ -85,7 +86,16 @@ public class Location extends Structure implements RegularRecord, NoteContainer,
 
 	@Override
 	public LocalDateTime getLastChange() {
-		return recordManager.getLastChange();
+		var result = recordManager.getLastChange();
+
+		if (!isStructure) {
+			final Structure newestReference = recordManager.getReferences().stream().filter(Fact.class::isInstance).max(Comparator.comparing(f -> ((Fact) f).getLastChange())).orElse(null);
+			if (newestReference instanceof Fact f) {
+				result = f.getLastChange();
+			}
+		}
+
+		return result;
 	}
 
 	@Override
