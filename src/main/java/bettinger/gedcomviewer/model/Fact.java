@@ -181,7 +181,7 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 	/* #region toString & toHTML */
 	@Override
 	public String toString() {
-		final var sb = new StringBuilder(String.format(Format.PADDED_PIPE_SEPARATED, parentStructure.toString(), getLocaleTag()));
+		final var sb = new StringBuilder(String.format(Format.PADDED_PIPE_SEPARATED, getParentStructure().toString(), getLocaleTag()));
 
 		if (!getValue().isEmpty()) {
 			sb.append(String.format(Format.TRAILING_SPACE_COLON_WITH_SUFFIX, getValue()));
@@ -283,6 +283,6 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 
 	@Override
 	public String getLink() {
-		return String.format(Format.PADDED_PIPE_SEPARATED, parentStructure.getLink(), getLocaleTag());
+		return String.format(Format.PADDED_PIPE_SEPARATED, getParentStructure().getLink(), getLocaleTag());
 	}
 }
