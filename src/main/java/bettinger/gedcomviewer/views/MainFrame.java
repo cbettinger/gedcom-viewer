@@ -29,6 +29,7 @@ import bettinger.gedcomviewer.Preferences;
 import bettinger.gedcomviewer.model.GEDCOM;
 import bettinger.gedcomviewer.model.GEDCOM.GEDCOMEvent;
 import bettinger.gedcomviewer.model.GEDCOM.GEDCOMException;
+import bettinger.gedcomviewer.tools.portraitcomparison.views.FacialFeatureAnalysisDialog;
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.utils.DesktopUtils;
 import bettinger.gedcomviewer.utils.ExportUtils;
@@ -109,6 +110,7 @@ public class MainFrame extends Frame {
 					case "EXPORT_LINEAGE" -> showExportLineageFileChooser();
 					case "EXPORT_ANCESTORS" -> showExportAncestorsFileChooser();
 					case "EXPORT_DESCENDANTS" -> showExportDescendantsFileChooser();
+					case "FACIAL_FEATURE_ANALYSIS" -> showFacialFeatureAnalysisDialog();
 					case "SHOW_ABOUT" -> showAboutDialog();
 				}
 			}
@@ -465,6 +467,13 @@ public class MainFrame extends Frame {
 					}
 				}.execute();
 			}
+		}
+	}
+
+	private void showFacialFeatureAnalysisDialog() {
+		final var selectedRecord = tabbedPane.getSelectedRecord();
+		if (selectedRecord instanceof Individual proband) {
+			new FacialFeatureAnalysisDialog(proband);
 		}
 	}
 

@@ -207,6 +207,16 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 		exportMenu.add(exportDescendantsMenuItem);
 		enableOnIndividualIsSelectedItems.add(exportDescendantsMenuItem);
 
+		final var toolsMenu = new JMenu(I18N.get("Tools"));
+		add(toolsMenu);
+
+		final var faialFeatureAnalysisMenuItem = new JMenuItem(String.format(Format.TRAILING_TRIPLE_DOT, I18N.get("FacialFeatureAnalysis")));
+		faialFeatureAnalysisMenuItem.setIcon(IconFontSwing.buildIcon(MaterialIcons.PSYCHOLOGY_ALT, Constants.MENU_ICON_SIZE));
+		faialFeatureAnalysisMenuItem.setActionCommand("FACIAL_FEATURE_ANALYSIS");
+		faialFeatureAnalysisMenuItem.addActionListener(this);
+		toolsMenu.add(faialFeatureAnalysisMenuItem);
+		enableOnIndividualIsSelectedItems.add(faialFeatureAnalysisMenuItem);
+
 		final var viewMenu = new JMenu(I18N.get("View"));
 		add(viewMenu);
 
