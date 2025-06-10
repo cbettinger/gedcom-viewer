@@ -7,7 +7,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.utils.HTMLUtils;
 
@@ -21,7 +20,7 @@ public class Occupation extends Structure implements DerivedRecord {
 	private final List<Individual> individuals;
 
 	Occupation(final GEDCOM gedcom, final String name, final List<Individual> individuals) {
-		super(gedcom, getId(name), null);
+		super(gedcom, constructId(TAG, name), null);
 
 		this.recordManager = new RecordManager(this, gedcom, individuals.stream().map(Record::getLastChange).filter(Objects::nonNull).min(Comparator.naturalOrder()).orElse(null));
 
@@ -97,10 +96,6 @@ public class Occupation extends Structure implements DerivedRecord {
 	/* #endregion */
 
 	static String getLinkFromFact(final Fact occupationFact) {
-		return HTMLUtils.createAnchorLink(getId(occupationFact.getValue()), occupationFact.getValue());
-	}
-
-	private static String getId(final String name) {
-		return String.format(Format.PIPE_SEPARATED, TAG, name.hashCode());
+		return HTMLUtils.createAnchorLink(constructId(TAG, occupationFact.getValue()), occupationFact.getValue());
 	}
 }
