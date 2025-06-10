@@ -24,7 +24,7 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 	private final Date date;
 	private Location location;
 
-	Fact(final GEDCOM gedcom, final org.folg.gedcom.model.EventFact eventFact, final Structure parentStructure) {
+	Fact(final GEDCOM gedcom, final org.folg.gedcom.model.EventFact eventFact, final IndividualFamilyCommonStructure parentStructure) {
 		super(gedcom, eventFact.getTag(), eventFact, parentStructure);
 
 		this.noteManager = new NoteManager(this, gedcom, eventFact.getNoteRefs());
