@@ -50,14 +50,17 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 		this.mediaManager = new MediaManager(this, gedcom, tag);
 
 		this.name = parseName(tag);
-		this.latitude = parseLatitude(tag);
-		this.longitude = parseLongitude(tag);
+
+		final var mapTag = TagUtils.getChildTag(tag, "MAP");
+		this.latitude = parseLatitude(mapTag);
+		this.longitude = parseLongitude(mapTag);
+
 		this.imageURL = getPrimaryImageURL(false);
 
 		this.isStructure = true;
 	}
 
-	Location(final GEDCOM gedcom, final String place) {
+	Location(final GEDCOM gedcom, final String place, final float latitude, final float longitude) {
 		super(gedcom, constructId(TAG_PLACE, place), null);
 
 		this.recordManager = new RecordManager(this, gedcom, LocalDateTime.now());
@@ -65,8 +68,10 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 		this.mediaManager = new MediaManager(this, gedcom, new ArrayList<>());
 
 		this.name = place;
-		this.latitude = 0.0f;	// TODO: parse from map child tag
-		this.longitude = 0.0f;
+
+		this.latitude = latitude;
+		this.longitude = longitude;
+
 		this.imageURL = getPrimaryImageURL(false);
 
 		this.isStructure = false;
@@ -229,24 +234,23 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 		return name == null ? UNKNOWN_STRING : name;
 	}
 
-	private static float parseLatitude(final GedcomTag tag) {
+	static float parseLatitude(final GedcomTag mapTag) {
 		try {
-			return Float.parseFloat(parseMapCoordinate(tag, "LATI"));
+			return Float.parseFloat(parseMapCoordinate(mapTag, "LATI"));
 		} catch (final NumberFormatException _) {
 			return 0;
 		}
 	}
 
-	private static float parseLongitude(final GedcomTag tag) {
+	static float parseLongitude(final GedcomTag mapTag) {
 		try {
-			return Float.parseFloat(parseMapCoordinate(tag, "LONG"));
+			return Float.parseFloat(parseMapCoordinate(mapTag, "LONG"));
 		} catch (final NumberFormatException _) {
 			return 0;
 		}
 	}
 
-	private static String parseMapCoordinate(final GedcomTag tag, final String dimension) {
-		final var mapTag = TagUtils.getChildTag(tag, "MAP");
+	private static String parseMapCoordinate(final GedcomTag mapTag, final String dimension) {	// TODO: parse standard conforming values
 		if (mapTag != null) {
 			final var value = TagUtils.parseChildTagValue(mapTag, dimension);
 			return value == null ? UNKNOWN_STRING : value;

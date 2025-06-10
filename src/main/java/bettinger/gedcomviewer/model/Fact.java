@@ -38,15 +38,22 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 
 		this.date = new Date(eventFact.getDate());
 
-		final var locationTag = getFirstExtensionTag(Location.TAG);
-		this.location = locationTag == null ? null : (Location) gedcom.getRecord(locationTag.getRef());
+		this.location = null;
 
-		final var place = getPlace();
-		if (this.location == null && !place.isEmpty()) {
-			this.location = gedcom.getLocations().stream().filter(l -> !l.isStructure() && l.getName().equals(place)).findFirst().orElse(null);
-			if (this.location == null) {
-				this.location = new Location(gedcom, place);
-				gedcom.addLocation(this.location);
+		final var locationTag = getFirstExtensionTag(Location.TAG);
+		if (locationTag != null) {
+			this.location = (Location) gedcom.getRecord(locationTag.getRef());
+		} else {
+			final var place = getPlace();
+			final var mapTag = getFirstExtensionTag("MAP");
+			final var latitude = Location.parseLatitude(mapTag);
+			final var longitude = Location.parseLongitude(mapTag);
+			if (!place.isEmpty()) {
+				this.location = gedcom.getPlace(place, latitude, longitude);
+				if (this.location == null) {
+					this.location = new Location(gedcom, place, latitude, longitude);
+					gedcom.addPlace(this.location);
+				}
 			}
 		}
 

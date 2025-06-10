@@ -263,9 +263,15 @@ public class GEDCOM {
 		return locations;
 	}
 
-	void addLocation(final Location location) {
-		locations.add(location);
-		addRecord(location);
+	Location getPlace(final String name, final float latitude, final float longitude) {
+		return getLocations().stream().filter(l -> !l.isStructure() && l.getName().equals(name) && Float.compare(l.getLatitude(), latitude) == 0 && Float.compare(l.getLongitude(), longitude) == 0).findFirst().orElse(null);
+	}
+
+	void addPlace(final Location location) {
+		if (!location.isStructure()) {
+			locations.add(location);
+			addRecord(location);
+		}
 	}
 
 	public List<Individual> getIndividuals(final String filter) {
