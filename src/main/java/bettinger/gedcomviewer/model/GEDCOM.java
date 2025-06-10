@@ -263,7 +263,7 @@ public class GEDCOM {
 		return locations;
 	}
 
-	void addPlace(final Location location) {
+	void addLocation(final Location location) {
 		locations.add(location);
 		addRecord(location);
 	}

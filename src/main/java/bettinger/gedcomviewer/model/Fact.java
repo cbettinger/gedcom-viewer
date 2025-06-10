@@ -46,6 +46,7 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 			this.location = gedcom.getLocations().stream().filter(l -> !l.isStructure() && l.getName().equals(place)).findFirst().orElse(null);
 			if (this.location == null) {
 				this.location = new Location(gedcom, place);
+				gedcom.addLocation(this.location);
 			}
 		}
 

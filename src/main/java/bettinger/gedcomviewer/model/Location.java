@@ -70,7 +70,6 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 		this.imageURL = getPrimaryImageURL(false);
 
 		this.isStructure = false;
-		gedcom.addPlace(this);
 	}
 
 	/* #region container */
