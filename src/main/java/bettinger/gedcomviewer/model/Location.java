@@ -9,6 +9,7 @@ import org.folg.gedcom.model.GedcomTag;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.Format;
@@ -17,8 +18,6 @@ import bettinger.gedcomviewer.Preferences;
 import bettinger.gedcomviewer.utils.DateTimeUtils;
 import bettinger.gedcomviewer.utils.HTMLUtils;
 import bettinger.gedcomviewer.utils.TagUtils;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonAutoDetect(fieldVisibility = Visibility.NONE, getterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
 public class Location extends Structure implements RegularRecord, NoteContainer, MediaContainer {
