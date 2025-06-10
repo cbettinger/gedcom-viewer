@@ -2,8 +2,10 @@ package bettinger.gedcomviewer.tools.portraitcomparison.views;
 
 import java.awt.BorderLayout;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JPanel;
 
 import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.I18N;
@@ -29,8 +31,14 @@ public class FacialFeatureAnalysisDialog extends JDialog {
 
         this.startButton = new JButton(I18N.get("StartFacialFeatureAnalysis"), IconFontSwing.buildIcon(MaterialIcons.PLAY_ARROW, Constants.BUTTON_ICON_SIZE));
 
+        var buttonPanel = new JPanel();
+        buttonPanel.add(this.startButton);
+
 		this.infoPane = new HTMLTextPane();
         this.infoPane.setText(I18N.get("FacialFeatureAnalysisStartInfo"));
+
+        var proband = new HTMLTextPane();
+        proband.setText(String.format("%s: %s", I18N.get("Proband"), individual.getName()));
         this.maxDepthPicker = new IntegerPicker(I18N.get("MaxFacialFeatureComparisonDepth"), Constants.MIN_FACE_COMPARISON_DEPTH, Constants.MAX_FACE_COMPARISON_DEPTH);
         this.maxNumPortraitsPicker = new IntegerPicker(I18N.get("MaxNumPortraitsPerPerson"), Constants.MIN_NUM_PORTRAITS_FOR_FACE_COMPARISON, Constants.MAX_NUM_PORTRAITS_FOR_FACE_COMPARISON);
 
@@ -44,9 +52,10 @@ public class FacialFeatureAnalysisDialog extends JDialog {
         var parameterPane = new JPanel();
         parameterPane.setBackground(Constants.DEFAULT_CONTENT_COLOR);
         parameterPane.add(vBox);
+
 		add(this.infoPane, BorderLayout.PAGE_START);
-        add(this.startButton, BorderLayout.PAGE_END);
         add(parameterPane, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.PAGE_END);
 
 		pack();
 
