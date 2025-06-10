@@ -11,7 +11,6 @@ import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.views.HTMLTextPane;
 import bettinger.gedcomviewer.views.IntegerPicker;
 import bettinger.gedcomviewer.views.MainFrame;
-import bettinger.gedcomviewer.views.VBox;
 import bettinger.gedcomviewer.views.icons.MaterialIcons;
 import jiconfont.swing.IconFontSwing;
 
@@ -35,13 +34,19 @@ public class FacialFeatureAnalysisDialog extends JDialog {
         this.maxDepthPicker = new IntegerPicker(I18N.get("MaxFacialFeatureComparisonDepth"), Constants.MIN_FACE_COMPARISON_DEPTH, Constants.MAX_FACE_COMPARISON_DEPTH);
         this.maxNumPortraitsPicker = new IntegerPicker(I18N.get("MaxNumPortraitsPerPerson"), Constants.MIN_NUM_PORTRAITS_FOR_FACE_COMPARISON, Constants.MAX_NUM_PORTRAITS_FOR_FACE_COMPARISON);
 
-        var vBox = new VBox();
+        var vBox = new JPanel();
+        vBox.setLayout(new BoxLayout(vBox, BoxLayout.PAGE_AXIS));
+        vBox.setBackground(Constants.DEFAULT_CONTENT_COLOR);
+        vBox.add(proband);
         vBox.add(this.maxDepthPicker);
         vBox.add(this.maxNumPortraitsPicker);
 
+        var parameterPane = new JPanel();
+        parameterPane.setBackground(Constants.DEFAULT_CONTENT_COLOR);
+        parameterPane.add(vBox);
 		add(this.infoPane, BorderLayout.PAGE_START);
-        add(vBox, BorderLayout.CENTER);
         add(this.startButton, BorderLayout.PAGE_END);
+        add(parameterPane, BorderLayout.CENTER);
 
 		pack();
 
