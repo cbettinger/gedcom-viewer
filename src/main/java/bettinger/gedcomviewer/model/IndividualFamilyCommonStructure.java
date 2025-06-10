@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.utils.HTMLUtils;
 
-public abstract class IndividualFamilyCommonStructure extends Structure implements RegularRecord, NoteContainer, MediaContainer, SourceCitationContainer {
+public abstract class IndividualFamilyCommonStructure extends Structure implements Record, NoteContainer, MediaContainer, SourceCitationContainer {
 	protected final RecordManager recordManager;
 	protected final NoteManager noteManager;
 	protected final MediaManager mediaManager;
@@ -38,6 +38,11 @@ public abstract class IndividualFamilyCommonStructure extends Structure implemen
 	@Override
 	public GEDCOM getGEDCOM() {
 		return recordManager.getGEDCOM();
+	}
+
+	@Override
+	public boolean hasXRef() {
+		return true;
 	}
 
 	@Override

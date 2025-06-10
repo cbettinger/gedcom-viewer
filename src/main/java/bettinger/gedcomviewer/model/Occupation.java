@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.utils.HTMLUtils;
 
-public class Occupation extends Structure implements DerivedRecord {
+public class Occupation extends Structure implements Record {
 
 	static final String TAG = "OCCU";
 
@@ -36,6 +36,11 @@ public class Occupation extends Structure implements DerivedRecord {
 	@Override
 	public GEDCOM getGEDCOM() {
 		return recordManager.getGEDCOM();
+	}
+
+	@Override
+	public boolean hasXRef() {
+		return false;
 	}
 
 	@Override

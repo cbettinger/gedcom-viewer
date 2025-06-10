@@ -6,7 +6,7 @@ import java.util.Set;
 
 import bettinger.gedcomviewer.utils.HTMLUtils;
 
-public class Note extends Structure implements RegularRecord, SourceCitationContainer {
+public class Note extends Structure implements Record, SourceCitationContainer {
 
 	static final String TAG = "NOTE";
 
@@ -28,6 +28,11 @@ public class Note extends Structure implements RegularRecord, SourceCitationCont
 	@Override
 	public GEDCOM getGEDCOM() {
 		return recordManager.getGEDCOM();
+	}
+
+	@Override
+	public boolean hasXRef() {
+		return true;
 	}
 
 	@Override

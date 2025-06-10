@@ -22,7 +22,7 @@ import bettinger.gedcomviewer.utils.HTMLUtils;
 import bettinger.gedcomviewer.utils.TagUtils;
 
 @JsonAutoDetect(fieldVisibility = Visibility.NONE, getterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
-public class Location extends Structure implements RegularRecord, NoteContainer, MediaContainer {
+public class Location extends Structure implements Record, NoteContainer, MediaContainer {
 
 	static final String TAG = "_LOC";
 	static final String TAG_PLACE = "PLAC";
@@ -57,7 +57,7 @@ public class Location extends Structure implements RegularRecord, NoteContainer,
 		this.isStructure = true;
 	}
 
-	Location(final GEDCOM gedcom, final String place) {	// TODO: do not show id in task bar
+	Location(final GEDCOM gedcom, final String place) {
 		super(gedcom, constructId(TAG_PLACE, place), null);
 
 		this.recordManager = new RecordManager(this, gedcom, LocalDateTime.now());
@@ -77,6 +77,11 @@ public class Location extends Structure implements RegularRecord, NoteContainer,
 	@Override
 	public GEDCOM getGEDCOM() {
 		return recordManager.getGEDCOM();
+	}
+
+	@Override
+	public boolean hasXRef() {
+		return isStructure;
 	}
 
 	@Override

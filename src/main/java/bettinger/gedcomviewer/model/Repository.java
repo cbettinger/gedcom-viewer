@@ -6,7 +6,7 @@ import java.util.Set;
 
 import bettinger.gedcomviewer.utils.HTMLUtils;
 
-public class Repository extends Structure implements RegularRecord, NoteContainer {
+public class Repository extends Structure implements Record, NoteContainer {
 
 	static final String TAG = "REPO";
 
@@ -32,6 +32,11 @@ public class Repository extends Structure implements RegularRecord, NoteContaine
 	@Override
 	public GEDCOM getGEDCOM() {
 		return recordManager.getGEDCOM();
+	}
+
+	@Override
+	public boolean hasXRef() {
+		return true;
 	}
 
 	@Override
