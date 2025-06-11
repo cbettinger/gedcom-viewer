@@ -164,5 +164,10 @@
 			<artifactId>gedcom-5to7</artifactId>
 			<version>1.0.2</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.nigel-parker</groupId>
+			<artifactId>gedinline</artifactId>
+			<version>v4-main-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 </project>
