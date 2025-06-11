@@ -27,4 +27,8 @@ public class IntegerPicker extends JPanel{
         add(this.labelPane);
         add(this.valueSpinner);
     }
+
+    public int getValue() {
+        return (int)valueSpinner.getValue();
+    }
 }
