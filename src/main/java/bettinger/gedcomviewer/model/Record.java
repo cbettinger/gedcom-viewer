@@ -7,6 +7,7 @@ import java.util.Set;
 public interface Record {
 	GEDCOM getGEDCOM();
 
+	boolean hasXRef();
 	String getId();
 	int getNumber();
 	LocalDateTime getLastChange();

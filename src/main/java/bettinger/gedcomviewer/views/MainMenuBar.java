@@ -256,7 +256,7 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 			add(helpMenu);
 
 			final var aboutMenuItem = new JMenuItem(String.format(Format.TRAILING_TRIPLE_DOT, I18N.get("About")));
-			aboutMenuItem.setIcon(IconFontSwing.buildIcon(MaterialIcons.INFO_OUTLINE, Constants.MENU_ICON_SIZE));
+			aboutMenuItem.setIcon(IconFontSwing.buildIcon(MaterialIcons.INFO, Constants.MENU_ICON_SIZE));
 			aboutMenuItem.setActionCommand("SHOW_ABOUT");
 			aboutMenuItem.addActionListener(this);
 			helpMenu.add(aboutMenuItem);

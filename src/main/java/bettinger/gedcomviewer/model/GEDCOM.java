@@ -263,6 +263,17 @@ public class GEDCOM {
 		return locations;
 	}
 
+	Location getPlace(final String name, final float latitude, final float longitude) {
+		return getLocations().stream().filter(l -> !l.isStructure() && l.getName().equals(name) && Float.compare(l.getLatitude(), latitude) == 0 && Float.compare(l.getLongitude(), longitude) == 0).findFirst().orElse(null);
+	}
+
+	void addPlace(final Location location) {
+		if (!location.isStructure()) {
+			locations.add(location);
+			addRecord(location);
+		}
+	}
+
 	public List<Individual> getIndividuals(final String filter) {
 		return filter(getIndividuals(), filter);
 	}
@@ -287,7 +298,7 @@ public class GEDCOM {
 		return occupations;
 	}
 
-	private List<Occupation> parseOccupations(List<Individual> individuals) {
+	private List<Occupation> parseOccupations(final List<Individual> individuals) {
 		final var map = new TreeMap<String, List<Individual>>();
 		for (final var individual : individuals) {
 			final var occupationValues = individual.getFacts(Occupation.TAG).stream().map(Fact::getValue).filter(s -> !s.isEmpty()).distinct().toList();
