@@ -211,7 +211,7 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 		add(toolsMenu);
 
 		final var facialFeatureAnalysisMenuItem = new JMenuItem(String.format(Format.TRAILING_TRIPLE_DOT, I18N.get("FacialFeatureAnalysis")));
-		facialFeatureAnalysisMenuItem.setIcon(IconFontSwing.buildIcon(MaterialIcons.SENTIMENT_NEUTRAL, Constants.MENU_ICON_SIZE));
+		facialFeatureAnalysisMenuItem.setIcon(IconFontSwing.buildIcon(MaterialIcons.PSYCHOLOGY_ALT, Constants.MENU_ICON_SIZE));
 		facialFeatureAnalysisMenuItem.setActionCommand("FACIAL_FEATURE_ANALYSIS");
 		facialFeatureAnalysisMenuItem.addActionListener(this);
 		toolsMenu.add(facialFeatureAnalysisMenuItem);
