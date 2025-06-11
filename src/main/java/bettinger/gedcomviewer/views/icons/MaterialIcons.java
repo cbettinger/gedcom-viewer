@@ -6,7 +6,6 @@ import jiconfont.IconFont;
 import java.io.InputStream;
 
 public enum MaterialIcons implements IconCode {
-	PLAYLIST_REMOVE('\uEB80'),
 	AC_UNIT('\uEB3B'),
 	ACCESS_ALARM('\uE190'),
 	ACCESS_ALARMS('\uE191'),
@@ -658,6 +657,7 @@ public enum MaterialIcons implements IconCode {
 	PLAYLIST_ADD_CHECK('\uE065'),
 	PLAYLIST_ADD('\uE03B'),
 	PLAYLIST_PLAY('\uE05F'),
+	PLAYLIST_REMOVE('\uEB80'),
 	PLUS_ONE('\uE800'),
 	POLL('\uE801'),
 	POLYMER('\uE8AB'),
@@ -970,7 +970,7 @@ public enum MaterialIcons implements IconCode {
 
 			@Override
 			public InputStream getFontInputStream() {
-				return MaterialIcons.class.getResourceAsStream("/icons/MaterialIcons-Regular.ttf");
+				return MaterialIcons.class.getResourceAsStream("/icons/MaterialIconsOutlined-Regular.otf");
 			}
 		};
 	}
