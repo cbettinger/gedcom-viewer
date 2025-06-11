@@ -298,7 +298,7 @@ public class GEDCOM {
 		return occupations;
 	}
 
-	private List<Occupation> parseOccupations(List<Individual> individuals) {
+	private List<Occupation> parseOccupations(final List<Individual> individuals) {
 		final var map = new TreeMap<String, List<Individual>>();
 		for (final var individual : individuals) {
 			final var occupationValues = individual.getFacts(Occupation.TAG).stream().map(Fact::getValue).filter(s -> !s.isEmpty()).distinct().toList();
