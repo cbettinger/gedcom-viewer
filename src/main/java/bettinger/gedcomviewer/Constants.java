@@ -7,7 +7,7 @@ import com.formdev.flatlaf.util.SystemInfo;
 public abstract class Constants {
 
 	public static final String APP_NAME = "GEDCOM Viewer";
-	public static final String APP_VERSION = "1.0.0";
+	public static final String APP_VERSION = "1.0.0-pre";
 	public static final String APP_URL = "https://github.com/cbettinger/gedcom-viewer";
 
 	public static final int DEFAULT_FRAME_WIDTH = 1920;
@@ -23,6 +23,7 @@ public abstract class Constants {
 	public static final int DEFAULT_LARGE_MODAL_DIALOG_HEIGHT = DEFAULT_FRAME_HEIGHT / 2;
 
 	public static final int BORDER_SIZE = 5;
+	public static final int PANEL_MARGIN = 4 * BORDER_SIZE;
 
 	public static final int MENU_ICON_SIZE = 16;
 	public static final int TOOLBAR_ICON_SIZE = SystemInfo.isMacOS ? 16 : 22;

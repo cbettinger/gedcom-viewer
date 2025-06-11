@@ -51,7 +51,7 @@ public class VisualizationFrame extends Frame {
 		this.rendererClass = rendererClass;
 		this.renderedBody = "";
 
-		this.visualization = new WebViewPanel(true, null);
+		this.visualization = new WebViewPanel();
 
 		this.statusBar = new VisualizationStatusBar(visualization);
 		this.statusBar.addPropertyChangeListener(event -> {

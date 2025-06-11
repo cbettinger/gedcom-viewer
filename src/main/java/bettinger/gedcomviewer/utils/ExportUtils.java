@@ -4,10 +4,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
@@ -30,6 +31,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.helper.W3CDom;
 import org.xml.sax.SAXParseException;
 
+import com.openhtmltopdf.extend.FSSupplier;
 import com.openhtmltopdf.extend.impl.FSDefaultCacheStore;
 import com.openhtmltopdf.outputdevice.helper.ExternalResourceControlPriority;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
@@ -58,7 +60,6 @@ import bettinger.gedcomviewer.model.Structure;
 public abstract class ExportUtils {
 	private static final Generator GENERATOR;
 
-	private static final String HTML_TEMPLATE_FILE_PATH = "./src/main/resources/export/template.html";
 	private static final String ASSETS_FOLDER_NAME = "assets";
 
 	private static final String HTML_TITLE_FORMAT = String.format("<h1>%%s<a href='#top' title='%s'>\u25B2</a></h1>", I18N.get("ToTop"));
@@ -67,6 +68,8 @@ public abstract class ExportUtils {
 
 	@SuppressWarnings("java:S3008")
 	private static String HTML_TEMPLATE = "";
+	@SuppressWarnings("java:S3008")
+	private static FSSupplier<InputStream> PDF_FONT_SUPPLIER = null;
 
 	static {
 		GENERATOR = new Generator();
@@ -75,9 +78,10 @@ public abstract class ExportUtils {
 		GENERATOR.setVersion(Constants.APP_VERSION);
 
 		try {
-			HTML_TEMPLATE = Files.readString(Path.of(HTML_TEMPLATE_FILE_PATH));
+			HTML_TEMPLATE = new String(ExportUtils.class.getClassLoader().getResourceAsStream("export/template.html").readAllBytes(), StandardCharsets.UTF_8);
+			PDF_FONT_SUPPLIER = () -> ExportUtils.class.getClassLoader().getResourceAsStream("export/DejaVuSans-Condensed.ttf");
 		} catch (final IOException e) {
-			Logger.getLogger(ExportUtils.class.getName()).log(Level.SEVERE, String.format("Failed to read template from file '%s'", HTML_TEMPLATE_FILE_PATH), e);
+			Logger.getLogger(ExportUtils.class.getName()).log(Level.SEVERE, "Failed to read template file", e);
 		}
 	}
 
@@ -137,7 +141,7 @@ public abstract class ExportUtils {
 		final PdfRendererBuilder pdfBuilder = new PdfRendererBuilder();
 		pdfBuilder.useFastMode();
 		pdfBuilder.useCacheStore(CacheStore.PDF_FONT_METRICS, new FSDefaultCacheStore());
-		pdfBuilder.useFont(new File("./src/main/resources/export/DejaVuSans-Condensed.ttf"), "DejaVuSansCondensed");
+		pdfBuilder.useFont(PDF_FONT_SUPPLIER, "DejaVuSansCondensed");
 		pdfBuilder.useExternalResourceAccessControl((_, _) -> true, ExternalResourceControlPriority.RUN_AFTER_RESOLVING_URI);
 		pdfBuilder.useExternalResourceAccessControl((_, _) -> true, ExternalResourceControlPriority.RUN_BEFORE_RESOLVING_URI);
 		pdfBuilder.withW3cDocument(new W3CDom().fromJsoup(Jsoup.parse(sanitizedHtml)), null);
@@ -293,7 +297,6 @@ public abstract class ExportUtils {
 					final var appendixSources = sc.getSourceCitations(options.contains(HTMLOption.NO_CONFIDENTIAL_DATA)).stream().map(SourceCitation::getSource).toList();
 					result.addAll(appendixSources);
 					queue.addAll(appendixSources);
-
 
 					final var appendixRepositories = appendixSources.stream().map(Source::getRepository).filter(r -> r != null).toList();
 					result.addAll(appendixRepositories);

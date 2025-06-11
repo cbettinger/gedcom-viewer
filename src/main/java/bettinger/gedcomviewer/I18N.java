@@ -1,6 +1,7 @@
 package bettinger.gedcomviewer;
 
 import java.awt.Image;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -50,7 +51,14 @@ public abstract class I18N {
 	}
 
 	public static ImageIcon getLocaleIcon(final Locale locale, final int size) {
-		return new ImageIcon(new ImageIcon(I18N.class.getClassLoader().getResource(String.format("./locales/%s.png", locale.getLanguage()))).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
+		byte[] data;
+		try {
+			data = I18N.class.getClassLoader().getResourceAsStream(String.format("locales/%s.png", locale.getLanguage())).readAllBytes();
+		} catch (IOException _) {
+			return null;
+		}
+
+		return new ImageIcon(new ImageIcon(data).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
 	}
 
 	private I18N() {}

@@ -10,8 +10,8 @@ import bettinger.gedcomviewer.Events;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.Preferences;
 import bettinger.gedcomviewer.model.GEDCOM;
-import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.model.GEDCOM.GEDCOMEvent;
+import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.utils.JSONUtils;
 import bettinger.gedcomviewer.views.WebViewPanel;
 import bettinger.gedcomviewer.views.tabs.IRecordCollectionView;
@@ -51,7 +51,7 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 
 	@SuppressWarnings("unused")
 	public MapPanel() {
-		super(false, "./map/index.html");
+		super(false, "map");
 
 		setEnabled(false);
 

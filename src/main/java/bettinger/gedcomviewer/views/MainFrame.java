@@ -1,9 +1,12 @@
 package bettinger.gedcomviewer.views;
 
 import java.awt.BorderLayout;
+import java.awt.Taskbar;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +15,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -61,10 +65,26 @@ public class MainFrame extends Frame {
 
 	private final GEDCOM gedcom = new GEDCOM();
 
+	private final URL iconURL;
+
 	private final TabbedPane tabbedPane;
 	private final MainStatusBar statusBar;
 
 	private MainFrame() {
+		iconURL = getClass().getClassLoader().getResource("icons/gedcom-viewer-icon.png");
+
+		if (iconURL != null) {
+			try {
+				final var icon = ImageIO.read(iconURL);
+				setIconImage(icon);
+				if (SystemInfo.isMacOS) {
+					Taskbar.getTaskbar().setIconImage(icon);
+				}
+			} catch (IOException _) {
+				// intentionally left blank
+			}
+		}
+
 		IconFontSwing.register(MaterialIcons.getIconFont());
 
 		setJMenuBar(new MainMenuBar());
@@ -130,6 +150,8 @@ public class MainFrame extends Frame {
 				JOptionPane.showMessageDialog(MainFrame.getInstance(), I18N.get("RestartToApplyChanges"), I18N.get("Language"), JOptionPane.OK_OPTION);
 			}
 		});
+
+		gedcom.unload();
 	}
 
 	private String buildTitle(final GEDCOM gedcom) {
@@ -516,6 +538,10 @@ public class MainFrame extends Frame {
 
 	public static MainFrame getInstance() {
 		return instance;
+	}
+
+	public static URL getIconURL() {
+		return instance != null ? instance.iconURL : null;
 	}
 
 	public static void create() {

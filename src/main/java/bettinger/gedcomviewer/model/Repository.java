@@ -25,7 +25,7 @@ public class Repository extends Structure implements RegularRecord, NoteContaine
 
 		this.wrappedRepository = repository;
 
-		this.address = new Address(gedcom, repository, this);
+		this.address = repository.getAddress() != null ? new Address(gedcom, repository, this) : null;
 	}
 
 	/* #region container */

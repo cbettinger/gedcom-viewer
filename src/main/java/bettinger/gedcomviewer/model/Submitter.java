@@ -37,7 +37,7 @@ public class Submitter extends Structure implements RegularRecord, NoteContainer
 
 		this.wrappedSubmitter = submitter;
 
-		this.address = new Address(gedcom, submitter, this);
+		this.address = submitter.getAddress() != null ? new Address(gedcom, submitter, this) : null;
 
 		parse();
 	}
