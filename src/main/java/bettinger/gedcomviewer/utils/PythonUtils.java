@@ -14,6 +14,20 @@ public interface PythonUtils {
         List<String> result = new ArrayList<String>();
 
 		try {
+            Runtime runtime = Runtime.getRuntime();
+
+            String[] pipInstall = {"python", "install", "pip"};
+            runtime.exec(pipInstall);
+
+            String[] pipenvInstall = {"pip", "install", "--user", "pipenv"};
+            runtime.exec(pipenvInstall);
+
+            String[] envCreate = {"pipenv", "shell"};
+            runtime.exec(envCreate);
+
+            String[] requirementsInstall = {"pipenv", "install"};
+            runtime.exec(requirementsInstall);
+            
             ArrayList<String> command = new ArrayList<String>();
             command.add("python");
             command.add(scriptPath);
@@ -21,8 +35,9 @@ public interface PythonUtils {
                 command.add(arg);
             }
 
-			Process p = Runtime.getRuntime().exec((String[])command.toArray());
+			Process p = runtime.exec((String[])command.toArray());
             BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "there");
             String s = null;
             while ((s = stdInput.readLine()) != null) {
                 result.add(s);
