@@ -35,9 +35,9 @@ public interface PythonUtils {
                 command.add(arg);
             }
 
-			Process p = runtime.exec((String[])command.toArray());
+			Process p = runtime.exec(command.toArray(new String[0]));
             BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "there");
+
             String s = null;
             while ((s = stdInput.readLine()) != null) {
                 result.add(s);
