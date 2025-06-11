@@ -37,18 +37,17 @@ public class FacialFeatureAnalysisDialog extends JDialog {
 		this.infoPane = new HTMLTextPane();
         this.infoPane.setText(I18N.get("FacialFeatureAnalysisStartInfo"));
 
-        var proband = new HTMLTextPane();
-        proband.setText(String.format("%s: %s", I18N.get("Proband"), individual.getName()));
         this.maxDepthPicker = new IntegerPicker(I18N.get("MaxFacialFeatureComparisonDepth"), Constants.MIN_FACE_COMPARISON_DEPTH, Constants.MAX_FACE_COMPARISON_DEPTH);
         this.maxNumPortraitsPicker = new IntegerPicker(I18N.get("MaxNumPortraitsPerPerson"), Constants.MIN_NUM_PORTRAITS_FOR_FACE_COMPARISON, Constants.MAX_NUM_PORTRAITS_FOR_FACE_COMPARISON);
 
         var vBox = new JPanel();
         vBox.setLayout(new BoxLayout(vBox, BoxLayout.PAGE_AXIS));
         vBox.setBackground(Constants.DEFAULT_CONTENT_COLOR);
+        var proband = new HTMLTextPane();
+        proband.setText(String.format("%s: %s", I18N.get("Proband"), individual.getName()));
         vBox.add(proband);
         vBox.add(this.maxDepthPicker);
         vBox.add(this.maxNumPortraitsPicker);
-
         var parameterPane = new JPanel();
         parameterPane.setBackground(Constants.DEFAULT_CONTENT_COLOR);
         parameterPane.add(vBox);
