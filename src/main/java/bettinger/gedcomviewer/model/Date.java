@@ -1,5 +1,6 @@
 package bettinger.gedcomviewer.model;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +22,7 @@ public class Date implements Comparable<Date> {
 	private final String formatted;
 	private LocalDate timestamp;
 
-	Date(final String raw) {
+	private Date(final String raw) throws ParseException {
 		this.raw = raw == null ? "" : raw;
 		this.components = parseComponents(this.raw);
 		this.timestamp = parseTimestamp(components);
@@ -51,10 +52,19 @@ public class Date implements Comparable<Date> {
 		}
 	}
 
-	private static String[] parseComponents(final String raw) {
+	public static Date parse(final String raw) {
+		try {
+			return new Date(raw);
+		}
+		catch (ParseException _) {
+			return null;
+		}
+	}
+
+	private static String[] parseComponents(final String raw) throws ParseException {
 		final var matcher = DATE_STRING_PATTERN.matcher(raw);
 		if (!matcher.find()) {
-			return new String[0];
+			throw new ParseException(String.format("Invalid date string '%s'", raw), 0);
 		}
 
 		final String[] result = new String[8];
