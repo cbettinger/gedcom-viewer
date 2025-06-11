@@ -207,6 +207,16 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 		exportMenu.add(exportDescendantsMenuItem);
 		enableOnIndividualIsSelectedItems.add(exportDescendantsMenuItem);
 
+		final var toolsMenu = new JMenu(I18N.get("Tools"));
+		add(toolsMenu);
+
+		final var validateMenuItem = new JMenuItem(String.format(Format.TRAILING_TRIPLE_DOT, I18N.get("Validate")));
+		validateMenuItem.setIcon(IconFontSwing.buildIcon(MaterialIcons.CHECK, Constants.MENU_ICON_SIZE));
+		validateMenuItem.setActionCommand("VALIDATE");
+		validateMenuItem.addActionListener(this);
+		toolsMenu.add(validateMenuItem);
+		enableOnFileIsLoadedItems.add(validateMenuItem);
+
 		final var viewMenu = new JMenu(I18N.get("View"));
 		add(viewMenu);
 
