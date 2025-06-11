@@ -1,4 +1,4 @@
-function getExports() { return { showLocations, showLineage, showAncestors, showDescendants }; }
+function getExports() { return { showLocations, showLineage, showAncestors, showDescendants, animateFacts }; }
 
 const LINE_COLOR = "#FF2262";
 
@@ -232,6 +232,27 @@ function showDescendants(json) {
 		}
 
 		show();
+	}
+}
+
+function animateFacts(json) {
+	let facts = JSON.parse(json);
+
+	reset(L.layerGroup());
+
+	if (facts.length) {
+		for (let fact of facts) {
+			if (fact.location && fact.location.latitude && fact.location.longitude) {
+				createMarker(fact.location, fact.location.references);
+			}
+		}
+
+
+		show();
+
+		if (bounds?.isValid()) {
+			locationsBounds = bounds;
+		}
 	}
 }
 
