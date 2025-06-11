@@ -10,7 +10,7 @@ import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.utils.HTMLUtils;
 
-public class Fact extends Substructure implements NoteContainer, MediaContainer, SourceCitationContainer {
+public class Fact extends Substructure implements NoteContainer, MediaContainer, SourceCitationContainer, Comparable<Fact> {
 
 	private static final List<String> BAPTISM_TAGS = Arrays.asList("BAP", "BAPM", "BAPT", "BAPTISM", "ADULT_CHRISTNG", "CHR", "CHRA", "CHRISTENING");
 	private static final List<String> MARRIAGE_TAGS = Arrays.asList("MARC", "MARR", "MARRIAGE");
@@ -111,6 +111,20 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 	@Override
 	public List<SourceCitation> getSourceCitations(boolean excludeConfidential) {
 		return sourceCitationManager.getSourceCitations(excludeConfidential);
+	}
+
+	@SuppressWarnings("java:S1210")
+	@Override
+	public int compareTo(Fact f) {
+		if (date == null && f.date == null) {
+			return 0;
+		} else if (date == null) {
+			return -1;
+		} else if (f.date == null) {
+			return 1;
+		} else {
+			return date.compareTo(f.date);
+		}
 	}
 	/* #endregion */
 
