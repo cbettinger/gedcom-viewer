@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.net.URI;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
@@ -29,7 +30,11 @@ import bettinger.gedcomviewer.Preferences;
 import bettinger.gedcomviewer.model.GEDCOM;
 import bettinger.gedcomviewer.model.GEDCOM.GEDCOMEvent;
 import bettinger.gedcomviewer.model.GEDCOM.GEDCOMException;
+import bettinger.gedcomviewer.tools.portraitcomparison.model.FacialFeatureAnalyser;
+import bettinger.gedcomviewer.tools.portraitcomparison.model.FacialFeatureAnalysisResult;
+import bettinger.gedcomviewer.tools.portraitcomparison.model.FacialFeatures;
 import bettinger.gedcomviewer.tools.portraitcomparison.views.FacialFeatureAnalysisDialog;
+import bettinger.gedcomviewer.tools.portraitcomparison.views.ResultFrame;
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.utils.DesktopUtils;
 import bettinger.gedcomviewer.utils.ExportUtils;
@@ -472,8 +477,34 @@ public class MainFrame extends Frame {
 
 	private void showFacialFeatureAnalysisDialog() {
 		final var selectedRecord = tabbedPane.getSelectedRecord();
-		if (selectedRecord instanceof Individual proband) {
-			new FacialFeatureAnalysisDialog(proband);
+		if (selectedRecord instanceof Individual individual) {
+			new FacialFeatureAnalysisDialog(individual, (proband, maxDepth, maxNumPortraits) -> this.showFacialFeatureAnalysisResults(proband, maxDepth, maxNumPortraits));
+		}
+	}
+
+	private void showFacialFeatureAnalysisResults(Individual proband, int maxDepth, int maxNumPortraits) {
+		if (proband != null) {
+			new BackgroundWorker(I18N.get("FacialFeatureAnalysis")) {
+				private HashMap<FacialFeatures, FacialFeatureAnalysisResult> results;
+				
+				@Override
+				protected URI doInBackground() throws Exception {
+					var uri = super.doInBackground();
+
+					results = FacialFeatureAnalyser.analyse(proband, maxDepth, maxNumPortraits);
+
+					return uri;
+				}
+
+				@Override
+				protected void onSuccess(final URI uri) {
+					super.onSuccess(uri);
+
+					if (results != null) {
+						new ResultFrame(results);
+					}
+				}
+			}.execute();
 		}
 	}
 

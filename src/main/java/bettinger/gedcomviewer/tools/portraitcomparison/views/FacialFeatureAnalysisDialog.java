@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Individual;
+import bettinger.gedcomviewer.tools.portraitcomparison.model.AnalysisStarter;
 import bettinger.gedcomviewer.views.HTMLTextPane;
 import bettinger.gedcomviewer.views.IntegerPicker;
 import bettinger.gedcomviewer.views.MainFrame;
@@ -23,16 +24,11 @@ public class FacialFeatureAnalysisDialog extends JDialog {
     private final IntegerPicker maxNumPortraitsPicker;
     private final JButton startButton;
 
-	public FacialFeatureAnalysisDialog(final Individual individual) {
+	public FacialFeatureAnalysisDialog(final Individual individual, AnalysisStarter onStart) {
 		setTitle(I18N.get("FacialFeatureAnalysis"));
 		setModal(true);
 
 		setLayout(new BorderLayout());
-
-        this.startButton = new JButton(I18N.get("StartFacialFeatureAnalysis"), IconFontSwing.buildIcon(MaterialIcons.PLAY_ARROW, Constants.BUTTON_ICON_SIZE));
-
-        var buttonPanel = new JPanel();
-        buttonPanel.add(this.startButton);
 
 		this.infoPane = new HTMLTextPane();
         this.infoPane.setText(I18N.get("FacialFeatureAnalysisStartInfo"));
@@ -51,6 +47,14 @@ public class FacialFeatureAnalysisDialog extends JDialog {
         var parameterPane = new JPanel();
         parameterPane.setBackground(Constants.DEFAULT_CONTENT_COLOR);
         parameterPane.add(vBox);
+
+        this.startButton = new JButton(I18N.get("StartFacialFeatureAnalysis"), IconFontSwing.buildIcon(MaterialIcons.PLAY_ARROW, Constants.BUTTON_ICON_SIZE));
+        this.startButton.addActionListener(e -> {
+            onStart.start(individual, maxDepthPicker.getValue(), maxNumPortraitsPicker.getValue());
+            setVisible(false);
+        });
+        var buttonPanel = new JPanel();
+        buttonPanel.add(this.startButton);
 
 		add(this.infoPane, BorderLayout.PAGE_START);
         add(parameterPane, BorderLayout.CENTER);
