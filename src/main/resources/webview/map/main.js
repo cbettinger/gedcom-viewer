@@ -271,10 +271,11 @@ function addPolyline(linePoints) {
 function addAnimationSequence(linePoints) {	// TODO: NaN checks
 	log(linePoints);
 
-	let yearsTotal = linePoints[linePoints.length - 1][2] - linePoints[0][2];
-	log(yearsTotal);
-
 	animation = L.motion.seq([]);
+
+	animation.firstYear = linePoints[0][2];
+	animation.lastYear =  linePoints[linePoints.length - 1][2];
+	animation.totalYears = animation.lastYear - animation.firstYear;
 
 	for (let i = 0; i < linePoints.length - 1; i++) {
 		let point1 = linePoints[i];
@@ -284,6 +285,7 @@ function addAnimationSequence(linePoints) {	// TODO: NaN checks
 		let duration = years / ANIMATION_YEARS_PER_SECOND * 1000;
 
 		let line = L.motion.polyline([point1, point2], { color: LINE_COLOR }, { duration });
+		line.years = years;
 		bounds.extend(line.getBounds());
 		animation.addLayer(line, true);
 	}
@@ -314,7 +316,7 @@ function showYearLabel(textContent = "") {
 	yearLabel.style.display = "block";
 }
 
-function show() {
+function show() {	// TODO: null checks
 	if (map) {
 		if (container) {
 			map.addLayer(container);
@@ -326,7 +328,20 @@ function show() {
 			map.fitWorld();
 		}
 
-		animation?.motionStart();
+
+		let timer = null;
+		if (animation) {
+			let year = animation.firstYear;
+
+			timer = setInterval(() => {
+				if (year === animation.lastYear) {
+					clearInterval(timer);
+				}
+				showYearLabel(year++);
+			}, 1000.0 / ANIMATION_YEARS_PER_SECOND);
+
+			animation.motionStart();
+		}
 	}
 }
 
