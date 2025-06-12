@@ -14,13 +14,12 @@ import bettinger.gedcomviewer.views.Frame;
 
 public class ResultFrame extends Frame {
 
-    public ResultFrame(final HashMap<FacialFeatures, FacialFeatureAnalysisResult> results) {
+    public ResultFrame(final TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results) {
         super();
         Logger.getLogger(ResultFrame.class.getName()).log(Level.INFO, results.toString());
 
         var detailedPane = new JTabbedPane();
-        final TreeMap<FacialFeatures, FacialFeatureAnalysisResult> sortedResults = new TreeMap<>(results);
-        for (final var enrty : sortedResults.entrySet()) {
+        for (final var enrty : results.entrySet()) {
             detailedPane.addTab(I18N.get(enrty.getKey().name()), new DetailedResultPane(enrty.getValue()));
         }
 

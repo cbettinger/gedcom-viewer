@@ -1,8 +1,8 @@
 package bettinger.gedcomviewer.tools.portraitcomparison.model;
 
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,8 +12,8 @@ import bettinger.gedcomviewer.utils.PythonUtils;
 
 public abstract class FacialFeatureAnalyser {
 
-    public static HashMap<FacialFeatures, FacialFeatureAnalysisResult> analyse(final Individual individual, final int maxDepth, final int maxNumPortraits) {
-        HashMap<FacialFeatures, FacialFeatureAnalysisResult> results = new HashMap<>();
+    public static TreeMap<FacialFeatures, FacialFeatureAnalysisResult> analyse(final Individual individual, final int maxDepth, final int maxNumPortraits) {
+        TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results = new TreeMap<>();
 
         String inputJSON = createInputJSON(individual, maxDepth);
 
@@ -22,6 +22,7 @@ public abstract class FacialFeatureAnalyser {
 
         final String[] args = {inputJSON, Integer.toString(maxNumPortraits), Integer.toString(maxDepth)};
         final List<String> outputs = PythonUtils.callScript(pathToScript, args);
+
         for(String o : outputs) {
             Logger.getLogger(FacialFeatureAnalyser.class.getName()).log(Level.INFO, o);
         }

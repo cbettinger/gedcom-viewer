@@ -507,7 +507,7 @@ public class MainFrame extends Frame {
 	private void showFacialFeatureAnalysisResults(Individual proband, int maxDepth, int maxNumPortraits) {
 		if (proband != null) {
 			new BackgroundWorker(I18N.get("FacialFeatureAnalysis")) {
-				private HashMap<FacialFeatures, FacialFeatureAnalysisResult> results;
+				private TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results;
 				
 				@Override
 				protected URI doInBackground() throws Exception {
