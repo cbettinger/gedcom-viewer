@@ -1,4 +1,4 @@
-function getExports() { return { showLocations, showLineage, showAncestors, showDescendants, animateFacts }; }
+function getExports() { return { showLocations, showLineage, showAncestors, showDescendants }; }
 
 const LINE_COLOR = "#FF2262";
 
@@ -60,7 +60,7 @@ function showLocations(json) {
 	}
 }
 
-function showLineage(json) {
+function showLineage(json, animate = false) {
 	let individuals = JSON.parse(json);
 
 	reset();
@@ -104,7 +104,7 @@ function showLineage(json) {
 	}
 }
 
-function showAncestors(json) {
+function showAncestors(json, animate = false) {
 	let ancestors = JSON.parse(json);
 
 	reset();
@@ -184,7 +184,7 @@ function showAncestors(json) {
 	}
 }
 
-function showDescendants(json) {
+function showDescendants(json, animate = false) {
 	let individuals = JSON.parse(json);
 
 	reset();
@@ -232,27 +232,6 @@ function showDescendants(json) {
 		}
 
 		show();
-	}
-}
-
-function animateFacts(json) {
-	let facts = JSON.parse(json);
-
-	reset(L.layerGroup());
-
-	if (facts.length) {
-		for (let fact of facts) {
-			if (fact.location && fact.location.latitude && fact.location.longitude) {
-				createMarker(fact.location, fact.location.references);
-			}
-		}
-
-
-		show();
-
-		if (bounds?.isValid()) {
-			locationsBounds = bounds;
-		}
 	}
 }
 

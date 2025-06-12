@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.folg.gedcom.model.Gedcom;
 import org.folg.gedcom.model.GedcomTag;
@@ -48,8 +47,6 @@ public class GEDCOM {
 
 	private List<Occupation> occupations;
 
-	private List<Fact> datedFacts;
-
 	public GEDCOM() {
 		unload();
 	}
@@ -78,8 +75,6 @@ public class GEDCOM {
 
 		occupations = new ArrayList<>();
 
-		datedFacts = new ArrayList<>();
-
 		postEvent();
 	}
 
@@ -107,7 +102,6 @@ public class GEDCOM {
 			this.families = wrappedGedcom.getFamilies().stream().map(f -> new Family(this, f)).map(r -> { addRecord(r); return r; }).collect(Collectors.toCollection(ArrayList::new));
 
 			this.occupations = parseOccupations(this.individuals).stream().map(r -> { addRecord(r); return r; }).collect(Collectors.toCollection(ArrayList::new));
-			this.datedFacts = parseDatedFacts(Stream.concat(this.individuals.stream(), this.families.stream()).toList());
 
 			this.submitters = this.wrappedGedcom.getSubmitters().stream().map(s -> new Submitter(this, s)).map(r -> { addRecord(r); return r; }).collect(Collectors.toCollection(ArrayList::new));
 			this.author = this.submitters.stream().filter(s -> s.getId().equals(this.wrappedGedcom.getHeader().getSubmitterRef())).findAny().orElse(null);
@@ -326,20 +320,6 @@ public class GEDCOM {
 		}
 
 		return result;
-	}
-
-	public List<Fact> getDatedFacts() {
-		return datedFacts;
-	}
-
-	private List<Fact> parseDatedFacts(final List<IndividualFamilyCommonStructure> individualsAndFamilies) {
-		final var result = new ArrayList<Fact>();
-
-		for (final var individualOrFamily : individualsAndFamilies) {
-			result.addAll(individualOrFamily.getFacts().stream().filter(f -> f.getDate() != null).toList());
-		}
-
-		return result.stream().sorted().toList();
 	}
 
 	private <T extends Record> List<T> filter(final List<T> list, final String filter) {

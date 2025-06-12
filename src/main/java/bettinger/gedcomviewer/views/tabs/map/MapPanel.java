@@ -18,8 +18,8 @@ import bettinger.gedcomviewer.views.tabs.IRecordCollectionView;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
@@ -48,9 +48,8 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 	private RadioButton ancestorsRadioButton;
 	private RadioButton descendantsRadioButton;
 	private IndividualsComboBox individualsComboBox;
-	private RadioButton animateFactsRadioButton;
+	private CheckBox animationCheckBox;
 
-	@SuppressWarnings("unused")
 	public MapPanel() {
 		super(false, "map");
 
@@ -63,43 +62,26 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 		ancestorsRadioButton = new RadioButton(I18N.get("Ancestors"));
 		descendantsRadioButton = new RadioButton(I18N.get("Descendants"));
 		individualsComboBox = new IndividualsComboBox();
-		animateFactsRadioButton = new RadioButton(I18N.get("Facts"));	// TODO: label
+		animationCheckBox = new CheckBox(I18N.get("Animation"));
 
-		radioButtons.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) -> update());
-
-		locationsRadioButton.setOnAction(event -> showLocations());
+		radioButtons.selectedToggleProperty().addListener(_ -> update());
 		locationsRadioButton.setToggleGroup(radioButtons);
-
-		lineageRadioButton.setOnAction(event -> showLineage());
 		lineageRadioButton.setToggleGroup(radioButtons);
-
-		ancestorsRadioButton.setOnAction(event -> showAncestors());
 		ancestorsRadioButton.setToggleGroup(radioButtons);
-
-		descendantsRadioButton.setOnAction(event -> showDescendants());
 		descendantsRadioButton.setToggleGroup(radioButtons);
 
-		individualsComboBox.valueProperty().addListener((ObservableValue<? extends Individual> observable, Individual oldValue, Individual newValue) -> {
+		individualsComboBox.valueProperty().addListener((ObservableValue<? extends Individual> _, Individual _, Individual newValue) -> {
 			proband = newValue;
-
-			final var selectedRadioButton = radioButtons.getSelectedToggle();
-			if (selectedRadioButton == lineageRadioButton) {
-				showLineage();
-			} else if (selectedRadioButton == ancestorsRadioButton) {
-				showAncestors();
-			} else if (selectedRadioButton == descendantsRadioButton) {
-				showDescendants();
-			}
+			update();
 		});
 
-		animateFactsRadioButton.setOnAction(event -> animateFacts());
-		animateFactsRadioButton.setToggleGroup(radioButtons);
+		animationCheckBox.setOnAction(_ -> update());
 
 		configPane.setPadding(new Insets(PADDING, PADDING, PADDING, PADDING));
 		configPane.setSpacing(PADDING);
 		configPane.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(10), Insets.EMPTY)));
 		configPane.setBorder(new Border(new BorderStroke(Color.gray(0.69), BorderStrokeStyle.SOLID, new CornerRadii(3), new BorderWidths(2))));
-		configPane.getChildren().addAll(locationsRadioButton, lineageRadioButton, ancestorsRadioButton, descendantsRadioButton, individualsComboBox, animateFactsRadioButton);
+		configPane.getChildren().addAll(locationsRadioButton, lineageRadioButton, ancestorsRadioButton, descendantsRadioButton, individualsComboBox, animationCheckBox);
 
 		AnchorPane.setBottomAnchor(configPane, MARGIN);
 		AnchorPane.setLeftAnchor(configPane, MARGIN);
@@ -121,7 +103,7 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 	protected void onLoad() {
 		super.onLoad();
 
-		showLocations();
+		reset();
 	}
 
 	private void reset() {
@@ -134,16 +116,28 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 				individualsComboBox.getSelectionModel().clearSelection();
 			}
 
-			update();
-
-			showLocations();
+			animationCheckBox.setSelected(false);
 		});
 	}
 
 	private void update() {
 		Platform.runLater(() -> {
 			setEnabled(gedcom != null && gedcom.isLoaded());
-			individualsComboBox.setDisable(radioButtons.getSelectedToggle() == locationsRadioButton || radioButtons.getSelectedToggle() == animateFactsRadioButton);
+
+			final var selectedRadioButton = radioButtons.getSelectedToggle();
+
+			individualsComboBox.setDisable(selectedRadioButton == locationsRadioButton);
+			animationCheckBox.setDisable(selectedRadioButton == locationsRadioButton);
+
+			if (selectedRadioButton == locationsRadioButton) {
+				showLocations();
+			} else if (selectedRadioButton == lineageRadioButton) {
+				showLineage();
+			} else if (selectedRadioButton == ancestorsRadioButton) {
+				showAncestors();
+			} else if (selectedRadioButton == descendantsRadioButton) {
+				showDescendants();
+			}
 		});
 	}
 
@@ -158,7 +152,7 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 	private void showLineage() {
 		Platform.runLater(() -> {
 			if (js != null && gedcom != null && gedcom.isLoaded() && proband != null) {
-				js.call("showLineage", JSONUtils.toJSON(proband.getLineage(Preferences.getLineageMode()).stream().map(Quintet::getValue1).toList()));
+				js.call("showLineage", JSONUtils.toJSON(proband.getLineage(Preferences.getLineageMode()).stream().map(Quintet::getValue1).toList()), animationCheckBox.isSelected());
 			}
 		});
 	}
@@ -166,7 +160,7 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 	private void showAncestors() {
 		Platform.runLater(() -> {
 			if (js != null && gedcom != null && gedcom.isLoaded() && proband != null) {
-				js.call("showAncestors", JSONUtils.toJSON(proband.getAncestorsList().stream().collect(Collectors.toMap(Quintet::getValue0, Quintet::getValue1))));
+				js.call("showAncestors", JSONUtils.toJSON(proband.getAncestorsList().stream().collect(Collectors.toMap(Quintet::getValue0, Quintet::getValue1))), animationCheckBox.isSelected());
 			}
 		});
 	}
@@ -174,16 +168,7 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 	private void showDescendants() {
 		Platform.runLater(() -> {
 			if (js != null && gedcom != null && gedcom.isLoaded() && proband != null) {
-				js.call("showDescendants", JSONUtils.toJSON(proband.getDescendantsList().stream().map(Quintet::getValue1).toList()));
-			}
-		});
-	}
-
-	private void animateFacts() {
-		Platform.runLater(() -> {
-			if (js != null && gedcom != null && gedcom.isLoaded()) {
-				System.out.println(JSONUtils.toJSON(gedcom.getDatedFacts()));
-				js.call("animateFacts", JSONUtils.toJSON(gedcom.getDatedFacts()));
+				js.call("showDescendants", JSONUtils.toJSON(proband.getDescendantsList().stream().map(Quintet::getValue1).toList()), animationCheckBox.isSelected());
 			}
 		});
 	}
