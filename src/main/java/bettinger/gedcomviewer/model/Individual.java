@@ -145,6 +145,12 @@ public class Individual extends IndividualFamilyCommonStructure {
 		return getSexSign(sex);
 	}
 
+	@JsonProperty
+	private String getBirthYear() {
+		final var birthDate = getBirthDate() != null ? getBirthDate() : getBaptismDate();
+		return birthDate == null ? "" : birthDate.getYear();
+	}
+
 	public Date getBirthDate() {
 		final var primaryFact = getPrimaryBirth();
 		return primaryFact == null ? null : primaryFact.getDate();

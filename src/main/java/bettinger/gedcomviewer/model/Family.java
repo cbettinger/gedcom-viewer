@@ -49,6 +49,12 @@ public class Family extends IndividualFamilyCommonStructure {
 		return wifes.isEmpty() ? null : (Individual) gedcom.getRecord(wifes.get(0).getRef());
 	}
 
+	@JsonProperty
+	private String getMarriageYear() {
+		final var marriageDate = getMarriageDate();
+		return marriageDate == null ? "" : marriageDate.getYear();
+	}
+
 	public Date getMarriageDate() {
 		final var primaryFact = getPrimaryMarriage();
 		return primaryFact == null ? null : primaryFact.getDate();

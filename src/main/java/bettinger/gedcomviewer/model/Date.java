@@ -33,6 +33,10 @@ public class Date implements Comparable<Date> {
 		return raw;
 	}
 
+	public String getYear() {
+		return components[3] == null ? "" : components[3];
+	}
+
 	@Override
 	public String toString() {
 		return formatted;
