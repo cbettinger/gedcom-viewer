@@ -4,8 +4,7 @@ const LINE_COLOR = "#FF2262";
 
 let map = null;
 let bounds = null;
-let layer = null;
-let locationsBounds = null;
+let container = null;
 
 addEventListener("DOMContentLoaded", () => { addMap(); });
 
@@ -41,7 +40,7 @@ function addMap() {
 function showLocations(json) {
 	let locations = JSON.parse(json);
 
-	reset(locations.length ?  L.markerClusterGroup({
+	reset(locations.length ? L.markerClusterGroup({
 		showCoverageOnHover: false,
 	}) : L.layerGroup());
 
@@ -53,10 +52,6 @@ function showLocations(json) {
 		}
 
 		show();
-
-		if (bounds?.isValid()) {
-			locationsBounds = bounds;
-		}
 	}
 }
 
@@ -82,7 +77,7 @@ function showLineage(json, animate = false) {
 				}
 			}
 
-			let parentsMarriageLocation = individual?.parents?.marriageLocation;
+			let parentsMarriageLocation = individual?.parents?.marriageLocation;	// TODO: could be after birth of child!
 			if (parentsMarriageLocation) {
 				if (parentsMarriageLocation.latitude && parentsMarriageLocation.longitude) {
 					if (!locationInfos.has(parentsMarriageLocation.id)) {
@@ -98,7 +93,11 @@ function showLineage(json, animate = false) {
 			createNumberedMarker(locationInfo.location, locationInfo.entries.map(e => `${locationInfo.entries.length === 1 ? "" : `<span class="number">${e.number}:</span>`}${e.text}`), locationInfo.entries.length === 1 ? locationInfo.entries[0].number : "…");
 		}
 
-		addPolyline(linePoints);
+		if (animate) {
+			addAnimatedPolyline(linePoints);
+		} else {
+			addPolyline(linePoints);
+		}
 
 		show();
 	}
@@ -199,7 +198,7 @@ function showDescendants(json, animate = false) {
 					if (!locationInfos.has(birthOrBaptismLocation.id)) {
 						locationInfos.set(birthOrBaptismLocation.id, { location: birthOrBaptismLocation, entries: [] });
 					}
-					locationInfos.get(birthOrBaptismLocation.id).entries.push(`<span class="sign">${individual.birthLocation ? '*' : '~'}</span> ${individual.name}` );
+					locationInfos.get(birthOrBaptismLocation.id).entries.push(`<span class="sign">${individual.birthLocation ? '*' : '~'}</span> ${individual.name}`);
 
 					if (individuals.indexOf(individual) > 0) {
 						let parentsMarriageLocation = individual?.parents?.marriageLocation;
@@ -235,23 +234,34 @@ function showDescendants(json, animate = false) {
 	}
 }
 
-function reset(newLayer = L.layerGroup()) {
+function reset(newContainer = L.layerGroup()) {
 	if (map) {
 		bounds = new L.LatLngBounds();
 
-		if (layer) {
-			map.removeLayer(layer);
+		if (container) {
+			map.removeLayer(container);
 		}
-		layer = newLayer;
+		container = newContainer;
 	}
 }
 
 function addLine(location1, location2) {
-	layer.addLayer(L.polyline([[location1.latitude, location1.longitude], [location2.latitude, location2.longitude]], { color: LINE_COLOR }));
+	container.addLayer(L.polyline([[location1.latitude, location1.longitude], [location2.latitude, location2.longitude]], { color: LINE_COLOR }));
 }
 
 function addPolyline(linePoints) {
-	layer.addLayer(L.polyline(linePoints, { color: LINE_COLOR }));
+	container.addLayer(L.polyline(linePoints, { color: LINE_COLOR }));
+}
+
+function addAnimatedPolyline(linePoints) {
+	container.addLayer(L.motion.polyline(linePoints, { color: LINE_COLOR }, {
+		auto: true,
+		duration: 3000,
+	}, {
+		showMarker: true,
+		removeOnEnd: false,
+		//icon: L.divIcon({ html: "<i class='fa fa-car fa-2x' aria-hidden='true'></i>", iconSize: L.point(27.5, 24) })
+	}));
 }
 
 function createNumberedMarker(location, entries = null, number = "?") {
@@ -262,28 +272,22 @@ function createNumberedMarker(location, entries = null, number = "?") {
 
 function createMarker(location, entries = null) {
 	let marker = L.marker([location.latitude, location.longitude]);
-	marker.bindTooltip(`<h1>${location.name}</h1>${entries ? entries.join("<br>") : ""}<br />${location.imageURL ? `<img src="${location.imageURL}" />`: ""}`, { className: "map-marker-tooltip" });
+	marker.bindTooltip(`<h1>${location.name}</h1>${entries ? entries.join("<br>") : ""}<br />${location.imageURL ? `<img src="${location.imageURL}" />` : ""}`, { className: "map-marker-tooltip" });
 	bounds.extend(marker.getLatLng());
-	layer.addLayer(marker);
+	container.addLayer(marker);
 	return marker;
 }
 
 function show() {
 	if (map) {
-		if (layer) {
-			map.addLayer(layer);
+		if (container) {
+			map.addLayer(container);
 		}
 
-		if (bounds) {
-			if (bounds.isValid()) {
-				map.fitBounds(bounds);
-			}
-			else if (locationsBounds?.isValid()) {
-				map.fitBounds(locationsBounds);
-			}
-			else {
-				map.setView([0, 0], 0);
-			}
+		if (bounds?.isValid()) {
+			map.fitBounds(bounds);
+		} else {
+			map.setView([0, 0], 0);
 		}
 	}
 }
