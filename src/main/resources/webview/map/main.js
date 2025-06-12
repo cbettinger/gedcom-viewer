@@ -2,10 +2,14 @@ function getExports() { return { showLocations, showLineage, showAncestors, show
 
 const LINE_COLOR = "#FF2262";
 
+const ANIMATION_YEARS_PER_SECOND = 40.0;
+
 let map = null;
 let bounds = null;
 let container = null;
 let animation = null;
+
+let yearLabel = document.getElementById("yearLabel");
 
 addEventListener("DOMContentLoaded", () => { addMap(); });
 
@@ -74,7 +78,7 @@ function showLineage(json, animate = false) {
 						locationInfos.set(birthOrBaptismLocation.id, { location: birthOrBaptismLocation, entries: [] });
 					}
 					locationInfos.get(birthOrBaptismLocation.id).entries.push({ number: number++, text: `<span class="sign">${individual.birthLocation ? '*' : '~'}</span> ${individual.name}` });
-					linePoints.push([birthOrBaptismLocation.latitude, birthOrBaptismLocation.longitude]);
+					linePoints.push([birthOrBaptismLocation.latitude, birthOrBaptismLocation.longitude, parseInt(individual.birthYear)]);
 				}
 			}
 
@@ -85,7 +89,7 @@ function showLineage(json, animate = false) {
 						locationInfos.set(parentsMarriageLocation.id, { location: parentsMarriageLocation, entries: [] });
 					}
 					locationInfos.get(parentsMarriageLocation.id).entries.push({ number: number++, text: `<span class="sign">⚭</span> ${individual.parents.name}` });
-					linePoints.push([parentsMarriageLocation.latitude, parentsMarriageLocation.longitude]);
+					linePoints.push([parentsMarriageLocation.latitude, parentsMarriageLocation.longitude, parseInt(individual.parents.marriageYear)]);
 				}
 			}
 		}
@@ -238,6 +242,8 @@ function showDescendants(json, animate = false) {
 }
 
 function reset(newContainer = L.layerGroup()) {
+	hideYearLabel();
+
 	if (map) {
 		bounds = new L.LatLngBounds();
 
@@ -262,20 +268,27 @@ function addPolyline(linePoints) {
 	container.addLayer(polyline);
 }
 
-function addAnimationSequence(linePoints) {
+function addAnimationSequence(linePoints) {	// TODO: NaN checks
+	log(linePoints);
+
+	let yearsTotal = linePoints[linePoints.length - 1][2] - linePoints[0][2];
+	log(yearsTotal);
+
 	animation = L.motion.seq([]);
+
 	for (let i = 0; i < linePoints.length - 1; i++) {
-		let line = createAnimatedLine(linePoints[i], linePoints[i + 1]);
+		let point1 = linePoints[i];
+		let point2 = linePoints[i + 1];
+
+		let years = point2[2] - point1[2];
+		let duration = years / ANIMATION_YEARS_PER_SECOND * 1000;
+
+		let line = L.motion.polyline([point1, point2], { color: LINE_COLOR }, { duration });
 		bounds.extend(line.getBounds());
 		animation.addLayer(line, true);
 	}
-	container.addLayer(animation);
-}
 
-function createAnimatedLine(point1, point2) {
-	return L.motion.polyline([point1, point2], { color: LINE_COLOR }, {
-		duration: 500,
-	});
+	container.addLayer(animation);
 }
 
 function createNumberedMarker(location, entries = null, number = "?") {
@@ -292,6 +305,15 @@ function createMarker(location, entries = null) {
 	return marker;
 }
 
+function hideYearLabel() {
+	yearLabel.style.display = "none";
+}
+
+function showYearLabel(textContent = "") {
+	yearLabel.textContent = textContent;
+	yearLabel.style.display = "block";
+}
+
 function show() {
 	if (map) {
 		if (container) {
@@ -306,4 +328,8 @@ function show() {
 
 		animation?.motionStart();
 	}
+}
+
+function log(obj) {
+	alert(JSON.stringify(obj));
 }

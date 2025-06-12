@@ -36,3 +36,19 @@ body {
 .map-marker-tooltip .sign {
 	min-width: 0.5rem;
 }
+
+#yearLabel {
+	position: relative;
+	z-index: 1000000;
+	margin: auto;
+	margin-top: 10px;
+	width: 80px;
+
+	background-color: white;
+	padding: 5px;
+	border: 2px solid rgba(0, 0, 0, 0.2);
+	border-radius: 4px;
+
+	text-align: center;
+	font-size: 200%;
+}
