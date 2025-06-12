@@ -90,12 +90,14 @@ function showLineage(json, animate = false) {
 			}
 		}
 
-		for (let locationInfo of locationInfos.values()) {
-			createNumberedMarker(locationInfo.location, locationInfo.entries.map(e => `${locationInfo.entries.length === 1 ? "" : `<span class="number">${e.number}:</span>`}${e.text}`), locationInfo.entries.length === 1 ? locationInfo.entries[0].number : "…");
+		if (!animate) {
+			for (let locationInfo of locationInfos.values()) {
+				createNumberedMarker(locationInfo.location, locationInfo.entries.map(e => `${locationInfo.entries.length === 1 ? "" : `<span class="number">${e.number}:</span>`}${e.text}`), locationInfo.entries.length === 1 ? locationInfo.entries[0].number : "…");
+			}
 		}
 
 		if (animate) {
-			addAnimationSequence(linePoints);
+			addAnimationSequence(linePoints.toReversed());
 		} else {
 			addPolyline(linePoints);
 		}
@@ -249,29 +251,30 @@ function reset(newContainer = L.layerGroup()) {
 }
 
 function addLine(location1, location2) {
-	container.addLayer(L.polyline([[location1.latitude, location1.longitude], [location2.latitude, location2.longitude]], { color: LINE_COLOR }));
+	let line = L.polyline([[location1.latitude, location1.longitude], [location2.latitude, location2.longitude]], { color: LINE_COLOR });
+	bounds.extend(line.getBounds());
+	container.addLayer(line);
 }
 
 function addPolyline(linePoints) {
-	container.addLayer(L.polyline(linePoints, { color: LINE_COLOR }));
+	let polyline = L.polyline(linePoints, { color: LINE_COLOR });
+	bounds.extend(polyline.getBounds());
+	container.addLayer(polyline);
 }
 
 function addAnimationSequence(linePoints) {
 	animation = L.motion.seq([]);
 	for (let i = 0; i < linePoints.length - 1; i++) {
-		animation.addLayer(createAnimatedPolyline([linePoints[i], linePoints[i + 1]]), true);
+		let line = createAnimatedLine(linePoints[i], linePoints[i + 1]);
+		bounds.extend(line.getBounds());
+		animation.addLayer(line, true);
 	}
 	container.addLayer(animation);
 }
 
-function createAnimatedPolyline(linePoints) {
-	return L.motion.polyline(linePoints, { color: LINE_COLOR }, {
-		auto: false,
+function createAnimatedLine(point1, point2) {
+	return L.motion.polyline([point1, point2], { color: LINE_COLOR }, {
 		duration: 500,
-	}, {
-		showMarker: true,
-		removeOnEnd: false,
-		//icon: L.divIcon({ html: "<i class='fa fa-car fa-2x' aria-hidden='true'></i>", iconSize: L.point(27.5, 24) })
 	});
 }
 
@@ -293,14 +296,14 @@ function show() {
 	if (map) {
 		if (container) {
 			map.addLayer(container);
-
-			animation?.motionStart();
 		}
 
 		if (bounds?.isValid()) {
 			map.fitBounds(bounds);
 		} else {
-			map.setView([0, 0], 0);
+			map.fitWorld();
 		}
+
+		animation?.motionStart();
 	}
 }
