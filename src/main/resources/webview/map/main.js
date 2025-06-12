@@ -5,6 +5,7 @@ const LINE_COLOR = "#FF2262";
 let map = null;
 let bounds = null;
 let container = null;
+let animation = null;
 
 addEventListener("DOMContentLoaded", () => { addMap(); });
 
@@ -94,7 +95,7 @@ function showLineage(json, animate = false) {
 		}
 
 		if (animate) {
-			addAnimatedPolyline(linePoints);
+			addAnimationSequence(linePoints);
 		} else {
 			addPolyline(linePoints);
 		}
@@ -242,6 +243,8 @@ function reset(newContainer = L.layerGroup()) {
 			map.removeLayer(container);
 		}
 		container = newContainer;
+
+		animation = null;
 	}
 }
 
@@ -253,15 +256,23 @@ function addPolyline(linePoints) {
 	container.addLayer(L.polyline(linePoints, { color: LINE_COLOR }));
 }
 
-function addAnimatedPolyline(linePoints) {
-	container.addLayer(L.motion.polyline(linePoints, { color: LINE_COLOR }, {
-		auto: true,
-		duration: 3000,
+function addAnimationSequence(linePoints) {
+	animation = L.motion.seq([]);
+	for (let i = 0; i < linePoints.length - 1; i++) {
+		animation.addLayer(createAnimatedPolyline([linePoints[i], linePoints[i + 1]]), true);
+	}
+	container.addLayer(animation);
+}
+
+function createAnimatedPolyline(linePoints) {
+	return L.motion.polyline(linePoints, { color: LINE_COLOR }, {
+		auto: false,
+		duration: 500,
 	}, {
 		showMarker: true,
 		removeOnEnd: false,
 		//icon: L.divIcon({ html: "<i class='fa fa-car fa-2x' aria-hidden='true'></i>", iconSize: L.point(27.5, 24) })
-	}));
+	});
 }
 
 function createNumberedMarker(location, entries = null, number = "?") {
@@ -282,6 +293,8 @@ function show() {
 	if (map) {
 		if (container) {
 			map.addLayer(container);
+
+			animation?.motionStart();
 		}
 
 		if (bounds?.isValid()) {
