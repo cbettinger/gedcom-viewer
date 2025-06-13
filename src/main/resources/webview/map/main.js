@@ -95,7 +95,7 @@ function showLineage(json, animate = false) {
 		}
 
 		if (animate) {
-			addAnimationSequence(linePoints.toReversed());
+			addAnimation(linePoints.toReversed());
 		} else {
 			for (let locationInfo of locationInfos.values()) {
 				createNumberedMarker(locationInfo.location, locationInfo.entries.map(e => `${locationInfo.entries.length === 1 ? "" : `<span class="number">${e.number}:</span>`}${e.text}`), locationInfo.entries.length === 1 ? locationInfo.entries[0].number : "…");
@@ -268,7 +268,7 @@ function addPolyline(linePoints) {
 	}
 }
 
-function addAnimationSequence(linePoints) {
+function addAnimation(linePoints) {
 	log(linePoints);	// TODO: remove
 
 	if (linePoints.length > 1) {
@@ -324,7 +324,7 @@ function showMap() {
 	fitMap();
 
 	if (animation) {
-		showYearLabel();
+		startAnimation();
 	}
 }
 
@@ -336,12 +336,12 @@ function fitMap() {
 	}
 }
 
-function showYearLabel() {
+function startAnimation() {
 	if (animation && Number.isInteger(animation.firstYear) && Number.isInteger(animation.lastYear) && animation.lastYear >= animation.firstYear) {
 		let year = animation.firstYear;
 
 		let timer = setInterval(() => {
-			updateYearLabel(year);
+			showYearLabel(year);
 			if (year === animation.lastYear) {
 				clearInterval(timer);
 			}
@@ -352,7 +352,7 @@ function showYearLabel() {
 	}
 }
 
-function updateYearLabel(textContent = "") {
+function showYearLabel(textContent = "") {
 	yearLabel.textContent = textContent;
 	yearLabel.style.display = "block";
 }
