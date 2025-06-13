@@ -93,21 +93,23 @@ class MediaManager {
 		appendPrimaryImage(sb, true, Constants.PORTRAIT_WIDTH);
 	}
 
-	public void appendPrimaryImage(final StringBuilder sb, final boolean onlyPhoto, final int width) {
-		final var imageURL = getPrimaryImageURL(onlyPhoto);
-		if (!imageURL.isEmpty()) {
-			HTMLUtils.appendLineBreak(sb);
-			HTMLUtils.appendImage(sb, imageURL, width);
-		}
+	public void appendPrimaryPhoto(final StringBuilder sb) {
+		appendPrimaryImage(sb, true, Constants.PREVIEW_IMAGE_WIDTH);
 	}
 
-	public String getPrimaryImageURL(final boolean onlyPhoto) {
-		final var image = getPrimaryImage(onlyPhoto);
-		if (image != null) {
-			return image.getURL().toString();
-		}
+	public void appendPrimaryImage(final StringBuilder sb) {
+		appendPrimaryImage(sb, false, Constants.PREVIEW_IMAGE_WIDTH);
+	}
 
-		return "";
+	public void appendPrimaryImage(final StringBuilder sb, final boolean onlyPhoto, final int width) {
+		final var image = getPrimaryImage(onlyPhoto);
+		if (image != null && image.exists()) {
+			final var imageURL = image.getURL();
+			if (!imageURL.isEmpty()) {
+				HTMLUtils.appendLineBreak(sb);
+				HTMLUtils.appendImage(sb, imageURL, width);
+			}
+		}
 	}
 
 	public Media getPrimaryImage(final boolean onlyPhoto) {

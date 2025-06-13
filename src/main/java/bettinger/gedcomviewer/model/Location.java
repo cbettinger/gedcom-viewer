@@ -13,7 +13,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.Preferences;
@@ -55,7 +54,8 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 		this.latitude = parseLatitude(mapTag);
 		this.longitude = parseLongitude(mapTag);
 
-		this.imageURL = getPrimaryImageURL(false);
+		final var image = getPrimaryImage(false);
+		this.imageURL = image != null && image.exists() && !image.getURL().isEmpty() ? image.getURL() : "";
 
 		this.isStructure = true;
 	}
@@ -72,7 +72,8 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 		this.latitude = latitude;
 		this.longitude = longitude;
 
-		this.imageURL = getPrimaryImageURL(false);
+		final var image = getPrimaryImage(false);
+		this.imageURL = image != null && image.exists() && !image.getURL().isEmpty() ? image.getURL() : "";
 
 		this.isStructure = false;
 	}
@@ -138,11 +139,6 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 	}
 
 	@Override
-	public String getPrimaryImageURL(final boolean onlyPhoto) {
-		return mediaManager.getPrimaryImageURL(onlyPhoto);
-	}
-
-	@Override
 	public Media getPrimaryImage(final boolean onlyPhoto) {
 		return mediaManager.getPrimaryImage(onlyPhoto);
 	}
@@ -189,7 +185,7 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 		HTMLUtils.appendH1(sb, getName());
 
 		if (!options.contains(HTMLOption.EXPORT)) {
-			mediaManager.appendPrimaryImage(sb, false, Constants.PREVIEW_IMAGE_WIDTH);
+			mediaManager.appendPrimaryImage(sb);
 		}
 
 		if (Math.signum(latitude) != 0 && Math.signum(longitude) != 0) {

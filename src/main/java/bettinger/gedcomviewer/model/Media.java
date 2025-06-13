@@ -3,7 +3,6 @@ package bettinger.gedcomviewer.model;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -133,24 +132,25 @@ public class Media extends Structure implements Record, NoteContainer, SourceCit
 		return getId();
 	}
 
+	public String getURL() {
+		try {
+			return getFile().toURI().toURL().toString();
+		} catch (final Exception _) {
+			return "";
+		}
+	}
+
+	public boolean exists() {
+		final var file = getFile();
+		return file.exists() && !file.isDirectory();
+	}
+
 	public File getFile() {
 		return new File(fileName);
 	}
 
 	public String getFileName() {
 		return fileName;
-	}
-
-	public URL getURL() {
-		URL fileURL = null;
-
-		try {
-			fileURL = new File(fileName).toURI().toURL();
-		} catch (final Exception _) {
-			// intentionally left blank
-		}
-
-		return fileURL;
 	}
 
 	public Type getType() {
@@ -192,27 +192,22 @@ public class Media extends Structure implements Record, NoteContainer, SourceCit
 
 		HTMLUtils.appendH1(sb, getTitle());
 
-		final URL fileURL = getURL();
-		if (fileURL != null) {
-			final var file = getFile();
-			final var fileExists = file.exists() && !file.isDirectory();
-			if (fileExists) {
-				if (isImage()) {
-					HTMLUtils.appendH2(sb, I18N.get("Preview"));
-					if (options.contains(HTMLOption.EXPORT)) {
-						HTMLUtils.appendImage(sb, fileURL.toString());
-					} else {
-						HTMLUtils.appendImage(sb, fileURL.toString(), Constants.PREVIEW_IMAGE_WIDTH);
-					}
-					HTMLUtils.appendLineBreak(sb);
+		if (exists()) {
+			if (isImage()) {
+				HTMLUtils.appendH2(sb, I18N.get("Preview"));
+				if (options.contains(HTMLOption.EXPORT)) {
+					HTMLUtils.appendImage(sb, getURL());
+				} else {
+					HTMLUtils.appendImage(sb, getURL(), Constants.PREVIEW_IMAGE_WIDTH);
 				}
+				HTMLUtils.appendLineBreak(sb);
+			}
 
-				if (!options.contains(HTMLOption.NO_OPEN_MEDIA_LINK)) {
-					if (options.contains(HTMLOption.EXPORT)) {
-						HTMLUtils.appendText(sb, HTMLUtils.createDownloadLink(fileURL.toString(), I18N.get("OpenFile")));
-					} else {
-						HTMLUtils.appendText(sb, HTMLUtils.createLink(fileURL.toString(), I18N.get("OpenFile")));
-					}
+			if (!options.contains(HTMLOption.NO_OPEN_MEDIA_LINK)) {
+				if (options.contains(HTMLOption.EXPORT)) {
+					HTMLUtils.appendText(sb, HTMLUtils.createDownloadLink(getURL(), I18N.get("OpenFile")));
+				} else {
+					HTMLUtils.appendText(sb, HTMLUtils.createLink(getURL(), I18N.get("OpenFile")));
 				}
 			}
 		}

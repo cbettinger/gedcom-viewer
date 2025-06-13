@@ -84,11 +84,6 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 	}
 
 	@Override
-	public String getPrimaryImageURL(final boolean onlyPhoto) {
-		return mediaManager.getPrimaryImageURL(onlyPhoto);
-	}
-
-	@Override
 	public Media getPrimaryImage(final boolean onlyPhoto) {
 		return mediaManager.getPrimaryImage(onlyPhoto);
 	}
