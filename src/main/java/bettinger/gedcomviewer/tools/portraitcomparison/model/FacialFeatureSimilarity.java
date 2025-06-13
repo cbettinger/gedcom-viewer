@@ -15,11 +15,11 @@ public class FacialFeatureSimilarity {
         this.maxMatchAncestorFileName = maxMatchAncestorFileName;
     }
     
-    public double getMaxSimilarity() {
+    public Float getMaxSimilarity() {
         return maxSimilarity;
     }
 
-    public double getAvgSimilarity() {
+    public Float getAvgSimilarity() {
         return avgSimilarity;
     }
 
