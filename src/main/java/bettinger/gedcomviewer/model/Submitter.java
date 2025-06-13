@@ -8,7 +8,6 @@ import java.util.Set;
 
 import org.folg.gedcom.model.GedcomTag;
 
-import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.utils.HTMLUtils;
@@ -112,11 +111,6 @@ public class Submitter extends Structure implements Record, NoteContainer, Media
 	}
 
 	@Override
-	public String getPrimaryImageURL(final boolean onlyPhoto) {
-		return mediaManager.getPrimaryImageURL(onlyPhoto);
-	}
-
-	@Override
 	public Media getPrimaryImage(final boolean onlyPhoto) {
 		return mediaManager.getPrimaryImage(onlyPhoto);
 	}
@@ -192,7 +186,7 @@ public class Submitter extends Structure implements Record, NoteContainer, Media
 		HTMLUtils.appendH1(sb, getName());
 
 		if (!options.contains(HTMLOption.EXPORT)) {
-			mediaManager.appendPrimaryImage(sb, true, Constants.PORTRAIT_WIDTH);
+			mediaManager.appendPortrait(sb);
 			HTMLUtils.appendLineBreaks(sb, 2);
 		}
 

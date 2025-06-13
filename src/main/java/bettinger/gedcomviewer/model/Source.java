@@ -88,11 +88,6 @@ public class Source extends Structure implements Record, NoteContainer, MediaCon
 	}
 
 	@Override
-	public String getPrimaryImageURL(final boolean onlyPhoto) {
-		return mediaManager.getPrimaryImageURL(onlyPhoto);
-	}
-
-	@Override
 	public Media getPrimaryImage(final boolean onlyPhoto) {
 		return mediaManager.getPrimaryImage(onlyPhoto);
 	}

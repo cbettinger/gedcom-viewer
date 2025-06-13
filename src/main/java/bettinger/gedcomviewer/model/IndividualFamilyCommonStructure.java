@@ -92,11 +92,6 @@ public abstract class IndividualFamilyCommonStructure extends Structure implemen
 	}
 
 	@Override
-	public String getPrimaryImageURL(final boolean onlyPhoto) {
-		return mediaManager.getPrimaryImageURL(onlyPhoto);
-	}
-
-	@Override
 	public Media getPrimaryImage(final boolean onlyPhoto) {
 		return mediaManager.getPrimaryImage(onlyPhoto);
 	}

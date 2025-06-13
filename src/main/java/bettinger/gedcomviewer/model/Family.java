@@ -7,13 +7,11 @@ import java.util.function.Predicate;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.utils.HTMLUtils;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonAutoDetect(fieldVisibility = Visibility.NONE, getterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
 public class Family extends IndividualFamilyCommonStructure {
@@ -142,7 +140,7 @@ public class Family extends IndividualFamilyCommonStructure {
 
 		if (!options.contains(HTMLOption.EXPORT)) {
 			HTMLUtils.appendLineBreak(sb);
-			mediaManager.appendPrimaryImage(sb, true, Constants.PREVIEW_IMAGE_WIDTH);
+			mediaManager.appendPrimaryPhoto(sb);
 		}
 
 		final var husband = getHusband();
