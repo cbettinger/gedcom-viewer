@@ -250,8 +250,10 @@ function resetMap(newContainer = L.layerGroup()) {
 	bounds = new L.LatLngBounds();
 
 	animation = null;
-	clearInterval(animationTimer);
-	animationTimer = null;
+	if (animationTimer) {
+		clearInterval(animationTimer);
+		animationTimer = null;
+	}
 
 	hideYearLabel();
 }
@@ -355,12 +357,12 @@ function startAnimation() {
 }
 
 function showYearLabel(textContent = "") {
-	yearLabel?.textContent = textContent;
-	yearLabel?.style.display = "block";
+	yearLabel.textContent = textContent;
+	yearLabel.style.display = "block";
 }
 
 function hideYearLabel() {
-	yearLabel?.style.display = "none";
+	yearLabel.style.display = "none";
 }
 
 function log(obj) {
