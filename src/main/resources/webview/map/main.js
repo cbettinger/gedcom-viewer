@@ -56,7 +56,7 @@ function showLocations(json) {
 			}
 		}
 
-		show();
+		showMap();
 	}
 }
 
@@ -94,19 +94,17 @@ function showLineage(json, animate = false) {
 			}
 		}
 
-		if (!animate) {
-			for (let locationInfo of locationInfos.values()) {
-				createNumberedMarker(locationInfo.location, locationInfo.entries.map(e => `${locationInfo.entries.length === 1 ? "" : `<span class="number">${e.number}:</span>`}${e.text}`), locationInfo.entries.length === 1 ? locationInfo.entries[0].number : "…");
-			}
-		}
-
 		if (animate) {
 			addAnimationSequence(linePoints.toReversed());
 		} else {
+			for (let locationInfo of locationInfos.values()) {
+				createNumberedMarker(locationInfo.location, locationInfo.entries.map(e => `${locationInfo.entries.length === 1 ? "" : `<span class="number">${e.number}:</span>`}${e.text}`), locationInfo.entries.length === 1 ? locationInfo.entries[0].number : "…");
+			}
+
 			addPolyline(linePoints);
 		}
 
-		show();
+		showMap();
 	}
 }
 
@@ -186,7 +184,7 @@ function showAncestors(json, animate = false) {
 			createMarker(locationInfo.location, locationInfo.entries);
 		}
 
-		show();
+		showMap();
 	}
 }
 
@@ -237,7 +235,7 @@ function showDescendants(json, animate = false) {
 			createMarker(locationInfo.location, locationInfo.entries);
 		}
 
-		show();
+		showMap();
 	}
 }
 
@@ -263,34 +261,45 @@ function addLine(location1, location2) {
 }
 
 function addPolyline(linePoints) {
-	let polyline = L.polyline(linePoints, { color: LINE_COLOR });
-	bounds.extend(polyline.getBounds());
-	container.addLayer(polyline);
+	if (linePoints.length > 1) {
+		let polyline = L.polyline(linePoints, { color: LINE_COLOR });
+		bounds.extend(polyline.getBounds());
+		container.addLayer(polyline);
+	}
 }
 
-function addAnimationSequence(linePoints) {	// TODO: NaN checks
-	log(linePoints);
+function addAnimationSequence(linePoints) {
+	log(linePoints);	// TODO: remove
 
-	animation = L.motion.seq([]);
+	if (linePoints.length > 1) {
+		animation = L.motion.seq([]);
 
-	animation.firstYear = linePoints[0][2];
-	animation.lastYear =  linePoints[linePoints.length - 1][2];
-	animation.totalYears = animation.lastYear - animation.firstYear;
+		let firstPoint = linePoints[0];
+		let lastPoint = linePoints[linePoints.length - 1];
 
-	for (let i = 0; i < linePoints.length - 1; i++) {
-		let point1 = linePoints[i];
-		let point2 = linePoints[i + 1];
+		animation.firstYear = firstPoint.length > 2 ? firstPoint[2] : null;
+		animation.lastYear = lastPoint.length > 2 ? lastPoint[2] : null;
 
-		let years = point2[2] - point1[2];
-		let duration = years / ANIMATION_YEARS_PER_SECOND * 1000;
+		for (let i = 0; i < linePoints.length - 1; i++) {
+			let point1 = linePoints[i];
+			let point2 = linePoints[i + 1];
 
-		let line = L.motion.polyline([point1, point2], { color: LINE_COLOR }, { duration });
-		line.years = years;
-		bounds.extend(line.getBounds());
-		animation.addLayer(line, true);
+			if (point1.length > 2 && point2.length > 2) {
+				let years = point2[2] - point1[2];
+
+				if (Number.isInteger(years)) {
+					let duration = years / ANIMATION_YEARS_PER_SECOND * 1000;
+
+					let line = L.motion.polyline([point1, point2], { color: LINE_COLOR }, { duration });
+					line.years = years;
+					bounds.extend(line.getBounds());
+					animation.addLayer(line, true);
+				}
+			}
+		}
+
+		container.addLayer(animation);
 	}
-
-	container.addLayer(animation);
 }
 
 function createNumberedMarker(location, entries = null, number = "?") {
@@ -307,42 +316,49 @@ function createMarker(location, entries = null) {
 	return marker;
 }
 
-function hideYearLabel() {
-	yearLabel.style.display = "none";
+function showMap() {
+	if (map && container) {
+		map.addLayer(container);
+	}
+
+	fitMap();
+
+	if (animation) {
+		showYearLabel();
+	}
 }
 
-function showYearLabel(textContent = "") {
+function fitMap() {
+	if (bounds?.isValid()) {
+		map?.fitBounds(bounds);
+	} else {
+		map?.fitWorld();
+	}
+}
+
+function showYearLabel() {
+	if (animation && Number.isInteger(animation.firstYear) && Number.isInteger(animation.lastYear) && animation.lastYear >= animation.firstYear) {
+		let year = animation.firstYear;
+
+		let timer = setInterval(() => {
+			updateYearLabel(year);
+			if (year === animation.lastYear) {
+				clearInterval(timer);
+			}
+			year++;
+		}, 1000.0 / ANIMATION_YEARS_PER_SECOND);
+
+		animation.motionStart();
+	}
+}
+
+function updateYearLabel(textContent = "") {
 	yearLabel.textContent = textContent;
 	yearLabel.style.display = "block";
 }
 
-function show() {	// TODO: null checks
-	if (map) {
-		if (container) {
-			map.addLayer(container);
-		}
-
-		if (bounds?.isValid()) {
-			map.fitBounds(bounds);
-		} else {
-			map.fitWorld();
-		}
-
-
-		let timer = null;
-		if (animation) {
-			let year = animation.firstYear;
-
-			timer = setInterval(() => {
-				if (year === animation.lastYear) {
-					clearInterval(timer);
-				}
-				showYearLabel(year++);
-			}, 1000.0 / ANIMATION_YEARS_PER_SECOND);
-
-			animation.motionStart();
-		}
-	}
+function hideYearLabel() {
+	yearLabel.style.display = "none";
 }
 
 function log(obj) {
