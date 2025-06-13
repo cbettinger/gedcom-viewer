@@ -5,6 +5,7 @@ const LINE_COLOR = "#FF2262";
 const ANIMATION_YEARS_PER_SECOND = 40.0;
 
 let map = null;
+
 let bounds = null;
 let container = null;
 
@@ -53,7 +54,7 @@ function showLocations(json) {
 	if (locations.length) {
 		for (let location of locations) {
 			if (location.latitude && location.longitude) {
-				createMarker(location, location.references);
+				addMarker(location, location.references);
 			}
 		}
 
@@ -99,7 +100,7 @@ function showLineage(json, animate = false) {
 			addAnimation(linePoints.toReversed());
 		} else {
 			for (let locationInfo of locationInfos.values()) {
-				createNumberedMarker(locationInfo.location, locationInfo.entries.map(e => `${locationInfo.entries.length === 1 ? "" : `<span class="number">${e.number}:</span>`}${e.text}`), locationInfo.entries.length === 1 ? locationInfo.entries[0].number : "…");
+				addNumberedMarker(locationInfo.location, locationInfo.entries.map(e => `${locationInfo.entries.length === 1 ? "" : `<span class="number">${e.number}:</span>`}${e.text}`), locationInfo.entries.length === 1 ? locationInfo.entries[0].number : "…");
 			}
 
 			addPolyline(linePoints);
@@ -182,7 +183,7 @@ function showAncestors(json, animate = false) {
 		}
 
 		for (let locationInfo of locationInfos.values()) {
-			createMarker(locationInfo.location, locationInfo.entries);
+			addMarker(locationInfo.location, locationInfo.entries);
 		}
 
 		showMap();
@@ -233,7 +234,7 @@ function showDescendants(json, animate = false) {
 		}
 
 		for (let locationInfo of locationInfos.values()) {
-			createMarker(locationInfo.location, locationInfo.entries);
+			addMarker(locationInfo.location, locationInfo.entries);
 		}
 
 		showMap();
@@ -241,21 +242,15 @@ function showDescendants(json, animate = false) {
 }
 
 function resetMap(newContainer = L.layerGroup()) {
+	bounds = new L.LatLngBounds();
+
 	if (map && container) {
 		map.removeLayer(container);
 	}
 
 	container = newContainer;
 
-	bounds = new L.LatLngBounds();
-
-	animation = null;
-	if (animationTimer) {
-		clearInterval(animationTimer);
-		animationTimer = null;
-	}
-
-	hideYearLabel();
+	stopAnimation();
 }
 
 function addLine(location1, location2) {
@@ -306,13 +301,13 @@ function addAnimation(linePoints) {
 	}
 }
 
-function createNumberedMarker(location, entries = null, number = "?") {
-	let marker = createMarker(location, entries);
+function addNumberedMarker(location, entries = null, number = "?") {
+	let marker = addMarker(location, entries);
 	marker.setIcon(new L.NumberedDivIcon({ number }));
 	return marker;
 }
 
-function createMarker(location, entries = null) {
+function addMarker(location, entries = null) {
 	let marker = L.marker([location.latitude, location.longitude]);
 	marker.bindTooltip(`<h1>${location.name}</h1>${entries ? entries.join("<br>") : ""}<br />${location.imageURL ? `<img src="${location.imageURL}" />` : ""}`, { className: "map-marker-tooltip" });
 	bounds.extend(marker.getLatLng());
@@ -327,9 +322,7 @@ function showMap() {
 
 	fitMap();
 
-	if (animation) {
-		startAnimation();
-	}
+	startAnimation();
 }
 
 function fitMap() {
@@ -347,13 +340,27 @@ function startAnimation() {
 		animationTimer = setInterval(() => {
 			showYearLabel(year);
 			if (year === animation.lastYear) {
-				clearInterval(animationTimer);
+				stopAnimation();
 			}
 			year++;
 		}, 1000.0 / ANIMATION_YEARS_PER_SECOND);
 
 		animation.motionStart();
 	}
+}
+
+function stopAnimation() {
+	if (animation) {
+		animation.motionStop();
+		animation = null;
+	}
+
+	if (animationTimer) {
+		clearInterval(animationTimer);
+		animationTimer = null;
+	}
+
+	hideYearLabel();
 }
 
 function showYearLabel(textContent = "") {
