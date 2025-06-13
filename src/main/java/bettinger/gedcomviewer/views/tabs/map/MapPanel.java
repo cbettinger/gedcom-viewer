@@ -48,6 +48,7 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 	private RadioButton ancestorsRadioButton;
 	private RadioButton descendantsRadioButton;
 	private IndividualsComboBox individualsComboBox;
+	private CheckBox pathsCheckBox;
 	private CheckBox animationCheckBox;
 
 	public MapPanel() {
@@ -62,6 +63,7 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 		ancestorsRadioButton = new RadioButton(I18N.get("Ancestors"));
 		descendantsRadioButton = new RadioButton(I18N.get("Descendants"));
 		individualsComboBox = new IndividualsComboBox();
+		pathsCheckBox = new CheckBox(I18N.get("Paths"));
 		animationCheckBox = new CheckBox(I18N.get("Animation"));
 
 		radioButtons.selectedToggleProperty().addListener(_ -> update());
@@ -75,13 +77,14 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 			update();
 		});
 
+		pathsCheckBox.setOnAction(_ -> update());
 		animationCheckBox.setOnAction(_ -> update());
 
 		configPane.setPadding(new Insets(PADDING, PADDING, PADDING, PADDING));
 		configPane.setSpacing(PADDING);
 		configPane.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(10), Insets.EMPTY)));
 		configPane.setBorder(new Border(new BorderStroke(Color.gray(0.69), BorderStrokeStyle.SOLID, new CornerRadii(3), new BorderWidths(2))));
-		configPane.getChildren().addAll(locationsRadioButton, lineageRadioButton, ancestorsRadioButton, descendantsRadioButton, individualsComboBox, animationCheckBox);
+		configPane.getChildren().addAll(locationsRadioButton, lineageRadioButton, ancestorsRadioButton, descendantsRadioButton, individualsComboBox, pathsCheckBox, animationCheckBox);
 
 		AnchorPane.setBottomAnchor(configPane, MARGIN);
 		AnchorPane.setLeftAnchor(configPane, MARGIN);
@@ -116,6 +119,7 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 				individualsComboBox.getSelectionModel().clearSelection();
 			}
 
+			pathsCheckBox.setSelected(false);
 			animationCheckBox.setSelected(false);
 		});
 	}
@@ -127,6 +131,7 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 			final var selectedRadioButton = radioButtons.getSelectedToggle();
 
 			individualsComboBox.setDisable(selectedRadioButton == locationsRadioButton);
+			pathsCheckBox.setDisable(selectedRadioButton == locationsRadioButton);
 			animationCheckBox.setDisable(selectedRadioButton == locationsRadioButton);
 
 			if (selectedRadioButton == locationsRadioButton) {
@@ -152,7 +157,7 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 	private void showLineage() {
 		Platform.runLater(() -> {
 			if (js != null && gedcom != null && gedcom.isLoaded() && proband != null) {
-				js.call("showLineage", JSONUtils.toJSON(proband.getLineage(Preferences.getLineageMode()).stream().map(Quintet::getValue1).toList()), animationCheckBox.isSelected());
+				js.call("showLineage", JSONUtils.toJSON(proband.getLineage(Preferences.getLineageMode()).stream().map(Quintet::getValue1).toList()), pathsCheckBox.isSelected(), animationCheckBox.isSelected());
 			}
 		});
 	}
@@ -160,7 +165,7 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 	private void showAncestors() {
 		Platform.runLater(() -> {
 			if (js != null && gedcom != null && gedcom.isLoaded() && proband != null) {
-				js.call("showAncestors", JSONUtils.toJSON(proband.getAncestorsList().stream().collect(Collectors.toMap(Quintet::getValue0, Quintet::getValue1))), animationCheckBox.isSelected());
+				js.call("showAncestors", JSONUtils.toJSON(proband.getAncestorsList().stream().collect(Collectors.toMap(Quintet::getValue0, Quintet::getValue1))), pathsCheckBox.isSelected(), animationCheckBox.isSelected());
 			}
 		});
 	}
@@ -168,7 +173,7 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 	private void showDescendants() {
 		Platform.runLater(() -> {
 			if (js != null && gedcom != null && gedcom.isLoaded() && proband != null) {
-				js.call("showDescendants", JSONUtils.toJSON(proband.getDescendantsList().stream().map(Quintet::getValue1).toList()), animationCheckBox.isSelected());
+				js.call("showDescendants", JSONUtils.toJSON(proband.getDescendantsList().stream().map(Quintet::getValue1).toList()), pathsCheckBox.isSelected(), animationCheckBox.isSelected());
 			}
 		});
 	}
