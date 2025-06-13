@@ -7,8 +7,9 @@ const ANIMATION_YEARS_PER_SECOND = 40.0;
 let map = null;
 let bounds = null;
 let container = null;
-let animation = null;
 
+let animation = null;
+let animationTimer = null;
 let yearLabel = document.getElementById("yearLabel");
 
 addEventListener("DOMContentLoaded", () => { addMap(); });
@@ -45,7 +46,7 @@ function addMap() {
 function showLocations(json) {
 	let locations = JSON.parse(json);
 
-	reset(locations.length ? L.markerClusterGroup({
+	resetMap(locations.length ? L.markerClusterGroup({
 		showCoverageOnHover: false,
 	}) : L.layerGroup());
 
@@ -63,7 +64,7 @@ function showLocations(json) {
 function showLineage(json, animate = false) {
 	let individuals = JSON.parse(json);
 
-	reset();
+	resetMap();
 
 	if (individuals.length) {
 		let locationInfos = new Map();
@@ -111,7 +112,7 @@ function showLineage(json, animate = false) {
 function showAncestors(json, animate = false) {
 	let ancestors = JSON.parse(json);
 
-	reset();
+	resetMap();
 
 	if (1 in ancestors) {
 		let locationInfos = new Map();
@@ -191,7 +192,7 @@ function showAncestors(json, animate = false) {
 function showDescendants(json, animate = false) {
 	let individuals = JSON.parse(json);
 
-	reset();
+	resetMap();
 
 	if (individuals.length) {
 		let locationInfos = new Map();
@@ -239,19 +240,20 @@ function showDescendants(json, animate = false) {
 	}
 }
 
-function reset(newContainer = L.layerGroup()) {
-	hideYearLabel();
-
-	if (map) {
-		bounds = new L.LatLngBounds();
-
-		if (container) {
-			map.removeLayer(container);
-		}
-		container = newContainer;
-
-		animation = null;
+function resetMap(newContainer = L.layerGroup()) {
+	if (map && container) {
+		map.removeLayer(container);
 	}
+
+	container = newContainer;
+
+	bounds = new L.LatLngBounds();
+
+	animation = null;
+	clearInterval(animationTimer);
+	animationTimer = null;
+
+	hideYearLabel();
 }
 
 function addLine(location1, location2) {
@@ -340,10 +342,10 @@ function startAnimation() {
 	if (animation && Number.isInteger(animation.firstYear) && Number.isInteger(animation.lastYear) && animation.lastYear >= animation.firstYear) {
 		let year = animation.firstYear;
 
-		let timer = setInterval(() => {
+		animationTimer = setInterval(() => {
 			showYearLabel(year);
 			if (year === animation.lastYear) {
-				clearInterval(timer);
+				clearInterval(animationTimer);
 			}
 			year++;
 		}, 1000.0 / ANIMATION_YEARS_PER_SECOND);
@@ -353,12 +355,12 @@ function startAnimation() {
 }
 
 function showYearLabel(textContent = "") {
-	yearLabel.textContent = textContent;
-	yearLabel.style.display = "block";
+	yearLabel?.textContent = textContent;
+	yearLabel?.style.display = "block";
 }
 
 function hideYearLabel() {
-	yearLabel.style.display = "none";
+	yearLabel?.style.display = "none";
 }
 
 function log(obj) {
