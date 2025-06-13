@@ -1,6 +1,8 @@
 function getExports() { return { showLocations, showLineage, showAncestors, showDescendants }; }
 
-const LINE_COLOR = "#FF2262";
+const COLOR = "#FF2262";
+const OPACITY = 0.7;
+const CIRCLE_MARKER_RADIUS = 7;
 
 const ANIMATION_YEARS_PER_SECOND = 40.0;
 
@@ -59,7 +61,7 @@ function showLocations(json) {
 	if (locations.length) {
 		for (let location of locations) {
 			if (location.latitude && location.longitude) {
-				addMarker(location, location.references);
+				addRegularMarker(location, location.references);
 			}
 		}
 
@@ -75,7 +77,6 @@ function showLineage(json, paths = false, animate = false) {
 	if (individuals.length) {
 		let locationInfos = new Map();
 		let linePoints = [];
-		let number = 1;
 
 		for (let individual of individuals) {
 			let birthOrBaptismLocation = individual.birthLocation || individual.baptismLocation;
@@ -84,7 +85,7 @@ function showLineage(json, paths = false, animate = false) {
 					if (!locationInfos.has(birthOrBaptismLocation.id)) {
 						locationInfos.set(birthOrBaptismLocation.id, { location: birthOrBaptismLocation, entries: [] });
 					}
-					locationInfos.get(birthOrBaptismLocation.id).entries.push({ number: number++, text: `<span class="sign">${individual.birthLocation ? '*' : '~'}</span> ${individual.name}` });
+					locationInfos.get(birthOrBaptismLocation.id).entries.push(`<span class="sign">${individual.birthLocation ? '*' : '~'}</span> ${individual.name}`);
 					linePoints.push([birthOrBaptismLocation.latitude, birthOrBaptismLocation.longitude, parseInt(individual.birthYear)]);
 				}
 			}
@@ -95,7 +96,7 @@ function showLineage(json, paths = false, animate = false) {
 					if (!locationInfos.has(parentsMarriageLocation.id)) {
 						locationInfos.set(parentsMarriageLocation.id, { location: parentsMarriageLocation, entries: [] });
 					}
-					locationInfos.get(parentsMarriageLocation.id).entries.push({ number: number++, text: `<span class="sign">⚭</span> ${individual.parents.name}` });
+					locationInfos.get(parentsMarriageLocation.id).entries.push(`<span class="sign">⚭</span> ${individual.parents.name}`);
 					linePoints.push([parentsMarriageLocation.latitude, parentsMarriageLocation.longitude, parseInt(individual.parents.marriageYear)]);
 				}
 			}
@@ -104,12 +105,12 @@ function showLineage(json, paths = false, animate = false) {
 		if (animate) {
 			addAnimation(linePoints.toReversed());
 		} else {
-			for (let locationInfo of locationInfos.values()) {
-				addNumberedMarker(locationInfo.location, locationInfo.entries.map(e => `${locationInfo.entries.length === 1 ? "" : `<span class="number">${e.number}:</span>`}${e.text}`), locationInfo.entries.length === 1 ? locationInfo.entries[0].number : "…");
-			}
-
 			if (paths) {
 				addPolyline(linePoints);
+			}
+
+			for (let locationInfo of locationInfos.values()) {
+				addCircleMarker(locationInfo.location, locationInfo.entries);
 			}
 		}
 
@@ -190,7 +191,7 @@ function showAncestors(json, paths = false, animate = false) {
 		}
 
 		for (let locationInfo of locationInfos.values()) {
-			addMarker(locationInfo.location, locationInfo.entries);
+			addCircleMarker(locationInfo.location, locationInfo.entries);
 		}
 
 		showMap();
@@ -241,7 +242,7 @@ function showDescendants(json, paths = false, animate = false) {
 		}
 
 		for (let locationInfo of locationInfos.values()) {
-			addMarker(locationInfo.location, locationInfo.entries);
+			addCircleMarker(locationInfo.location, locationInfo.entries);
 		}
 
 		showMap();
@@ -261,14 +262,14 @@ function resetMap(newContainer = L.layerGroup()) {
 }
 
 function addLine(location1, location2) {
-	let line = L.polyline([[location1.latitude, location1.longitude], [location2.latitude, location2.longitude]], { color: LINE_COLOR });
+	let line = L.polyline([[location1.latitude, location1.longitude], [location2.latitude, location2.longitude]], { color: COLOR, opacity: OPACITY });
 	bounds.extend(line.getBounds());
 	container.addLayer(line);
 }
 
 function addPolyline(linePoints) {
 	if (linePoints.length > 1) {
-		let polyline = L.polyline(linePoints, { color: LINE_COLOR });
+		let polyline = L.polyline(linePoints, { color: COLOR, opacity: OPACITY });
 		bounds.extend(polyline.getBounds());
 		container.addLayer(polyline);
 	}
@@ -294,7 +295,7 @@ function addAnimation(linePoints) {
 				if (Number.isInteger(years)) {
 					let duration = years / ANIMATION_YEARS_PER_SECOND * 1000;
 
-					let line = L.motion.polyline([point1, point2], { color: LINE_COLOR }, { duration });
+					let line = L.motion.polyline([point1, point2], { color: COLOR, opacity: OPACITY }, { duration });
 					line.years = years;
 					bounds.extend(line.getBounds());
 					animation.addLayer(line, true);
@@ -306,15 +307,16 @@ function addAnimation(linePoints) {
 	}
 }
 
-function addNumberedMarker(location, entries = null, number = "?") {
-	let marker = addMarker(location, entries);
-	marker.setIcon(new L.NumberedDivIcon({ number }));
-	return marker;
+function addRegularMarker(location, entries = null) {
+	return addMarker(L.marker([location.latitude, location.longitude]), location, entries);
 }
 
-function addMarker(location, entries = null) {
-	let marker = L.marker([location.latitude, location.longitude]);
-	marker.bindTooltip(`<h1>${location.name}</h1>${entries ? entries.join("<br>") : ""}<br />${location.imageURL ? `<img src="${location.imageURL}" />` : ""}`, { className: "map-marker-tooltip" });
+function addCircleMarker(location, entries = null) {
+	return addMarker(L.circleMarker([location.latitude, location.longitude], { radius: CIRCLE_MARKER_RADIUS, color: COLOR, fillOpacity: OPACITY, stroke: false}), location, entries);
+}
+
+function addMarker(marker, location, entries = null) {
+	marker.bindTooltip(`<h1>${location.name}</h1>${entries ? entries.join("<br />") : ""}<br />${location.imageURL ? `<img src="${location.imageURL}" />` : ""}`, { className: "map-marker-tooltip" });
 	bounds.extend(marker.getLatLng());
 	container.addLayer(marker);
 	return marker;
