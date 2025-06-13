@@ -47,9 +47,7 @@ function addMap() {
 function showLocations(json) {
 	let locations = JSON.parse(json);
 
-	resetMap(locations.length ? L.markerClusterGroup({
-		showCoverageOnHover: false,
-	}) : L.layerGroup());
+	resetMap(locations.length ? L.markerClusterGroup({ showCoverageOnHover: false }) : L.layerGroup());
 
 	if (locations.length) {
 		for (let location of locations) {
@@ -268,8 +266,6 @@ function addPolyline(linePoints) {
 }
 
 function addAnimation(linePoints) {
-	log(linePoints);	// TODO: remove
-
 	if (linePoints.length > 1) {
 		animation = L.motion.seq([]);
 
