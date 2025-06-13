@@ -28,15 +28,13 @@ public class FacialFeatureAnalysisResult {
         HashMap<String, FacialFeatureSimilarity> personSimilarities = new HashMap<>();
         HashMap<AncestralLine, Float> pathSimilarities = new HashMap<>();
 
-        final var personSimilarityEntries = personSimilaritiesNode.fields();
-        while (personSimilarityEntries.hasNext()) {
-            final var entry = personSimilarityEntries.next();
+        final var personSimilarityEntries = personSimilaritiesNode.properties();
+        for (final var entry : personSimilarityEntries) {
             personSimilarities.put(entry.getKey(), FacialFeatureSimilarity.fromJSON(entry.getValue()));
         }
 
-        final var pathSimilarityEntries = pathSimilaritiesNode.fields();
-        while (pathSimilarityEntries.hasNext()) {
-            final var entry = pathSimilarityEntries.next();
+        final var pathSimilarityEntries = pathSimilaritiesNode.properties();
+        for (final var entry : pathSimilarityEntries) {
             pathSimilarities.put(AncestralLine.fromString(entry.getKey()), Float.parseFloat(entry.getValue().asText()));
         }
 
