@@ -228,7 +228,7 @@ class Node {
 
 		if (individual != null) {
 			final var primaryImage = individual.getPrimaryImage(true);
-			if (primaryImage != null) {
+			if (primaryImage != null && primaryImage.exists()) {
 				var image = (BufferedImage) primaryImage.getImage();
 
 				final var clip = individual.getImageClip(primaryImage);
