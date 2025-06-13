@@ -258,7 +258,7 @@ function resetMap(newContainer = L.layerGroup()) {
 
 	container = newContainer;
 
-	stopAnimation();
+	resetAnimation();
 }
 
 function addLine(location1, location2) {
@@ -356,6 +356,11 @@ function startAnimation() {
 	}
 }
 
+function resetAnimation() {
+	stopAnimation();
+	hideYearLabel();
+}
+
 function stopAnimation() {
 	if (animation) {
 		animation.motionStop();
@@ -366,8 +371,6 @@ function stopAnimation() {
 		clearInterval(animationTimer);
 		animationTimer = null;
 	}
-
-	hideYearLabel();
 }
 
 function showYearLabel(textContent = "") {

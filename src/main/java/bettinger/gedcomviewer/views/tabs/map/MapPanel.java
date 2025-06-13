@@ -109,7 +109,7 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 		reset();
 	}
 
-	private void reset() {
+	private void reset() {	// TODO: store settings
 		Platform.runLater(() -> {
 			radioButtons.selectToggle(locationsRadioButton);
 
