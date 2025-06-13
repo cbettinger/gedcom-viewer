@@ -1,5 +1,6 @@
 package bettinger.gedcomviewer.tools.portraitcomparison.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -39,5 +40,43 @@ public class FacialFeatureAnalysisResult {
         }
 
         return new FacialFeatureAnalysisResult(personSimilarities, pathSimilarities);
+    }
+
+    public Object[] getMaxPersonSimilarity() {
+        ArrayList<String> idsWithMaxSim = new ArrayList<>();
+        Float maxSimilarity = null;
+        for (final var entry : personSimilarities.entrySet()) {
+            final var id = entry.getKey();
+            final var avgSim = entry.getValue().getAvgSimilarity();
+            if (maxSimilarity == null || avgSim > maxSimilarity) {
+                idsWithMaxSim.clear();
+                idsWithMaxSim.add(id);
+                maxSimilarity = avgSim;
+            } else if (avgSim == maxSimilarity) {
+                idsWithMaxSim.add(id);
+            }
+        }
+        
+        Object[] result = {idsWithMaxSim, maxSimilarity};
+        return result;
+    }
+
+    public Object[] getMaxPathSimilarity() {
+        ArrayList<AncestralLine> pathsWithMaxSim = new ArrayList<>();
+        Float maxSimilarity = null;
+        for (final var entry : pathSimilarities.entrySet()) {
+            final var path = entry.getKey();
+            final var avgSim = entry.getValue();
+            if (maxSimilarity == null || avgSim > maxSimilarity) {
+                pathsWithMaxSim.clear();
+                pathsWithMaxSim.add(path);
+                maxSimilarity = avgSim;
+            } else if (avgSim == maxSimilarity) {
+                pathsWithMaxSim.add(path);
+            }
+        }
+        
+        Object[] result = {pathsWithMaxSim, maxSimilarity};
+        return result;
     }
 }
