@@ -1,11 +1,7 @@
 package bettinger.gedcomviewer.tools.portraitcomparison.model;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-
-import com.fasterxml.jackson.databind.JsonNode;
-
-import bettinger.gedcomviewer.utils.JSONUtils;
+import java.util.List;
 
 public class AncestralLine {
 
@@ -16,12 +12,8 @@ public class AncestralLine {
     }
 
     public static AncestralLine fromString(final String bottomUpLine) {
-        final JsonNode pathNode = JSONUtils.fromString(bottomUpLine);
-        ArrayList<String> pathArray = new ArrayList<>();
-        for(JsonNode personID : pathNode) {
-            pathArray.add(personID.asText());
-        }
-        return new AncestralLine((String[])pathArray.toArray());
+        List<String> pathArray = Arrays.asList(bottomUpLine.split("\\s*,\\s*"));
+        return new AncestralLine(pathArray.toArray(new String[0]));
     }
 
     @Override
