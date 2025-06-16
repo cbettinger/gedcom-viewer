@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
 import bettinger.gedcomviewer.I18N;
@@ -26,7 +27,7 @@ public class ResultOverviewPane extends JPanel {
         var visualization = new JPanel();
         TreeMap<FacialFeatures, Object[]> maxPathSimilarities = new TreeMap<>();
         TreeMap<FacialFeatures, Object[]> maxPersonSimilarities = new TreeMap<>();
-        final String[] columns = {I18N.get("FacialFeature"), I18N.get("LineColor"), I18N.get("AvgSimilarity"), I18N.get("MaxSimilarity")};
+        final String[] columns = {I18N.get("FacialFeature"), I18N.get("LineColor"), I18N.get("MaxPathSimilarity"), I18N.get("MaxSimilarity")};
         ArrayList<Object[]> tableData = new ArrayList<>();
 
         for (final var entry : results.entrySet()) {
@@ -37,15 +38,16 @@ public class ResultOverviewPane extends JPanel {
            final var maxPersonSimilarity = featureResult.getMaxPersonSimilarity();
            maxPersonSimilarities.put(feature, maxPersonSimilarity);
 
-           Object[] row = {feature, feature, maxPathSimilarity[1], maxPersonSimilarity[1]};
+           Object[] row = {I18N.get(feature.name()), feature, maxPathSimilarity[1], maxPersonSimilarity[1]};
            tableData.add(row);
         }
 
         var legend = new AutoFitTable();
         Object[][] data = tableData.toArray(new Object[0][0]);
         legend.setModel(new DefaultTableModel(data, columns));
+        legend.getColumnModel().getColumn(1).setCellRenderer(new OverviewTableLineColorCellRenderer());
 
-        add(legend, BorderLayout.LINE_END);
+        add(new JScrollPane(legend), BorderLayout.LINE_END);
     }
 
     public static Map<FacialFeatures, Color> getFeatureColors() {
