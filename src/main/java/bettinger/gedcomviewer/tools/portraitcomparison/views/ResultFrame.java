@@ -7,10 +7,12 @@ import java.util.logging.Logger;
 
 import javax.swing.JTabbedPane;
 
+import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.tools.portraitcomparison.model.FacialFeatureAnalysisResult;
 import bettinger.gedcomviewer.tools.portraitcomparison.model.FacialFeatures;
 import bettinger.gedcomviewer.views.Frame;
+import bettinger.gedcomviewer.views.MainFrame;
 
 public class ResultFrame extends Frame {
 
@@ -28,6 +30,9 @@ public class ResultFrame extends Frame {
         tabbedPane.addTab(I18N.get("DetailedView"), detailedPane);
 
         add(tabbedPane);
+        pack();
+		setSize(Constants.DEFAULT_FRAME_WIDTH, Constants.DEFAULT_FRAME_HEIGHT);
+		setLocationRelativeTo(MainFrame.getInstance());
         setVisible(true);
     }
 }
