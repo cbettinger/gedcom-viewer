@@ -15,7 +15,7 @@ import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.model.Structure;
 
-class Node {
+public class Node {
 
 	static final int MINIMAL_WIDTH = 200;
 	static final int MINIMAL_HEIGHT = 100;
@@ -58,15 +58,15 @@ class Node {
 	private int change;
 	private int shift;
 
-	Node(final SVGGraphics2D g, final Individual individual) {
+	public Node(final SVGGraphics2D g, final Individual individual) {
 		this(g, individual, false);
 	}
 
-	Node(final SVGGraphics2D g, final Individual individual, final boolean isClone) {
+	public Node(final SVGGraphics2D g, final Individual individual, final boolean isClone) {
 		this(g, individual, isClone, null);
 	}
 
-	Node(final SVGGraphics2D g, final Individual individual, final boolean isClone, final Node parent) {
+	public Node(final SVGGraphics2D g, final Individual individual, final boolean isClone, final Node parent) {
 		this.g = g;
 
 		this.individual = individual;
@@ -104,95 +104,95 @@ class Node {
 		this.height = Math.max(MINIMAL_HEIGHT, text.size() * (lineHeight + PADDING) + 2 * PADDING);
 	}
 
-	Point getPosition() {
+	public Point getPosition() {
 		return new Point(x, y);
 	}
 
-	Rectangle getRectangle() {
+	public Rectangle getRectangle() {
 		return new Rectangle(x, y, width, height);
 	}
 
-	Individual getIndividual() {
+	public Individual getIndividual() {
 		return individual;
 	}
 
-	Node getParent() {
+	public Node getParent() {
 		return parent;
 	}
 
-	int getDepth() {
+	public int getDepth() {
 		return depth;
 	}
 
-	int getChildIndex() {
+	public int getChildIndex() {
 		return getParent() == null ? 0 : getParent().getChildren().indexOf(this);
 	}
 
-	boolean hasChildren() {
+	public boolean hasChildren() {
 		return !getChildren().isEmpty();
 	}
 
-	int getChildCount() {
+	public int getChildCount() {
 		return getChildren().size();
 	}
 
-	Node getChild(final int index) {
+	public Node getChild(final int index) {
 		return getChildren().get(index);
 	}
 
-	List<Node> getChildren() {
+	public List<Node> getChildren() {
 		return children;
 	}
 
-	int getMod() {
+	public int getMod() {
 		return mod;
 	}
 
-	void setMod(final int value) {
+	public void setMod(final int value) {
 		mod = value;
 	}
 
-	Node getThread() {
+	public Node getThread() {
 		return thread;
 	}
 
-	void setThread(final Node value) {
+	public void setThread(final Node value) {
 		thread = value;
 	}
 
-	int getPrelim() {
+	public int getPrelim() {
 		return prelim;
 	}
 
-	void setPrelim(final int value) {
+	public void setPrelim(final int value) {
 		prelim = value;
 	}
 
-	Node getAncestor() {
+	public Node getAncestor() {
 		return ancestor;
 	}
 
-	void setAncestor(final Node value) {
+	public void setAncestor(final Node value) {
 		ancestor = value;
 	}
 
-	int getChange() {
+	public int getChange() {
 		return change;
 	}
 
-	void setChange(final int value) {
+	public void setChange(final int value) {
 		change = value;
 	}
 
-	int getShift() {
+	public int getShift() {
 		return shift;
 	}
 
-	void setShift(final int value) {
+	public void setShift(final int value) {
 		shift = value;
 	}
 
-	void render(final int x, final int y) {
+	public void render(final int x, final int y) {
 		this.x = x;
 		this.y = y;
 
