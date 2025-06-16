@@ -26,6 +26,11 @@ public abstract class FacialFeatureAnalyser {
         for(String o : outputs) {
             Logger.getLogger(FacialFeatureAnalyser.class.getName()).log(Level.INFO, o);
         }
+        final var outputJSON = JSONUtils.fromString(outputs.getLast());
+        for (final var feature : FacialFeatures.values()) {
+            results.put(feature, FacialFeatureAnalysisResult.fromJSON(outputJSON, feature.name()));
+        }
+
         return results;
     }
 
