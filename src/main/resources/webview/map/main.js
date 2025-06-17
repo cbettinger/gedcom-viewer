@@ -56,12 +56,12 @@ function addMap() {
 function showLocations(json) {
 	let locations = JSON.parse(json);
 
-	resetMap(locations.length ? L.markerClusterGroup({ showCoverageOnHover: false }) : L.layerGroup());
+	resetMap(locations.length ? L.markerClusterGroup({ showCoverageOnHover: true }) : L.layerGroup());
 
 	if (locations.length) {
 		for (let location of locations) {
 			if (location.latitude && location.longitude) {
-				addRegularMarker(location, location.references);
+				addMarker(location, location.references);
 			}
 		}
 
@@ -110,7 +110,7 @@ function showLineage(json, paths = false, animate = false) {
 			}
 
 			for (let locationInfo of locationInfos.values()) {
-				addCircleMarker(locationInfo.location, locationInfo.entries);
+				addMarker(locationInfo.location, locationInfo.entries);
 			}
 		}
 
@@ -191,7 +191,7 @@ function showAncestors(json, paths = false, animate = false) {
 		}
 
 		for (let locationInfo of locationInfos.values()) {
-			addCircleMarker(locationInfo.location, locationInfo.entries);
+			addMarker(locationInfo.location, locationInfo.entries);
 		}
 
 		showMap();
@@ -242,7 +242,7 @@ function showDescendants(json, paths = false, animate = false) {
 		}
 
 		for (let locationInfo of locationInfos.values()) {
-			addCircleMarker(locationInfo.location, locationInfo.entries);
+			addMarker(locationInfo.location, locationInfo.entries);
 		}
 
 		showMap();
@@ -307,15 +307,8 @@ function addAnimation(linePoints) {
 	}
 }
 
-function addRegularMarker(location, entries = null) {
-	return addMarker(L.marker([location.latitude, location.longitude]), location, entries);
-}
-
-function addCircleMarker(location, entries = null) {
-	return addMarker(L.circleMarker([location.latitude, location.longitude], { radius: CIRCLE_MARKER_RADIUS, color: COLOR, fillOpacity: OPACITY, stroke: false}), location, entries);
-}
-
-function addMarker(marker, location, entries = null) {
+function addMarker(location, entries = null) {
+	let marker = L.circleMarker([location.latitude, location.longitude], { radius: CIRCLE_MARKER_RADIUS, color: COLOR, fillOpacity: OPACITY, stroke: false});
 	marker.bindTooltip(`<h1>${location.name}</h1>${entries ? entries.join("<br />") : ""}<br />${location.imageURL ? `<img src="${location.imageURL}" />` : ""}`, { className: "map-marker-tooltip" });
 	bounds.extend(marker.getLatLng());
 	container.addLayer(marker);

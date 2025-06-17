@@ -29,7 +29,6 @@ public abstract class Preferences {
 	private static final String GENERATIONS_KEY_PREFIX = "generations";
 
 	public static void storeRecentFile(final File file) {
-
 		if (file != null) {
 			final var recentFilePaths = getRecentFilePaths();
 
