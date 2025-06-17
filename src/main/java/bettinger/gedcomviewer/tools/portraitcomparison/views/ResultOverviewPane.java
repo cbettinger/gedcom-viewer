@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -16,16 +18,16 @@ import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.tools.portraitcomparison.model.FacialFeatureAnalysisResult;
 import bettinger.gedcomviewer.tools.portraitcomparison.model.FacialFeatures;
 import bettinger.gedcomviewer.views.AutoFitTable;
+import bettinger.gedcomviewer.views.WebViewPanel;
 
 public class ResultOverviewPane extends JPanel {
+    private final WebViewPanel visualization;
     
     public ResultOverviewPane(final Individual proband, final int numGenerations, final TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results) {
         super();
         setLayout(new BorderLayout());
 
-        final Map<FacialFeatures, Color> FEATURE_COLORS = ResultOverviewPane.getFeatureColors();
-
-        var visualization = new JPanel();
+        this.visualization = new WebViewPanel();
         TreeMap<FacialFeatures, Object[]> maxPathSimilarities = new TreeMap<>();
         TreeMap<FacialFeatures, Object[]> maxPersonSimilarities = new TreeMap<>();
         final String[] columns = {I18N.get("FacialFeature"), I18N.get("LineColor"), I18N.get("MaxPathSimilarity"), I18N.get("MaxSimilarity")};
@@ -49,7 +51,26 @@ public class ResultOverviewPane extends JPanel {
         legend.getColumnModel().getColumn(1).setCellRenderer(new OverviewTableLineColorCellRenderer());
 
         add(new JScrollPane(legend), BorderLayout.LINE_END);
+        add(visualization, BorderLayout.LINE_START);
+        update(proband, numGenerations, results);
     }
+
+    private void update(final Individual proband, final int numGenerations, final TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results) {
+		ResultOverviewRenderer renderer = null;
+
+		try {
+			renderer = new ResultOverviewRenderer();
+		} catch (final Exception e) {
+			Logger.getLogger(ResultOverviewPane.class.getName()).log(Level.SEVERE, "Failed to create renderer", e);
+		}
+
+		if (renderer != null) {
+			renderer.render(proband, numGenerations+1);
+
+			visualization.setBody(renderer.toString());
+			visualization.scrollTo(renderer.getProbandNode().getPosition());
+		}
+	}
 
     public static Map<FacialFeatures, Color> getFeatureColors() {
         final Map<FacialFeatures, Color> FEATURE_COLORS = new HashMap<>();
