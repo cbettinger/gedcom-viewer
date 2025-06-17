@@ -524,7 +524,7 @@ public class MainFrame extends Frame {
 					super.onSuccess(uri);
 
 					if (results != null) {
-						new ResultFrame(results);
+						new ResultFrame(proband, maxDepth, results);
 					}
 				}
 			}.execute();

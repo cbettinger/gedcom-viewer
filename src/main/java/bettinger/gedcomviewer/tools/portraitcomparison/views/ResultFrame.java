@@ -9,6 +9,7 @@ import javax.swing.JTabbedPane;
 
 import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.I18N;
+import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.tools.portraitcomparison.model.FacialFeatureAnalysisResult;
 import bettinger.gedcomviewer.tools.portraitcomparison.model.FacialFeatures;
 import bettinger.gedcomviewer.views.Frame;
@@ -16,7 +17,7 @@ import bettinger.gedcomviewer.views.MainFrame;
 
 public class ResultFrame extends Frame {
 
-    public ResultFrame(final TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results) {
+    public ResultFrame(final Individual proband, final int numGenerations, final TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results) {
         super();
         Logger.getLogger(ResultFrame.class.getName()).log(Level.INFO, results.toString());
 
@@ -26,7 +27,7 @@ public class ResultFrame extends Frame {
         }
 
         var tabbedPane = new JTabbedPane();
-        tabbedPane.addTab(I18N.get("Overview"), new ResultOverviewPane(results));
+        tabbedPane.addTab(I18N.get("Overview"), new ResultOverviewPane(proband, numGenerations, results));
         tabbedPane.addTab(I18N.get("DetailedView"), detailedPane);
 
         add(tabbedPane);

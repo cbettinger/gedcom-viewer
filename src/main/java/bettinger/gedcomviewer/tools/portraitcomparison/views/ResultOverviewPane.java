@@ -12,13 +12,14 @@ import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
 import bettinger.gedcomviewer.I18N;
+import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.tools.portraitcomparison.model.FacialFeatureAnalysisResult;
 import bettinger.gedcomviewer.tools.portraitcomparison.model.FacialFeatures;
 import bettinger.gedcomviewer.views.AutoFitTable;
 
 public class ResultOverviewPane extends JPanel {
     
-    public ResultOverviewPane(final TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results) {
+    public ResultOverviewPane(final Individual proband, final int numGenerations, final TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results) {
         super();
         setLayout(new BorderLayout());
 
