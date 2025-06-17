@@ -43,14 +43,16 @@ public class AutoFitTable extends JTable {
 			final var component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 			if (value instanceof File file && component instanceof JLabel label) {
+				final var fileExists = FileUtils.exists(file);
+
 				label.setText(FileUtils.getFileName(file));
 				label.setForeground(Color.BLACK);
-				label.setBackground(file.exists() && !file.isDirectory() ? TRANSPARENT : RED);
+				label.setBackground(fileExists ? TRANSPARENT : RED);
 
 				Color backgroundColor = TRANSPARENT;
 				Color foregroundColor = Color.BLACK;
 
-				if (!file.exists() || file.isDirectory()) {
+				if (!fileExists) {
 					backgroundColor = RED;
 				} else if (isSelected) {
 					backgroundColor = SELECTION_BACKGROUND;

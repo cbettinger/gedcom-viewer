@@ -141,8 +141,7 @@ public class Media extends Structure implements Record, NoteContainer, SourceCit
 	}
 
 	public boolean exists() {
-		final var file = getFile();
-		return file.exists() && !file.isDirectory();
+		return FileUtils.exists(getFile());
 	}
 
 	public File getFile() {

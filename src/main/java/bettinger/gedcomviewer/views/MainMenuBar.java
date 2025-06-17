@@ -281,11 +281,9 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 
 		final var recentFiles = Preferences.getRecentFiles();
 		for (final var recentFile : recentFiles) {
-			if (FileUtils.exists(recentFile)) {
-				final var recentFileMenuItem = new JMenuItem(FileUtils.getFileName(recentFile));
-				recentFileMenuItem.addActionListener(_ -> Events.post(new UI.LoadFileCommand(recentFile)));
-				recentFilesMenuItem.add(recentFileMenuItem);
-			}
+			final var recentFileMenuItem = new JMenuItem(FileUtils.getFileName(recentFile));
+			recentFileMenuItem.addActionListener(_ -> Events.post(new UI.LoadFileCommand(recentFile)));
+			recentFilesMenuItem.add(recentFileMenuItem);
 		}
 
 		recentFilesMenuItem.setEnabled(!recentFiles.isEmpty());
