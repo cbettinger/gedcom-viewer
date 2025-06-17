@@ -166,9 +166,9 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 		return longitude;
 	}
 
-	@JsonProperty("references")
-	private List<String> getFactLabels() {
-		return recordManager.getReferences().stream().filter(Fact.class::isInstance).map(f -> ((Fact) f).getLabel()).toList();
+	@JsonProperty
+	private List<String> getFacts() {
+		return getReferences().stream().filter(Fact.class::isInstance).map(f -> ((Fact) f).toString()).toList();
 	}
 	/* #endregion */
 

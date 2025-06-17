@@ -6,9 +6,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.I18N;
 
+@JsonAutoDetect(fieldVisibility = Visibility.NONE, getterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
 public class Date implements Comparable<Date> {
 
 	@SuppressWarnings("java:S5843")
@@ -33,6 +38,7 @@ public class Date implements Comparable<Date> {
 		return raw;
 	}
 
+	@JsonProperty
 	public String getYear() {
 		return components[3] == null ? "" : components[3];
 	}

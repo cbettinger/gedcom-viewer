@@ -6,10 +6,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.utils.HTMLUtils;
 
+@JsonAutoDetect(fieldVisibility = Visibility.NONE, getterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
 public class Fact extends Substructure implements NoteContainer, MediaContainer, SourceCitationContainer, Comparable<Fact> {
 
 	private static final List<String> BAPTISM_TAGS = Arrays.asList("BAP", "BAPM", "BAPT", "BAPTISM", "ADULT_CHRISTNG", "CHR", "CHRA", "CHRISTENING");
@@ -23,7 +28,9 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 	private final org.folg.gedcom.model.EventFact wrappedFact;
 	private final IndividualFamilyCommonStructure individualOrFamily;
 
+	@JsonProperty
 	private final Date date;
+	@JsonProperty
 	private Location location;
 
 	Fact(final GEDCOM gedcom, final org.folg.gedcom.model.EventFact eventFact, final IndividualFamilyCommonStructure parentStructure) {
@@ -197,18 +204,20 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 		return Quality.fromValue(qualityValue);
 	}
 
-	public String getLabel() {
-		return toString();
-	}
 	/* #endregion */
 
 	/* #region toString & toHTML */
+	@JsonProperty
 	@Override
 	public String toString() {
 		final var sb = new StringBuilder(String.format(Format.PADDED_PIPE_SEPARATED, getParentStructure().toString(), getLocaleTag()));
 
 		if (!getValue().isEmpty()) {
 			sb.append(String.format(Format.TRAILING_SPACE_COLON_WITH_SUFFIX, getValue()));
+		}
+
+		if (getDate() != null) {
+			sb.append(String.format(Format.TRAILING_PADDED_PIPE_WITH_SUFFIX, getDate().toString()));
 		}
 
 		return sb.toString();

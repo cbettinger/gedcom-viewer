@@ -2,7 +2,7 @@ function getExports() { return { showLocations, showLineage, showAncestors, show
 
 const COLOR = "#FF2262";
 const OPACITY = 0.7;
-const CIRCLE_MARKER_RADIUS = 7;
+const CIRCLE_MARKER_RADIUS = 10;
 
 const ANIMATION_YEARS_PER_SECOND = 40.0;
 
@@ -61,7 +61,7 @@ function showLocations(json) {
 	if (locations.length) {
 		for (let location of locations) {
 			if (location.latitude && location.longitude) {
-				addMarker(location, location.references);
+				addMarker(location, location.facts);
 			}
 		}
 
@@ -79,26 +79,24 @@ function showLineage(json, paths = false, animate = false) {
 		let linePoints = [];
 
 		for (let individual of individuals) {
-			let birthOrBaptismLocation = individual.birthLocation || individual.baptismLocation;
-			if (birthOrBaptismLocation) {
-				if (birthOrBaptismLocation.latitude && birthOrBaptismLocation.longitude) {
-					if (!locationInfos.has(birthOrBaptismLocation.id)) {
-						locationInfos.set(birthOrBaptismLocation.id, { location: birthOrBaptismLocation, entries: [] });
-					}
-					locationInfos.get(birthOrBaptismLocation.id).entries.push(`<span class="sign">${individual.birthLocation ? '*' : '~'}</span> ${individual.name}`);
-					linePoints.push([birthOrBaptismLocation.latitude, birthOrBaptismLocation.longitude, parseInt(individual.birthYear)]);
+			let birthOrBaptism = individual.birthOrBaptism;
+			let birthOrBaptismLocation = birthOrBaptism?.location;
+			if (birthOrBaptismLocation?.latitude && birthOrBaptismLocation?.longitude) {
+				if (!locationInfos.has(birthOrBaptismLocation.id)) {
+					locationInfos.set(birthOrBaptismLocation.id, { location: birthOrBaptismLocation, entries: [] });
 				}
+				locationInfos.get(birthOrBaptismLocation.id).entries.push(birthOrBaptism.toString);
+				linePoints.push([birthOrBaptismLocation.latitude, birthOrBaptismLocation.longitude, birthOrBaptism.date.year]);
 			}
 
-			let parentsMarriageLocation = individual?.parents?.marriageLocation;	// TODO: could be after birth of child!
-			if (parentsMarriageLocation) {
-				if (parentsMarriageLocation.latitude && parentsMarriageLocation.longitude) {
-					if (!locationInfos.has(parentsMarriageLocation.id)) {
-						locationInfos.set(parentsMarriageLocation.id, { location: parentsMarriageLocation, entries: [] });
-					}
-					locationInfos.get(parentsMarriageLocation.id).entries.push(`<span class="sign">⚭</span> ${individual.parents.name}`);
-					linePoints.push([parentsMarriageLocation.latitude, parentsMarriageLocation.longitude, parseInt(individual.parents.marriageYear)]);
+			let parentsMarriage = individual.parents?.marriage;
+			let parentsMarriageLocation = parentsMarriage?.location;	// TODO: could be after birth of child!
+			if (parentsMarriageLocation?.latitude && parentsMarriageLocation?.longitude) {
+				if (!locationInfos.has(parentsMarriageLocation.id)) {
+					locationInfos.set(parentsMarriageLocation.id, { location: parentsMarriageLocation, entries: [] });
 				}
+				locationInfos.get(parentsMarriageLocation.id).entries.push(parentsMarriage.toString);
+				linePoints.push([parentsMarriageLocation.latitude, parentsMarriageLocation.longitude, parentsMarriage.date.year]);
 			}
 		}
 
@@ -135,34 +133,33 @@ function showAncestors(json, paths = false, animate = false) {
 			let childKekule = queue.shift();
 			let child = ancestors[childKekule];
 
-			let birthOrBaptismLocation = child?.birthLocation || child?.baptismLocation;
-			if (birthOrBaptismLocation) {
-				if (birthOrBaptismLocation.latitude && birthOrBaptismLocation.longitude) {
-					if (!locationInfos.has(birthOrBaptismLocation.id)) {
-						locationInfos.set(birthOrBaptismLocation.id, { location: birthOrBaptismLocation, entries: [] });
-					}
-					locationInfos.get(birthOrBaptismLocation.id).entries.push(`<span class="sign">${child.birthLocation ? '*' : '~'}</span> ${child.name}`);
+			let birthOrBaptism = child?.birthOrBaptism;
+			let birthOrBaptismLocation = birthOrBaptism?.location;
+			if (birthOrBaptismLocation?.latitude && birthOrBaptismLocation?.longitude) {
+				if (!locationInfos.has(birthOrBaptismLocation.id)) {
+					locationInfos.set(birthOrBaptismLocation.id, { location: birthOrBaptismLocation, entries: [] });
 				}
+				locationInfos.get(birthOrBaptismLocation.id).entries.push(birthOrBaptism.toString);
 			}
 
-			let parentsMarriageLocation = child?.parents?.marriageLocation;
-			if (parentsMarriageLocation) {
-				if (parentsMarriageLocation.latitude && parentsMarriageLocation.longitude) {
-					if (!locationInfos.has(parentsMarriageLocation.id)) {
-						locationInfos.set(parentsMarriageLocation.id, { location: parentsMarriageLocation, entries: [] });
-					}
-					locationInfos.get(parentsMarriageLocation.id).entries.push(`<span class="sign">⚭</span> ${child.parents.name}`);
+			let parentsMarriage = child?.parents?.marriage;
+			let parentsMarriageLocation = parentsMarriage?.location;
+			if (parentsMarriageLocation?.latitude && parentsMarriageLocation?.longitude) {
+				if (!locationInfos.has(parentsMarriageLocation.id)) {
+					locationInfos.set(parentsMarriageLocation.id, { location: parentsMarriageLocation, entries: [] });
+				}
+				locationInfos.get(parentsMarriageLocation.id).entries.push(parentsMarriage.toString);
 
-					if (paths && child?.birthOrBaptismLocation?.latitude && child?.birthOrBaptismLocation?.longitude && parentsMarriageLocation?.latitude && parentsMarriageLocation?.longitude) {
-						addLine(child.birthOrBaptismLocation, parentsMarriageLocation);
-					}
+				if (paths && birthOrBaptismLocation?.latitude && birthOrBaptismLocation?.longitude) {
+					addLine(birthOrBaptismLocation, parentsMarriageLocation);
 				}
 			}
 
 			let fatherKekule = childKekule * 2;
 			let father = ancestors[fatherKekule];
 			if (father && !visited.has(fatherKekule)) {
-				let fathersBirthOrBaptismLocation = father?.birthLocation || father?.baptismLocation;
+				let fathersBirthOrBaptism = father.birthOrBaptism;
+				let fathersBirthOrBaptismLocation = fathersBirthOrBaptism?.location;
 				if (fathersBirthOrBaptismLocation?.latitude && fathersBirthOrBaptismLocation?.longitude) {
 					if (paths && parentsMarriageLocation?.latitude && parentsMarriageLocation?.longitude) {
 						addLine(parentsMarriageLocation, fathersBirthOrBaptismLocation);
@@ -177,7 +174,8 @@ function showAncestors(json, paths = false, animate = false) {
 			let motherKekule = (childKekule * 2) + 1;
 			let mother = ancestors[motherKekule];
 			if (mother && !visited.has(motherKekule)) {
-				let mothersBirthOrBaptismLocation = mother?.birthLocation || mother?.baptismLocation;
+				let mothersBirthOrBaptism = mother.birthOrBaptism;
+				let mothersBirthOrBaptismLocation = mothersBirthOrBaptism?.location;
 				if (mothersBirthOrBaptismLocation?.latitude && mothersBirthOrBaptismLocation?.longitude) {
 					if (paths && parentsMarriageLocation?.latitude && parentsMarriageLocation?.longitude) {
 						addLine(parentsMarriageLocation, mothersBirthOrBaptismLocation);
@@ -207,35 +205,34 @@ function showDescendants(json, paths = false, animate = false) {
 		let locationInfos = new Map();
 
 		for (let individual of individuals) {
-			let birthOrBaptismLocation = individual.birthLocation || individual.baptismLocation;
-			if (birthOrBaptismLocation) {
-				if (birthOrBaptismLocation.latitude && birthOrBaptismLocation.longitude) {
-					if (!locationInfos.has(birthOrBaptismLocation.id)) {
-						locationInfos.set(birthOrBaptismLocation.id, { location: birthOrBaptismLocation, entries: [] });
-					}
-					locationInfos.get(birthOrBaptismLocation.id).entries.push(`<span class="sign">${individual.birthLocation ? '*' : '~'}</span> ${individual.name}`);
+			let birthOrBaptism = individual.birthOrBaptism;
+			let birthOrBaptismLocation = birthOrBaptism?.location;
+			if (birthOrBaptismLocation?.latitude && birthOrBaptismLocation?.longitude) {
+				if (!locationInfos.has(birthOrBaptismLocation.id)) {
+					locationInfos.set(birthOrBaptismLocation.id, { location: birthOrBaptismLocation, entries: [] });
+				}
+				locationInfos.get(birthOrBaptismLocation.id).entries.push(birthOrBaptism.toString);
 
-					if (individuals.indexOf(individual) > 0) {
-						let parentsMarriageLocation = individual?.parents?.marriageLocation;
-						if (paths && birthOrBaptismLocation?.latitude && birthOrBaptismLocation?.longitude && parentsMarriageLocation?.latitude && parentsMarriageLocation?.longitude) {
-							addLine(birthOrBaptismLocation, parentsMarriageLocation);
-						}
+				if (individuals.indexOf(individual) > 0) {
+					let parentsMarriage = individual.parents?.marriage;
+					let parentsMarriageLocation = parentsMarriage?.location;
+					if (paths && parentsMarriageLocation?.latitude && parentsMarriageLocation?.longitude) {
+						addLine(birthOrBaptismLocation, parentsMarriageLocation);
 					}
 				}
 			}
 
 			for (let family of individual.families) {
-				let marriageLocation = family?.marriageLocation;
-				if (marriageLocation) {
-					if (marriageLocation.latitude && marriageLocation.longitude) {
-						if (!locationInfos.has(marriageLocation.id)) {
-							locationInfos.set(marriageLocation.id, { location: marriageLocation, entries: [] });
-						}
-						locationInfos.get(marriageLocation.id).entries.push(`<span class="sign">⚭</span> ${family.name}`);
+				let marriage = family.marriage;
+				let marriageLocation = marriage?.location;
+				if (marriageLocation?.latitude && marriageLocation?.longitude) {
+					if (!locationInfos.has(marriageLocation.id)) {
+						locationInfos.set(marriageLocation.id, { location: marriageLocation, entries: [] });
+					}
+					locationInfos.get(marriageLocation.id).entries.push(marriage.toString);
 
-						if (paths && birthOrBaptismLocation?.latitude && birthOrBaptismLocation?.longitude && marriageLocation?.latitude && marriageLocation?.longitude) {
-							addLine(birthOrBaptismLocation, marriageLocation);
-						}
+					if (paths && birthOrBaptismLocation?.latitude && birthOrBaptismLocation?.longitude) {
+						addLine(birthOrBaptismLocation, marriageLocation);
 					}
 				}
 			}
@@ -290,7 +287,7 @@ function addAnimation(linePoints) {
 			let point2 = linePoints[i + 1];
 
 			if (point1.length > 2 && point2.length > 2) {
-				let years = point2[2] - point1[2];
+				let years = parseInt(point2[2]) - parseInt(point1[2]);
 
 				if (Number.isInteger(years)) {
 					let duration = years / ANIMATION_YEARS_PER_SECOND * 1000;

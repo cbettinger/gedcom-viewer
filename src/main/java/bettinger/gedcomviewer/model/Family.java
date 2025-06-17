@@ -30,7 +30,6 @@ public class Family extends IndividualFamilyCommonStructure {
 	}
 
 	/* #region getter & setter */
-	@JsonProperty
 	public String getName() {
 		final var husband = getHusband();
 		final var wife = getWife();
@@ -47,29 +46,23 @@ public class Family extends IndividualFamilyCommonStructure {
 		return wifes.isEmpty() ? null : (Individual) gedcom.getRecord(wifes.get(0).getRef());
 	}
 
-	@JsonProperty
-	private String getMarriageYear() {
-		final var marriageDate = getMarriageDate();
-		return marriageDate == null ? "" : marriageDate.getYear();
-	}
-
 	public Date getMarriageDate() {
-		final var primaryFact = getPrimaryMarriage();
-		return primaryFact == null ? null : primaryFact.getDate();
+		final var fact = getMarriage();
+		return fact == null ? null : fact.getDate();
 	}
 
 	public String getMarriagePlace() {
-		final var primaryFact = getPrimaryMarriage();
-		return primaryFact == null ? "" : primaryFact.getPlace();
+		final var fact = getMarriage();
+		return fact == null ? "" : fact.getPlace();
+	}
+
+	public Location getMarriageLocation() {
+		final var fact = getMarriage();
+		return fact == null ? null : fact.getLocation();
 	}
 
 	@JsonProperty
-	public Location getMarriageLocation() {
-		final var primaryFact = getPrimaryMarriage();
-		return primaryFact == null ? null : primaryFact.getLocation();
-	}
-
-	private Fact getPrimaryMarriage() {
+	private Fact getMarriage() {
 		return getBestFact(MARRIAGE_TAG);
 	}
 
@@ -78,21 +71,21 @@ public class Family extends IndividualFamilyCommonStructure {
 	}
 
 	public Date getDivorceDate() {
-		final var primaryFact = getPrimaryDivorce();
-		return primaryFact == null ? null : primaryFact.getDate();
+		final var fact = getDivorce();
+		return fact == null ? null : fact.getDate();
 	}
 
 	public String getDivorcePlace() {
-		final var primaryFact = getPrimaryDivorce();
-		return primaryFact == null ? "" : primaryFact.getPlace();
+		final var fact = getDivorce();
+		return fact == null ? "" : fact.getPlace();
 	}
 
 	public Location getDivorceLocation() {
-		final var primaryFact = getPrimaryDivorce();
-		return primaryFact == null ? null : primaryFact.getLocation();
+		final var fact = getDivorce();
+		return fact == null ? null : fact.getLocation();
 	}
 
-	private Fact getPrimaryDivorce() {
+	private Fact getDivorce() {
 		return getBestFact(DIVORCE_TAG);
 	}
 
