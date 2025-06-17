@@ -16,7 +16,7 @@ import bettinger.gedcomviewer.model.Location;
 import bettinger.gedcomviewer.model.Structure;
 import bettinger.gedcomviewer.utils.SVGUtils;
 
-abstract class Renderer {
+public abstract class Renderer {
 
 	static final Font DEFAULT_FONT = new Font("Arial", Font.PLAIN, 12);
 	static final Font BOLD_FONT = DEFAULT_FONT.deriveFont(Font.BOLD);
@@ -81,7 +81,7 @@ abstract class Renderer {
 		this.minimalX = Integer.MAX_VALUE;
 	}
 
-	Node getProbandNode() {
+	public Node getProbandNode() {
 		return probandNode;
 	}
 
@@ -93,7 +93,7 @@ abstract class Renderer {
 		render(proband, 0);
 	}
 
-	void render(final Individual proband, final int generations) {
+	public void render(final Individual proband, final int generations) {
 		render(proband, generations, null);
 	}
 
