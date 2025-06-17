@@ -3,6 +3,8 @@ package bettinger.gedcomviewer.tools.portraitcomparison.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.javatuples.Pair;
+
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class FacialFeatureAnalysisResult {
@@ -42,7 +44,7 @@ public class FacialFeatureAnalysisResult {
         return new FacialFeatureAnalysisResult(personSimilarities, pathSimilarities);
     }
 
-    public Object[] getMaxPersonSimilarity() {
+    public Pair<ArrayList<String>, Float> getMaxPersonSimilarity() {
         ArrayList<String> idsWithMaxSim = new ArrayList<>();
         Float maxSimilarity = null;
         for (final var entry : personSimilarities.entrySet()) {
@@ -56,12 +58,10 @@ public class FacialFeatureAnalysisResult {
                 idsWithMaxSim.add(id);
             }
         }
-        
-        Object[] result = {idsWithMaxSim, maxSimilarity};
-        return result;
+        return new Pair<ArrayList<String>, Float>(idsWithMaxSim, maxSimilarity);
     }
 
-    public Object[] getMaxPathSimilarity() {
+    public Pair<ArrayList<AncestralLine>, Float> getMaxPathSimilarity() {
         ArrayList<AncestralLine> pathsWithMaxSim = new ArrayList<>();
         Float maxSimilarity = null;
         for (final var entry : pathSimilarities.entrySet()) {
@@ -75,8 +75,6 @@ public class FacialFeatureAnalysisResult {
                 pathsWithMaxSim.add(path);
             }
         }
-        
-        Object[] result = {pathsWithMaxSim, maxSimilarity};
-        return result;
+        return new Pair<ArrayList<AncestralLine>, Float>(pathsWithMaxSim, maxSimilarity);
     }
 }
