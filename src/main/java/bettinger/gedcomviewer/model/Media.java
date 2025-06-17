@@ -30,7 +30,7 @@ public class Media extends Structure implements Record, NoteContainer, SourceCit
 	private final SourceCitationManager sourceCitationManager;
 
 	private String title;
-	private String fileName;
+	private String filePath;
 	private String format;
 	private Type type;
 
@@ -46,12 +46,12 @@ public class Media extends Structure implements Record, NoteContainer, SourceCit
 			this.title = getFirstExtensionTagValue("TITL");
 		}
 
-		final var mediaFileName = media.getFile();
-		if (mediaFileName.startsWith(STG_PREFIX)) {
+		final var mediaFilePath = media.getFile();
+		if (mediaFilePath.startsWith(STG_PREFIX)) {
 			final String gedcomFileBaseName = FileUtils.getBaseName(gedcom.getFileName());
-			this.fileName = FileUtils.getPath(gedcom.getDirectoryPath(), gedcomFileBaseName, mediaFileName.replaceFirst(STG_PREFIX, ""));
+			this.filePath = FileUtils.getPath(gedcom.getDirectoryPath(), gedcomFileBaseName, mediaFilePath.replaceFirst(STG_PREFIX, ""));
 		} else {
-			this.fileName = FileUtils.getPath(gedcom.getDirectoryPath(), mediaFileName);
+			this.filePath = FileUtils.getPath(gedcom.getDirectoryPath(), mediaFilePath);
 		}
 
 		final var formatTag = getFirstExtensionTag("FORM");
@@ -145,11 +145,7 @@ public class Media extends Structure implements Record, NoteContainer, SourceCit
 	}
 
 	public File getFile() {
-		return new File(fileName);
-	}
-
-	public String getFileName() {
-		return fileName;
+		return new File(filePath);
 	}
 
 	public Type getType() {
