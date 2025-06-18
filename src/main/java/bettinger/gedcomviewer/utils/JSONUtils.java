@@ -1,5 +1,7 @@
 package bettinger.gedcomviewer.utils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,5 +29,16 @@ public interface JSONUtils {
 				Logger.getLogger(JSONUtils.class.getName()).log(Level.SEVERE, "Failed to deserialize JSON string to JSON object", e);
 				return mapper.createObjectNode();
 			}
+	}
+
+	public static File toJSONFile(final Object input, final String filePath) {
+		final var writer = new ObjectMapper().writer().withDefaultPrettyPrinter();
+		File file = new File(filePath);
+        try {
+			writer.writeValue(file, input);
+		} catch (IOException e) {
+			Logger.getLogger(JSONUtils.class.getName()).log(Level.SEVERE, "Failed to create JSON file", e);
+		}
+		return file;
 	}
 }
