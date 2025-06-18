@@ -7,7 +7,7 @@ from base.Person import Person
 if len(sys.argv) < 4:
     print({'isError': True, 'messageKey': 'NotEnoughParameters'}) #sys.exit('Es wurden nicht alle benötigten Parameter mitgegeben. Es muss ein zu verwendender Stammbaum-JSON-String angegeben werden. Zusätzlich muss die maximale Anzahl Portraits pro Person sowie die maximale Anzahl Generationen für die Analyse spezifiziert werden. Optional kann zusätzlich die ID der zu analysierenden Person mitgegeben werden.')
 
-rootPerson = parseJSON.parseString(sys.argv[1], int(sys.argv[2]))
+rootPerson = parseJSON.parseFile(sys.argv[1], int(sys.argv[2]))
 if len(sys.argv) > 4:
     try:
         rootPerson = Person.PERSONS[sys.argv[4]]

@@ -1,6 +1,8 @@
 package bettinger.gedcomviewer.tools.portraitcomparison.model;
 
+import java.io.File;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.logging.Level;
@@ -15,12 +17,12 @@ public abstract class FacialFeatureAnalyser {
     public static TreeMap<FacialFeatures, FacialFeatureAnalysisResult> analyse(final Individual individual, final int maxDepth, final int maxNumPortraits) {
         TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results = new TreeMap<>();
 
-        String inputJSON = createInputJSON(individual, maxDepth);
+        File inputFile = createInputFile(individual, maxDepth);
 
         final String pathToProject = System.getProperty("user.dir");
         final String pathToScript = Paths.get(pathToProject, "src", "main", "python", "familyFaceCompare.py").toString();
 
-        final String[] args = {inputJSON, Integer.toString(maxNumPortraits), Integer.toString(maxDepth)};
+        final String[] args = {inputFile.getAbsolutePath(), Integer.toString(maxNumPortraits), Integer.toString(maxDepth)};
         final List<String> outputs = PythonUtils.callScript(pathToScript, args);
 
         for(String o : outputs) {
@@ -31,11 +33,15 @@ public abstract class FacialFeatureAnalyser {
             results.put(feature, FacialFeatureAnalysisResult.fromJSON(outputJSON, feature.name()));
         }
 
+        inputFile.delete();
+
         return results;
     }
 
-    private static String createInputJSON(final Individual individual, final int maxDepth) {
+    private static File createInputFile(final Individual individual, final int maxDepth) {
         PersonInput inputObject = new PersonInput(individual, 0, maxDepth);
-        return JSONUtils.toJSON(inputObject);
+        Date date = new Date();
+        long timeMillis = date.getTime();
+        return JSONUtils.toJSONFile(inputObject, String.format("%d-%s.json", timeMillis, individual.getName()));
     }
 }
