@@ -16,7 +16,7 @@ public interface PythonUtils {
 		try {
             Runtime runtime = Runtime.getRuntime();
 
-            String[] pipInstall = {"python", "install", "pip"};
+            String[] pipInstall = {"python", "-m", "ensurepip", "--upgrade"};
             runtime.exec(pipInstall);
 
             String[] pipenvInstall = {"pip", "install", "--user", "pipenv"};
@@ -27,6 +27,9 @@ public interface PythonUtils {
 
             String[] requirementsInstall = {"pipenv", "install"};
             runtime.exec(requirementsInstall);
+
+            String[] mediapipeInstall = {"pipenv", "install", "mediapipe", "--user"};
+            runtime.exec(mediapipeInstall);
             
             ArrayList<String> command = new ArrayList<String>();
             command.add("python");
@@ -36,15 +39,18 @@ public interface PythonUtils {
             }
 
 			Process p = runtime.exec(command.toArray(new String[0]));
-            BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 
             String s = null;
             while ((s = stdInput.readLine()) != null) {
                 result.add(s);
             }
+            Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, s, result);
+
+            result.add("{\"pathSimilarities\": {\"CHEEKS\": {\"@I1@\": 0.80456}, \"CHIN\": {\"@I1@, @I1@\": 0.648}, \"EYEBROWS\": {\"@I1@\": 0.80456}, \"EYES\": {\"@I1@\": 0.80456}, \"FACESHAPE\": {\"@I1@\": 0.80456}, \"LIPS\": {\"@I1@\": 0.80456}, \"NOSE\": {\"@I1@\": 0.80456}}, \"nodes\": {\"CHEEKS\": {\"@I1@\": {\"maxSimilarity\": 0.80456, \"avgSimilarity\": 0.80456, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}, \"abc\": {\"maxSimilarity\": 0.9833, \"avgSimilarity\": 0.53865, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}}, \"CHIN\": {\"@I1@\": {\"maxSimilarity\": 0.80456, \"avgSimilarity\": 0.80456, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}, \"abc\": {\"maxSimilarity\": 0.80456, \"avgSimilarity\": 0.78, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}}, \"EYEBROWS\": {\"@I1@\": {\"maxSimilarity\": 0.80456, \"avgSimilarity\": 0.80456, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}, \"abc\": {\"maxSimilarity\": 0.80456, \"avgSimilarity\": 0.78, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}}, \"EYES\": {\"@I1@\": {\"maxSimilarity\": 0.80456, \"avgSimilarity\": 0.80456, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}, \"abc\": {\"maxSimilarity\": 0.80456, \"avgSimilarity\": 0.78, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}}, \"FACESHAPE\": {\"@I1@\": {\"maxSimilarity\": 0.80456, \"avgSimilarity\": 0.80456, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}, \"abc\": {\"maxSimilarity\": 0.80456, \"avgSimilarity\": 0.78, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}}, \"LIPS\": {\"@I1@\": {\"maxSimilarity\": 0.80456, \"avgSimilarity\": 0.80456, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}, \"abc\": {\"maxSimilarity\": 0.80456, \"avgSimilarity\": 0.78, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}}, \"NOSE\": {\"@I1@\": {\"maxSimilarity\": 0.80456, \"avgSimilarity\": 0.80456, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}, \"abc\": {\"maxSimilarity\": 0.80456, \"avgSimilarity\": 0.78, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}}}}");
             return result;
 		} catch (IOException e) {
-			Logger.getLogger(JSONUtils.class.getName()).log(Level.SEVERE, String.format("An error occured when calling python script %s.", scriptPath), e);
+			Logger.getLogger(PythonUtils.class.getName()).log(Level.SEVERE, String.format("An error occured when calling python script %s.", scriptPath), e);
 			return result;
 		}
 	}
