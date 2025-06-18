@@ -30,7 +30,7 @@ public abstract class Renderer {
 	static final int SUBTREE_DISTANCE = 2 * EDGE_LABEL_PADDING;
 
 	final SVGDocument doc;
-	final SVGGraphics2D g;
+	final protected SVGGraphics2D g;
 
 	final Orientation orientation;
 	final boolean renderRootNode;

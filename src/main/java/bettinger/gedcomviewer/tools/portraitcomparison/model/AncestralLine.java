@@ -11,6 +11,10 @@ public class AncestralLine {
         this.ancestorIDs = ancestorIDs;
     }
 
+    public String[] getAncestorIDs() {
+        return ancestorIDs;
+    }
+
     public static AncestralLine fromString(final String bottomUpLine) {
         List<String> pathArray = Arrays.asList(bottomUpLine.split("\\s*,\\s*"));
         return new AncestralLine(pathArray.toArray(new String[0]));

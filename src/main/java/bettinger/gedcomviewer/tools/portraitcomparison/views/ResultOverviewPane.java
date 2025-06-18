@@ -62,7 +62,7 @@ public class ResultOverviewPane extends JPanel {
 		ResultOverviewRenderer renderer = null;
 
 		try {
-			renderer = new ResultOverviewRenderer();
+			renderer = new ResultOverviewRenderer(proband, results);
 		} catch (final Exception e) {
 			Logger.getLogger(ResultOverviewPane.class.getName()).log(Level.SEVERE, "Failed to create renderer", e);
 		}

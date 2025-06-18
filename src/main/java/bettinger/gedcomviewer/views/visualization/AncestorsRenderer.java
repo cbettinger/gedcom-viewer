@@ -11,7 +11,7 @@ import bettinger.gedcomviewer.model.Individual;
 
 public class AncestorsRenderer extends Renderer {
 
-	final List<Quartet<Node, Node, Node, String>> edges = new ArrayList<>();
+	final protected List<Quartet<Node, Node, Node, String>> edges = new ArrayList<>();
 
 	public AncestorsRenderer() {
 		super(Orientation.BOTTOM_UP, true);
@@ -79,7 +79,7 @@ public class AncestorsRenderer extends Renderer {
 	}
 
 	@Override
-	void renderEdges() {
+	public void renderEdges() {
 		super.renderEdges();
 
 		for (final var edge : edges) {
