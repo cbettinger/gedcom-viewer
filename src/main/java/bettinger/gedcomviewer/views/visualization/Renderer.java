@@ -367,8 +367,8 @@ public abstract class Renderer {
 		g.setFont(DEFAULT_FONT);
 	}
 
-	Point renderEdge(final Node leftNode, final Node rightNode) {
-		return renderEdge(leftNode, rightNode, null, 0, true);
+	protected Point renderEdge(final Node leftNode, final Node rightNode) {
+		return renderEdge(leftNode, rightNode, "", 0, true);
 	}
 
 	Point renderEdge(final Node leftNode, final Node rightNode, final String label) {
@@ -376,7 +376,7 @@ public abstract class Renderer {
 	}
 
 	Point renderEdge(final Node leftNode, final Node rightNode, final int index) {
-		return renderEdge(leftNode, rightNode, null, index, false);
+		return renderEdge(leftNode, rightNode, "", index, false);
 	}
 
 	Point renderEdge(final Node leftNode, final Node rightNode, final String label, final int index) {
