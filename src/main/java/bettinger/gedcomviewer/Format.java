@@ -2,6 +2,8 @@ package bettinger.gedcomviewer;
 
 public abstract class Format {
 
+	public static final String LEADING_SLASH = "-%s";
+
 	public static final String TRAILING_SPACE = "%s ";
 	public static final String TRAILING_COLON = "%s:";
 	public static final String TRAILING_DOT = "%s.";

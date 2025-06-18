@@ -37,18 +37,11 @@ body {
 	min-width: 0.5rem;
 }
 
-#yearLabel {
-	position: relative;
-	z-index: 1000000;
-	margin: auto;
-	margin-top: 10px;
-	width: 80px;
+.leaflet-control.leaflet-timeline-control .prev, .leaflet-control.leaflet-timeline-control .next {
+	display: none;
+}
 
-	background-color: white;
-	padding: 5px;
-	border: 2px solid rgba(0, 0, 0, 0.2);
-	border-radius: 4px;
-
-	text-align: center;
-	font-size: 200%;
+.leaflet-control.leaflet-timeline-control .time-text {
+	font-size: 150%;
+	font-weight: bold;
 }

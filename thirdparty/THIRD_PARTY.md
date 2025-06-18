@@ -2,11 +2,14 @@
 
 The following third-party software products and media assets are redistributed and/or used in accordance to their respective license:
 
+## ISC License
+
+* leaflet.timeline: Copyright (c) 2015, Jonathan Skeate, <https://github.com/skeate/Leaflet.timeline>
+
 ## MIT License
 
 * jiconfont-swing: Copyright (c) 2016 jIconFont, <https://github.com/jIconFont/jiconfont-swing>
 * jsoup: Copyright (c) 2009-2025 Jonathan Hedley, <https://jsoup.org>
-* leaflet.motion: Copyright (c) 2022 Igor Vladyka, <igor.vladyka@gmail.com>, <https://github.com/Igor-Vladyka>
 * leaflet.markercluster: Copyright (c) 2012 David Leaver, <https://github.com/Leaflet/Leaflet.markercluster>
 * slf4j: Copyright (c) 2004-2022 QOS.ch Sarl (Switzerland), <https://github.com/qos-ch/slf4j>
 

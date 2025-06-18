@@ -131,8 +131,8 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 			final var selectedRadioButton = radioButtons.getSelectedToggle();
 
 			individualsComboBox.setDisable(selectedRadioButton == locationsRadioButton);
-			pathsCheckBox.setDisable(selectedRadioButton == locationsRadioButton);
-			animationCheckBox.setDisable(selectedRadioButton == locationsRadioButton);
+			pathsCheckBox.setDisable(selectedRadioButton == locationsRadioButton || animationCheckBox.isSelected());
+			animationCheckBox.setDisable(selectedRadioButton == locationsRadioButton || pathsCheckBox.isSelected());
 
 			if (selectedRadioButton == locationsRadioButton) {
 				showLocations();

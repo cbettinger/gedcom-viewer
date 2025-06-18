@@ -32,9 +32,9 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 
 	@JsonProperty
 	private final String name;
-	@JsonProperty
+	@JsonProperty("lat")
 	private final float latitude;
-	@JsonProperty
+	@JsonProperty("lng")
 	private final float longitude;
 	@JsonProperty
 	private final String imageURL;

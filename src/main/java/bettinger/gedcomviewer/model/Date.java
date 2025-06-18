@@ -26,21 +26,19 @@ public class Date implements Comparable<Date> {
 	private final String[] components;
 	private final String formatted;
 	private LocalDate timestamp;
+	@JsonProperty
+	private final String isoFormattedTimestamp;
 
 	private Date(final String raw) throws ParseException {
 		this.raw = raw == null ? "" : raw;
 		this.components = parseComponents(this.raw);
+		this.formatted = format(this.components);
 		this.timestamp = parseTimestamp(components);
-		this.formatted = format(components);
+		this.isoFormattedTimestamp = formatISOTimestamp(this.timestamp);
 	}
 
 	public String getRaw() {
 		return raw;
-	}
-
-	@JsonProperty
-	public String getYear() {
-		return components[3] == null ? "" : components[3];
 	}
 
 	@Override
@@ -106,10 +104,6 @@ public class Date implements Comparable<Date> {
 		return result;
 	}
 
-	private static LocalDate parseTimestamp(final String[] components) {
-		return components == null || components.length != 8 ? null : LocalDate.of(Integer.parseInt(components[3]), components[2] == null ? 1 : Integer.parseInt(components[2]), components[1] == null ? 1 : Integer.parseInt(components[1]));
-	}
-
 	private static String format(final String[] components) {
 		if (components == null || components.length != 8) {
 			return "";
@@ -146,5 +140,13 @@ public class Date implements Comparable<Date> {
 		}
 
 		return sb.toString();
+	}
+
+	private static LocalDate parseTimestamp(final String[] components) {
+		return components == null || components.length != 8 ? null : LocalDate.of(Integer.parseInt(components[3]), components[2] == null ? 1 : Integer.parseInt(components[2]), components[1] == null ? 1 : Integer.parseInt(components[1]));
+	}
+
+	private static String formatISOTimestamp(final LocalDate timestamp) {
+		return timestamp == null ? null : timestamp.toString();
 	}
 }

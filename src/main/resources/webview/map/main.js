@@ -2,18 +2,16 @@ function getExports() { return { showLocations, showLineage, showAncestors, show
 
 const COLOR = "#FF2262";
 const OPACITY = 0.7;
-const CIRCLE_MARKER_RADIUS = 10;
-
-const ANIMATION_YEARS_PER_SECOND = 40.0;
+const LINE_OPTIONS = { color: COLOR, opacity: OPACITY };
+const CIRCLE_MARKER_OPTIONS = { ...LINE_OPTIONS, radius: 10, stroke: false, fillOpacity: OPACITY };
 
 let map = null;
 
 let bounds = null;
 let container = null;
 
-let animation = null;
-let animationTimer = null;
-let yearLabel = document.getElementById("yearLabel");
+let timeline = null;
+let timelineControl = null;
 
 addEventListener("DOMContentLoaded", () => { addMap(); });
 
@@ -60,9 +58,7 @@ function showLocations(json) {
 
 	if (locations.length) {
 		for (let location of locations) {
-			if (location.latitude && location.longitude) {
-				addMarker(location, location.facts);
-			}
+			addMarker(location, location.facts);
 		}
 
 		showMap();
@@ -75,40 +71,42 @@ function showLineage(json, paths = false, animate = false) {
 	resetMap();
 
 	if (individuals.length) {
+		let points = [];
 		let locationInfos = new Map();
-		let linePoints = [];
 
 		for (let individual of individuals) {
 			let birthOrBaptism = individual.birthOrBaptism;
 			let birthOrBaptismLocation = birthOrBaptism?.location;
-			if (birthOrBaptismLocation?.latitude && birthOrBaptismLocation?.longitude) {
+			if (birthOrBaptismLocation?.lat && birthOrBaptismLocation?.lng) {
+				points.push({ date: birthOrBaptism.date, location: birthOrBaptismLocation.id });
+
 				if (!locationInfos.has(birthOrBaptismLocation.id)) {
-					locationInfos.set(birthOrBaptismLocation.id, { location: birthOrBaptismLocation, entries: [] });
+					locationInfos.set(birthOrBaptismLocation.id, { location: birthOrBaptismLocation, references: [] });
 				}
-				locationInfos.get(birthOrBaptismLocation.id).entries.push(birthOrBaptism.toString);
-				linePoints.push([birthOrBaptismLocation.latitude, birthOrBaptismLocation.longitude, birthOrBaptism.date.year]);
+				locationInfos.get(birthOrBaptismLocation.id).references.push(birthOrBaptism.toString);
 			}
 
 			let parentsMarriage = individual.parents?.marriage;
-			let parentsMarriageLocation = parentsMarriage?.location;	// TODO: could be after birth of child!
-			if (parentsMarriageLocation?.latitude && parentsMarriageLocation?.longitude) {
+			let parentsMarriageLocation = parentsMarriage?.location;
+			if (parentsMarriageLocation?.lat && parentsMarriageLocation?.lng) {
+				points.push({ date: parentsMarriage.date, location: parentsMarriageLocation.id });
+
 				if (!locationInfos.has(parentsMarriageLocation.id)) {
-					locationInfos.set(parentsMarriageLocation.id, { location: parentsMarriageLocation, entries: [] });
+					locationInfos.set(parentsMarriageLocation.id, { location: parentsMarriageLocation, references: [] });
 				}
-				locationInfos.get(parentsMarriageLocation.id).entries.push(parentsMarriage.toString);
-				linePoints.push([parentsMarriageLocation.latitude, parentsMarriageLocation.longitude, parentsMarriage.date.year]);
+				locationInfos.get(parentsMarriageLocation.id).references.push(parentsMarriage.toString);
 			}
 		}
 
 		if (animate) {
-			addAnimation(linePoints.toReversed());
+			addAnimation(points.toReversed(), locationInfos);
 		} else {
 			if (paths) {
-				addPolyline(linePoints);
+				addPolyline(points.map(p => locationInfos.get(p.location).location));
 			}
 
 			for (let locationInfo of locationInfos.values()) {
-				addMarker(locationInfo.location, locationInfo.entries);
+				addMarker(locationInfo.location, locationInfo.references);
 			}
 		}
 
@@ -135,22 +133,22 @@ function showAncestors(json, paths = false, animate = false) {
 
 			let birthOrBaptism = child?.birthOrBaptism;
 			let birthOrBaptismLocation = birthOrBaptism?.location;
-			if (birthOrBaptismLocation?.latitude && birthOrBaptismLocation?.longitude) {
+			if (birthOrBaptismLocation?.lat && birthOrBaptismLocation?.lng) {
 				if (!locationInfos.has(birthOrBaptismLocation.id)) {
-					locationInfos.set(birthOrBaptismLocation.id, { location: birthOrBaptismLocation, entries: [] });
+					locationInfos.set(birthOrBaptismLocation.id, { location: birthOrBaptismLocation, references: [] });
 				}
-				locationInfos.get(birthOrBaptismLocation.id).entries.push(birthOrBaptism.toString);
+				locationInfos.get(birthOrBaptismLocation.id).references.push(birthOrBaptism.toString);
 			}
 
 			let parentsMarriage = child?.parents?.marriage;
 			let parentsMarriageLocation = parentsMarriage?.location;
-			if (parentsMarriageLocation?.latitude && parentsMarriageLocation?.longitude) {
+			if (parentsMarriageLocation?.lat && parentsMarriageLocation?.lng) {
 				if (!locationInfos.has(parentsMarriageLocation.id)) {
-					locationInfos.set(parentsMarriageLocation.id, { location: parentsMarriageLocation, entries: [] });
+					locationInfos.set(parentsMarriageLocation.id, { location: parentsMarriageLocation, references: [] });
 				}
-				locationInfos.get(parentsMarriageLocation.id).entries.push(parentsMarriage.toString);
+				locationInfos.get(parentsMarriageLocation.id).references.push(parentsMarriage.toString);
 
-				if (paths && birthOrBaptismLocation?.latitude && birthOrBaptismLocation?.longitude) {
+				if (paths && birthOrBaptismLocation?.lat && birthOrBaptismLocation?.lng) {
 					addLine(birthOrBaptismLocation, parentsMarriageLocation);
 				}
 			}
@@ -160,10 +158,10 @@ function showAncestors(json, paths = false, animate = false) {
 			if (father && !visited.has(fatherKekule)) {
 				let fathersBirthOrBaptism = father.birthOrBaptism;
 				let fathersBirthOrBaptismLocation = fathersBirthOrBaptism?.location;
-				if (fathersBirthOrBaptismLocation?.latitude && fathersBirthOrBaptismLocation?.longitude) {
-					if (paths && parentsMarriageLocation?.latitude && parentsMarriageLocation?.longitude) {
+				if (fathersBirthOrBaptismLocation?.lat && fathersBirthOrBaptismLocation?.lng) {
+					if (paths && parentsMarriageLocation?.lat && parentsMarriageLocation?.lng) {
 						addLine(parentsMarriageLocation, fathersBirthOrBaptismLocation);
-					} else if (paths && birthOrBaptismLocation?.latitude && birthOrBaptismLocation?.longitude) {
+					} else if (paths && birthOrBaptismLocation?.lat && birthOrBaptismLocation?.lng) {
 						addLine(birthOrBaptismLocation, fathersBirthOrBaptismLocation);
 					}
 				}
@@ -176,10 +174,10 @@ function showAncestors(json, paths = false, animate = false) {
 			if (mother && !visited.has(motherKekule)) {
 				let mothersBirthOrBaptism = mother.birthOrBaptism;
 				let mothersBirthOrBaptismLocation = mothersBirthOrBaptism?.location;
-				if (mothersBirthOrBaptismLocation?.latitude && mothersBirthOrBaptismLocation?.longitude) {
-					if (paths && parentsMarriageLocation?.latitude && parentsMarriageLocation?.longitude) {
+				if (mothersBirthOrBaptismLocation?.lat && mothersBirthOrBaptismLocation?.lng) {
+					if (paths && parentsMarriageLocation?.lat && parentsMarriageLocation?.lng) {
 						addLine(parentsMarriageLocation, mothersBirthOrBaptismLocation);
-					} else if (paths && birthOrBaptismLocation?.latitude && birthOrBaptismLocation?.longitude) {
+					} else if (paths && birthOrBaptismLocation?.lat && birthOrBaptismLocation?.lng) {
 						addLine(birthOrBaptismLocation, mothersBirthOrBaptismLocation);
 					}
 				}
@@ -189,7 +187,7 @@ function showAncestors(json, paths = false, animate = false) {
 		}
 
 		for (let locationInfo of locationInfos.values()) {
-			addMarker(locationInfo.location, locationInfo.entries);
+			addMarker(locationInfo.location, locationInfo.references);
 		}
 
 		showMap();
@@ -207,16 +205,16 @@ function showDescendants(json, paths = false, animate = false) {
 		for (let individual of individuals) {
 			let birthOrBaptism = individual.birthOrBaptism;
 			let birthOrBaptismLocation = birthOrBaptism?.location;
-			if (birthOrBaptismLocation?.latitude && birthOrBaptismLocation?.longitude) {
+			if (birthOrBaptismLocation?.lat && birthOrBaptismLocation?.lng) {
 				if (!locationInfos.has(birthOrBaptismLocation.id)) {
-					locationInfos.set(birthOrBaptismLocation.id, { location: birthOrBaptismLocation, entries: [] });
+					locationInfos.set(birthOrBaptismLocation.id, { location: birthOrBaptismLocation, references: [] });
 				}
-				locationInfos.get(birthOrBaptismLocation.id).entries.push(birthOrBaptism.toString);
+				locationInfos.get(birthOrBaptismLocation.id).references.push(birthOrBaptism.toString);
 
 				if (individuals.indexOf(individual) > 0) {
 					let parentsMarriage = individual.parents?.marriage;
 					let parentsMarriageLocation = parentsMarriage?.location;
-					if (paths && parentsMarriageLocation?.latitude && parentsMarriageLocation?.longitude) {
+					if (paths && parentsMarriageLocation?.lat && parentsMarriageLocation?.lng) {
 						addLine(birthOrBaptismLocation, parentsMarriageLocation);
 					}
 				}
@@ -225,13 +223,13 @@ function showDescendants(json, paths = false, animate = false) {
 			for (let family of individual.families) {
 				let marriage = family.marriage;
 				let marriageLocation = marriage?.location;
-				if (marriageLocation?.latitude && marriageLocation?.longitude) {
+				if (marriageLocation?.lat && marriageLocation?.lng) {
 					if (!locationInfos.has(marriageLocation.id)) {
-						locationInfos.set(marriageLocation.id, { location: marriageLocation, entries: [] });
+						locationInfos.set(marriageLocation.id, { location: marriageLocation, references: [] });
 					}
-					locationInfos.get(marriageLocation.id).entries.push(marriage.toString);
+					locationInfos.get(marriageLocation.id).references.push(marriage.toString);
 
-					if (paths && birthOrBaptismLocation?.latitude && birthOrBaptismLocation?.longitude) {
+					if (paths && birthOrBaptismLocation?.lat && birthOrBaptismLocation?.lng) {
 						addLine(birthOrBaptismLocation, marriageLocation);
 					}
 				}
@@ -239,7 +237,7 @@ function showDescendants(json, paths = false, animate = false) {
 		}
 
 		for (let locationInfo of locationInfos.values()) {
-			addMarker(locationInfo.location, locationInfo.entries);
+			addMarker(locationInfo.location, locationInfo.references);
 		}
 
 		showMap();
@@ -255,60 +253,85 @@ function resetMap(newContainer = L.layerGroup()) {
 
 	container = newContainer;
 
-	resetAnimation();
+	if (timeline && timelineControl) {
+		timelineControl.removeTimelines(timeline);
+
+		timelineControl.remove();
+		timelineControl = null;
+
+		timeline.remove();
+		timeline = null;
+	}
 }
 
 function addLine(location1, location2) {
-	let line = L.polyline([[location1.latitude, location1.longitude], [location2.latitude, location2.longitude]], { color: COLOR, opacity: OPACITY });
-	bounds.extend(line.getBounds());
-	container.addLayer(line);
+	addPolyline([location1, location2]);
 }
 
-function addPolyline(linePoints) {
-	if (linePoints.length > 1) {
-		let polyline = L.polyline(linePoints, { color: COLOR, opacity: OPACITY });
+function addPolyline(locations) {
+	if (locations.length > 1) {
+		let polyline = L.polyline(locations, LINE_OPTIONS);
 		bounds.extend(polyline.getBounds());
 		container.addLayer(polyline);
 	}
 }
 
-function addAnimation(linePoints) {
-	if (linePoints.length > 1) {
-		animation = L.motion.seq([]);
+function addAnimation(points, locationInfos) {
+	if (points.length > 1) {
+		let geoJSON = { type: "FeatureCollection", features: [] };
 
-		let firstPoint = linePoints[0];
-		let lastPoint = linePoints[linePoints.length - 1];
+		//let lastPoint = linePoints[linePoints.length - 1];	// TODO: improve
+		let lastYear = 2026; //lastPoint.length > 2 ? parseInt(lastPoint[2]) : null;
 
-		animation.firstYear = firstPoint.length > 2 ? firstPoint[2] : null;
-		animation.lastYear = lastPoint.length > 2 ? lastPoint[2] : null;
+		if (Number.isInteger(lastYear)) {
+			for (let point of points) {
+				let locationInfo = locationInfos.get(point.location);
+				let location = locationInfo.location;
 
-		for (let i = 0; i < linePoints.length - 1; i++) {
-			let point1 = linePoints[i];
-			let point2 = linePoints[i + 1];
+				bounds.extend(location);
 
-			if (point1.length > 2 && point2.length > 2) {
-				let years = parseInt(point2[2]) - parseInt(point1[2]);
-
-				if (Number.isInteger(years)) {
-					let duration = years / ANIMATION_YEARS_PER_SECOND * 1000;
-
-					let line = L.motion.polyline([point1, point2], { color: COLOR, opacity: OPACITY }, { duration });
-					line.years = years;
-					bounds.extend(line.getBounds());
-					animation.addLayer(line, true);
-				}
+				geoJSON.features.push({
+					type: "Feature",
+					properties: {
+						start: point.date.isoFormattedTimestamp,
+						end: `${lastYear}`,
+						location,
+						references: locationInfo.references
+					},
+					geometry: {
+						type: "Point",
+						coordinates: [location.lng, location.lat]
+					}
+				});
 			}
-		}
 
-		container.addLayer(animation);
+			timelineControl = new L.TimelineSliderControl({
+				position: "bottomright",
+				formatOutput: date => new Date(date).getFullYear().toString()
+			});
+
+			timeline = new L.Timeline(geoJSON, { pointToLayer: data => addMarker(data.properties.location, data.properties.references) });
+
+			timelineControl.addTo(map);
+			timelineControl.addTimelines(timeline);
+			timeline.addTo(map);
+		}
 	}
 }
 
-function addMarker(location, entries = null) {
-	let marker = L.circleMarker([location.latitude, location.longitude], { radius: CIRCLE_MARKER_RADIUS, color: COLOR, fillOpacity: OPACITY, stroke: false});
-	marker.bindTooltip(`<h1>${location.name}</h1>${entries ? entries.join("<br />") : ""}<br />${location.imageURL ? `<img src="${location.imageURL}" />` : ""}`, { className: "map-marker-tooltip" });
+function addMarker(location, references = null) {
+	if (!location.lat || !location.lng) {
+		return null;
+	}
+
+	let marker = L.circleMarker(location, CIRCLE_MARKER_OPTIONS);
 	bounds.extend(marker.getLatLng());
 	container.addLayer(marker);
+
+	if (location.name) {
+		marker.bindTooltip(`<h1>${location.name}</h1>${Array.isArray(references) ? references.join("<br />") : ""}<br />${location.imageURL ? `<img src="${location.imageURL}" />` : ""}`, { className: "map-marker-tooltip" });
+	}
+
 	return marker;
 }
 
@@ -331,45 +354,9 @@ function fitMap() {
 }
 
 function startAnimation() {
-	if (animation && Number.isInteger(animation.firstYear) && Number.isInteger(animation.lastYear) && animation.lastYear >= animation.firstYear) {
-		let year = animation.firstYear;
-
-		animationTimer = setInterval(() => {
-			showYearLabel(year);
-			if (year === animation.lastYear) {
-				stopAnimation();
-			}
-			year++;
-		}, 1000.0 / ANIMATION_YEARS_PER_SECOND);
-
-		animation.motionStart();
+	if (timelineControl) {
+		timelineControl.play();
 	}
-}
-
-function resetAnimation() {
-	stopAnimation();
-	hideYearLabel();
-}
-
-function stopAnimation() {
-	if (animation) {
-		animation.motionStop();
-		animation = null;
-	}
-
-	if (animationTimer) {
-		clearInterval(animationTimer);
-		animationTimer = null;
-	}
-}
-
-function showYearLabel(textContent = "") {
-	yearLabel.textContent = textContent;
-	yearLabel.style.display = "block";
-}
-
-function hideYearLabel() {
-	yearLabel.style.display = "none";
 }
 
 function log(obj) {
