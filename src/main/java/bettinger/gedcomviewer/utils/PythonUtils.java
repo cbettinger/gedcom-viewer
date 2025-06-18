@@ -17,20 +17,20 @@ public interface PythonUtils {
             Runtime runtime = Runtime.getRuntime();
 
             String[] pipInstall = {"python", "-m", "ensurepip", "--upgrade"};
-            runtime.exec(pipInstall);
+            Process p = runtime.exec(pipInstall);
+            p.waitFor();
+            Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "pip installed", result);
 
             String[] pipenvInstall = {"pip", "install", "--user", "pipenv"};
-            runtime.exec(pipenvInstall);
-
-            String[] envCreate = {"pipenv", "shell"};
-            runtime.exec(envCreate);
+            p = runtime.exec(pipenvInstall);
+            p.waitFor();
+            Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "pipenv installed", result);
 
             String[] requirementsInstall = {"pipenv", "install"};
-            runtime.exec(requirementsInstall);
+            p = runtime.exec(requirementsInstall);
+            p.waitFor();
+            Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "requirements installed", result);
 
-            String[] mediapipeInstall = {"pipenv", "install", "mediapipe", "--user"};
-            runtime.exec(mediapipeInstall);
-            
             ArrayList<String> command = new ArrayList<String>();
             command.add("python");
             command.add(scriptPath);
@@ -38,7 +38,9 @@ public interface PythonUtils {
                 command.add(arg);
             }
 
-			Process p = runtime.exec(command.toArray(new String[0]));
+			p = runtime.exec(command.toArray(new String[0]));
+            p.waitFor();
+            Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "analysis done", result);
             BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 
             String s = null;
@@ -52,7 +54,10 @@ public interface PythonUtils {
 		} catch (IOException e) {
 			Logger.getLogger(PythonUtils.class.getName()).log(Level.SEVERE, String.format("An error occured when calling python script %s.", scriptPath), e);
 			return result;
-		}
+		} catch (InterruptedException e) {
+            Logger.getLogger(PythonUtils.class.getName()).log(Level.SEVERE, String.format("An error occured when calling python script %s.", scriptPath), e);
+			return result;
+        }
 	}
 }
 
