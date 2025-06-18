@@ -32,6 +32,8 @@ public interface PythonUtils {
             Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "requirements installed", result);
 
             ArrayList<String> command = new ArrayList<String>();
+            command.add("pipenv");
+            command.add("run");
             command.add("python");
             command.add(scriptPath);
             for(String arg : args) {
