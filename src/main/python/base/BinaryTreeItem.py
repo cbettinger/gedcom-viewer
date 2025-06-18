@@ -11,19 +11,19 @@ class BinaryTreeItem:
         self.parent2 = parent2
 
     def __str__(self):
-        s = s = '{}: {}'.format(self.name, self.value)
+        s = s = "{}: {}".format(self.name, self.value)
         if self.parent1:
-            s += '\n{}: {}'.format(self.parent1Name, self.parent1.value)
+            s += "\n{}: {}".format(self.parent1Name, self.parent1.value)
         if self.parent2:
-            s += '\n{}: {}'.format(self.parent2Name, self.parent2.value)
+            s += "\n{}: {}".format(self.parent2Name, self.parent2.value)
         return s
 
-    def tree(self, tabbing=''):
-        s = '\n{t}{n}: {v}'.format(t=tabbing, n=self.name, v=self.value)
+    def tree(self, tabbing=""):
+        s = "\n{t}{n}: {v}".format(t=tabbing, n=self.name, v=self.value)
         if self.parent1:
-            s += '\n{t}{n}: {v}'.format(t=tabbing, n=self.parent1Name, v=self.parent1.tree(tabbing+'  '))
+            s += "\n{t}{n}: {v}".format(t=tabbing, n=self.parent1Name, v=self.parent1.tree(tabbing+"  "))
         if self.parent2:
-            s += '\n{t}{n}: {v}'.format(t=tabbing, n=self.parent2Name, v=self.parent2.tree(tabbing+'  '))
+            s += "\n{t}{n}: {v}".format(t=tabbing, n=self.parent2Name, v=self.parent2.tree(tabbing+"  "))
         return s
     
     def getPaths(self, includeSelf=False, maxDepth=MAX_COMPARISON_DEPTH):

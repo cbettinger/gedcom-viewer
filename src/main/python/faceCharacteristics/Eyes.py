@@ -8,4 +8,4 @@ class Eyes(TwoElementalFacePart):
     leftEyeLidsIndices = [*leftEyeIndices, 342, 359, 467, 260, 259, 257, 258, 286, 414, 463, 341, 256, 252, 253, 254, 339, 255, 446, 261, 448, 449, 450, 451, 452, 453, 464]
     
     def __init__(self, faceLandmarks):
-        super().__init__('Augen', faceLandmarks, 'rechtes Auge', 'linkes Auge', Eyes.rightEyeLidsIndices, Eyes.leftEyeLidsIndices, 133, 362, 230, 450, None, None, classifier1=XGB_CLASSIFIERS['EYES']['first'], classifier2=XGB_CLASSIFIERS['EYES']['second'])
+        super().__init__("Augen", faceLandmarks, "rechtes Auge", "linkes Auge", Eyes.rightEyeLidsIndices, Eyes.leftEyeLidsIndices, 133, 362, 230, 450, None, None, classifier1=XGB_CLASSIFIERS["EYES"]["first"], classifier2=XGB_CLASSIFIERS["EYES"]["second"])

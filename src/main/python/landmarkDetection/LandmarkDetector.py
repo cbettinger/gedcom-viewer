@@ -3,7 +3,7 @@ from mediapipe.tasks import python
 
 class LandmarkDetector:
 
-    BASE_OPTIONS = python.BaseOptions(model_asset_path='face_landmarker.task')
+    BASE_OPTIONS = python.BaseOptions(model_asset_path="face_landmarker.task")
     OPTIONS = vision.FaceLandmarkerOptions(base_options=BASE_OPTIONS,
                                         output_face_blendshapes=True,
                                         output_facial_transformation_matrixes=True,

@@ -9,7 +9,7 @@ class FaceShape(OneElementalFacePart):
                        35, 117, 50, 207, 214, 210, 211, 32, 140, 298, 300, 265, 346, 280, 427, 434, 430, 431, 262, 369]
     def __init__(self, faceLandmarks):
         self.contourLineIndices = self._generateContourLineIndices(FaceShape.contourLineIndices)
-        super().__init__('Gesichtsform', faceLandmarks, FaceShape.landmarkIndices, 10, 152, None, XGB_CLASSIFIERS['FACESHAPE'])
+        super().__init__("Gesichtsform", faceLandmarks, FaceShape.landmarkIndices, 10, 152, None, XGB_CLASSIFIERS["FACESHAPE"])
 
     def _generateContourLineIndices(self, originalIndices):
         if originalIndices is None:

@@ -11,4 +11,4 @@ class Nose(OneElementalFacePart):
     additionalFaces = [[417, 351, 412], [193, 188, 122]]
     
     def __init__(self, faceLandmarks):
-        super().__init__('Nase', faceLandmarks, Nose.landmarkIndices, 168, 2, Nose.additionalFaces, XGB_CLASSIFIERS['NOSE'])
+        super().__init__("Nase", faceLandmarks, Nose.landmarkIndices, 168, 2, Nose.additionalFaces, XGB_CLASSIFIERS["NOSE"])

@@ -12,7 +12,7 @@ class FaceLandmarks:
         try:
             normalizedLandmarks = np.asarray(LandmarkDetector.detectLandmarks(mpImg))
         except:
-            raise Exception('Es konnte kein Gesicht erkannt werden.')
+            raise Exception("Es konnte kein Gesicht erkannt werden.")
 
         img = mpImg.numpy_view()
 
@@ -72,7 +72,7 @@ class FaceLandmarks:
         return img
     
     def getMask(self, indices=np.arange(468), additionalFaces=None):
-        return self.drawMesh(indices, [255], bgColor=[0], additionalFaces=additionalFaces).astype('uint8')
+        return self.drawMesh(indices, [255], bgColor=[0], additionalFaces=additionalFaces).astype("uint8")
 
     def drawLines(self, lineIndices, color=[0, 0, 0], bgColor=[255, 255, 255]):
         img = np.full((self.srcImgHeight, self.srcImgWidth, 3), bgColor)

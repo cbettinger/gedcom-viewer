@@ -17,7 +17,7 @@ def getFaceAnalysisResult(targetPerson, maxDepth=None):
     similarityResults = FaceAnalyser.analyse(targetPerson, maxDepth)
     
     if similarityResults is None:
-        return {'isError': True, 'messageKey': 'NotEnoughUsablePortraits'} #'Die Zielperson konnte nicht analysiert werden. Es müssen von der Person selbst sowie von beiden Elternteilen Portraits vohanden sein, auf denen ein Gesicht durch das System erkannt werden kann, um eine Ähnlichkeitsanalyse durchzuführen.'
+        return {"isError": "y", "messageKey": "NotEnoughUsablePortraits"} #"Die Zielperson konnte nicht analysiert werden. Es müssen von der Person selbst sowie von beiden Elternteilen Portraits vohanden sein, auf denen ein Gesicht durch das System erkannt werden kann, um eine Ähnlichkeitsanalyse durchzuführen."
     paths = targetPerson.getPaths()
 
     nodes = dictUtils.getDicts(FACE_CHARACTERISTICS_OF_INTEREST)
@@ -27,18 +27,18 @@ def getFaceAnalysisResult(targetPerson, maxDepth=None):
         avgPersonSimilarities = {}
 
         for id, personResults in similarityResults.items():
-            maxSimRes = personResults['max'][c]
-            avgSim = personResults['avg'][c]
+            maxSimRes = personResults["max"][c]
+            avgSim = personResults["avg"][c]
 
             avgPersonSimilarities.update({id: avgSim})
 
             if maxSimRes.value is None:
-                nodes[c].update({id: {'maxSimilarity': None, 'avgSimilarity': None}})
+                nodes[c].update({id: {"maxSimilarity": None, "avgSimilarity": None}})
             else:
-                individualResult = {'maxSimilarity': maxSimRes.value, 'avgSimilarity': avgSim, 'maxMatchImgTarget': maxSimRes.img1.fileName, 'maxMatchImgAncestor': maxSimRes.img2.fileName}
+                individualResult = {"maxSimilarity": maxSimRes.value, "avgSimilarity": avgSim, "maxMatchImgTarget": maxSimRes.img1.fileName, "maxMatchImgAncestor": maxSimRes.img2.fileName}
                 nodes[c].update({id: individualResult})
         
         for path in paths:
-            pathSimilarities[c].update({str(path).replace('[', '').replace(']', ''): getAvgPathSimilarity(path, avgPersonSimilarities)})
+            pathSimilarities[c].update({str(path).replace("[", "").replace("]", ""): getAvgPathSimilarity(path, avgPersonSimilarities)})
 
-    return {'pathSimilarities': pathSimilarities, 'nodes': nodes}
+    return {"pathSimilarities": pathSimilarities, "nodes": nodes}

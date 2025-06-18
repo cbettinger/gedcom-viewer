@@ -16,7 +16,7 @@ class XGBooster(Classifier):
         return self.model.predict_proba(input)[:, 1]
     
     def save(self, filenameWithoutExtension):
-        self.model.save_model('{}.json'.format(filenameWithoutExtension))
+        self.model.save_model("{}.json".format(filenameWithoutExtension))
 
     def load(self, filename):
         self.model.load_model(filename)
