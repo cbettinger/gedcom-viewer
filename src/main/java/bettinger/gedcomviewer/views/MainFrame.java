@@ -507,6 +507,8 @@ public class MainFrame extends Frame {
 
 	private void showFacialFeatureAnalysisResults(Individual proband, int maxDepth, int maxNumPortraits) {
 		if (proband != null) {
+			var results = FacialFeatureAnalyser.analyse(proband, maxDepth, maxNumPortraits);
+			System.out.println(results);
 			new BackgroundWorker(I18N.get("FacialFeatureAnalysis")) {
 				private TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results;
 				
