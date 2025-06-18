@@ -53,8 +53,8 @@ public class ResultOverviewPane extends JPanel {
         legend.setModel(new DefaultTableModel(data, columns));
         legend.getColumnModel().getColumn(1).setCellRenderer(new OverviewTableLineColorCellRenderer());
 
-        add(new JScrollPane(legend), BorderLayout.LINE_END);
-        add(visualization, BorderLayout.LINE_START);
+        add(new JScrollPane(legend), BorderLayout.EAST);
+        add(visualization, BorderLayout.CENTER);
         update(proband, numGenerations, results);
     }
 
