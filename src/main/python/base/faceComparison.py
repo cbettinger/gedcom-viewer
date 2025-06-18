@@ -17,7 +17,7 @@ def getFaceAnalysisResult(targetPerson, maxDepth=None):
     similarityResults = FaceAnalyser.analyse(targetPerson, maxDepth)
     
     if similarityResults is None:
-        return {'isError': True, 'messageKey': 'FaceAnalysisFailed'} #'Die Zielperson konnte nicht analysiert werden. Es müssen von der Person selbst sowie von beiden Elternteilen Portraits vohanden sein, auf denen ein Gesicht durch das System erkannt werden kann, um eine Ähnlichkeitsanalyse durchzuführen.'
+        return {'isError': True, 'messageKey': 'NotEnoughUsablePortraits'} #'Die Zielperson konnte nicht analysiert werden. Es müssen von der Person selbst sowie von beiden Elternteilen Portraits vohanden sein, auf denen ein Gesicht durch das System erkannt werden kann, um eine Ähnlichkeitsanalyse durchzuführen.'
     paths = targetPerson.getPaths()
 
     nodes = dictUtils.getDicts(FACE_CHARACTERISTICS_OF_INTEREST)
