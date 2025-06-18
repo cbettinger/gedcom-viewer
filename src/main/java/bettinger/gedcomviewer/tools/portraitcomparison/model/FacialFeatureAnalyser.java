@@ -24,16 +24,16 @@ public abstract class FacialFeatureAnalyser {
 
         final String[] args = {inputFile.getAbsolutePath(), Integer.toString(maxNumPortraits), Integer.toString(maxDepth)};
         final List<String> outputs = PythonUtils.callScript(pathToScript, args);
-
-        for(String o : outputs) {
-            Logger.getLogger(FacialFeatureAnalyser.class.getName()).log(Level.INFO, o);
-        }
-        final var outputJSON = JSONUtils.fromString(outputs.getLast());
-        for (final var feature : FacialFeatures.values()) {
-            results.put(feature, FacialFeatureAnalysisResult.fromJSON(outputJSON, feature.name()));
-        }
-
         inputFile.delete();
+
+        final var outputJSON = JSONUtils.fromString(outputs.getLast());
+        if (outputJSON.get("isError") != null) {
+            
+        } else {
+             for (final var feature : FacialFeatures.values()) {
+                results.put(feature, FacialFeatureAnalysisResult.fromJSON(outputJSON, feature.name()));
+            }
+        }
 
         return results;
     }
