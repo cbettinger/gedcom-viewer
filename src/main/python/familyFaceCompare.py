@@ -15,6 +15,6 @@ if len(sys.argv) > 4:
     except:
         sys.exit("Es existiert kein Individuum mit ID {}.".format(sys.argv[4]))
 
-print(json.dumps(getFaceAnalysisResult(rootPerson, int(sys.argv[3]))))
+print(json.dumps(str(getFaceAnalysisResult(rootPerson, int(sys.argv[3])))))
 
 # python src/familyfacecompare.py testfiles/sobisiak-miriam-minimal.json > testResults/sobisiak-miriam-minimal-newBase-avg.txt
