@@ -73,7 +73,7 @@ class FaceAnalyser:
             faces = mostSimilarFaces.get(c)
             if faces is None:
                 maxResult.update({c: SimilarityResult(None, None, None)})
-                avgResult.update({c: SimilarityResult(None, None, None)})
+                avgResult.update({c: None})
                 avgMaxResult.update({c: SimilarityResult(None, None, None)})
             else:
                 f1, f2 = faces

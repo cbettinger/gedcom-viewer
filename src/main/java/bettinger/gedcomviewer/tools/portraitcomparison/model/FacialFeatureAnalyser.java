@@ -8,6 +8,7 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.utils.JSONUtils;
 import bettinger.gedcomviewer.utils.PythonUtils;
@@ -26,9 +27,14 @@ public abstract class FacialFeatureAnalyser {
         final List<String> outputs = PythonUtils.callScript(pathToScript, args);
         inputFile.delete();
 
+        if (outputs.size() < 1) {
+            //todo show error
+            return results;
+        }
         final var outputJSON = JSONUtils.fromString(outputs.getLast());
         if (outputJSON.get("isError") != null) {
-            
+            Logger.getLogger(FacialFeatureAnalyser.class.getName()).log(Level.SEVERE, I18N.get(outputJSON.get("messageKey").asText()));
+            //todo show error
         } else {
              for (final var feature : FacialFeatures.values()) {
                 results.put(feature, FacialFeatureAnalysisResult.fromJSON(outputJSON, feature.name()));
