@@ -19,17 +19,17 @@ public interface PythonUtils {
             String[] pipInstall = {"python", "-m", "ensurepip", "--upgrade"};
             Process p = runtime.exec(pipInstall);
             p.waitFor();
-            Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "pip installed", result);
+            Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "pip installed");
 
             String[] pipenvInstall = {"pip", "install", "--user", "pipenv"};
             p = runtime.exec(pipenvInstall);
             p.waitFor();
-            Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "pipenv installed", result);
+            Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "pipenv installed");
 
             String[] requirementsInstall = {"pipenv", "install"};
             p = runtime.exec(requirementsInstall);
             p.waitFor();
-            Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "requirements installed", result);
+            Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "requirements installed");
 
             ArrayList<String> command = new ArrayList<String>();
             command.add("pipenv");
@@ -39,11 +39,12 @@ public interface PythonUtils {
             for(String arg : args) {
                 command.add(arg);
             }
+            Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, args[0]);
 
-			p = runtime.exec(command.toArray(new String[0]));
-            p.waitFor();
-            Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "analysis done", result);
-            BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+			Process pOut = runtime.exec(command.toArray(new String[0]));
+            pOut.waitFor();
+            Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "analysis done");
+            BufferedReader stdInput = new BufferedReader(new InputStreamReader(pOut.getInputStream()));
 
             String s = null;
             while ((s = stdInput.readLine()) != null) {
@@ -51,7 +52,6 @@ public interface PythonUtils {
             }
             Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, s, result);
 
-            result.add("{\"pathSimilarities\": {\"CHEEKS\": {\"@I1@\": 0.80456}, \"CHIN\": {\"@I1@, @I1@\": 0.648}, \"EYEBROWS\": {\"@I1@\": 0.80456}, \"EYES\": {\"@I1@\": 0.80456}, \"FACESHAPE\": {\"@I1@\": 0.80456}, \"LIPS\": {\"@I1@\": 0.80456}, \"NOSE\": {\"@I1@\": 0.80456}}, \"nodes\": {\"CHEEKS\": {\"@I1@\": {\"maxSimilarity\": 0.80456, \"avgSimilarity\": 0.80456, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}, \"abc\": {\"maxSimilarity\": 0.9833, \"avgSimilarity\": 0.53865, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}}, \"CHIN\": {\"@I1@\": {\"maxSimilarity\": 0.80456, \"avgSimilarity\": 0.80456, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}, \"abc\": {\"maxSimilarity\": 0.80456, \"avgSimilarity\": 0.78, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}}, \"EYEBROWS\": {\"@I1@\": {\"maxSimilarity\": 0.80456, \"avgSimilarity\": 0.80456, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}, \"abc\": {\"maxSimilarity\": 0.80456, \"avgSimilarity\": 0.78, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}}, \"EYES\": {\"@I1@\": {\"maxSimilarity\": 0.80456, \"avgSimilarity\": 0.80456, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}, \"abc\": {\"maxSimilarity\": 0.80456, \"avgSimilarity\": 0.78, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}}, \"FACESHAPE\": {\"@I1@\": {\"maxSimilarity\": 0.80456, \"avgSimilarity\": 0.80456, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}, \"abc\": {\"maxSimilarity\": 0.80456, \"avgSimilarity\": 0.78, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}}, \"LIPS\": {\"@I1@\": {\"maxSimilarity\": 0.80456, \"avgSimilarity\": 0.80456, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}, \"abc\": {\"maxSimilarity\": 0.80456, \"avgSimilarity\": 0.78, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}}, \"NOSE\": {\"@I1@\": {\"maxSimilarity\": 0.80456, \"avgSimilarity\": 0.80456, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}, \"abc\": {\"maxSimilarity\": 0.80456, \"avgSimilarity\": 0.78, \"maxMatchImgTarget\": \"h\", \"maxMatchImgAncestor\": \"i\"}}}}");
             return result;
 		} catch (IOException e) {
 			Logger.getLogger(PythonUtils.class.getName()).log(Level.SEVERE, String.format("An error occured when calling python script %s.", scriptPath), e);
