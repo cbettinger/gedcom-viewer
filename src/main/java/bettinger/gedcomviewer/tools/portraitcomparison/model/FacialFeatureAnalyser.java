@@ -1,6 +1,8 @@
 package bettinger.gedcomviewer.tools.portraitcomparison.model;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
@@ -35,10 +37,19 @@ public abstract class FacialFeatureAnalyser {
         if (outputJSON.get("isError") != null) {
             Logger.getLogger(FacialFeatureAnalyser.class.getName()).log(Level.SEVERE, I18N.get(outputJSON.get("messageKey").asText()));
             //todo show error
-        } else {
-             for (final var feature : FacialFeatures.values()) {
-                results.put(feature, FacialFeatureAnalysisResult.fromJSON(outputJSON, feature.name()));
+        } else if (outputJSON.get("success") != null) {
+            try {
+                final var resultJson = JSONUtils.fromString(Files.readString(Paths.get(outputJSON.get("filename").asText())));
+                Logger.getLogger(FacialFeatureAnalyser.class.getName()).log(Level.INFO, resultJson.asText());
+                for (final var feature : FacialFeatures.values()) {
+                    results.put(feature, FacialFeatureAnalysisResult.fromJSON(resultJson, feature.name()));
+                }
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
+        } else {
+            //todo show error
         }
 
         return results;
