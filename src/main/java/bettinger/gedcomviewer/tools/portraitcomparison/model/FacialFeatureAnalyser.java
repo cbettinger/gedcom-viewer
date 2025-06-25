@@ -10,6 +10,8 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.pdfbox.util.Charsets;
+
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.utils.JSONUtils;
@@ -39,7 +41,10 @@ public abstract class FacialFeatureAnalyser {
             //todo show error
         } else if (outputJSON.get("success") != null) {
             try {
-                final var resultJson = JSONUtils.fromString(Files.readString(Paths.get(outputJSON.get("filename").asText())));
+                var resultFilepath = Paths.get(outputJSON.get("filename").asText());
+                final var resultJson = JSONUtils.fromString(Files.readString(resultFilepath, Charsets.UTF_8));
+                Files.delete(resultFilepath);
+
                 Logger.getLogger(FacialFeatureAnalyser.class.getName()).log(Level.INFO, resultJson.asText());
                 for (final var feature : FacialFeatures.values()) {
                     results.put(feature, FacialFeatureAnalysisResult.fromJSON(resultJson, feature.name()));
