@@ -39,6 +39,6 @@ def getFaceAnalysisResult(targetPerson, maxDepth=None):
                 nodes[c].update({id: individualResult})
         
         for path in paths:
-            pathSimilarities[c].update({str(path).replace("[", "").replace("]", ""): str(getAvgPathSimilarity(path, avgPersonSimilarities))})
+            pathSimilarities[c].update({str(path).replace("[", "").replace("]", "").replace("'", ""): str(getAvgPathSimilarity(path, avgPersonSimilarities))})
 
     return {"pathSimilarities": pathSimilarities, "nodes": nodes}
