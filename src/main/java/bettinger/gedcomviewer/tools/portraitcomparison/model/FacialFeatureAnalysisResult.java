@@ -49,13 +49,16 @@ public class FacialFeatureAnalysisResult {
         Float maxSimilarity = null;
         for (final var entry : personSimilarities.entrySet()) {
             final var id = entry.getKey();
-            final var avgSim = entry.getValue().getAvgSimilarity();
-            if (maxSimilarity == null || avgSim > maxSimilarity) {
-                idsWithMaxSim.clear();
-                idsWithMaxSim.add(id);
-                maxSimilarity = avgSim;
-            } else if (avgSim == maxSimilarity) {
-                idsWithMaxSim.add(id);
+            final var featureSim = entry.getValue();
+            if (featureSim != null) {
+                final var avgSim = featureSim.getAvgSimilarity();
+                if (maxSimilarity == null || avgSim > maxSimilarity) {
+                    idsWithMaxSim.clear();
+                    idsWithMaxSim.add(id);
+                    maxSimilarity = avgSim;
+                } else if (avgSim == maxSimilarity) {
+                    idsWithMaxSim.add(id);
+                }
             }
         }
         return new Pair<ArrayList<String>, Float>(idsWithMaxSim, maxSimilarity);
