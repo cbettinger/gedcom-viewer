@@ -26,7 +26,7 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 	private final SourceCitationManager sourceCitationManager;
 
 	private final org.folg.gedcom.model.EventFact wrappedFact;
-	private final IndividualFamilyCommonStructure individualOrFamily;
+	private final IndividualFamilyCommonStructure parentStructure;
 
 	@JsonProperty
 	private final Date date;
@@ -41,7 +41,7 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 		this.sourceCitationManager = new SourceCitationManager(this, gedcom);
 
 		this.wrappedFact = eventFact;
-		this.individualOrFamily = parentStructure;
+		this.parentStructure = parentStructure;
 
 		this.date = Date.parse(eventFact.getDate());
 
@@ -132,7 +132,7 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 
 	/* #region getter & setter */
 	public LocalDateTime getLastChange() {
-		return individualOrFamily.getLastChange();
+		return parentStructure.getLastChange();
 	}
 
 	public String getTag() {

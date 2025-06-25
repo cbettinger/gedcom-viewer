@@ -194,6 +194,12 @@ public class Individual extends IndividualFamilyCommonStructure {
 		return getQuality(BAPTISM_TAG);
 	}
 
+	@JsonProperty
+	public Fact getDeathOrBurial() {
+		final var fact = getDeath();
+		return fact != null ? fact : getBurial();
+	}
+
 	public Date getDeathDate() {
 		final var fact = getDeath();
 		return fact == null ? null : fact.getDate();

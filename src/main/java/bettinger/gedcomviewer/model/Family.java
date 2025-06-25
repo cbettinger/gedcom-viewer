@@ -62,7 +62,7 @@ public class Family extends IndividualFamilyCommonStructure {
 	}
 
 	@JsonProperty
-	private Fact getMarriage() {
+	public Fact getMarriage() {
 		return getBestFact(MARRIAGE_TAG);
 	}
 
@@ -85,7 +85,7 @@ public class Family extends IndividualFamilyCommonStructure {
 		return fact == null ? null : fact.getLocation();
 	}
 
-	private Fact getDivorce() {
+	public Fact getDivorce() {
 		return getBestFact(DIVORCE_TAG);
 	}
 

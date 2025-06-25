@@ -63,8 +63,7 @@ public class Date implements Comparable<Date> {
 	public static Date parse(final String raw) {
 		try {
 			return new Date(raw);
-		}
-		catch (ParseException _) {
+		} catch (final ParseException _) {
 			return null;
 		}
 	}
