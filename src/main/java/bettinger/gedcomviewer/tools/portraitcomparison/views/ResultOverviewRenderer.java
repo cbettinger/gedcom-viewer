@@ -42,18 +42,16 @@ class ResultOverviewRenderer extends AncestorsRenderer {
             for (final var path : maxSimilarityPaths) {
                 var pathIDs = path.getAncestorIDs();
                 var tuple = new Pair<String, String>(proband.getId(), pathIDs[0]);
-                if (this.maxSimilarityEdges.containsKey(tuple)) {
-                    this.maxSimilarityEdges.get(tuple).add(color);
-                } else {
+                if (!this.maxSimilarityEdges.containsKey(tuple)) {
                     this.maxSimilarityEdges.put(tuple, new HashSet<Color>());
                 }
-                for (int i=1; i<pathIDs.length-1; i++) {
+                this.maxSimilarityEdges.get(tuple).add(color);
+                for (int i=0; i<pathIDs.length-1; i++) {
                     tuple = new Pair<String,String>(pathIDs[i], pathIDs[i+1]);
-                    if (this.maxSimilarityEdges.containsKey(tuple)) {
-                    this.maxSimilarityEdges.get(tuple).add(color);
-                    } else {
+                    if (!this.maxSimilarityEdges.containsKey(tuple)) {
                         this.maxSimilarityEdges.put(tuple, new HashSet<Color>());
                     }
+                    this.maxSimilarityEdges.get(tuple).add(color);
                 }
             }
         } 
@@ -79,7 +77,7 @@ class ResultOverviewRenderer extends AncestorsRenderer {
             final boolean considerMother = motherNode != null && motherNode.getIndividual() != null;
 
             boolean edgeWasDrawn = false;
-
+            
             if (considerFather) {
                 final Pair<String, String> tuple = new Pair<String,String>(rootNode.getIndividual().getId(), fatherNode.getIndividual().getId());
                 if (maxSimilarityEdges.containsKey(tuple)) {
@@ -110,7 +108,7 @@ class ResultOverviewRenderer extends AncestorsRenderer {
                 final int offsetY = LINE_OFFSET * edgeNumber + LINE_OFFSET / 2;
                 final int offsetX = left ? -offsetY : offsetY;
                 g.setPaint(color);
-                g.drawLine(parentsPoint.x + offsetX, parentsPoint.y + offsetY, parentNodePosition.x, parentNodePosition.y + offsetY);
+                g.drawLine(parentsPoint.x + offsetX, parentsPoint.y + offsetY, parentNodePosition.x, parentsPoint.y + offsetY);
                 g.drawLine(parentsPoint.x + offsetX, parentsPoint.y + offsetY, parentsPoint.x + offsetX, rootNode.getPosition().y);
                 edgeNumber++;
             }
