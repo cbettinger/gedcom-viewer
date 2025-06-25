@@ -258,7 +258,6 @@ public class Individual extends IndividualFamilyCommonStructure {
 		return parents == null ? null : parents.getWife();
 	}
 
-	@JsonProperty
 	public Family getParents() {
 		final var parentFamilies = wrappedPerson.getParentFamilyRefs();
 		return parentFamilies == null || parentFamilies.isEmpty() ? null : (Family) gedcom.getRecord(parentFamilies.get(0).getRef());

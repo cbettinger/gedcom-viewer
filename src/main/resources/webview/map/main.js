@@ -1,9 +1,13 @@
 function getExports() { return { showLocations, showLineage, showAncestors, showDescendants }; }
 
-const COLOR = "#FF2262";
+const DEFAULT_COLOR = "#ff2262";
 const OPACITY = 0.7;
-const LINE_OPTIONS = { color: COLOR, opacity: OPACITY };
+const LINE_OPTIONS = { color: DEFAULT_COLOR, opacity: OPACITY };
 const CIRCLE_MARKER_OPTIONS = { ...LINE_OPTIONS, radius: 10, stroke: false, fillOpacity: OPACITY };
+
+const COLOR_PALETTE = ["#7bc17f", "#6dab8f", "#578886", "#b6587c", "#cf53cf", "#ae45d1", "#9a3dcc", "#7c30c8", "#fffd95", "#d2d29c", "#b2b2a4", "#78789e", "#aec2bb", "#97a8bd", "#8494c0", "#6975b2", "#4c549b", "#ffc337", "#feae34", "#e39a3b", "#be8042", "#9e6a43", "#ff964e", "#ff8643", "#d15842", "#b14a50"];	// TODO: improve palette
+
+let nextColor = 0;
 
 let map = null;
 
@@ -66,45 +70,35 @@ function showLocations(json) {
 }
 
 function showLineage(json, paths = false, animate = false) {
-	let individuals = JSON.parse(json);
+	let facts = JSON.parse(json);
 
 	resetMap();
 
-	if (individuals.length) {
-		let points = [];
+	if (facts.length) {
 		let locationInfos = new Map();
 
-		for (let individual of individuals) {
-			let birthOrBaptism = individual.birthOrBaptism;
-			let birthOrBaptismLocation = birthOrBaptism?.location;
-			if (birthOrBaptismLocation?.lat && birthOrBaptismLocation?.lng) {
-				points.push({ date: birthOrBaptism.date, location: birthOrBaptismLocation.id });
+		for (let factsOfIndividual of facts) {
+			let points = [];
 
-				if (!locationInfos.has(birthOrBaptismLocation.id)) {
-					locationInfos.set(birthOrBaptismLocation.id, { location: birthOrBaptismLocation, references: [] });
+			for (let fact of factsOfIndividual) {
+				if (fact.date?.start && fact.location?.id && fact.location?.lat && fact.location?.lng) {
+					if (!locationInfos.has(fact.location.id)) {
+						locationInfos.set(fact.location.id, { location: fact.location, references: [] });
+					}
+					locationInfos.get(fact.location.id).references.push(fact.toString);
+
+					points.push({ date: fact.date, location: fact.location.id });
 				}
-				locationInfos.get(birthOrBaptismLocation.id).references.push(birthOrBaptism.toString);
 			}
 
-			let parentsMarriage = individual.parents?.marriage;
-			let parentsMarriageLocation = parentsMarriage?.location;
-			if (parentsMarriageLocation?.lat && parentsMarriageLocation?.lng) {
-				points.push({ date: parentsMarriage.date, location: parentsMarriageLocation.id });
-
-				if (!locationInfos.has(parentsMarriageLocation.id)) {
-					locationInfos.set(parentsMarriageLocation.id, { location: parentsMarriageLocation, references: [] });
-				}
-				locationInfos.get(parentsMarriageLocation.id).references.push(parentsMarriage.toString);
+			if (paths) {
+				addPolyline(points.map(p => locationInfos.get(p.location).location), getNextColor());
 			}
 		}
 
 		if (animate) {
-			addAnimation(points.toReversed(), locationInfos);
+			addAnimation(facts, locationInfos);
 		} else {
-			if (paths) {
-				addPolyline(points.map(p => locationInfos.get(p.location).location));
-			}
-
 			for (let locationInfo of locationInfos.values()) {
 				addMarker(locationInfo.location, locationInfo.references);
 			}
@@ -268,54 +262,67 @@ function addLine(location1, location2) {
 	addPolyline([location1, location2]);
 }
 
-function addPolyline(locations) {
+function addPolyline(locations, color = null) {
 	if (locations.length > 1) {
-		let polyline = L.polyline(locations, LINE_OPTIONS);
+		let options = { ...LINE_OPTIONS };
+		if (color) {
+			options.color = color;
+		}
+
+		let polyline = L.polyline(locations, options);
 		bounds.extend(polyline.getBounds());
 		container.addLayer(polyline);
 	}
 }
 
-function addAnimation(points, locationInfos) {
-	if (points.length > 1) {
+function getNextColor() {
+	if (nextColor === COLOR_PALETTE.length) {
+		nextColor = 0;
+	}
+	return COLOR_PALETTE[nextColor++];
+}
+
+function addAnimation(facts, locationInfos) {
+	if (facts.length) {
 		let geoJSON = { type: "FeatureCollection", features: [] };
 
-		//let lastPoint = linePoints[linePoints.length - 1];	// TODO: improve
-		let lastYear = 2026; //lastPoint.length > 2 ? parseInt(lastPoint[2]) : null;
-
-		if (Number.isInteger(lastYear)) {
-			for (let point of points) {
-				let locationInfo = locationInfos.get(point.location);
-				let location = locationInfo.location;
+		for (let factsOfIndividual of facts) {
+			for (let fact of factsOfIndividual) {
+				let location = fact.location;
+				let locationInfo = locationInfos.get(location.id);
 
 				bounds.extend(location);
 
 				geoJSON.features.push({
 					type: "Feature",
 					properties: {
-						start: point.date.isoFormattedTimestamp,
-						end: `${lastYear}`,
 						location,
-						references: locationInfo.references
+						references: locationInfo.references,
+						start: fact.date.start,
+						end: fact.date.end || "2026-01-01"	// TODO: improve
 					},
 					geometry: {
 						type: "Point",
 						coordinates: [location.lng, location.lat]
 					}
 				});
+
+				log(fact.date.start);
+				//log(fact.date.end);
 			}
-
-			timelineControl = new L.TimelineSliderControl({
-				position: "bottomright",
-				formatOutput: date => new Date(date).getFullYear().toString()
-			});
-
-			timeline = new L.Timeline(geoJSON, { pointToLayer: data => addMarker(data.properties.location, data.properties.references) });
-
-			timelineControl.addTo(map);
-			timelineControl.addTimelines(timeline);
-			timeline.addTo(map);
+			log("-----------");
 		}
+
+		timelineControl = new L.TimelineSliderControl({
+			position: "bottomright",
+			formatOutput: date => new Date(date).getFullYear().toString()
+		});
+
+		timeline = new L.Timeline(geoJSON, { pointToLayer: data => addMarker(data.properties.location, data.properties.references) });
+
+		timelineControl.addTo(map);
+		timelineControl.addTimelines(timeline);
+		timeline.addTo(map);
 	}
 }
 

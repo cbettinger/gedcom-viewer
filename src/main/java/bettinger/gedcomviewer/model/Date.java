@@ -25,16 +25,17 @@ public class Date implements Comparable<Date> {
 	private final String raw;
 	private final String[] components;
 	private final String formatted;
-	private LocalDate timestamp;
 	@JsonProperty
-	private final String isoFormattedTimestamp;
+	private String start;
+	@JsonProperty
+	private String end;
 
 	private Date(final String raw) throws ParseException {
 		this.raw = raw == null ? "" : raw;
 		this.components = parseComponents(this.raw);
 		this.formatted = format(this.components);
-		this.timestamp = parseTimestamp(components);
-		this.isoFormattedTimestamp = formatISOTimestamp(this.timestamp);
+		this.start = formatISO(parseStart(this.components));
+		this.end = formatISO(parseEnd(this.components));
 	}
 
 	public String getRaw() {
@@ -49,14 +50,14 @@ public class Date implements Comparable<Date> {
 	@SuppressWarnings("java:S1210")
 	@Override
 	public int compareTo(final Date o) {
-		if (timestamp == null && o.timestamp == null) {
+		if (start == null && o.start == null) {
 			return 0;
-		} else if (timestamp == null) {
+		} else if (start == null) {
 			return -1;
-		} else if (o.timestamp == null) {
+		} else if (o.start == null) {
 			return 1;
 		} else {
-			return timestamp.compareTo(o.timestamp);
+			return start.compareTo(o.start);
 		}
 	}
 
@@ -141,11 +142,23 @@ public class Date implements Comparable<Date> {
 		return sb.toString();
 	}
 
-	private static LocalDate parseTimestamp(final String[] components) {
-		return components == null || components.length != 8 ? null : LocalDate.of(Integer.parseInt(components[3]), components[2] == null ? 1 : Integer.parseInt(components[2]), components[1] == null ? 1 : Integer.parseInt(components[1]));
+	private static String formatISO(final LocalDate timestamp) {
+		return timestamp == null ? "" : timestamp.toString();
 	}
 
-	private static String formatISOTimestamp(final LocalDate timestamp) {
-		return timestamp == null ? null : timestamp.toString();
+	private static LocalDate parseStart(final String[] components) {
+		try {
+			return LocalDate.of(Integer.parseInt(components[3]), components[2] == null ? 1 : Integer.parseInt(components[2]), components[1] == null ? 1 : Integer.parseInt(components[1]));
+		} catch (final Exception _) {
+			return null;
+		}
+	}
+
+	private static LocalDate parseEnd(final String[] components) {
+		try {
+			return LocalDate.of(Integer.parseInt(components[7]), components[6] == null ? 1 : Integer.parseInt(components[6]), components[5] == null ? 1 : Integer.parseInt(components[5]));
+		} catch (final Exception _) {
+			return null;
+		}
 	}
 }

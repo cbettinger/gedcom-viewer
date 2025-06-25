@@ -1,5 +1,8 @@
 package bettinger.gedcomviewer.views.tabs.map;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 import org.javatuples.Quintet;
@@ -9,6 +12,7 @@ import com.google.common.eventbus.Subscribe;
 import bettinger.gedcomviewer.Events;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.Preferences;
+import bettinger.gedcomviewer.model.Fact;
 import bettinger.gedcomviewer.model.GEDCOM;
 import bettinger.gedcomviewer.model.GEDCOM.GEDCOMEvent;
 import bettinger.gedcomviewer.model.Individual;
@@ -157,7 +161,41 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 	private void showLineage() {
 		Platform.runLater(() -> {
 			if (js != null && gedcom != null && gedcom.isLoaded() && proband != null) {
-				js.call("showLineage", JSONUtils.toJSON(proband.getLineage(Preferences.getLineageMode()).stream().map(Quintet::getValue1).toList()), pathsCheckBox.isSelected(), animationCheckBox.isSelected());
+				final var facts = new ArrayList<ArrayList<Fact>>();
+
+				proband.getLineage(Preferences.getLineageMode()).forEach(quintet -> {
+					final var factsOfIndividual = new ArrayList<Fact>();
+
+					final var individual = quintet.getValue1();
+
+					final var birth = individual.getBirthOrBaptism();
+					if (birth != null && birth.getDate() != null && birth.getLocation() != null) {
+						factsOfIndividual.add(birth);
+					}
+
+					final var death = individual.getDeathOrBurial();
+					if (death != null && death.getDate() != null && death.getLocation() != null) {
+						factsOfIndividual.add(death);
+					}
+
+					individual.getFacts("RESI").stream().filter(fact -> fact.getDate() != null && fact.getLocation() != null).forEach(factsOfIndividual::add);	// TODO: start/end
+
+					final var family = individual == proband ? null : quintet.getValue2();
+					if (family != null) {
+						final var marriage = family.getMarriage();
+						if (marriage != null && marriage.getDate() != null && marriage.getLocation() != null) {
+							factsOfIndividual.add(marriage);
+						}
+					}
+
+					Collections.sort(factsOfIndividual, Comparator.comparing(Fact::getDate));
+
+					facts.add(factsOfIndividual);
+				});
+
+				System.out.println(JSONUtils.toJSON(facts));	// TODO: remove
+
+				js.call("showLineage", JSONUtils.toJSON(facts), pathsCheckBox.isSelected(), animationCheckBox.isSelected());
 			}
 		});
 	}
