@@ -39,8 +39,7 @@ public interface PythonUtils {
             for(String arg : args) {
                 command.add(arg);
             }
-            Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, args[0]);
-
+            
 			Process pOut = runtime.exec(command.toArray(new String[0]));
             pOut.waitFor();
             Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "analysis done");
@@ -50,7 +49,7 @@ public interface PythonUtils {
             while ((s = stdInput.readLine()) != null) {
                 result.add(s);
             }
-            Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, s, result);
+            Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, result.toString());
 
             return result;
 		} catch (IOException e) {
