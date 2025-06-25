@@ -33,12 +33,12 @@ def getFaceAnalysisResult(targetPerson, maxDepth=None):
             avgPersonSimilarities.update({id: avgSim})
 
             if maxSimRes.value is None:
-                nodes[c].update({id: {"maxSimilarity": None, "avgSimilarity": None}})
+                nodes[c].update({id: ""})
             else:
-                individualResult = {"maxSimilarity": maxSimRes.value, "avgSimilarity": avgSim, "maxMatchImgTarget": maxSimRes.img1.fileName, "maxMatchImgAncestor": maxSimRes.img2.fileName}
+                individualResult = {"maxSimilarity": str(maxSimRes.value), "avgSimilarity": str(avgSim), "maxMatchImgTarget": maxSimRes.img1.fileName, "maxMatchImgAncestor": maxSimRes.img2.fileName}
                 nodes[c].update({id: individualResult})
         
         for path in paths:
-            pathSimilarities[c].update({str(path).replace("[", "").replace("]", ""): getAvgPathSimilarity(path, avgPersonSimilarities)})
+            pathSimilarities[c].update({str(path).replace("[", "").replace("]", ""): str(getAvgPathSimilarity(path, avgPersonSimilarities))})
 
     return {"pathSimilarities": pathSimilarities, "nodes": nodes}

@@ -17,9 +17,9 @@ if len(sys.argv) > 4:
 
 filename = sys.argv[1].replace(".json", "-result.json")
 
-outputFile = open(filename, "w", encoding="utf-8")
-outputFile.write(json.dumps(str(getFaceAnalysisResult(rootPerson, int(sys.argv[3])))))
-outputFile.close()
+with open(filename, 'w', encoding='utf-8') as f:
+    json.dump(getFaceAnalysisResult(rootPerson, int(sys.argv[3])), f, ensure_ascii=False, indent=4)
+
 print(json.dumps({"success": "y", "filename": filename}))
 
 # python src/familyfacecompare.py testfiles/sobisiak-miriam-minimal.json > testResults/sobisiak-miriam-minimal-newBase-avg.txt
