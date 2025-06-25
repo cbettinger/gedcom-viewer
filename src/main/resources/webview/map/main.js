@@ -287,7 +287,10 @@ function addAnimation(facts, locationInfos) {
 		let geoJSON = { type: "FeatureCollection", features: [] };
 
 		for (let factsOfIndividual of facts) {
-			for (let fact of factsOfIndividual) {
+			for (let i = 0; i < factsOfIndividual.length; i++) {
+				let fact = factsOfIndividual[i];
+				let nextFact = i < factsOfIndividual.length - 1 ? factsOfIndividual[i + 1] : null;
+
 				let location = fact.location;
 				let locationInfo = locationInfos.get(location.id);
 
@@ -299,7 +302,7 @@ function addAnimation(facts, locationInfos) {
 						location,
 						references: locationInfo.references,
 						start: fact.date.start,
-						end: fact.date.end || "2026-01-01"	// TODO: improve
+						end: fact.date.end || nextFact?.date.start || fact.date.start
 					},
 					geometry: {
 						type: "Point",
@@ -307,19 +310,18 @@ function addAnimation(facts, locationInfos) {
 					}
 				});
 
-				log(fact.date.start);
+				//log(fact.date.start);
 				//log(fact.date.end);
 			}
-			log("-----------");
+			//log("-----------");
 		}
+		log(geoJSON);
+		timeline = new L.Timeline(geoJSON, { pointToLayer: data => addMarker(data.properties.location, data.properties.references) });
 
 		timelineControl = new L.TimelineSliderControl({
 			position: "bottomright",
 			formatOutput: date => new Date(date).getFullYear().toString()
 		});
-
-		timeline = new L.Timeline(geoJSON, { pointToLayer: data => addMarker(data.properties.location, data.properties.references) });
-
 		timelineControl.addTo(map);
 		timelineControl.addTimelines(timeline);
 		timeline.addTo(map);
