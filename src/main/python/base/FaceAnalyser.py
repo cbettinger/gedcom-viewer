@@ -11,8 +11,6 @@ class FaceAnalyser:
         
         depth = 0
         similarities = {}
-        targetPersonMaxSimilarity, targetPersonAvgSimilarity = cls._getSimilaritiesToIndividual(targetPerson, targetPerson)
-        similarities.update({targetPerson.value: {"max": targetPersonMaxSimilarity, "avg": targetPersonAvgSimilarity}})
         individualsToCheck = [targetPerson.parent1, targetPerson.parent2]
 
         while depth < maxDepth:
