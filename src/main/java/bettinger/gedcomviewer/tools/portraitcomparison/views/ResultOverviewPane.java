@@ -77,13 +77,13 @@ public class ResultOverviewPane extends JPanel {
 
     public static Map<FacialFeatures, Color> getFeatureColors() {
         final Map<FacialFeatures, Color> FEATURE_COLORS = new HashMap<>();
-        FEATURE_COLORS.put(FacialFeatures.CHEEKS, Color.BLUE);
-        FEATURE_COLORS.put(FacialFeatures.CHIN, Color.GREEN);
-        FEATURE_COLORS.put(FacialFeatures.EYEBROWS, Color.ORANGE);
-        FEATURE_COLORS.put(FacialFeatures.EYES, Color.RED);
-        FEATURE_COLORS.put(FacialFeatures.FACESHAPE, Color.CYAN);
-        FEATURE_COLORS.put(FacialFeatures.LIPS, Color.MAGENTA);
-        FEATURE_COLORS.put(FacialFeatures.NOSE, Color.YELLOW);
+        FEATURE_COLORS.put(FacialFeatures.CHEEKS, Color.decode("#4363d8"));
+        FEATURE_COLORS.put(FacialFeatures.CHIN, Color.decode("#42d4f4"));
+        FEATURE_COLORS.put(FacialFeatures.EYEBROWS, Color.decode("#f58231"));
+        FEATURE_COLORS.put(FacialFeatures.EYES, Color.decode("#a9a9a9"));
+        FEATURE_COLORS.put(FacialFeatures.FACESHAPE, Color.decode("#3cb44b"));
+        FEATURE_COLORS.put(FacialFeatures.LIPS, Color.decode("#f032e6"));
+        FEATURE_COLORS.put(FacialFeatures.NOSE, Color.decode("#dcbeff"));
 
         return FEATURE_COLORS;
     }
