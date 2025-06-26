@@ -74,7 +74,7 @@ public class FacialFeatureAnalysisResult {
                 pathsWithMaxSim.clear();
                 pathsWithMaxSim.add(path);
                 maxSimilarity = avgSim;
-            } else if (avgSim == maxSimilarity) {
+            } else if (Math.abs(avgSim - maxSimilarity) < 0.000001) {
                 pathsWithMaxSim.add(path);
             }
         }
