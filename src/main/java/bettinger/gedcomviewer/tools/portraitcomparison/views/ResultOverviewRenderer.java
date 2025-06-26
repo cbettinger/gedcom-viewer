@@ -84,39 +84,28 @@ class ResultOverviewRenderer extends AncestorsRenderer {
             final var fatherNode = edge.getValue1();
             final var motherNode = edge.getValue2();
 
-            final Point parentsPoint = renderEdge(fatherNode, motherNode);
-
             final boolean considerFather = fatherNode != null && fatherNode.getIndividual() != null && !excludedIndividuals.contains(fatherNode.getIndividual().getId());
             final boolean considerMother = motherNode != null && motherNode.getIndividual() != null && !excludedIndividuals.contains(motherNode.getIndividual().getId());
 
-            boolean edgeWasDrawn = false;
-            boolean leftAndRightEdgesDrawn = false;
-            
-            if (considerFather) {
-                final Pair<String, String> tuple = new Pair<String,String>(rootNode.getIndividual().getId(), fatherNode.getIndividual().getId());
-                if (maxSimilarityEdges.containsKey(tuple)) {
-                    renderMaxSimilarityEdge(rootNode, fatherNode, parentsPoint, tuple, true);
-                    edgeWasDrawn = true;
-                }
-            }
-            if (considerMother) {
-                final Pair<String, String> tuple = new Pair<String,String>(rootNode.getIndividual().getId(), motherNode.getIndividual().getId());
-                if (maxSimilarityEdges.containsKey(tuple)) {
-                    renderMaxSimilarityEdge(rootNode, motherNode, parentsPoint, tuple, false);
-                    if (edgeWasDrawn) {
-                        leftAndRightEdgesDrawn = true;
-                    }
-                    edgeWasDrawn = true;
-                }
-            }
+            boolean drawLeft = considerFather && maxSimilarityEdges.containsKey(new Pair<String,String>(rootNode.getIndividual().getId(), fatherNode.getIndividual().getId()));
+            boolean drawRight = considerMother && maxSimilarityEdges.containsKey(new Pair<String,String>(rootNode.getIndividual().getId(), motherNode.getIndividual().getId()));
+
+            g.setPaint(Constants.DEFAULT_CONTENT_COLOR);
+            final Point parentsPoint = renderEdge(fatherNode, motherNode);
             if (parentsPoint != null) {
-                if (!leftAndRightEdgesDrawn) {
+                if (!drawLeft || !drawRight) {
                     g.setPaint(DEFAULT_LINE_COLOR);
+                    renderEdge(fatherNode, motherNode);
                     g.drawLine(parentsPoint.x, parentsPoint.y, parentsPoint.x, rootNode.getPosition().y);
-                } /*else {
-                    g.setPaint(Constants.DEFAULT_CONTENT_COLOR);
-                    g.drawLine(parentsPoint.x-1, parentsPoint.y, parentsPoint.x+1, parentsPoint.y);
-                }*/
+                }
+                if (drawLeft) {
+                    final Pair<String, String> tuple = new Pair<String,String>(rootNode.getIndividual().getId(), fatherNode.getIndividual().getId());
+                    renderMaxSimilarityEdge(rootNode, fatherNode, parentsPoint, tuple, true);
+                }
+                if (drawRight) {
+                    final Pair<String, String> tuple = new Pair<String,String>(rootNode.getIndividual().getId(), motherNode.getIndividual().getId());
+                    renderMaxSimilarityEdge(rootNode, motherNode, parentsPoint, tuple, false);
+                }
             }
 		}
     }
