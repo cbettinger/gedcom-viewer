@@ -33,9 +33,9 @@ public abstract class Renderer {
 	final protected SVGGraphics2D g;
 
 	final Orientation orientation;
-	final boolean renderRootNode;
+	protected final boolean renderRootNode;
 
-	Node rootNode;
+	protected Node rootNode;
 	Individual proband;
 	Node probandNode;
 
@@ -353,7 +353,7 @@ public abstract class Renderer {
 		}
 	}
 
-	void renderNodes(final Node node) {
+	protected void renderNodes(final Node node) {
 		if (renderRootNode || node != rootNode) {
 			node.render(node.x, node.y);
 		}

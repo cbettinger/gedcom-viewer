@@ -1,7 +1,10 @@
 package bettinger.gedcomviewer.tools.portraitcomparison.views;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -25,6 +28,7 @@ class ResultOverviewRenderer extends AncestorsRenderer {
     private HashMap<Pair<String, String>, Set<Color>> maxSimilarityEdges;
     private final int LINE_OFFSET = 5;
     private final Color DEFAULT_LINE_COLOR = Color.BLACK;
+    private final float BORDER_THICKNESS = 2.5f;
     private ArrayList<String> excludedIndividuals;
 
     ResultOverviewRenderer(final Individual proband, final TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results) {
@@ -132,5 +136,30 @@ class ResultOverviewRenderer extends AncestorsRenderer {
     void renderBorders() {
 
     }
+
+    @Override
+    protected void renderNodes(final Node node) {
+        final Stroke defaultStroke = g.getStroke();
+		if (renderRootNode || node != rootNode) {
+			node.render(node.getPosition().x, node.getPosition().y);
+            int colorNum = 0;
+            for (var color : maxSimilarityIndividuals.keySet()) {
+                if (node.getIndividual() != null && maxSimilarityIndividuals.get(color).contains(node.getIndividual().getId())) {
+                    int offset = colorNum * (int) BORDER_THICKNESS;
+                    g.setPaint(color);
+                    g.setStroke(new BasicStroke(BORDER_THICKNESS));
+                    final Rectangle rect = node.getRectangle();
+                    g.drawRect(rect.x-offset, rect.y-offset, rect.width+2*offset, rect.height+2*offset);
+                    g.setPaint(Color.BLACK);
+                    colorNum++;
+                }
+            }
+            g.setStroke(defaultStroke);
+		}
+
+		for (final var child : node.getChildren()) {
+			renderNodes(child);
+		}
+	}
 }
 
