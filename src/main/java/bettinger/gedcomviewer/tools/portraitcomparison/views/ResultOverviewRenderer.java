@@ -12,6 +12,7 @@ import org.javatuples.Pair;
 import org.javatuples.Triplet;
 import org.javatuples.Tuple;
 
+import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.tools.portraitcomparison.model.FacialFeatureAnalysisResult;
 import bettinger.gedcomviewer.tools.portraitcomparison.model.FacialFeatures;
@@ -57,12 +58,12 @@ class ResultOverviewRenderer extends AncestorsRenderer {
                         exclude.add(pathIDs[i+1]);
                     } else {
                         exclude.clear();
-                        tuple = new Pair<String,String>(pathIDs[i], pathIDs[i+1]);
-                        if (!this.maxSimilarityEdges.containsKey(tuple)) {
-                            this.maxSimilarityEdges.put(tuple, new HashSet<Color>());
-                        }
-                        this.maxSimilarityEdges.get(tuple).add(color);
                     }
+                    tuple = new Pair<String,String>(pathIDs[i], pathIDs[i+1]);
+                    if (!this.maxSimilarityEdges.containsKey(tuple)) {
+                        this.maxSimilarityEdges.put(tuple, new HashSet<Color>());
+                    }
+                    this.maxSimilarityEdges.get(tuple).add(color);
                 }
                 this.excludedIndividuals.addAll(exclude);
             }
@@ -83,16 +84,13 @@ class ResultOverviewRenderer extends AncestorsRenderer {
             final var fatherNode = edge.getValue1();
             final var motherNode = edge.getValue2();
 
-            if(excludedIndividuals.contains(rootNode.getIndividual().getId())) {
-                continue;
-            }
-
             final Point parentsPoint = renderEdge(fatherNode, motherNode);
 
-            final boolean considerFather = fatherNode != null && fatherNode.getIndividual() != null;
-            final boolean considerMother = motherNode != null && motherNode.getIndividual() != null;
+            final boolean considerFather = fatherNode != null && fatherNode.getIndividual() != null && !excludedIndividuals.contains(fatherNode.getIndividual().getId());
+            final boolean considerMother = motherNode != null && motherNode.getIndividual() != null && !excludedIndividuals.contains(motherNode.getIndividual().getId());
 
             boolean edgeWasDrawn = false;
+            boolean leftAndRightEdgesDrawn = false;
             
             if (considerFather) {
                 final Pair<String, String> tuple = new Pair<String,String>(rootNode.getIndividual().getId(), fatherNode.getIndividual().getId());
@@ -105,11 +103,20 @@ class ResultOverviewRenderer extends AncestorsRenderer {
                 final Pair<String, String> tuple = new Pair<String,String>(rootNode.getIndividual().getId(), motherNode.getIndividual().getId());
                 if (maxSimilarityEdges.containsKey(tuple)) {
                     renderMaxSimilarityEdge(rootNode, motherNode, parentsPoint, tuple, false);
+                    if (edgeWasDrawn) {
+                        leftAndRightEdgesDrawn = true;
+                    }
                     edgeWasDrawn = true;
                 }
             }
-            if (!edgeWasDrawn && parentsPoint != null) {
-                g.drawLine(parentsPoint.x, parentsPoint.y, parentsPoint.x, rootNode.getPosition().y);
+            if (parentsPoint != null) {
+                if (!leftAndRightEdgesDrawn) {
+                    g.setPaint(DEFAULT_LINE_COLOR);
+                    g.drawLine(parentsPoint.x, parentsPoint.y, parentsPoint.x, rootNode.getPosition().y);
+                } /*else {
+                    g.setPaint(Constants.DEFAULT_CONTENT_COLOR);
+                    g.drawLine(parentsPoint.x-1, parentsPoint.y, parentsPoint.x+1, parentsPoint.y);
+                }*/
             }
 		}
     }
@@ -121,10 +128,11 @@ class ResultOverviewRenderer extends AncestorsRenderer {
         int edgeNumber = 0;
         for (final var color : edgeColors) {
             if (parentsPoint != null) {
-                final int offsetY = LINE_OFFSET * edgeNumber + LINE_OFFSET / 2;
-                final int offsetX = left ? -offsetY : offsetY;
+                final int offsetY = LINE_OFFSET * edgeNumber;
+                final int offsetX = left ? -offsetY - LINE_OFFSET / 2 : offsetY + LINE_OFFSET / 2;
+                final int endX = left ? parentNodePosition.x + LINE_OFFSET : parentNodePosition.x;
                 g.setPaint(color);
-                g.drawLine(parentsPoint.x + offsetX, parentsPoint.y + offsetY, parentNodePosition.x, parentsPoint.y + offsetY);
+                g.drawLine(parentsPoint.x + offsetX, parentsPoint.y + offsetY, endX, parentsPoint.y + offsetY);
                 g.drawLine(parentsPoint.x + offsetX, parentsPoint.y + offsetY, parentsPoint.x + offsetX, rootNode.getPosition().y);
                 edgeNumber++;
             }
