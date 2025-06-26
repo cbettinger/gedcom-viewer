@@ -12,8 +12,6 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.javatuples.Pair;
-import org.javatuples.Triplet;
-import org.javatuples.Tuple;
 
 import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.model.Individual;
@@ -75,12 +73,6 @@ class ResultOverviewRenderer extends AncestorsRenderer {
     }
 
     @Override
-    public void render(final Individual proband, final int generations) {
-		super.render(proband, generations);
-        renderBorders();
-	}
-
-    @Override
     public void renderEdges() {
         //super.renderEdges();
         for (final var edge : edges) {
@@ -131,10 +123,6 @@ class ResultOverviewRenderer extends AncestorsRenderer {
             }
         }
         g.setPaint(DEFAULT_LINE_COLOR);
-    }
-
-    void renderBorders() {
-
     }
 
     @Override
