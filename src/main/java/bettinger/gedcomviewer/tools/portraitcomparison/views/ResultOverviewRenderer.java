@@ -24,11 +24,13 @@ class ResultOverviewRenderer extends AncestorsRenderer {
     private HashMap<Pair<String, String>, Set<Color>> maxSimilarityEdges;
     private final int LINE_OFFSET = 5;
     private final Color DEFAULT_LINE_COLOR = Color.BLACK;
+    private ArrayList<String> excludedIndividuals;
 
     ResultOverviewRenderer(final Individual proband, final TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results) {
         super();
         this.maxSimilarityIndividuals = new HashMap<>();
         this.maxSimilarityEdges = new HashMap<>();
+        this.excludedIndividuals = new ArrayList<>();
 
         final var featureColors = ResultOverviewPane.getFeatureColors();
         for (final var entry : results.entrySet()) {
@@ -38,6 +40,8 @@ class ResultOverviewRenderer extends AncestorsRenderer {
             var maxPersonSimilarityIDs = res.getMaxPersonSimilarity().getValue0();
             this.maxSimilarityIndividuals.put(color, maxPersonSimilarityIDs);
 
+            var personSimilarities = res.getPersonSimilarities();
+
             var maxSimilarityPaths = res.getMaxPathSimilarity().getValue0();
             for (final var path : maxSimilarityPaths) {
                 var pathIDs = path.getAncestorIDs();
@@ -46,13 +50,21 @@ class ResultOverviewRenderer extends AncestorsRenderer {
                     this.maxSimilarityEdges.put(tuple, new HashSet<Color>());
                 }
                 this.maxSimilarityEdges.get(tuple).add(color);
+
+                ArrayList<String> exclude = new ArrayList<>();
                 for (int i=0; i<pathIDs.length-1; i++) {
-                    tuple = new Pair<String,String>(pathIDs[i], pathIDs[i+1]);
-                    if (!this.maxSimilarityEdges.containsKey(tuple)) {
-                        this.maxSimilarityEdges.put(tuple, new HashSet<Color>());
+                    if(personSimilarities.get(pathIDs[i+1]) == null) {
+                        exclude.add(pathIDs[i+1]);
+                    } else {
+                        exclude.clear();
+                        tuple = new Pair<String,String>(pathIDs[i], pathIDs[i+1]);
+                        if (!this.maxSimilarityEdges.containsKey(tuple)) {
+                            this.maxSimilarityEdges.put(tuple, new HashSet<Color>());
+                        }
+                        this.maxSimilarityEdges.get(tuple).add(color);
                     }
-                    this.maxSimilarityEdges.get(tuple).add(color);
                 }
+                this.excludedIndividuals.addAll(exclude);
             }
         } 
     }
@@ -70,6 +82,10 @@ class ResultOverviewRenderer extends AncestorsRenderer {
             final var rootNode = edge.getValue0();
             final var fatherNode = edge.getValue1();
             final var motherNode = edge.getValue2();
+
+            if(excludedIndividuals.contains(rootNode.getIndividual().getId())) {
+                continue;
+            }
 
             final Point parentsPoint = renderEdge(fatherNode, motherNode);
 
