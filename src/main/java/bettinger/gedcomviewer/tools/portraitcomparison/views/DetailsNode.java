@@ -122,4 +122,9 @@ public class DetailsNode extends Node{
             g.setStroke(defaultStroke);
         }
     }
+
+    @Override
+    protected int getTextPositionX() {
+        return super.getTextPositionX() + (portraitTargetPerson == null ? 0 : this.portraitTargetPersonWidth + 2*PADDING);
+    }
 }

@@ -214,11 +214,16 @@ public class Node {
 
 		renderImages();
 
+		final int textPositionX = getTextPositionX();
 		for (final var line : text) {
 			nextY += (PADDING + lineHeight);
-			g.drawString(line, x + PADDING + (portrait == null ? 0 : this.portraitWidth + PADDING), nextY);
+			g.drawString(line, textPositionX, nextY);
 			g.setFont(Renderer.DEFAULT_FONT);
 		}
+	}
+
+	protected int getTextPositionX() {
+		return x + PADDING + (portrait == null ? 0 : this.portraitWidth + PADDING);
 	}
 
 	protected void renderImages() {
