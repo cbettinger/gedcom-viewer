@@ -23,14 +23,14 @@ public class DetailsRenderer extends AncestorsRenderer {
     private final Individual targetPerson;
     private final HashMap<String, FacialFeatureSimilarity> personSimilarities;
     private HashMap<Pair<String, String>, Float> coloredEdges;
-    private ArrayList<String> excludedIndividuals;
+    private ArrayList<String> includedIndividuals;
     private ArrayList<String> lastIndividualsOfPath;
 
     public DetailsRenderer(final Individual proband, final FacialFeatureAnalysisResult result) {
         this.targetPerson = proband;
         this.personSimilarities = result.getPersonSimilarities();
         this.coloredEdges = new HashMap<>();
-        this.excludedIndividuals = new ArrayList<>();
+        this.includedIndividuals = new ArrayList<>();
         this.lastIndividualsOfPath = new ArrayList<>();
 
         for (final var entry : result.getPathSimilarities().entrySet()) {
@@ -42,15 +42,20 @@ public class DetailsRenderer extends AncestorsRenderer {
                     this.coloredEdges.put(tuple, 0.f);
                 }
                 this.coloredEdges.put(tuple, Math.max(this.coloredEdges.get(tuple), similarity));
+                if (personSimilarities.get(pathIDs[0]) != null) {
+                    this.includedIndividuals.add(pathIDs[0]);
+                }
 
-                ArrayList<String> exclude = new ArrayList<>();
                 String lastOfPath = null;
+                ArrayList<String> notIncluded = new ArrayList<>();
                 for (int i=0; i<pathIDs.length-1; i++) {
-                    if(personSimilarities.get(pathIDs[i+1]) == null) {
-                        exclude.add(pathIDs[i+1]);
-                    } else {
-                        exclude.clear();
+                    if(personSimilarities.get(pathIDs[i+1]) != null) {
+                        this.includedIndividuals.addAll(notIncluded);
+                        notIncluded.clear();
+                        this.includedIndividuals.add(pathIDs[i+1]);
                         lastOfPath = pathIDs[i+1];
+                    } else {
+                        notIncluded.add(pathIDs[i+1]);
                     }
                     tuple = new Pair<String,String>(pathIDs[i], pathIDs[i+1]);
                     if (!this.coloredEdges.containsKey(tuple)) {
@@ -58,7 +63,6 @@ public class DetailsRenderer extends AncestorsRenderer {
                     }
                     this.coloredEdges.put(tuple, Math.max(this.coloredEdges.get(tuple), similarity));
                 }
-                this.excludedIndividuals.addAll(exclude);
                 this.lastIndividualsOfPath.add(lastOfPath);
         }
     }
@@ -70,8 +74,8 @@ public class DetailsRenderer extends AncestorsRenderer {
             final var fatherNode = edge.getValue1();
             final var motherNode = edge.getValue2();
 
-            final boolean considerFather = fatherNode != null && fatherNode.getIndividual() != null && !excludedIndividuals.contains(fatherNode.getIndividual().getId());
-            final boolean considerMother = motherNode != null && motherNode.getIndividual() != null && !excludedIndividuals.contains(motherNode.getIndividual().getId());
+            final boolean considerFather = fatherNode != null && fatherNode.getIndividual() != null && includedIndividuals.contains(fatherNode.getIndividual().getId());
+            final boolean considerMother = motherNode != null && motherNode.getIndividual() != null && includedIndividuals.contains(motherNode.getIndividual().getId());
 
             boolean drawLeft = considerFather && coloredEdges.containsKey(new Pair<String,String>(rootNode.getIndividual().getId(), fatherNode.getIndividual().getId()));
             boolean drawRight = considerMother && coloredEdges.containsKey(new Pair<String,String>(rootNode.getIndividual().getId(), motherNode.getIndividual().getId()));
@@ -143,7 +147,7 @@ public class DetailsRenderer extends AncestorsRenderer {
     @Override
     protected int getEdgeLabelWidth(Node v, Node w) {
         int result = 0;
-        if (v != null && w != null && v.getIndividual() != null && w.getIndividual() != null && (!excludedIndividuals.contains(v.getIndividual().getId()) || !excludedIndividuals.contains(w.getIndividual().getId()))) {
+        if (v != null && w != null && v.getIndividual() != null && w.getIndividual() != null && (includedIndividuals.contains(v.getIndividual().getId()) || includedIndividuals.contains(w.getIndividual().getId()))) {
             result = g.getFontMetrics().stringWidth("100.00% 100.0%");
         }
         return result;
