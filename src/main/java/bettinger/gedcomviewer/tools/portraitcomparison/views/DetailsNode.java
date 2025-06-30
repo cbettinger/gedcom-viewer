@@ -117,7 +117,7 @@ public class DetailsNode extends Node{
             final Stroke defaultStroke = g.getStroke();
             g.setStroke(new BasicStroke(BORDER_THICKNESS));
             g.setPaint(borderColor);
-            g.drawRect(this.x-BORDER_THICKNESS, this.y-BORDER_THICKNESS, this.width+2*BORDER_THICKNESS, this.height+2*BORDER_THICKNESS);
+            g.drawRect(this.x, this.y, this.width, this.height);
             g.setPaint(Color.BLACK);
             g.setStroke(defaultStroke);
         }
