@@ -9,8 +9,10 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 
 import org.javatuples.Pair;
@@ -44,16 +46,26 @@ public class ResultOverviewPane extends JPanel {
            final var maxPersonSimilarity = featureResult.getMaxPersonSimilarity();
            maxPersonSimilarities.put(feature, maxPersonSimilarity);
 
-           Object[] row = {I18N.get(feature.name()), feature, maxPathSimilarity.getValue1(), maxPersonSimilarity.getValue1()};
+           Object[] row = {I18N.get(feature.name()), feature, String.format("%.2f%%", maxPathSimilarity.getValue1()*100), String.format("%.2f%%", maxPersonSimilarity.getValue1()*100)};
            tableData.add(row);
         }
 
-        var legend = new AutoFitTable();
+        var table = new AutoFitTable();
         Object[][] data = tableData.toArray(new Object[0][0]);
-        legend.setModel(new DefaultTableModel(data, columns));
-        legend.getColumnModel().getColumn(1).setCellRenderer(new OverviewTableLineColorCellRenderer());
+        table.setModel(new DefaultTableModel(data, columns));
+        table.getColumnModel().getColumn(1).setCellRenderer(new OverviewTableLineColorCellRenderer());
 
-        add(new JScrollPane(legend), BorderLayout.EAST);
+        var explanations = new JTextArea();
+        explanations.setEditable(false);
+        explanations.setLineWrap(true);
+        explanations.setText(String.format("\n%s: %s\n\n%s: %s", I18N.get("MaxPathSimilarity"), I18N.get("MaxPathSimilarityOverviewExplanation"), I18N.get("MaxSimilarity"), I18N.get("MaxSimilarityOverviewExplanation")));
+
+        var legend = new JPanel();
+        legend.setLayout(new BoxLayout(legend, BoxLayout.Y_AXIS));
+        legend.add(new JScrollPane(table));
+        legend.add(explanations);
+
+        add(legend, BorderLayout.EAST);
         add(visualization, BorderLayout.CENTER);
         update(proband, numGenerations, results);
     }
