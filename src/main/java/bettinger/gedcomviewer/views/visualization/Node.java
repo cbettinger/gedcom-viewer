@@ -104,6 +104,10 @@ public class Node {
 		this.height = Math.max(MINIMAL_HEIGHT, text.size() * (lineHeight + PADDING) + 2 * PADDING);
 	}
 
+	public int getWidth() {
+		return width;
+	}
+
 	public Point getPosition() {
 		return new Point(x, y);
 	}

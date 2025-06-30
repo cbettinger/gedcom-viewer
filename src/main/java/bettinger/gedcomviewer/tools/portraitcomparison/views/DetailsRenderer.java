@@ -24,12 +24,14 @@ public class DetailsRenderer extends AncestorsRenderer {
     private final HashMap<String, FacialFeatureSimilarity> personSimilarities;
     private HashMap<Pair<String, String>, Float> coloredEdges;
     private ArrayList<String> excludedIndividuals;
+    private ArrayList<String> lastIndividualsOfPath;
 
     public DetailsRenderer(final Individual proband, final FacialFeatureAnalysisResult result) {
         this.targetPerson = proband;
         this.personSimilarities = result.getPersonSimilarities();
         this.coloredEdges = new HashMap<>();
         this.excludedIndividuals = new ArrayList<>();
+        this.lastIndividualsOfPath = new ArrayList<>();
 
         for (final var entry : result.getPathSimilarities().entrySet()) {
             var pathIDs = entry.getKey().getAncestorIDs();
@@ -42,11 +44,13 @@ public class DetailsRenderer extends AncestorsRenderer {
                 this.coloredEdges.put(tuple, Math.max(this.coloredEdges.get(tuple), similarity));
 
                 ArrayList<String> exclude = new ArrayList<>();
+                String lastOfPath = null;
                 for (int i=0; i<pathIDs.length-1; i++) {
                     if(personSimilarities.get(pathIDs[i+1]) == null) {
                         exclude.add(pathIDs[i+1]);
                     } else {
                         exclude.clear();
+                        lastOfPath = pathIDs[i+1];
                     }
                     tuple = new Pair<String,String>(pathIDs[i], pathIDs[i+1]);
                     if (!this.coloredEdges.containsKey(tuple)) {
@@ -55,6 +59,7 @@ public class DetailsRenderer extends AncestorsRenderer {
                     this.coloredEdges.put(tuple, Math.max(this.coloredEdges.get(tuple), similarity));
                 }
                 this.excludedIndividuals.addAll(exclude);
+                this.lastIndividualsOfPath.add(lastOfPath);
         }
     }
 
@@ -104,14 +109,26 @@ public class DetailsRenderer extends AncestorsRenderer {
 
         if (parentsPoint != null) {
             final int offsetX = left ? - LINE_THICKNESS / 2 : LINE_THICKNESS / 2;
-            final int endX = left ? parentNodePosition.x + LINE_THICKNESS : parentNodePosition.x;
+            final int endX = left ? parentNodePosition.x + parentNode.getWidth() : parentNodePosition.x;
             g.setStroke(new BasicStroke(LINE_THICKNESS));
             g.setPaint(color);
             g.drawLine(parentsPoint.x + offsetX, parentsPoint.y, endX, parentsPoint.y);
             g.drawLine(parentsPoint.x + offsetX, parentsPoint.y, parentsPoint.x + offsetX, rootNode.getPosition().y);
+            g.setPaint(Color.BLACK);
+            g.setStroke(defaultStroke);
+
+            if (lastIndividualsOfPath.contains(tuple.getValue1())) {
+                final var lineStartX = left ? endX : parentsPoint.x + offsetX;
+                final var centerX = lineStartX + Math.abs(parentsPoint.x + offsetX - endX) / 2;
+
+                final var label = String.format("%.2f%%", similarity*100);
+                final var labelWidth = g.getFontMetrics().stringWidth(label);
+                var labelX = centerX - labelWidth / 2;
+			    final var labelY = parentsPoint.y - LINE_THICKNESS;
+
+				g.drawString(label, labelX, labelY);
+			}
         }
-        g.setPaint(Color.BLACK);
-        g.setStroke(defaultStroke);
     }
 
     @Override
