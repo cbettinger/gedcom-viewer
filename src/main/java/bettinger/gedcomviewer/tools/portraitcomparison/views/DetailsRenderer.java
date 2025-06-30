@@ -24,14 +24,14 @@ public class DetailsRenderer extends AncestorsRenderer {
     private final HashMap<String, FacialFeatureSimilarity> personSimilarities;
     private HashMap<Pair<String, String>, Float> coloredEdges;
     private ArrayList<String> includedIndividuals;
-    private ArrayList<String> lastIndividualsOfPath;
+    private HashMap<String, Float> lastIndividualsOfPath;
 
     public DetailsRenderer(final Individual proband, final FacialFeatureAnalysisResult result) {
         this.targetPerson = proband;
         this.personSimilarities = result.getPersonSimilarities();
         this.coloredEdges = new HashMap<>();
         this.includedIndividuals = new ArrayList<>();
-        this.lastIndividualsOfPath = new ArrayList<>();
+        this.lastIndividualsOfPath = new HashMap<>();
 
         for (final var entry : result.getPathSimilarities().entrySet()) {
             var pathIDs = entry.getKey().getAncestorIDs();
@@ -63,7 +63,7 @@ public class DetailsRenderer extends AncestorsRenderer {
                     }
                     this.coloredEdges.put(tuple, Math.max(this.coloredEdges.get(tuple), similarity));
                 }
-                this.lastIndividualsOfPath.add(lastOfPath);
+                this.lastIndividualsOfPath.put(lastOfPath, similarity);
         }
     }
 
@@ -121,11 +121,11 @@ public class DetailsRenderer extends AncestorsRenderer {
             g.setPaint(Color.BLACK);
             g.setStroke(defaultStroke);
 
-            if (lastIndividualsOfPath.contains(tuple.getValue1())) {
+            if (lastIndividualsOfPath.containsKey(tuple.getValue1())) {
                 final var lineStartX = left ? endX : parentsPoint.x + offsetX;
                 final var centerX = lineStartX + Math.abs(parentsPoint.x + offsetX - endX) / 2;
 
-                final var label = String.format("%.2f%%", similarity*100);
+                final var label = String.format("%.2f%%", lastIndividualsOfPath.get(tuple.getValue1())*100);
                 final var labelWidth = g.getFontMetrics().stringWidth(label);
                 var labelX = centerX - labelWidth / 2;
 			    final var labelY = parentsPoint.y - LINE_THICKNESS;
