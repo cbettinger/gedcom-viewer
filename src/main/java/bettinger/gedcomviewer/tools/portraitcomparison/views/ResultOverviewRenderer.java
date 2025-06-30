@@ -27,7 +27,7 @@ class ResultOverviewRenderer extends AncestorsRenderer {
     private HashMap<Pair<String, String>, Set<Color>> maxSimilarityEdges;
     private final int LINE_OFFSET = 5;
     private final Color DEFAULT_LINE_COLOR = Color.BLACK;
-    private final float BORDER_THICKNESS = 2.5f;
+    private final float LINE_THICKNESS = 3.5f;
     private HashMap<Color, ArrayList<String>> excludedIndividuals;
     private HashMap<Color, ArrayList<String>> maxPathIndividuals;
 
@@ -132,12 +132,15 @@ class ResultOverviewRenderer extends AncestorsRenderer {
         final var edgeColors = maxSimilarityEdges.get(tuple);
         final Point parentNodePosition = parentNode.getPosition();
 
+        final Stroke defaultStroke = g.getStroke();
+
         int edgeNumber = 0;
         for (final var color : edgeColors) {
             if (parentsPoint != null && !excludedIndividuals.get(color).contains(parentNode.getIndividual().getId())) {
                 final int offsetY = LINE_OFFSET * edgeNumber;
                 final int offsetX = left ? -offsetY - LINE_OFFSET / 2 : offsetY + LINE_OFFSET / 2;
                 final int endX = left ? parentNodePosition.x + LINE_OFFSET : parentNodePosition.x;
+                g.setStroke(new BasicStroke(LINE_THICKNESS));
                 g.setPaint(color);
                 g.drawLine(parentsPoint.x + offsetX, parentsPoint.y + offsetY, endX, parentsPoint.y + offsetY);
                 g.drawLine(parentsPoint.x + offsetX, parentsPoint.y + offsetY, parentsPoint.x + offsetX, rootNode.getPosition().y);
@@ -145,6 +148,7 @@ class ResultOverviewRenderer extends AncestorsRenderer {
             }
         }
         g.setPaint(DEFAULT_LINE_COLOR);
+        g.setStroke(defaultStroke);
     }
 
     @Override
@@ -155,9 +159,9 @@ class ResultOverviewRenderer extends AncestorsRenderer {
             int colorNum = 0;
             for (var color : maxSimilarityIndividuals.keySet()) {
                 if (node.getIndividual() != null && maxSimilarityIndividuals.get(color).contains(node.getIndividual().getId())) {
-                    int offset = colorNum * (int) BORDER_THICKNESS;
+                    int offset = colorNum * (int) LINE_THICKNESS;
                     g.setPaint(color);
-                    g.setStroke(new BasicStroke(BORDER_THICKNESS));
+                    g.setStroke(new BasicStroke(LINE_THICKNESS));
                     final Rectangle rect = node.getRectangle();
                     g.drawRect(rect.x-offset, rect.y-offset, rect.width+2*offset, rect.height+2*offset);
                     g.setPaint(Color.BLACK);
