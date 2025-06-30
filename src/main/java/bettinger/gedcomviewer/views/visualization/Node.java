@@ -17,12 +17,12 @@ import bettinger.gedcomviewer.model.Structure;
 
 public class Node {
 
-	static final int MINIMAL_WIDTH = 200;
-	static final int MINIMAL_HEIGHT = 100;
+	protected static final int MINIMAL_WIDTH = 200;
+	protected static final int MINIMAL_HEIGHT = 100;
 
-	private static final int PADDING = 10;
+	protected static final int PADDING = 10;
 
-	private static final int PORTRAIT_HEIGHT = MINIMAL_HEIGHT - 2 * PADDING;
+	protected static final int PORTRAIT_HEIGHT = MINIMAL_HEIGHT - 2 * PADDING;
 
 	private static final Color UNKNOWN_COLOR = Color.LIGHT_GRAY;
 	private static final Color MALE_COLOR = new Color(173, 215, 229);
@@ -30,14 +30,14 @@ public class Node {
 	private static final Color FEMALE_COLOR = new Color(255, 193, 204);
 	private static final Color FEMALE_CLONE_COLOR = new Color(255, 232, 236);
 
-	int x;
-	int y;
-	int width;
-	int height;
+	protected int x;
+	protected int y;
+	protected int width;
+	protected int height;
 
-	private final SVGGraphics2D g;
+	protected final SVGGraphics2D g;
 
-	private final Individual individual;
+	protected final Individual individual;
 	private final boolean isClone;
 
 	private final Node parent;
@@ -45,11 +45,11 @@ public class Node {
 
 	private final int depth;
 
-	private final Image portrait;
-	private final int portraitWidth;
+	protected Image portrait;
+	protected int portraitWidth;
 
-	private final List<String> text;
-	private final int lineHeight;
+	protected List<String> text;
+	protected final int lineHeight;
 
 	private int mod;
 	private Node thread;
@@ -212,14 +212,18 @@ public class Node {
 
 		g.setFont(Renderer.BOLD_FONT);
 
-		if (portrait != null) {
-			g.drawImage(portrait, x + PADDING, y + PADDING, portraitWidth, PORTRAIT_HEIGHT, null);
-		}
+		renderImages();
 
 		for (final var line : text) {
 			nextY += (PADDING + lineHeight);
 			g.drawString(line, x + PADDING + (portrait == null ? 0 : this.portraitWidth + PADDING), nextY);
 			g.setFont(Renderer.DEFAULT_FONT);
+		}
+	}
+
+	protected void renderImages() {
+		if (portrait != null) {
+			g.drawImage(portrait, x + PADDING, y + PADDING, portraitWidth, PORTRAIT_HEIGHT, null);
 		}
 	}
 
@@ -243,7 +247,7 @@ public class Node {
 		return result;
 	}
 
-	private List<String> getTextLines() {
+	protected List<String> getTextLines() {
 		final List<String> result = new ArrayList<>();
 
 		if (individual == null) {

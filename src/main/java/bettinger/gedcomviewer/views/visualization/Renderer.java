@@ -19,7 +19,7 @@ import bettinger.gedcomviewer.utils.SVGUtils;
 public abstract class Renderer {
 
 	static final Font DEFAULT_FONT = new Font("Arial", Font.PLAIN, 12);
-	static final Font BOLD_FONT = DEFAULT_FONT.deriveFont(Font.BOLD);
+	public static final Font BOLD_FONT = DEFAULT_FONT.deriveFont(Font.BOLD);
 
 	static final int LEVEL_DISTANCE = 25;
 
@@ -144,10 +144,10 @@ public abstract class Renderer {
 		return createNode(individual, null);
 	}
 
-	Node createNode(final Individual individual, final Node parentNode) {
+	protected Node createNode(final Individual individual, final Node parentNode) {
 		final var isClone = isClone(individual);
 
-		final var node = new Node(g, individual, isClone, parentNode);
+		final var node = getNewNode(individual, isClone, parentNode);
 
 		if (!isClone) {
 			individualCount++;
@@ -165,6 +165,10 @@ public abstract class Renderer {
 		maximalDepth = Math.max(maximalDepth, node.getDepth());
 
 		return node;
+	}
+
+	protected Node getNewNode(Individual individual, boolean isClone, Node parent) {
+		return new Node(g, individual, isClone, parent);
 	}
 
 	boolean isClone(final Individual individual) {
