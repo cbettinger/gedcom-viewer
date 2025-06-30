@@ -139,4 +139,13 @@ public class DetailsRenderer extends AncestorsRenderer {
         }
         return node;
 	}
+
+    @Override
+    protected int getEdgeLabelWidth(Node v, Node w) {
+        int result = 0;
+        if (v != null && w != null && v.getIndividual() != null && w.getIndividual() != null && (!excludedIndividuals.contains(v.getIndividual().getId()) || !excludedIndividuals.contains(w.getIndividual().getId()))) {
+            result = g.getFontMetrics().stringWidth("100.00% 100.0%");
+        }
+        return result;
+    }
 }

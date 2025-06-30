@@ -295,7 +295,7 @@ public abstract class Renderer {
 		return (v.width + w.width) / 2 + MINIMAL_CHILDREN_GAP + getEdgeLabelWidth(v, w);
 	}
 
-	int getEdgeLabelWidth(@SuppressWarnings("java:S1172") final Node v, final Node w) {
+	protected int getEdgeLabelWidth(@SuppressWarnings("java:S1172") final Node v, final Node w) {
 		return 0;
 	}
 

@@ -60,7 +60,7 @@ public class AncestorsRenderer extends Renderer {
 	}
 
 	@Override
-	int getEdgeLabelWidth(final Node v, final Node w) {
+	protected int getEdgeLabelWidth(final Node v, final Node w) {
 		var result = super.getEdgeLabelWidth(v, w);
 
 		final var vParentNode = v == null ? null : v.getParent();
