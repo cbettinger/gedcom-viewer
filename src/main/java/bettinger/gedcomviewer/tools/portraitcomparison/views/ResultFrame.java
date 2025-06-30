@@ -20,8 +20,7 @@ public class ResultFrame extends Frame {
     public ResultFrame(final Individual proband, final int numGenerations, final TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results) {
         super();
         setTitle(String.format("%s: %s", I18N.get("FacialFeatureAnalysis"), proband.getName()));
-        Logger.getLogger(ResultFrame.class.getName()).log(Level.INFO, results.toString());
-
+        
         var detailedPane = new JTabbedPane();
         for (final var enrty : results.entrySet()) {
             detailedPane.addTab(I18N.get(enrty.getKey().name()), new DetailedResultPane(proband, numGenerations, enrty.getValue()));

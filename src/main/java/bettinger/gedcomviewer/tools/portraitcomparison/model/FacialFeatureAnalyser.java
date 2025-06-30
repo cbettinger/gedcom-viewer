@@ -45,7 +45,6 @@ public abstract class FacialFeatureAnalyser {
                 final var resultJson = JSONUtils.fromString(Files.readString(resultFilepath, Charsets.UTF_8));
                 Files.delete(resultFilepath);
 
-                Logger.getLogger(FacialFeatureAnalyser.class.getName()).log(Level.INFO, resultJson.asText());
                 for (final var feature : FacialFeatures.values()) {
                     results.put(feature, FacialFeatureAnalysisResult.fromJSON(resultJson, feature.name()));
                 }
