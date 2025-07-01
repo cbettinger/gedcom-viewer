@@ -1,9 +1,6 @@
 package bettinger.gedcomviewer.tools.portraitcomparison.views;
 
-import java.util.HashMap;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.JTabbedPane;
 

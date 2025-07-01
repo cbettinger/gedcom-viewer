@@ -83,7 +83,6 @@ class ResultOverviewRenderer extends AncestorsRenderer {
 
     @Override
     public void renderEdges() {
-        //super.renderEdges();
         for (final var edge : edges) {
             final var rootNode = edge.getValue0();
             final var fatherNode = edge.getValue1();

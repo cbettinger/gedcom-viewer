@@ -49,7 +49,7 @@ public class FacialFeatureAnalysisDialog extends JDialog {
         parameterPane.add(vBox);
 
         this.startButton = new JButton(I18N.get("StartFacialFeatureAnalysis"), IconFontSwing.buildIcon(MaterialIcons.PLAY_ARROW, Constants.BUTTON_ICON_SIZE));
-        this.startButton.addActionListener(e -> {
+        this.startButton.addActionListener(_ -> {
             onStart.start(individual, maxDepthPicker.getValue(), maxNumPortraitsPicker.getValue());
             setVisible(false);
         });
