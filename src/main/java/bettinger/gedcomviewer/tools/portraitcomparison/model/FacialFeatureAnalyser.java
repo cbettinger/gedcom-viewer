@@ -22,7 +22,15 @@ public abstract class FacialFeatureAnalyser {
     public static TreeMap<FacialFeatures, FacialFeatureAnalysisResult> analyse(final Individual individual, final int maxDepth, final int maxNumPortraits) throws FacialFeatureAnalysisException {
         TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results = new TreeMap<>();
 
-        File inputFile = createInputFile(individual, maxDepth);
+        var defaultException = new FacialFeatureAnalysisException(I18N.get("FacialFeatureAnalysisFailed"));
+
+        File inputFile;
+        try {
+            inputFile = createInputFile(individual, maxDepth);
+        } catch (IOException e) {
+            Logger.getLogger(FacialFeatureAnalyser.class.getName()).log(Level.SEVERE, defaultException.getMessage());
+            throw defaultException;
+        }
 
         final String pathToProject = System.getProperty("user.dir");
         final String pathToScript = Paths.get(pathToProject, "src", "main", "python", "familyFaceCompare.py").toString();
@@ -30,8 +38,6 @@ public abstract class FacialFeatureAnalyser {
         final String[] args = { inputFile.getAbsolutePath(), Integer.toString(maxNumPortraits), Integer.toString(maxDepth) };
         final List<String> outputs = PythonUtils.callScript(pathToScript, args);
         inputFile.delete();
-
-        var defaultException = new FacialFeatureAnalysisException(I18N.get("FacialFeatureAnalysisFailed"));
 
         if (outputs.size() < 1) {
             Logger.getLogger(FacialFeatureAnalyser.class.getName()).log(Level.SEVERE, defaultException.getMessage());
@@ -64,10 +70,11 @@ public abstract class FacialFeatureAnalyser {
         return results;
     }
 
-    private static File createInputFile(final Individual individual, final int maxDepth) {
+    private static File createInputFile(final Individual individual, final int maxDepth) throws IOException {
         PersonInput inputObject = new PersonInput(individual, 0, maxDepth);
         Date date = new Date();
         long timeMillis = date.getTime();
-        return JSONUtils.toJSONFile(inputObject, String.format("%d-%s.json", timeMillis, individual.getName()));
+        Files.createDirectories(Paths.get("tmp"));
+        return JSONUtils.toJSONFile(inputObject, String.format("tmp/%d-%s.json", timeMillis, individual.getName()));
     }
 }
