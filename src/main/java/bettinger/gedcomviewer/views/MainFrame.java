@@ -36,6 +36,7 @@ import bettinger.gedcomviewer.model.GEDCOM;
 import bettinger.gedcomviewer.model.GEDCOM.GEDCOMEvent;
 import bettinger.gedcomviewer.model.GEDCOM.GEDCOMException;
 import bettinger.gedcomviewer.tools.portraitcomparison.model.FacialFeatureAnalyser;
+import bettinger.gedcomviewer.tools.portraitcomparison.model.FacialFeatureAnalysisException;
 import bettinger.gedcomviewer.tools.portraitcomparison.model.FacialFeatureAnalysisResult;
 import bettinger.gedcomviewer.tools.portraitcomparison.model.FacialFeatures;
 import bettinger.gedcomviewer.tools.portraitcomparison.views.FacialFeatureAnalysisDialog;
@@ -514,7 +515,11 @@ public class MainFrame extends Frame {
 				protected URI doInBackground() throws Exception {
 					var uri = super.doInBackground();
 
-					results = FacialFeatureAnalyser.analyse(proband, maxDepth, maxNumPortraits);
+					try {
+						results = FacialFeatureAnalyser.analyse(proband, maxDepth, maxNumPortraits);
+					} catch (FacialFeatureAnalysisException e) {
+						onError(e);
+					}
 
 					return uri;
 				}
