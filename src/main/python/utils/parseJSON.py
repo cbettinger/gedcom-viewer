@@ -1,5 +1,4 @@
 import json
-import os
 from base.Person import Person
 from base.config import MAX_IMAGES_PER_PERSON
 

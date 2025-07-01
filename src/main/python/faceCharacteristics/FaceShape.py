@@ -24,7 +24,7 @@ class FaceShape(OneElementalFacePart):
         return lines
 
     def _generateRealMesh(self):
-        return [None, None] #todo
+        return [None, None]
     
     def _generateEdgesVector(self):
         flatEdges = []
