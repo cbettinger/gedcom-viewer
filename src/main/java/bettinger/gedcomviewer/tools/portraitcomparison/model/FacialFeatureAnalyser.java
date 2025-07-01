@@ -19,7 +19,7 @@ import bettinger.gedcomviewer.utils.PythonUtils;
 
 public abstract class FacialFeatureAnalyser {
 
-    public static TreeMap<FacialFeatures, FacialFeatureAnalysisResult> analyse(final Individual individual, final int maxDepth, final int maxNumPortraits) {
+    public static TreeMap<FacialFeatures, FacialFeatureAnalysisResult> analyse(final Individual individual, final int maxDepth, final int maxNumPortraits) throws FacialFeatureAnalysisException {
         TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results = new TreeMap<>();
 
         File inputFile = createInputFile(individual, maxDepth);
@@ -31,14 +31,17 @@ public abstract class FacialFeatureAnalyser {
         final List<String> outputs = PythonUtils.callScript(pathToScript, args);
         inputFile.delete();
 
+        var defaultException = new FacialFeatureAnalysisException(I18N.get("FacialFeatureAnalysisFailed"));
+
         if (outputs.size() < 1) {
-            //todo show error
-            return results;
+            Logger.getLogger(FacialFeatureAnalyser.class.getName()).log(Level.SEVERE, defaultException.getMessage());
+            throw defaultException;
         }
         final var outputJSON = JSONUtils.fromString(outputs.getLast());
         if (outputJSON.get("isError") != null) {
-            Logger.getLogger(FacialFeatureAnalyser.class.getName()).log(Level.SEVERE, I18N.get(outputJSON.get("messageKey").asText()));
-            //todo show error
+            String message = I18N.get(outputJSON.get("messageKey").asText());
+            Logger.getLogger(FacialFeatureAnalyser.class.getName()).log(Level.SEVERE, message);
+            throw new FacialFeatureAnalysisException(message);
         } else if (outputJSON.get("success") != null) {
             try {
                 var resultFilepath = Paths.get(outputJSON.get("filename").asText());
@@ -49,11 +52,13 @@ public abstract class FacialFeatureAnalyser {
                     results.put(feature, FacialFeatureAnalysisResult.fromJSON(resultJson, feature.name()));
                 }
             } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                String message = I18N.get("ProcessingFacialFeatureAnalysisResultFailed");
+                Logger.getLogger(FacialFeatureAnalyser.class.getName()).log(Level.SEVERE, message);
+                throw new FacialFeatureAnalysisException(message);
             }
         } else {
-            //todo show error
+            Logger.getLogger(FacialFeatureAnalyser.class.getName()).log(Level.SEVERE, defaultException.getMessage());
+            throw defaultException;
         }
 
         return results;
