@@ -36,34 +36,34 @@ public class DetailsRenderer extends AncestorsRenderer {
         for (final var entry : result.getPathSimilarities().entrySet()) {
             var pathIDs = entry.getKey().getAncestorIDs();
             var similarity = entry.getValue();
-                
-                var tuple = new Pair<String, String>(proband.getId(), pathIDs[0]);
+
+            var tuple = new Pair<String, String>(proband.getId(), pathIDs[0]);
+            if (!this.coloredEdges.containsKey(tuple)) {
+                this.coloredEdges.put(tuple, 0.f);
+            }
+            this.coloredEdges.put(tuple, Math.max(this.coloredEdges.get(tuple), similarity));
+            if (personSimilarities.get(pathIDs[0]) != null) {
+                this.includedIndividuals.add(pathIDs[0]);
+            }
+
+            String lastOfPath = null;
+            ArrayList<String> notIncluded = new ArrayList<>();
+            for (int i = 0; i < pathIDs.length - 1; i++) {
+                if (personSimilarities.get(pathIDs[i + 1]) != null) {
+                    this.includedIndividuals.addAll(notIncluded);
+                    notIncluded.clear();
+                    this.includedIndividuals.add(pathIDs[i + 1]);
+                    lastOfPath = pathIDs[i + 1];
+                } else {
+                    notIncluded.add(pathIDs[i + 1]);
+                }
+                tuple = new Pair<String, String>(pathIDs[i], pathIDs[i + 1]);
                 if (!this.coloredEdges.containsKey(tuple)) {
                     this.coloredEdges.put(tuple, 0.f);
                 }
                 this.coloredEdges.put(tuple, Math.max(this.coloredEdges.get(tuple), similarity));
-                if (personSimilarities.get(pathIDs[0]) != null) {
-                    this.includedIndividuals.add(pathIDs[0]);
-                }
-
-                String lastOfPath = null;
-                ArrayList<String> notIncluded = new ArrayList<>();
-                for (int i=0; i<pathIDs.length-1; i++) {
-                    if(personSimilarities.get(pathIDs[i+1]) != null) {
-                        this.includedIndividuals.addAll(notIncluded);
-                        notIncluded.clear();
-                        this.includedIndividuals.add(pathIDs[i+1]);
-                        lastOfPath = pathIDs[i+1];
-                    } else {
-                        notIncluded.add(pathIDs[i+1]);
-                    }
-                    tuple = new Pair<String,String>(pathIDs[i], pathIDs[i+1]);
-                    if (!this.coloredEdges.containsKey(tuple)) {
-                        this.coloredEdges.put(tuple, 0.f);
-                    }
-                    this.coloredEdges.put(tuple, Math.max(this.coloredEdges.get(tuple), similarity));
-                }
-                this.lastIndividualsOfPath.put(lastOfPath, similarity);
+            }
+            this.lastIndividualsOfPath.put(lastOfPath, similarity);
         }
     }
 
@@ -77,8 +77,8 @@ public class DetailsRenderer extends AncestorsRenderer {
             final boolean considerFather = fatherNode != null && fatherNode.getIndividual() != null && includedIndividuals.contains(fatherNode.getIndividual().getId());
             final boolean considerMother = motherNode != null && motherNode.getIndividual() != null && includedIndividuals.contains(motherNode.getIndividual().getId());
 
-            boolean drawLeft = considerFather && coloredEdges.containsKey(new Pair<String,String>(rootNode.getIndividual().getId(), fatherNode.getIndividual().getId()));
-            boolean drawRight = considerMother && coloredEdges.containsKey(new Pair<String,String>(rootNode.getIndividual().getId(), motherNode.getIndividual().getId()));
+            boolean drawLeft = considerFather && coloredEdges.containsKey(new Pair<String, String>(rootNode.getIndividual().getId(), fatherNode.getIndividual().getId()));
+            boolean drawRight = considerMother && coloredEdges.containsKey(new Pair<String, String>(rootNode.getIndividual().getId(), motherNode.getIndividual().getId()));
 
             g.setPaint(Constants.DEFAULT_CONTENT_COLOR);
             final Point parentsPoint = renderEdge(fatherNode, motherNode);
@@ -89,11 +89,11 @@ public class DetailsRenderer extends AncestorsRenderer {
                     g.drawLine(parentsPoint.x, parentsPoint.y, parentsPoint.x, rootNode.getPosition().y);
                 }
                 if (drawLeft) {
-                    final Pair<String, String> tuple = new Pair<String,String>(rootNode.getIndividual().getId(), fatherNode.getIndividual().getId());
+                    final Pair<String, String> tuple = new Pair<String, String>(rootNode.getIndividual().getId(), fatherNode.getIndividual().getId());
                     renderColoredEdge(rootNode, fatherNode, parentsPoint, tuple, true);
                 }
                 if (drawRight) {
-                    final Pair<String, String> tuple = new Pair<String,String>(rootNode.getIndividual().getId(), motherNode.getIndividual().getId());
+                    final Pair<String, String> tuple = new Pair<String, String>(rootNode.getIndividual().getId(), motherNode.getIndividual().getId());
                     renderColoredEdge(rootNode, motherNode, parentsPoint, tuple, false);
                 }
             }
@@ -106,13 +106,13 @@ public class DetailsRenderer extends AncestorsRenderer {
 
         final Stroke defaultStroke = g.getStroke();
 
-        int red = Math.min(255, (int) (DetailedResultPane.NO_MATCH_COLOR.getRed() + similarity*DetailedResultPane.PERFECT_MATCH_COLOR.getRed()));
-        int green = Math.min(255, (int) (DetailedResultPane.NO_MATCH_COLOR.getGreen() + similarity*DetailedResultPane.PERFECT_MATCH_COLOR.getGreen()));
-        int blue = Math.min(255, (int) (DetailedResultPane.NO_MATCH_COLOR.getBlue() + similarity*DetailedResultPane.PERFECT_MATCH_COLOR.getBlue()));
+        int red = Math.min(255, (int) (DetailedResultPane.NO_MATCH_COLOR.getRed() + similarity * DetailedResultPane.PERFECT_MATCH_COLOR.getRed()));
+        int green = Math.min(255, (int) (DetailedResultPane.NO_MATCH_COLOR.getGreen() + similarity * DetailedResultPane.PERFECT_MATCH_COLOR.getGreen()));
+        int blue = Math.min(255, (int) (DetailedResultPane.NO_MATCH_COLOR.getBlue() + similarity * DetailedResultPane.PERFECT_MATCH_COLOR.getBlue()));
         var color = new Color(red, green, blue, 255);
 
         if (parentsPoint != null) {
-            final int offsetX = left ? - LINE_THICKNESS / 2 : LINE_THICKNESS / 2;
+            final int offsetX = left ? -LINE_THICKNESS / 2 : LINE_THICKNESS / 2;
             final int endX = left ? parentNodePosition.x + parentNode.getWidth() : parentNodePosition.x;
             g.setStroke(new BasicStroke(LINE_THICKNESS));
             g.setPaint(color);
@@ -125,24 +125,24 @@ public class DetailsRenderer extends AncestorsRenderer {
                 final var lineStartX = left ? endX : parentsPoint.x + offsetX;
                 final var centerX = lineStartX + Math.abs(parentsPoint.x + offsetX - endX) / 2;
 
-                final var label = String.format("%.2f%%", lastIndividualsOfPath.get(tuple.getValue1())*100);
+                final var label = String.format("%.2f%%", lastIndividualsOfPath.get(tuple.getValue1()) * 100);
                 final var labelWidth = g.getFontMetrics().stringWidth(label);
                 var labelX = centerX - labelWidth / 2;
-			    final var labelY = parentsPoint.y - LINE_THICKNESS;
+                final var labelY = parentsPoint.y - LINE_THICKNESS;
 
-				g.drawString(label, labelX, labelY);
-			}
+                g.drawString(label, labelX, labelY);
+            }
         }
     }
 
     @Override
     protected Node getNewNode(Individual individual, boolean isClone, Node parent) {
-		var node = new DetailsNode(g, individual, isClone, parent);
+        var node = new DetailsNode(g, individual, isClone, parent);
         if (individual != null && individual != targetPerson) {
             node.init(targetPerson, personSimilarities.get(individual.getId()));
         }
         return node;
-	}
+    }
 
     @Override
     protected int getEdgeLabelWidth(Node v, Node w) {

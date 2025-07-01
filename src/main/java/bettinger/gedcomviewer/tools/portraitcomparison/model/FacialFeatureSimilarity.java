@@ -14,7 +14,7 @@ public class FacialFeatureSimilarity {
         this.maxMatchTargetFileName = maxMatchTargetFileName;
         this.maxMatchAncestorFileName = maxMatchAncestorFileName;
     }
-    
+
     public Float getMaxSimilarity() {
         return maxSimilarity;
     }

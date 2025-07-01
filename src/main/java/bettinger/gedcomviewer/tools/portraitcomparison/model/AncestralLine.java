@@ -28,8 +28,8 @@ public class AncestralLine {
     @Override
     public boolean equals(Object o) {
         if (o instanceof AncestralLine) {
-            for(int i=0; i<ancestorIDs.length; i++) {
-                if (ancestorIDs[i] != ((AncestralLine)o).ancestorIDs[i]) {
+            for (int i = 0; i < ancestorIDs.length; i++) {
+                if (ancestorIDs[i] != ((AncestralLine) o).ancestorIDs[i]) {
                     return false;
                 }
             }

@@ -61,13 +61,13 @@ class ResultOverviewRenderer extends AncestorsRenderer {
                 this.maxSimilarityEdges.get(tuple).add(color);
 
                 ArrayList<String> exclude = new ArrayList<>();
-                for (int i=0; i<pathIDs.length-1; i++) {
-                    if(personSimilarities.get(pathIDs[i+1]) == null) {
-                        exclude.add(pathIDs[i+1]);
+                for (int i = 0; i < pathIDs.length - 1; i++) {
+                    if (personSimilarities.get(pathIDs[i + 1]) == null) {
+                        exclude.add(pathIDs[i + 1]);
                     } else {
                         exclude.clear();
                     }
-                    tuple = new Pair<String,String>(pathIDs[i], pathIDs[i+1]);
+                    tuple = new Pair<String, String>(pathIDs[i], pathIDs[i + 1]);
                     if (!this.maxSimilarityEdges.containsKey(tuple)) {
                         this.maxSimilarityEdges.put(tuple, new HashSet<Color>());
                     }
@@ -78,7 +78,7 @@ class ResultOverviewRenderer extends AncestorsRenderer {
                 }
                 this.excludedIndividuals.get(color).addAll(exclude);
             }
-        } 
+        }
     }
 
     @Override
@@ -91,7 +91,7 @@ class ResultOverviewRenderer extends AncestorsRenderer {
 
             final boolean considerFather = fatherNode != null && fatherNode.getIndividual() != null;
             final boolean considerMother = motherNode != null && motherNode.getIndividual() != null;
-            
+
             boolean fatherExcludedEverywhere = true;
             boolean motherExcludedEverywhere = true;
             for (final var color : maxPathIndividuals.keySet()) {
@@ -105,8 +105,8 @@ class ResultOverviewRenderer extends AncestorsRenderer {
                 }
             }
 
-            boolean drawLeft = considerFather && !fatherExcludedEverywhere && maxSimilarityEdges.containsKey(new Pair<String,String>(rootNode.getIndividual().getId(), fatherNode.getIndividual().getId()));
-            boolean drawRight = considerMother && !motherExcludedEverywhere && maxSimilarityEdges.containsKey(new Pair<String,String>(rootNode.getIndividual().getId(), motherNode.getIndividual().getId()));
+            boolean drawLeft = considerFather && !fatherExcludedEverywhere && maxSimilarityEdges.containsKey(new Pair<String, String>(rootNode.getIndividual().getId(), fatherNode.getIndividual().getId()));
+            boolean drawRight = considerMother && !motherExcludedEverywhere && maxSimilarityEdges.containsKey(new Pair<String, String>(rootNode.getIndividual().getId(), motherNode.getIndividual().getId()));
 
             g.setPaint(Constants.DEFAULT_CONTENT_COLOR);
             final Point parentsPoint = renderEdge(fatherNode, motherNode);
@@ -117,15 +117,15 @@ class ResultOverviewRenderer extends AncestorsRenderer {
                     g.drawLine(parentsPoint.x, parentsPoint.y, parentsPoint.x, rootNode.getPosition().y);
                 }
                 if (drawLeft) {
-                    final Pair<String, String> tuple = new Pair<String,String>(rootNode.getIndividual().getId(), fatherNode.getIndividual().getId());
+                    final Pair<String, String> tuple = new Pair<String, String>(rootNode.getIndividual().getId(), fatherNode.getIndividual().getId());
                     renderMaxSimilarityEdge(rootNode, fatherNode, parentsPoint, tuple, true);
                 }
                 if (drawRight) {
-                    final Pair<String, String> tuple = new Pair<String,String>(rootNode.getIndividual().getId(), motherNode.getIndividual().getId());
+                    final Pair<String, String> tuple = new Pair<String, String>(rootNode.getIndividual().getId(), motherNode.getIndividual().getId());
                     renderMaxSimilarityEdge(rootNode, motherNode, parentsPoint, tuple, false);
                 }
             }
-		}
+        }
     }
 
     void renderMaxSimilarityEdge(final Node rootNode, final Node parentNode, final Point parentsPoint, final Pair<String, String> tuple, final boolean left) {
@@ -154,8 +154,8 @@ class ResultOverviewRenderer extends AncestorsRenderer {
     @Override
     protected void renderNodes(final Node node) {
         final Stroke defaultStroke = g.getStroke();
-		if (renderRootNode || node != rootNode) {
-			node.render(node.getPosition().x, node.getPosition().y);
+        if (renderRootNode || node != rootNode) {
+            node.render(node.getPosition().x, node.getPosition().y);
             int colorNum = 0;
             for (var color : maxSimilarityIndividuals.keySet()) {
                 if (node.getIndividual() != null && maxSimilarityIndividuals.get(color).contains(node.getIndividual().getId())) {
@@ -163,17 +163,16 @@ class ResultOverviewRenderer extends AncestorsRenderer {
                     g.setPaint(color);
                     g.setStroke(new BasicStroke(LINE_THICKNESS));
                     final Rectangle rect = node.getRectangle();
-                    g.drawRect(rect.x-offset, rect.y-offset, rect.width+2*offset, rect.height+2*offset);
+                    g.drawRect(rect.x - offset, rect.y - offset, rect.width + 2 * offset, rect.height + 2 * offset);
                     g.setPaint(Color.BLACK);
                     colorNum++;
                 }
             }
             g.setStroke(defaultStroke);
-		}
+        }
 
-		for (final var child : node.getChildren()) {
-			renderNodes(child);
-		}
-	}
+        for (final var child : node.getChildren()) {
+            renderNodes(child);
+        }
+    }
 }
-

@@ -510,7 +510,7 @@ public class MainFrame extends Frame {
 		if (proband != null) {
 			new BackgroundWorker(I18N.get("FacialFeatureAnalysis")) {
 				private TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results;
-				
+
 				@Override
 				protected URI doInBackground() throws Exception {
 					var uri = super.doInBackground();

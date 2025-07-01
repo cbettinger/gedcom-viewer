@@ -7,11 +7,11 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
-public class ColorRamp extends JPanel{
+public class ColorRamp extends JPanel {
 
     private Color color1;
     private Color color2;
-    
+
     public ColorRamp(Color color1, Color color2) {
         this.color1 = color1;
         this.color2 = color2;

@@ -10,23 +10,23 @@ import java.util.logging.Logger;
 
 public interface PythonUtils {
 
-	public static List<String> callScript(final String scriptPath, String[] args) {
+    public static List<String> callScript(final String scriptPath, String[] args) {
         List<String> result = new ArrayList<String>();
 
-		try {
+        try {
             Runtime runtime = Runtime.getRuntime();
 
-            String[] pipInstall = {"python", "-m", "ensurepip", "--upgrade"};
+            String[] pipInstall = { "python", "-m", "ensurepip", "--upgrade" };
             Process p = runtime.exec(pipInstall);
             p.waitFor();
             Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "pip installed");
 
-            String[] pipenvInstall = {"pip", "install", "--user", "pipenv"};
+            String[] pipenvInstall = { "pip", "install", "--user", "pipenv" };
             p = runtime.exec(pipenvInstall);
             p.waitFor();
             Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "pipenv installed");
 
-            String[] requirementsInstall = {"pipenv", "install"};
+            String[] requirementsInstall = { "pipenv", "install" };
             p = runtime.exec(requirementsInstall);
             p.waitFor();
             Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "requirements installed");
@@ -36,11 +36,11 @@ public interface PythonUtils {
             command.add("run");
             command.add("python");
             command.add(scriptPath);
-            for(String arg : args) {
+            for (String arg : args) {
                 command.add(arg);
             }
-            
-			Process pOut = runtime.exec(command.toArray(new String[0]));
+
+            Process pOut = runtime.exec(command.toArray(new String[0]));
             pOut.waitFor();
             Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "analysis done");
             BufferedReader stdInput = new BufferedReader(new InputStreamReader(pOut.getInputStream()));
@@ -52,13 +52,12 @@ public interface PythonUtils {
             Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, result.toString());
 
             return result;
-		} catch (IOException e) {
-			Logger.getLogger(PythonUtils.class.getName()).log(Level.SEVERE, String.format("An error occured when calling python script %s.", scriptPath), e);
-			return result;
-		} catch (InterruptedException e) {
+        } catch (IOException e) {
             Logger.getLogger(PythonUtils.class.getName()).log(Level.SEVERE, String.format("An error occured when calling python script %s.", scriptPath), e);
-			return result;
+            return result;
+        } catch (InterruptedException e) {
+            Logger.getLogger(PythonUtils.class.getName()).log(Level.SEVERE, String.format("An error occured when calling python script %s.", scriptPath), e);
+            return result;
         }
-	}
+    }
 }
-

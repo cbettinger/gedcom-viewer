@@ -19,21 +19,21 @@ import jiconfont.swing.IconFontSwing;
 
 public class FacialFeatureAnalysisDialog extends JDialog {
 
-	private final HTMLTextPane infoPane;
+    private final HTMLTextPane infoPane;
     private final IntegerPicker maxDepthPicker;
     private final IntegerPicker maxNumPortraitsPicker;
     private final JButton startButton;
 
-	public FacialFeatureAnalysisDialog(final Individual individual, AnalysisStarter onStart) {
-		setTitle(I18N.get("FacialFeatureAnalysis"));
-		setModal(true);
+    public FacialFeatureAnalysisDialog(final Individual individual, AnalysisStarter onStart) {
+        setTitle(I18N.get("FacialFeatureAnalysis"));
+        setModal(true);
 
-		setLayout(new BorderLayout());
+        setLayout(new BorderLayout());
 
-		this.infoPane = new HTMLTextPane();
+        this.infoPane = new HTMLTextPane();
         this.infoPane.setText(I18N.get("FacialFeatureAnalysisStartInfo"));
 
-        this.maxDepthPicker = new IntegerPicker(I18N.get("MaxFacialFeatureComparisonDepth"), Constants.MIN_FACE_COMPARISON_DEPTH, Constants.MAX_FACE_COMPARISON_DEPTH, Constants.MAX_FACE_COMPARISON_DEPTH/2);
+        this.maxDepthPicker = new IntegerPicker(I18N.get("MaxFacialFeatureComparisonDepth"), Constants.MIN_FACE_COMPARISON_DEPTH, Constants.MAX_FACE_COMPARISON_DEPTH, Constants.MAX_FACE_COMPARISON_DEPTH / 2);
         this.maxNumPortraitsPicker = new IntegerPicker(I18N.get("MaxNumPortraitsPerPerson"), Constants.MIN_NUM_PORTRAITS_FOR_FACE_COMPARISON, Constants.MAX_NUM_PORTRAITS_FOR_FACE_COMPARISON, Constants.MAX_NUM_PORTRAITS_FOR_FACE_COMPARISON);
 
         var vBox = new JPanel();
@@ -56,15 +56,15 @@ public class FacialFeatureAnalysisDialog extends JDialog {
         var buttonPanel = new JPanel();
         buttonPanel.add(this.startButton);
 
-		add(this.infoPane, BorderLayout.PAGE_START);
+        add(this.infoPane, BorderLayout.PAGE_START);
         add(parameterPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.PAGE_END);
 
-		pack();
+        pack();
 
-		setSize(Constants.DEFAULT_MODAL_DIALOG_WIDTH, Constants.DEFAULT_MODAL_DIALOG_HEIGHT);
-		setLocationRelativeTo(MainFrame.getInstance());
+        setSize(Constants.DEFAULT_MODAL_DIALOG_WIDTH, Constants.DEFAULT_MODAL_DIALOG_HEIGHT);
+        setLocationRelativeTo(MainFrame.getInstance());
 
-		setVisible(true);
-	}
+        setVisible(true);
+    }
 }

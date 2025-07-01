@@ -27,7 +27,7 @@ public abstract class FacialFeatureAnalyser {
         final String pathToProject = System.getProperty("user.dir");
         final String pathToScript = Paths.get(pathToProject, "src", "main", "python", "familyFaceCompare.py").toString();
 
-        final String[] args = {inputFile.getAbsolutePath(), Integer.toString(maxNumPortraits), Integer.toString(maxDepth)};
+        final String[] args = { inputFile.getAbsolutePath(), Integer.toString(maxNumPortraits), Integer.toString(maxDepth) };
         final List<String> outputs = PythonUtils.callScript(pathToScript, args);
         inputFile.delete();
 

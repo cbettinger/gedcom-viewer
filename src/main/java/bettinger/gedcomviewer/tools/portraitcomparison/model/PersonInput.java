@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonAutoDetect(fieldVisibility = Visibility.NONE, getterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
 public class PersonInput {
-    @JsonProperty
+	@JsonProperty
 	private final String id;
 	@JsonProperty
 	private final List<PortraitInput> portraits;
@@ -34,11 +34,11 @@ public class PersonInput {
 
 		Map<Media, Rectangle> portraitData = individual.getPortraits();
 		for (Map.Entry<Media, Rectangle> entry : portraitData.entrySet()) {
-    		Media medium = entry.getKey();
-    		Rectangle clip = entry.getValue();
-    
+			Media medium = entry.getKey();
+			Rectangle clip = entry.getValue();
+
 			String fileName = medium.getFileName();
-			
+
 			PortraitInput portraitInput = new PortraitInput(fileName);
 			if (clip != null) {
 				portraitInput.setBoxPoints(clip.x, clip.y, clip.x + clip.width, clip.y + clip.height);

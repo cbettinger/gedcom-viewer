@@ -27,7 +27,7 @@ import bettinger.gedcomviewer.views.WebViewPanel;
 
 public class ResultOverviewPane extends JPanel {
     private final WebViewPanel visualization;
-    
+
     public ResultOverviewPane(final Individual proband, final int numGenerations, final TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results) {
         super();
         setLayout(new BorderLayout());
@@ -35,19 +35,19 @@ public class ResultOverviewPane extends JPanel {
         this.visualization = new WebViewPanel();
         TreeMap<FacialFeatures, Pair<ArrayList<AncestralLine>, Float>> maxPathSimilarities = new TreeMap<>();
         TreeMap<FacialFeatures, Pair<ArrayList<String>, Float>> maxPersonSimilarities = new TreeMap<>();
-        final String[] columns = {I18N.get("FacialFeature"), I18N.get("LineColor"), I18N.get("MaxPathSimilarity"), I18N.get("MaxSimilarity")};
+        final String[] columns = { I18N.get("FacialFeature"), I18N.get("LineColor"), I18N.get("MaxPathSimilarity"), I18N.get("MaxSimilarity") };
         ArrayList<Object[]> tableData = new ArrayList<>();
 
         for (final var entry : results.entrySet()) {
-           final var feature = entry.getKey();
-           final var featureResult = entry.getValue();
-           final var maxPathSimilarity = featureResult.getMaxPathSimilarity();
-           maxPathSimilarities.put(feature, maxPathSimilarity);
-           final var maxPersonSimilarity = featureResult.getMaxPersonSimilarity();
-           maxPersonSimilarities.put(feature, maxPersonSimilarity);
+            final var feature = entry.getKey();
+            final var featureResult = entry.getValue();
+            final var maxPathSimilarity = featureResult.getMaxPathSimilarity();
+            maxPathSimilarities.put(feature, maxPathSimilarity);
+            final var maxPersonSimilarity = featureResult.getMaxPersonSimilarity();
+            maxPersonSimilarities.put(feature, maxPersonSimilarity);
 
-           Object[] row = {I18N.get(feature.name()), feature, String.format("%.2f%%", maxPathSimilarity.getValue1()*100), String.format("%.2f%%", maxPersonSimilarity.getValue1()*100)};
-           tableData.add(row);
+            Object[] row = { I18N.get(feature.name()), feature, String.format("%.2f%%", maxPathSimilarity.getValue1() * 100), String.format("%.2f%%", maxPersonSimilarity.getValue1() * 100) };
+            tableData.add(row);
         }
 
         var table = new AutoFitTable();
@@ -71,21 +71,21 @@ public class ResultOverviewPane extends JPanel {
     }
 
     private void update(final Individual proband, final int numGenerations, final TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results) {
-		ResultOverviewRenderer renderer = null;
+        ResultOverviewRenderer renderer = null;
 
-		try {
-			renderer = new ResultOverviewRenderer(proband, results);
-		} catch (final Exception e) {
-			Logger.getLogger(ResultOverviewPane.class.getName()).log(Level.SEVERE, "Failed to create renderer", e);
-		}
+        try {
+            renderer = new ResultOverviewRenderer(proband, results);
+        } catch (final Exception e) {
+            Logger.getLogger(ResultOverviewPane.class.getName()).log(Level.SEVERE, "Failed to create renderer", e);
+        }
 
-		if (renderer != null) {
-			renderer.render(proband, numGenerations+1);
+        if (renderer != null) {
+            renderer.render(proband, numGenerations + 1);
 
-			visualization.setBody(renderer.toString());
-			visualization.scrollTo(renderer.getProbandNode().getPosition());
-		}
-	}
+            visualization.setBody(renderer.toString());
+            visualization.scrollTo(renderer.getProbandNode().getPosition());
+        }
+    }
 
     public static Map<FacialFeatures, Color> getFeatureColors() {
         final Map<FacialFeatures, Color> FEATURE_COLORS = new HashMap<>();
