@@ -1,4 +1,4 @@
-package bettinger.gedcomviewer.tools.portraitcomparison.views;
+package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -13,7 +13,7 @@ import javax.swing.JTextArea;
 
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Individual;
-import bettinger.gedcomviewer.tools.portraitcomparison.model.FacialFeatureAnalysisResult;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureAnalysisResult;
 import bettinger.gedcomviewer.views.WebViewPanel;
 
 public class DetailedResultPane extends JPanel {

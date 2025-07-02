@@ -1,4 +1,4 @@
-package bettinger.gedcomviewer.tools.portraitcomparison.model;
+package bettinger.gedcomviewer.tools.facialfeatureanalysis.model;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;

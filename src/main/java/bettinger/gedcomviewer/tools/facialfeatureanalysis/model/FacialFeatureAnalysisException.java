@@ -1,4 +1,4 @@
-package bettinger.gedcomviewer.tools.portraitcomparison.model;
+package bettinger.gedcomviewer.tools.facialfeatureanalysis.model;
 
 public class FacialFeatureAnalysisException extends Exception {
     public FacialFeatureAnalysisException(String message) {

@@ -1,4 +1,4 @@
-package bettinger.gedcomviewer.tools.portraitcomparison.model;
+package bettinger.gedcomviewer.tools.facialfeatureanalysis.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package bettinger.gedcomviewer.tools.portraitcomparison.views;
+package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 
 import java.util.TreeMap;
 
@@ -7,8 +7,8 @@ import javax.swing.JTabbedPane;
 import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Individual;
-import bettinger.gedcomviewer.tools.portraitcomparison.model.FacialFeatureAnalysisResult;
-import bettinger.gedcomviewer.tools.portraitcomparison.model.FacialFeatures;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureAnalysisResult;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatures;
 import bettinger.gedcomviewer.views.Frame;
 import bettinger.gedcomviewer.views.MainFrame;
 

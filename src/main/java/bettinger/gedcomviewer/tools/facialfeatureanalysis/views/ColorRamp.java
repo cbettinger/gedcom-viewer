@@ -1,4 +1,4 @@
-package bettinger.gedcomviewer.tools.portraitcomparison.views;
+package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 
 import java.awt.Color;
 import java.awt.GradientPaint;

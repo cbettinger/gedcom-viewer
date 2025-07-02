@@ -1,4 +1,4 @@
-package bettinger.gedcomviewer.tools.portraitcomparison.views;
+package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -11,8 +11,8 @@ import org.javatuples.Pair;
 
 import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.model.Individual;
-import bettinger.gedcomviewer.tools.portraitcomparison.model.FacialFeatureAnalysisResult;
-import bettinger.gedcomviewer.tools.portraitcomparison.model.FacialFeatureSimilarity;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureAnalysisResult;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureSimilarity;
 import bettinger.gedcomviewer.views.visualization.AncestorsRenderer;
 import bettinger.gedcomviewer.views.visualization.Node;
 

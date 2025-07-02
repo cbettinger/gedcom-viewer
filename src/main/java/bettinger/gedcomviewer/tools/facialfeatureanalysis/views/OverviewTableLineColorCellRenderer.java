@@ -1,4 +1,4 @@
-package bettinger.gedcomviewer.tools.portraitcomparison.views;
+package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import bettinger.gedcomviewer.tools.portraitcomparison.model.FacialFeatures;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatures;
 
 public class OverviewTableLineColorCellRenderer extends DefaultTableCellRenderer {
     private final Map<FacialFeatures, Color> cellColors;

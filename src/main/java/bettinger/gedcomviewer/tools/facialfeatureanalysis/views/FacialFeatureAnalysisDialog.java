@@ -1,4 +1,4 @@
-package bettinger.gedcomviewer.tools.portraitcomparison.views;
+package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 
 import java.awt.BorderLayout;
 
@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Individual;
-import bettinger.gedcomviewer.tools.portraitcomparison.model.AnalysisStarter;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.AnalysisStarter;
 import bettinger.gedcomviewer.views.HTMLTextPane;
 import bettinger.gedcomviewer.views.IntegerPicker;
 import bettinger.gedcomviewer.views.MainFrame;
