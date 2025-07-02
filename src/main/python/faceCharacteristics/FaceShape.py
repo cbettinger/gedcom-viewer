@@ -1,6 +1,7 @@
-from faceCharacteristics.OneElementalFacePart import OneElementalFacePart
-from classifiers.classifiers import XGB_CLASSIFIERS
 import numpy as np
+from classifiers.classifiers import XGB_CLASSIFIERS
+from faceCharacteristics.OneElementalFacePart import OneElementalFacePart
+
 
 class FaceShape(OneElementalFacePart):
     contourLineIndices = [[10, 338, 297, 332, 284, 251, 389, 356, 454, 323, 361, 288, 397, 365, 379, 378, 400, 377, 152, 148, 176, 149, 150, 136, 172, 58, 132, 93, 234, 127, 162, 21, 54, 103, 67, 109, 10], [103, 68, 70, 35, 117, 50, 207, 214, 210, 211, 32, 140, 176], [332, 298, 300, 265, 346, 280, 427, 434, 430, 431, 262, 369, 400]]

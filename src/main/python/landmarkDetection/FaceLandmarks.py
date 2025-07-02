@@ -1,7 +1,9 @@
-from landmarkDetection.LandmarkDetector import LandmarkDetector
-import numpy as np
 import math
+
+import numpy as np
+from landmarkDetection.LandmarkDetector import LandmarkDetector
 from utils.mathUtils import getRotationMatrixToAlignVectors
+
 
 class FaceLandmarks:
 

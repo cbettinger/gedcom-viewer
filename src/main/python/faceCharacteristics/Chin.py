@@ -1,5 +1,6 @@
-from faceCharacteristics.OneElementalFacePart import OneElementalFacePart
 from classifiers.classifiers import XGB_CLASSIFIERS
+from faceCharacteristics.OneElementalFacePart import OneElementalFacePart
+
 
 class Chin(OneElementalFacePart):
     landmarkIndices = [335, 424, 431, 395, 378, 406, 418, 262, 369, 400, 313, 421, 428, 396, 377, 18, 200, 199, 175, 152, 83, 201, 208, 171, 148, 182, 194, 32, 140, 176, 106, 204, 211, 170, 149]

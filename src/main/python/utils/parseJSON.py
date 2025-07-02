@@ -1,6 +1,8 @@
 import json
-from base.Person import Person
+
 from base.config import MAX_IMAGES_PER_PERSON
+from base.Person import Person
+
 
 def parseFile(filePath, maxNumPortraits=MAX_IMAGES_PER_PERSON):
     f = open(filePath, encoding="utf-8")

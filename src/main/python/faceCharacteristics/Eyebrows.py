@@ -1,5 +1,6 @@
-from faceCharacteristics.TwoElementalFacePart import TwoElementalFacePart
 from classifiers.classifiers import XGB_CLASSIFIERS
+from faceCharacteristics.TwoElementalFacePart import TwoElementalFacePart
+
 
 class Eyebrows(TwoElementalFacePart):
     leftIndices = [336, 296, 334, 293, 300, 276, 283, 282, 295, 285, 8, 9, 337, 299, 333, 298, 301, 368, 383, 353, 445, 444, 443, 442, 441]

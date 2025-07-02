@@ -1,6 +1,7 @@
-from classifiers.Classifier import Classifier
 import xgboost as xgb
+from classifiers.Classifier import Classifier
 from utils import csvUtils
+
 
 class XGBooster(Classifier):
     def __init__(self, name, pretrainedFilename=None, numTrees=100, treeDepth=6):

@@ -1,5 +1,6 @@
-from faceCharacteristics.TwoElementalFacePart import TwoElementalFacePart
 from classifiers.classifiers import XGB_CLASSIFIERS
+from faceCharacteristics.TwoElementalFacePart import TwoElementalFacePart
+
 
 class Lips(TwoElementalFacePart):
     upperLipIndices = [61, 185, 40, 39, 37, 0, 267, 269, 270, 409, 291, 308, 415, 310, 311, 312, 13, 82, 81, 80, 191, 78, 62, 76, 183, 184, 42, 74, 41, 73, 38, 72, 12, 11, 268, 302, 271, 303, 272, 304, 407, 408, 292, 306]

@@ -1,5 +1,6 @@
-from faceCharacteristics.TwoElementalFacePart import TwoElementalFacePart
 from classifiers.classifiers import XGB_CLASSIFIERS
+from faceCharacteristics.TwoElementalFacePart import TwoElementalFacePart
+
 
 class Cheeks(TwoElementalFacePart):
     leftIndices = [453, 357, 343, 437, 355, 429, 452, 350, 277, 451, 349, 329, 371, 423, 450, 348, 330, 449, 347, 448, 266, 426, 425, 280, 427, 436, 416, 288, 435, 433, 361, 401, 411, 376, 352, 323, 366, 454, 447, 345, 346, 340, 358]

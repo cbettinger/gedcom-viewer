@@ -1,5 +1,6 @@
-from faceCharacteristics.OneElementalFacePart import OneElementalFacePart
 from classifiers.classifiers import XGB_CLASSIFIERS
+from faceCharacteristics.OneElementalFacePart import OneElementalFacePart
+
 
 class Nose(OneElementalFacePart):
     landmarkIndices = [241, 458, 331, 326, 328, 99, 97, 107, 9, 336, 285, 8, 55, 193, 168, 417, 188, 174, 236, 198, 209, 49, 

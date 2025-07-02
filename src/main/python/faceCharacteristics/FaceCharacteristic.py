@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 class FaceCharacteristic(ABC):
 
     def __init__(self, name):

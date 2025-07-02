@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 class Classifier(ABC):
     def __init__(self, name, model, pretrainedFilename=None):
         super().__init__()

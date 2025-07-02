@@ -1,8 +1,9 @@
+import json
 import sys
+
 import utils.parseJSON as parseJSON
 from base.faceComparison import getFaceAnalysisResult
 from base.Person import Person
-import json
 
 if len(sys.argv) < 4:
     print(json.dumps({"isError": "y", "messageKey": "NotEnoughParameters"}))

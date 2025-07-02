@@ -2,6 +2,7 @@ import mediapipe as mp
 import numpy as np
 from PIL import Image
 
+
 def readImage(filePath, boxPoints=None):
     img = np.asarray(Image.open(filePath))
     if boxPoints:

@@ -1,5 +1,6 @@
-from faceCharacteristics.TwoElementalFacePart import TwoElementalFacePart
 from classifiers.classifiers import XGB_CLASSIFIERS
+from faceCharacteristics.TwoElementalFacePart import TwoElementalFacePart
+
 
 class Eyes(TwoElementalFacePart):
     rightEyeIndices = [33, 7, 163, 144, 145, 153, 154, 155, 133, 246, 161, 160, 159, 158, 157, 173, 468, 469, 471]
