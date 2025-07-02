@@ -7,7 +7,3 @@ def parseFile(filePath, maxNumPortraits=MAX_IMAGES_PER_PERSON):
     parsedObject = json.load(f)
     f.close()
     return Person.fromJSON(parsedObject, maxNumPortraits)
-
-def parseString(jsonString, maxNumPortraits=MAX_IMAGES_PER_PERSON):
-    parsedObject = json.loads(jsonString)
-    return Person.fromJSON(parsedObject, maxNumPortraits)

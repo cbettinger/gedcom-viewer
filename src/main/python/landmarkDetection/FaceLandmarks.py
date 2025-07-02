@@ -1,8 +1,6 @@
 from landmarkDetection.LandmarkDetector import LandmarkDetector
 import numpy as np
 import math
-from utils.meshTriangles import FACES
-import cv2
 from utils.mathUtils import getRotationMatrixToAlignVectors
 
 class FaceLandmarks:
@@ -51,38 +49,3 @@ class FaceLandmarks:
 
         self.realLandmarks = [ np.matmul(matToAlignSide, lm) for lm in r ]
         self.realLandmarks = np.asarray(self.realLandmarks)
-
-    def drawMesh(self, indices=np.arange(468), edgeColor=[0, 0, 0], fillColor=[255, 255, 255], bgColor=[255, 255, 255], additionalFaces=None):
-        facesToDraw = FACES.tolist()
-        if additionalFaces:
-            for f in additionalFaces:
-                facesToDraw.append(f)
-        trianglesToDraw = np.asarray([self.imageLandmarks[np.asarray(f)] for f in facesToDraw if all(np.isin(f, indices))])
-
-        img = None
-        if len(bgColor) > 1:
-            img = np.full((self.srcImgHeight, self.srcImgWidth, len(bgColor)), bgColor)
-        else:
-            img = np.full((self.srcImgHeight, self.srcImgWidth), bgColor[0])
-
-        for t in trianglesToDraw:
-            cv2.fillPoly(img, pts=[t], color=fillColor)
-            cv2.polylines(img, [t], isClosed=True, color=edgeColor)
-
-        return img
-    
-    def getMask(self, indices=np.arange(468), additionalFaces=None):
-        return self.drawMesh(indices, [255], bgColor=[0], additionalFaces=additionalFaces).astype("uint8")
-
-    def drawLines(self, lineIndices, color=[0, 0, 0], bgColor=[255, 255, 255]):
-        img = np.full((self.srcImgHeight, self.srcImgWidth, 3), bgColor)
-        for line in lineIndices:
-            lmLine = np.asarray(self.imageLandmarks[np.asarray(line)])
-            cv2.polylines(img, [lmLine], isClosed=False, color=color)
-        return img
-    
-    def getBoundingBox(self, indices=np.arange(468)):
-        lms = self.imageLandmarks[np.asarray(indices)]
-        xArr = lms[:, 0]
-        yArr = lms[:, 1]
-        return [[np.min(xArr), np.min(yArr)], [np.max(xArr), np.max(yArr)]]
