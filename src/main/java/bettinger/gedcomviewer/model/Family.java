@@ -135,6 +135,7 @@ public class Family extends IndividualFamilyCommonStructure {
 		}
 
 		if (!options.contains(HTMLOption.EXPORT)) {
+			HTMLUtils.appendLineBreak(sb);
 			mediaManager.appendPrimaryImage(sb, true, Constants.PREVIEW_IMAGE_WIDTH);
 		}
 

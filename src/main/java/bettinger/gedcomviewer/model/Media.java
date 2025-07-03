@@ -19,7 +19,7 @@ import bettinger.gedcomviewer.utils.FileUtils;
 import bettinger.gedcomviewer.utils.HTMLUtils;
 import bettinger.gedcomviewer.utils.TagUtils;
 
-public class Media extends Structure implements RegularRecord, NoteContainer, SourceCitationContainer {
+public class Media extends Structure implements Record, NoteContainer, SourceCitationContainer {
 
 	static final String TAG = "OBJE";
 
@@ -72,6 +72,11 @@ public class Media extends Structure implements RegularRecord, NoteContainer, So
 	@Override
 	public GEDCOM getGEDCOM() {
 		return recordManager.getGEDCOM();
+	}
+
+	@Override
+	public boolean hasXRef() {
+		return true;
 	}
 
 	@Override

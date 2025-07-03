@@ -15,14 +15,14 @@ import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.model.Structure;
 
-class Node {
+public class Node {
 
-	static final int MINIMAL_WIDTH = 200;
-	static final int MINIMAL_HEIGHT = 100;
+	protected static final int MINIMAL_WIDTH = 200;
+	protected static final int MINIMAL_HEIGHT = 100;
 
-	private static final int PADDING = 10;
+	protected static final int PADDING = 10;
 
-	private static final int PORTRAIT_HEIGHT = MINIMAL_HEIGHT - 2 * PADDING;
+	protected static final int PORTRAIT_HEIGHT = MINIMAL_HEIGHT - 2 * PADDING;
 
 	private static final Color UNKNOWN_COLOR = Color.LIGHT_GRAY;
 	private static final Color MALE_COLOR = new Color(173, 215, 229);
@@ -30,14 +30,14 @@ class Node {
 	private static final Color FEMALE_COLOR = new Color(255, 193, 204);
 	private static final Color FEMALE_CLONE_COLOR = new Color(255, 232, 236);
 
-	int x;
-	int y;
-	int width;
-	int height;
+	protected int x;
+	protected int y;
+	protected int width;
+	protected int height;
 
-	private final SVGGraphics2D g;
+	protected final SVGGraphics2D g;
 
-	private final Individual individual;
+	protected final Individual individual;
 	private final boolean isClone;
 
 	private final Node parent;
@@ -45,11 +45,11 @@ class Node {
 
 	private final int depth;
 
-	private final Image portrait;
-	private final int portraitWidth;
+	protected Image portrait;
+	protected int portraitWidth;
 
-	private final List<String> text;
-	private final int lineHeight;
+	protected List<String> text;
+	protected final int lineHeight;
 
 	private int mod;
 	private Node thread;
@@ -58,15 +58,15 @@ class Node {
 	private int change;
 	private int shift;
 
-	Node(final SVGGraphics2D g, final Individual individual) {
+	public Node(final SVGGraphics2D g, final Individual individual) {
 		this(g, individual, false);
 	}
 
-	Node(final SVGGraphics2D g, final Individual individual, final boolean isClone) {
+	public Node(final SVGGraphics2D g, final Individual individual, final boolean isClone) {
 		this(g, individual, isClone, null);
 	}
 
-	Node(final SVGGraphics2D g, final Individual individual, final boolean isClone, final Node parent) {
+	public Node(final SVGGraphics2D g, final Individual individual, final boolean isClone, final Node parent) {
 		this.g = g;
 
 		this.individual = individual;
@@ -104,95 +104,99 @@ class Node {
 		this.height = Math.max(MINIMAL_HEIGHT, text.size() * (lineHeight + PADDING) + 2 * PADDING);
 	}
 
-	Point getPosition() {
+	public int getWidth() {
+		return width;
+	}
+
+	public Point getPosition() {
 		return new Point(x, y);
 	}
 
-	Rectangle getRectangle() {
+	public Rectangle getRectangle() {
 		return new Rectangle(x, y, width, height);
 	}
 
-	Individual getIndividual() {
+	public Individual getIndividual() {
 		return individual;
 	}
 
-	Node getParent() {
+	public Node getParent() {
 		return parent;
 	}
 
-	int getDepth() {
+	public int getDepth() {
 		return depth;
 	}
 
-	int getChildIndex() {
+	public int getChildIndex() {
 		return getParent() == null ? 0 : getParent().getChildren().indexOf(this);
 	}
 
-	boolean hasChildren() {
+	public boolean hasChildren() {
 		return !getChildren().isEmpty();
 	}
 
-	int getChildCount() {
+	public int getChildCount() {
 		return getChildren().size();
 	}
 
-	Node getChild(final int index) {
+	public Node getChild(final int index) {
 		return getChildren().get(index);
 	}
 
-	List<Node> getChildren() {
+	public List<Node> getChildren() {
 		return children;
 	}
 
-	int getMod() {
+	public int getMod() {
 		return mod;
 	}
 
-	void setMod(final int value) {
+	public void setMod(final int value) {
 		mod = value;
 	}
 
-	Node getThread() {
+	public Node getThread() {
 		return thread;
 	}
 
-	void setThread(final Node value) {
+	public void setThread(final Node value) {
 		thread = value;
 	}
 
-	int getPrelim() {
+	public int getPrelim() {
 		return prelim;
 	}
 
-	void setPrelim(final int value) {
+	public void setPrelim(final int value) {
 		prelim = value;
 	}
 
-	Node getAncestor() {
+	public Node getAncestor() {
 		return ancestor;
 	}
 
-	void setAncestor(final Node value) {
+	public void setAncestor(final Node value) {
 		ancestor = value;
 	}
 
-	int getChange() {
+	public int getChange() {
 		return change;
 	}
 
-	void setChange(final int value) {
+	public void setChange(final int value) {
 		change = value;
 	}
 
-	int getShift() {
+	public int getShift() {
 		return shift;
 	}
 
-	void setShift(final int value) {
+	public void setShift(final int value) {
 		shift = value;
 	}
 
-	void render(final int x, final int y) {
+	public void render(final int x, final int y) {
 		this.x = x;
 		this.y = y;
 
@@ -212,14 +216,23 @@ class Node {
 
 		g.setFont(Renderer.BOLD_FONT);
 
-		if (portrait != null) {
-			g.drawImage(portrait, x + PADDING, y + PADDING, portraitWidth, PORTRAIT_HEIGHT, null);
-		}
+		renderImages();
 
+		final int textPositionX = getTextPositionX();
 		for (final var line : text) {
 			nextY += (PADDING + lineHeight);
-			g.drawString(line, x + PADDING + (portrait == null ? 0 : this.portraitWidth + PADDING), nextY);
+			g.drawString(line, textPositionX, nextY);
 			g.setFont(Renderer.DEFAULT_FONT);
+		}
+	}
+
+	protected int getTextPositionX() {
+		return x + PADDING + (portrait == null ? 0 : this.portraitWidth + PADDING);
+	}
+
+	protected void renderImages() {
+		if (portrait != null) {
+			g.drawImage(portrait, x + PADDING, y + PADDING, portraitWidth, PORTRAIT_HEIGHT, null);
 		}
 	}
 
@@ -243,7 +256,7 @@ class Node {
 		return result;
 	}
 
-	private List<String> getTextLines() {
+	protected List<String> getTextLines() {
 		final List<String> result = new ArrayList<>();
 
 		if (individual == null) {

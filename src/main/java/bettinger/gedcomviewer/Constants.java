@@ -1,5 +1,7 @@
 package bettinger.gedcomviewer;
 
+import java.awt.Color;
+
 import com.formdev.flatlaf.util.SystemInfo;
 
 public abstract class Constants {
@@ -17,18 +19,24 @@ public abstract class Constants {
 	public static final int DEFAULT_MODAL_DIALOG_WIDTH = 640;
 	public static final int DEFAULT_MODAL_DIALOG_HEIGHT = 480;
 
-	public static final int DEFAULT_LARGE_MODAL_DIALOG_WIDTH = DEFAULT_FRAME_WIDTH / 2;
-	public static final int DEFAULT_LARGE_MODAL_DIALOG_HEIGHT = DEFAULT_FRAME_HEIGHT / 2;
-
 	public static final int BORDER_SIZE = 5;
-	public static final int PANEL_MARGIN = 4 * BORDER_SIZE;
+	public static final int TEXT_PANE_MARGIN = 2 * BORDER_SIZE;
 
-	public static final int MENU_ICON_SIZE = 14;
+	public static final int MENU_ICON_SIZE = 16;
 	public static final int TOOLBAR_ICON_SIZE = SystemInfo.isMacOS ? 16 : 22;
 	public static final int TAB_ICON_SIZE = 22;
+	public static final int BUTTON_ICON_SIZE = 22;
 
 	public static final int PREVIEW_IMAGE_WIDTH = 350;
 	public static final int PORTRAIT_WIDTH = 200;
+
+	public static final int MIN_FACE_COMPARISON_DEPTH = 1;
+	public static final int MAX_FACE_COMPARISON_DEPTH = 10;
+
+	public static final int MIN_NUM_PORTRAITS_FOR_FACE_COMPARISON = 1;
+	public static final int MAX_NUM_PORTRAITS_FOR_FACE_COMPARISON = 5;
+
+	public static final Color DEFAULT_CONTENT_COLOR = Color.WHITE;
 
 	private Constants() {}
 }

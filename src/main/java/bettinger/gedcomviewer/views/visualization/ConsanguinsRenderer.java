@@ -8,7 +8,7 @@ public class ConsanguinsRenderer extends Renderer {
 	private DescendantsRenderer descendantsRenderer;
 
 	@Override
-	void render(final Individual proband, final int generations) {
+	public void render(final Individual proband, final int generations) {
 		this.proband = proband;
 
 		ancestorsRenderer = new AncestorsRenderer(this.doc, this.g, false);

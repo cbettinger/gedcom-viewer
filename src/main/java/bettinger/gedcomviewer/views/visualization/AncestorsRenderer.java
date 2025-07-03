@@ -9,11 +9,11 @@ import org.w3c.dom.svg.SVGDocument;
 
 import bettinger.gedcomviewer.model.Individual;
 
-class AncestorsRenderer extends Renderer {
+public class AncestorsRenderer extends Renderer {
 
-	final List<Quartet<Node, Node, Node, String>> edges = new ArrayList<>();
+	final protected List<Quartet<Node, Node, Node, String>> edges = new ArrayList<>();
 
-	AncestorsRenderer() {
+	public AncestorsRenderer() {
 		super(Orientation.BOTTOM_UP, true);
 	}
 
@@ -60,7 +60,7 @@ class AncestorsRenderer extends Renderer {
 	}
 
 	@Override
-	int getEdgeLabelWidth(final Node v, final Node w) {
+	protected int getEdgeLabelWidth(final Node v, final Node w) {
 		var result = super.getEdgeLabelWidth(v, w);
 
 		final var vParentNode = v == null ? null : v.getParent();
@@ -79,7 +79,7 @@ class AncestorsRenderer extends Renderer {
 	}
 
 	@Override
-	void renderEdges() {
+	public void renderEdges() {
 		super.renderEdges();
 
 		for (final var edge : edges) {

@@ -12,6 +12,7 @@ import org.folg.gedcom.model.GedcomTag;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
+import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.utils.HTMLUtils;
 import bettinger.gedcomviewer.utils.TagUtils;
 
@@ -79,6 +80,10 @@ public abstract class Structure {
 
 	public abstract String toHTML(final Set<HTMLOption> options);
 	/* #endregion */
+
+	static String constructId(final String idPrefix, final Object obj) {
+		return String.format(Format.PIPE_SEPARATED, idPrefix, obj.hashCode());
+	}
 
 	public static String getSexSign(final String sex) {
 		return switch (sex) {

@@ -1,6 +1,7 @@
 package bettinger.gedcomviewer.model;
 
 import java.awt.Rectangle;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -20,11 +21,12 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 	private final SourceCitationManager sourceCitationManager;
 
 	private final org.folg.gedcom.model.EventFact wrappedFact;
+	private final IndividualFamilyCommonStructure individualOrFamily;
 
 	private final Date date;
-	private final Location location;
+	private Location location;
 
-	Fact(final GEDCOM gedcom, final org.folg.gedcom.model.EventFact eventFact, final Structure parentStructure) {
+	Fact(final GEDCOM gedcom, final org.folg.gedcom.model.EventFact eventFact, final IndividualFamilyCommonStructure parentStructure) {
 		super(gedcom, eventFact.getTag(), eventFact, parentStructure);
 
 		this.noteManager = new NoteManager(this, gedcom, eventFact.getNoteRefs());
@@ -32,11 +34,29 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 		this.sourceCitationManager = new SourceCitationManager(this, gedcom);
 
 		this.wrappedFact = eventFact;
+		this.individualOrFamily = parentStructure;
 
 		this.date = new Date(eventFact.getDate());
 
+		this.location = null;
+
 		final var locationTag = getFirstExtensionTag(Location.TAG);
-		this.location = locationTag == null ? null : (Location) gedcom.getRecord(locationTag.getRef());
+		if (locationTag != null) {
+			this.location = (Location) gedcom.getRecord(locationTag.getRef());
+		} else {
+			final var place = getPlace();
+			final var mapTag = getFirstExtensionTag("MAP");
+			final var latitude = Location.parseLatitude(mapTag);
+			final var longitude = Location.parseLongitude(mapTag);
+			if (!place.isEmpty()) {
+				this.location = gedcom.getPlace(place, latitude, longitude);
+				if (this.location == null) {
+					this.location = new Location(gedcom, place, latitude, longitude);
+					gedcom.addPlace(this.location);
+				}
+			}
+		}
+
 		if (this.location != null) {
 			this.location.addReference(this);
 		}
@@ -95,6 +115,10 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 	/* #endregion */
 
 	/* #region getter & setter */
+	public LocalDateTime getLastChange() {
+		return individualOrFamily.getLastChange();
+	}
+
 	public String getTag() {
 		final var tag = wrappedFact.getTag();
 		return tag == null ? "" : tag;
@@ -172,7 +196,7 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 	/* #region toString & toHTML */
 	@Override
 	public String toString() {
-		final var sb = new StringBuilder(String.format(Format.PADDED_PIPE_SEPARATED, parentStructure.toString(), getLocaleTag()));
+		final var sb = new StringBuilder(String.format(Format.PADDED_PIPE_SEPARATED, getParentStructure().toString(), getLocaleTag()));
 
 		if (!getValue().isEmpty()) {
 			sb.append(String.format(Format.TRAILING_SPACE_COLON_WITH_SUFFIX, getValue()));
@@ -274,6 +298,6 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 
 	@Override
 	public String getLink() {
-		return String.format(Format.PADDED_PIPE_SEPARATED, parentStructure.getLink(), getLocaleTag());
+		return String.format(Format.PADDED_PIPE_SEPARATED, getParentStructure().getLink(), getLocaleTag());
 	}
 }

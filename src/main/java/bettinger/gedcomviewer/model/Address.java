@@ -80,7 +80,7 @@ public class Address extends Substructure {
 			}
 		}
 
-		final var phon = parentStructure.getExtensionTags(TAG_PHONE);
+		final var phon = getParentStructure().getExtensionTags(TAG_PHONE);
 		if (!phon.isEmpty()) {
 			phon.stream().forEach(t -> {
 				final var p = t.getValue();
@@ -90,7 +90,7 @@ public class Address extends Substructure {
 			});
 		}
 
-		final var email = parentStructure.getExtensionTags(TAG_EMAIL);
+		final var email = getParentStructure().getExtensionTags(TAG_EMAIL);
 		if (!email.isEmpty()) {
 			email.stream().forEach(t -> {
 				final var m = t.getValue();
@@ -100,7 +100,7 @@ public class Address extends Substructure {
 			});
 		}
 
-		final var urls = parentStructure.getExtensionTags(TAG_WWW);
+		final var urls = getParentStructure().getExtensionTags(TAG_WWW);
 		if (!urls.isEmpty()) {
 			urls.stream().forEach(t -> {
 				final var w = t.getValue();
@@ -191,7 +191,7 @@ public class Address extends Substructure {
 			}
 
 			if (values.size() > 1) {
-				parentStructure.replaceExtensionTags(TAG_PHONE, values.stream().skip(1).map(s -> {
+				getParentStructure().replaceExtensionTags(TAG_PHONE, values.stream().skip(1).map(s -> {
 					final var tag = new GedcomTag(null, TAG_PHONE, null);
 					tag.setValue(s);
 					return tag;
@@ -217,7 +217,7 @@ public class Address extends Substructure {
 			}
 
 			if (values.size() > 1) {
-				parentStructure.replaceExtensionTags(TAG_EMAIL, values.stream().skip(1).map(s -> {
+				getParentStructure().replaceExtensionTags(TAG_EMAIL, values.stream().skip(1).map(s -> {
 					final var tag = new GedcomTag(null, TAG_EMAIL, null);
 					tag.setValue(s);
 					return tag;
@@ -243,7 +243,7 @@ public class Address extends Substructure {
 			}
 
 			if (values.size() > 1) {
-				parentStructure.replaceExtensionTags(TAG_WWW, values.stream().skip(1).map(s -> {
+				getParentStructure().replaceExtensionTags(TAG_WWW, values.stream().skip(1).map(s -> {
 					final var tag = new GedcomTag(null, TAG_WWW, null);
 					tag.setValue(s);
 					return tag;

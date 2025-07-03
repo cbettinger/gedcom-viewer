@@ -18,7 +18,6 @@ import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.Events;
 import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.I18N;
-import bettinger.gedcomviewer.model.DerivedRecord;
 import bettinger.gedcomviewer.views.tabs.IRecordCollectionView;
 
 class MainStatusBar extends JPanel {
@@ -65,7 +64,7 @@ class MainStatusBar extends JPanel {
 
 			@Subscribe
 			void onRecordSelectedEvent(final UI.RecordSelectedEvent event) {
-				selectedRecordId = (event.getRecord() == null || event.getRecord() instanceof DerivedRecord) ? null : event.getRecord().getId();
+				selectedRecordId = (event.getRecord() != null && event.getRecord().hasXRef()) ? event.getRecord().getId() : null;
 				idLabel.setText(selectedRecordId == null ? "" : String.format(Format.KEY_VALUE, "ID", selectedRecordId));
 			}
 		});

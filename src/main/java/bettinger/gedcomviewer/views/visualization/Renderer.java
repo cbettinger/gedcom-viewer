@@ -16,10 +16,10 @@ import bettinger.gedcomviewer.model.Location;
 import bettinger.gedcomviewer.model.Structure;
 import bettinger.gedcomviewer.utils.SVGUtils;
 
-abstract class Renderer {
+public abstract class Renderer {
 
 	static final Font DEFAULT_FONT = new Font("Arial", Font.PLAIN, 12);
-	static final Font BOLD_FONT = DEFAULT_FONT.deriveFont(Font.BOLD);
+	public static final Font BOLD_FONT = DEFAULT_FONT.deriveFont(Font.BOLD);
 
 	static final int LEVEL_DISTANCE = 25;
 
@@ -30,12 +30,12 @@ abstract class Renderer {
 	static final int SUBTREE_DISTANCE = 2 * EDGE_LABEL_PADDING;
 
 	final SVGDocument doc;
-	final SVGGraphics2D g;
+	final protected SVGGraphics2D g;
 
 	final Orientation orientation;
-	final boolean renderRootNode;
+	protected final boolean renderRootNode;
 
-	Node rootNode;
+	protected Node rootNode;
 	Individual proband;
 	Node probandNode;
 
@@ -81,7 +81,7 @@ abstract class Renderer {
 		this.minimalX = Integer.MAX_VALUE;
 	}
 
-	Node getProbandNode() {
+	public Node getProbandNode() {
 		return probandNode;
 	}
 
@@ -93,7 +93,7 @@ abstract class Renderer {
 		render(proband, 0);
 	}
 
-	void render(final Individual proband, final int generations) {
+	public void render(final Individual proband, final int generations) {
 		render(proband, generations, null);
 	}
 
@@ -144,10 +144,10 @@ abstract class Renderer {
 		return createNode(individual, null);
 	}
 
-	Node createNode(final Individual individual, final Node parentNode) {
+	protected Node createNode(final Individual individual, final Node parentNode) {
 		final var isClone = isClone(individual);
 
-		final var node = new Node(g, individual, isClone, parentNode);
+		final var node = getNewNode(individual, isClone, parentNode);
 
 		if (!isClone) {
 			individualCount++;
@@ -165,6 +165,10 @@ abstract class Renderer {
 		maximalDepth = Math.max(maximalDepth, node.getDepth());
 
 		return node;
+	}
+
+	protected Node getNewNode(Individual individual, boolean isClone, Node parent) {
+		return new Node(g, individual, isClone, parent);
 	}
 
 	boolean isClone(final Individual individual) {
@@ -291,7 +295,7 @@ abstract class Renderer {
 		return (v.width + w.width) / 2 + MINIMAL_CHILDREN_GAP + getEdgeLabelWidth(v, w);
 	}
 
-	int getEdgeLabelWidth(@SuppressWarnings("java:S1172") final Node v, final Node w) {
+	protected int getEdgeLabelWidth(@SuppressWarnings("java:S1172") final Node v, final Node w) {
 		return 0;
 	}
 
@@ -353,7 +357,7 @@ abstract class Renderer {
 		}
 	}
 
-	void renderNodes(final Node node) {
+	protected void renderNodes(final Node node) {
 		if (renderRootNode || node != rootNode) {
 			node.render(node.x, node.y);
 		}
@@ -367,8 +371,8 @@ abstract class Renderer {
 		g.setFont(DEFAULT_FONT);
 	}
 
-	Point renderEdge(final Node leftNode, final Node rightNode) {
-		return renderEdge(leftNode, rightNode, null, 0, true);
+	protected Point renderEdge(final Node leftNode, final Node rightNode) {
+		return renderEdge(leftNode, rightNode, "", 0, true);
 	}
 
 	Point renderEdge(final Node leftNode, final Node rightNode, final String label) {
@@ -376,7 +380,7 @@ abstract class Renderer {
 	}
 
 	Point renderEdge(final Node leftNode, final Node rightNode, final int index) {
-		return renderEdge(leftNode, rightNode, null, index, false);
+		return renderEdge(leftNode, rightNode, "", index, false);
 	}
 
 	Point renderEdge(final Node leftNode, final Node rightNode, final String label, final int index) {

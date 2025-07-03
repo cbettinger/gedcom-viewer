@@ -8,7 +8,7 @@ import java.util.Set;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.utils.HTMLUtils;
 
-public class Source extends Structure implements RegularRecord, NoteContainer, MediaContainer {
+public class Source extends Structure implements Record, NoteContainer, MediaContainer {
 
 	static final String TAG = "SOUR";
 
@@ -40,6 +40,11 @@ public class Source extends Structure implements RegularRecord, NoteContainer, M
 	@Override
 	public GEDCOM getGEDCOM() {
 		return recordManager.getGEDCOM();
+	}
+
+	@Override
+	public boolean hasXRef() {
+		return true;
 	}
 
 	@Override

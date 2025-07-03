@@ -207,6 +207,16 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 		exportMenu.add(exportDescendantsMenuItem);
 		enableOnIndividualIsSelectedItems.add(exportDescendantsMenuItem);
 
+		final var toolsMenu = new JMenu(I18N.get("Tools"));
+		add(toolsMenu);
+
+		final var facialFeatureAnalysisMenuItem = new JMenuItem(String.format(Format.TRAILING_TRIPLE_DOT, I18N.get("FacialFeatureAnalysis")));
+		facialFeatureAnalysisMenuItem.setIcon(IconFontSwing.buildIcon(MaterialIcons.PSYCHOLOGY_ALT, Constants.MENU_ICON_SIZE));
+		facialFeatureAnalysisMenuItem.setActionCommand("FACIAL_FEATURE_ANALYSIS");
+		facialFeatureAnalysisMenuItem.addActionListener(this);
+		toolsMenu.add(facialFeatureAnalysisMenuItem);
+		enableOnIndividualIsSelectedItems.add(facialFeatureAnalysisMenuItem);
+
 		final var viewMenu = new JMenu(I18N.get("View"));
 		add(viewMenu);
 
@@ -246,7 +256,7 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 			add(helpMenu);
 
 			final var aboutMenuItem = new JMenuItem(String.format(Format.TRAILING_TRIPLE_DOT, I18N.get("About")));
-			aboutMenuItem.setIcon(IconFontSwing.buildIcon(MaterialIcons.INFO_OUTLINE, Constants.MENU_ICON_SIZE));
+			aboutMenuItem.setIcon(IconFontSwing.buildIcon(MaterialIcons.INFO, Constants.MENU_ICON_SIZE));
 			aboutMenuItem.setActionCommand("SHOW_ABOUT");
 			aboutMenuItem.addActionListener(this);
 			helpMenu.add(aboutMenuItem);

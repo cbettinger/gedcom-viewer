@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import javax.swing.JTextPane;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
@@ -14,6 +15,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
 
+import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.Events;
 import bettinger.gedcomviewer.utils.DesktopUtils;
 import bettinger.gedcomviewer.utils.HTMLUtils;
@@ -35,6 +37,7 @@ public class HTMLTextPane extends JTextPane {
 		setEditable(false);
 		setOpaque(true);
 		setBackground(Color.WHITE);
+		setBorder(new EmptyBorder(Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN));
 		setContentType("text/html");
 
 		final var editorKit = new HTMLEditorKit();

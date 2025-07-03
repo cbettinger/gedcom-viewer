@@ -36,7 +36,7 @@ public class SourceCitation extends Substructure {
 	/* #region toString & toHTML */
 	@Override
 	public String toString() {
-		final var sb = new StringBuilder(String.format(Format.PADDED_PIPE_SEPARATED, parentStructure.toString(), source));
+		final var sb = new StringBuilder(String.format(Format.PADDED_PIPE_SEPARATED, getParentStructure().toString(), source));
 
 		if (!(page == null || page.isEmpty())) {
 			sb.append(String.format(Format.TRAILING_SPACE_COLON_WITH_SUFFIX, page));
@@ -47,7 +47,7 @@ public class SourceCitation extends Substructure {
 
 	@Override
 	public String toHTML(final Set<HTMLOption> options) {
-		final var sb = new StringBuilder(parentStructure.getLink());
+		final var sb = new StringBuilder(getParentStructure().getLink());
 
 		if (!(page == null || page.isEmpty())) {
 			sb.append(String.format(Format.TRAILING_SPACE_COLON_WITH_SUFFIX, page));

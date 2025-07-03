@@ -2,6 +2,8 @@ package bettinger.gedcomviewer.model;
 
 import java.awt.Rectangle;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -9,6 +11,7 @@ import org.folg.gedcom.model.GedcomTag;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.Format;
@@ -18,12 +21,11 @@ import bettinger.gedcomviewer.utils.DateTimeUtils;
 import bettinger.gedcomviewer.utils.HTMLUtils;
 import bettinger.gedcomviewer.utils.TagUtils;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 @JsonAutoDetect(fieldVisibility = Visibility.NONE, getterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
-public class Location extends Structure implements RegularRecord, NoteContainer, MediaContainer {
+public class Location extends Structure implements Record, NoteContainer, MediaContainer {
 
 	static final String TAG = "_LOC";
+	static final String TAG_PLACE = "PLAC";
 
 	private final RecordManager recordManager;
 	private final NoteManager noteManager;
@@ -38,6 +40,8 @@ public class Location extends Structure implements RegularRecord, NoteContainer,
 	@JsonProperty
 	private final String imageURL;
 
+	private final boolean isStructure;
+
 	Location(final GEDCOM gedcom, final GedcomTag tag) {
 		super(gedcom, tag.getId(), null);
 
@@ -46,9 +50,31 @@ public class Location extends Structure implements RegularRecord, NoteContainer,
 		this.mediaManager = new MediaManager(this, gedcom, tag);
 
 		this.name = parseName(tag);
-		this.latitude = parseLatitude(tag);
-		this.longitude = parseLongitude(tag);
+
+		final var mapTag = TagUtils.getChildTag(tag, "MAP");
+		this.latitude = parseLatitude(mapTag);
+		this.longitude = parseLongitude(mapTag);
+
 		this.imageURL = getPrimaryImageURL(false);
+
+		this.isStructure = true;
+	}
+
+	Location(final GEDCOM gedcom, final String place, final float latitude, final float longitude) {
+		super(gedcom, constructId(TAG_PLACE, place), null);
+
+		this.recordManager = new RecordManager(this, gedcom, LocalDateTime.now());
+		this.noteManager = new NoteManager(this, gedcom, new ArrayList<>());
+		this.mediaManager = new MediaManager(this, gedcom, new ArrayList<>());
+
+		this.name = place;
+
+		this.latitude = latitude;
+		this.longitude = longitude;
+
+		this.imageURL = getPrimaryImageURL(false);
+
+		this.isStructure = false;
 	}
 
 	/* #region container */
@@ -58,13 +84,27 @@ public class Location extends Structure implements RegularRecord, NoteContainer,
 	}
 
 	@Override
+	public boolean hasXRef() {
+		return isStructure;
+	}
+
+	@Override
 	public int getNumber() {
 		return recordManager.getNumber();
 	}
 
 	@Override
 	public LocalDateTime getLastChange() {
-		return recordManager.getLastChange();
+		var result = recordManager.getLastChange();
+
+		if (!isStructure) {
+			final Structure newestReference = recordManager.getReferences().stream().filter(Fact.class::isInstance).max(Comparator.comparing(f -> ((Fact) f).getLastChange())).orElse(null);
+			if (newestReference instanceof Fact f) {
+				result = f.getLastChange();
+			}
+		}
+
+		return result;
 	}
 
 	@Override
@@ -114,6 +154,10 @@ public class Location extends Structure implements RegularRecord, NoteContainer,
 	/* #endregion */
 
 	/* #region getter & setter */
+	boolean isStructure() {
+		return isStructure;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -190,27 +234,39 @@ public class Location extends Structure implements RegularRecord, NoteContainer,
 		return name == null ? UNKNOWN_STRING : name;
 	}
 
-	private static float parseLatitude(final GedcomTag tag) {
+	static float parseLatitude(final GedcomTag mapTag) {
 		try {
-			return Float.parseFloat(parseMapCoordinate(tag, "LATI"));
+			return Float.parseFloat(parseMapCoordinate(mapTag, "LATI"));
 		} catch (final NumberFormatException _) {
 			return 0;
 		}
 	}
 
-	private static float parseLongitude(final GedcomTag tag) {
+	static float parseLongitude(final GedcomTag mapTag) {
 		try {
-			return Float.parseFloat(parseMapCoordinate(tag, "LONG"));
+			return Float.parseFloat(parseMapCoordinate(mapTag, "LONG"));
 		} catch (final NumberFormatException _) {
 			return 0;
 		}
 	}
 
-	private static String parseMapCoordinate(final GedcomTag tag, final String dimension) {
-		final var mapTag = TagUtils.getChildTag(tag, "MAP");
+	private static String parseMapCoordinate(final GedcomTag mapTag, final String dimension) {
 		if (mapTag != null) {
-			final var value = TagUtils.parseChildTagValue(mapTag, dimension);
-			return value == null ? UNKNOWN_STRING : value;
+			var value = TagUtils.parseChildTagValue(mapTag, dimension);
+
+			if (value == null) {
+				return UNKNOWN_STRING;
+			} else if (value.startsWith("N")) {
+				value = value.replaceFirst("N", "");
+			} else if (value.startsWith("S")) {
+				value = value.replaceFirst("S", "-");
+			} else if (value.startsWith("W")) {
+				value = value.replaceFirst("W", "-");
+			} else if (value.startsWith("E")) {
+				value = value.replaceFirst("E", "");
+			}
+
+			return value;
 		}
 
 		return UNKNOWN_STRING;

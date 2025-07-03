@@ -12,8 +12,8 @@ import com.google.common.eventbus.Subscribe;
 
 import bettinger.gedcomviewer.Events;
 import bettinger.gedcomviewer.model.GEDCOM;
-import bettinger.gedcomviewer.model.Record;
 import bettinger.gedcomviewer.model.GEDCOM.GEDCOMEvent;
+import bettinger.gedcomviewer.model.Record;
 import bettinger.gedcomviewer.views.AutoFitTable;
 import bettinger.gedcomviewer.views.HTMLTextPane;
 import bettinger.gedcomviewer.views.TableModel;

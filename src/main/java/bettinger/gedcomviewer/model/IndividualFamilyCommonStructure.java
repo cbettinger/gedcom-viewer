@@ -5,13 +5,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.utils.HTMLUtils;
 
-public abstract class IndividualFamilyCommonStructure extends Structure implements RegularRecord, NoteContainer, MediaContainer, SourceCitationContainer {
+public abstract class IndividualFamilyCommonStructure extends Structure implements Record, NoteContainer, MediaContainer, SourceCitationContainer {
 	protected final RecordManager recordManager;
 	protected final NoteManager noteManager;
 	protected final MediaManager mediaManager;
@@ -38,6 +39,11 @@ public abstract class IndividualFamilyCommonStructure extends Structure implemen
 	@Override
 	public GEDCOM getGEDCOM() {
 		return recordManager.getGEDCOM();
+	}
+
+	@Override
+	public boolean hasXRef() {
+		return true;
 	}
 
 	@Override
@@ -99,6 +105,10 @@ public abstract class IndividualFamilyCommonStructure extends Structure implemen
 	@Override
 	public Rectangle getImageClip(final Media image) {
 		return mediaManager.getImageClip(image);
+	}
+
+	public Map<Media, Rectangle> getPortraits() {
+		return mediaManager.getPortraits();
 	}
 
 	@Override

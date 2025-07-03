@@ -2,7 +2,7 @@
 
 # GEDCOM Viewer
 
-The aim of this project is to realize a cross-platform and multi-language viewer for GEDCOM 5 files in Java, whose GUI is closely based on the GEDCOM specification and yet is easy to use.
+The aim of this project is to realize a cross-platform and multi-language viewer for GEDCOM 5.5.1 files in Java, whose GUI is closely based on the GEDCOM specification and yet is easy to use.
 
 ## Features
 * Display of all GEDCOM record types

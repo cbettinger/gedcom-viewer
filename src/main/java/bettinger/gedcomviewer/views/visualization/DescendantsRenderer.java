@@ -59,7 +59,7 @@ class DescendantsRenderer extends Renderer {
 	}
 
 	@Override
-	int getEdgeLabelWidth(final Node v, final Node w) {
+	protected int getEdgeLabelWidth(final Node v, final Node w) {
 		var result = super.getEdgeLabelWidth(v, w);
 
 		final var edge = spouseEdges.stream().filter(e -> e.getValue1() == v || e.getValue1() == w).findFirst().orElse(null);

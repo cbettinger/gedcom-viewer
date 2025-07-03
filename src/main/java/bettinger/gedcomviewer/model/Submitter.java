@@ -13,7 +13,7 @@ import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.utils.HTMLUtils;
 
-public class Submitter extends Structure implements RegularRecord, NoteContainer, MediaContainer {
+public class Submitter extends Structure implements Record, NoteContainer, MediaContainer {
 
 	static final String TAG = "SUBM";
 	static final String TAG_LANGUAGE = "LANG";
@@ -64,6 +64,11 @@ public class Submitter extends Structure implements RegularRecord, NoteContainer
 	@Override
 	public GEDCOM getGEDCOM() {
 		return recordManager.getGEDCOM();
+	}
+
+	@Override
+	public boolean hasXRef() {
+		return true;
 	}
 
 	@Override
