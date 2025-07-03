@@ -24,7 +24,7 @@ public class ResultFrame extends Frame {
         }
 
         var tabbedPane = new JTabbedPane();
-        tabbedPane.addTab(I18N.get("Overview"), new ResultOverviewPane(proband, numGenerations, results));
+        tabbedPane.addTab(I18N.get("Overview"), new OverviewPane(proband, numGenerations, results));
         tabbedPane.addTab(I18N.get("DetailedView"), detailedPane);
 
         add(tabbedPane);

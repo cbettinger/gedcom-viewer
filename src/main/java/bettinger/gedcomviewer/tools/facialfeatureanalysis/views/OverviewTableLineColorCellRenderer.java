@@ -15,7 +15,7 @@ public class OverviewTableLineColorCellRenderer extends DefaultTableCellRenderer
 
     public OverviewTableLineColorCellRenderer() {
         super();
-        this.cellColors = ResultOverviewPane.getFeatureColors();
+        this.cellColors = OverviewPane.getFeatureColors();
     }
 
     @Override

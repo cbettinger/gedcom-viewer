@@ -21,7 +21,7 @@ import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatures;
 import bettinger.gedcomviewer.views.visualization.AncestorsRenderer;
 import bettinger.gedcomviewer.views.visualization.Node;
 
-class ResultOverviewRenderer extends AncestorsRenderer {
+class OverviewRenderer extends AncestorsRenderer {
 
     private HashMap<Color, ArrayList<String>> maxSimilarityIndividuals;
     private HashMap<Pair<String, String>, Set<Color>> maxSimilarityEdges;
@@ -31,14 +31,14 @@ class ResultOverviewRenderer extends AncestorsRenderer {
     private HashMap<Color, ArrayList<String>> excludedIndividuals;
     private HashMap<Color, ArrayList<String>> maxPathIndividuals;
 
-    ResultOverviewRenderer(final Individual proband, final TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results) {
+    OverviewRenderer(final Individual proband, final TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results) {
         super();
         this.maxSimilarityIndividuals = new HashMap<>();
         this.maxSimilarityEdges = new HashMap<>();
         this.excludedIndividuals = new HashMap<>();
         this.maxPathIndividuals = new HashMap<>();
 
-        final var featureColors = ResultOverviewPane.getFeatureColors();
+        final var featureColors = OverviewPane.getFeatureColors();
         for (final var entry : results.entrySet()) {
             var color = featureColors.get(entry.getKey());
             var res = entry.getValue();

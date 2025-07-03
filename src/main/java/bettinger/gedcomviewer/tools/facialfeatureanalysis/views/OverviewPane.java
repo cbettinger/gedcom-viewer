@@ -25,10 +25,10 @@ import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatures;
 import bettinger.gedcomviewer.views.AutoFitTable;
 import bettinger.gedcomviewer.views.WebViewPanel;
 
-public class ResultOverviewPane extends JPanel {
+public class OverviewPane extends JPanel {
     private final WebViewPanel visualization;
 
-    public ResultOverviewPane(final Individual proband, final int numGenerations, final TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results) {
+    public OverviewPane(final Individual proband, final int numGenerations, final TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results) {
         super();
         setLayout(new BorderLayout());
 
@@ -71,12 +71,12 @@ public class ResultOverviewPane extends JPanel {
     }
 
     private void update(final Individual proband, final int numGenerations, final TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results) {
-        ResultOverviewRenderer renderer = null;
+        OverviewRenderer renderer = null;
 
         try {
-            renderer = new ResultOverviewRenderer(proband, results);
+            renderer = new OverviewRenderer(proband, results);
         } catch (final Exception e) {
-            Logger.getLogger(ResultOverviewPane.class.getName()).log(Level.SEVERE, "Failed to create renderer", e);
+            Logger.getLogger(OverviewPane.class.getName()).log(Level.SEVERE, "Failed to create renderer", e);
         }
 
         if (renderer != null) {
