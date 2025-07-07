@@ -6,7 +6,7 @@ The following third-party software products and media assets are redistributed a
 
 * jiconfont-swing: Copyright (c) 2016 jIconFont, <https://github.com/jIconFont/jiconfont-swing>
 * jsoup: Copyright (c) 2009-2025 Jonathan Hedley, <https://jsoup.org>
-* leaflet.markercluster: Copyright 2012 David Leaver, <https://github.com/Leaflet/Leaflet.markercluster>
+* leaflet.markercluster: Copyright (c) 2012 David Leaver, <https://github.com/Leaflet/Leaflet.markercluster>
 * slf4j: Copyright (c) 2004-2022 QOS.ch Sarl (Switzerland), <https://github.com/qos-ch/slf4j>
 
 ## Apache License 2.0
