@@ -29,6 +29,7 @@ public abstract class Preferences {
 	private static final String LINEAGE_MODE_KEY = "lineageMode";
 	private static final String GENERATIONS_KEY_PREFIX = "generations";
 	private static final String MAP_PANEL_VIEW_KEY = "mapPanelView";
+	private static final String MAP_PANEL_PATHS_KEY = "mapPanelPaths";
 
 	public static void storeRecentFile(final File file) {
 		if (file != null) {
@@ -130,6 +131,14 @@ public abstract class Preferences {
 	public static View getMapPanelView() {
 		final var view = java.util.prefs.Preferences.userRoot().node(FILENAME).get(MAP_PANEL_VIEW_KEY, null);
 		return view != null ? View.valueOf(view) : null;
+	}
+
+	public static void setMapPanelPathsOption(final boolean value) {
+		java.util.prefs.Preferences.userRoot().node(FILENAME).put(MAP_PANEL_PATHS_KEY, Boolean.toString(value));
+	}
+
+	public static boolean getMapPanelPathsOption() {
+		return Boolean.valueOf(java.util.prefs.Preferences.userRoot().node(FILENAME).get(MAP_PANEL_PATHS_KEY, "false"));
 	}
 
 	private Preferences() {}

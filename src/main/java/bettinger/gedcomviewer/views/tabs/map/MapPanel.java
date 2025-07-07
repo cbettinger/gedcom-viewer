@@ -141,7 +141,7 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 				individualsComboBox.getSelectionModel().clearSelection();
 			}
 
-			pathsCheckBox.setSelected(false); // TODO: store setting
+			pathsCheckBox.setSelected(Preferences.getMapPanelPathsOption());
 		});
 	}
 
@@ -150,25 +150,28 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 			setEnabled(gedcom != null && gedcom.isLoaded());
 
 			final var selectedRadioButton = radioButtons.getSelectedToggle();
-
 			individualsComboBox.setDisable(selectedRadioButton == locationsRadioButton);
 			pathsCheckBox.setDisable(selectedRadioButton == locationsRadioButton);
 
+			Preferences.setMapPanelPathsOption(pathsCheckBox.isSelected());
+
 			if (selectedRadioButton == locationsRadioButton) {
+				Preferences.setMapPanelView(View.LOCATIONS);
 				showLocations();
 			} else if (selectedRadioButton == lineageRadioButton) {
+				Preferences.setMapPanelView(View.LINEAGE);
 				showLineage();
 			} else if (selectedRadioButton == ancestorsRadioButton) {
+				Preferences.setMapPanelView(View.ANCESTORS);
 				showAncestors();
 			} else if (selectedRadioButton == descendantsRadioButton) {
+				Preferences.setMapPanelView(View.DESCENDANTS);
 				showDescendants();
 			}
 		});
 	}
 
 	private void showLocations() {
-		Preferences.setMapPanelView(View.LOCATIONS);
-
 		Platform.runLater(() -> {
 			if (js != null && gedcom != null && gedcom.isLoaded()) {
 				js.call("showLocations", JSONUtils.toJSON(gedcom.getLocations()));
@@ -177,17 +180,14 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 	}
 
 	private void showLineage() {
-		Preferences.setMapPanelView(View.LINEAGE);
 		showFacts(proband.getLineage(Preferences.getLineageMode()));
 	}
 
 	private void showAncestors() {
-		Preferences.setMapPanelView(View.ANCESTORS);
 		showFacts(proband.getAncestorsList());
 	}
 
 	private void showDescendants() {
-		Preferences.setMapPanelView(View.DESCENDANTS);
 		showFacts(proband.getDescendantsList());
 	}
 
