@@ -55,7 +55,7 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 		this.longitude = parseLongitude(mapTag);
 
 		final var image = getPrimaryImage(false);
-		this.imageURL = image != null && image.exists() && !image.getURL().isEmpty() ? image.getURL() : "";
+		this.imageURL = image != null && image.exists() ? image.getURL() : "";
 
 		this.isStructure = true;
 	}
@@ -73,7 +73,7 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 		this.longitude = longitude;
 
 		final var image = getPrimaryImage(false);
-		this.imageURL = image != null && image.exists() && !image.getURL().isEmpty() ? image.getURL() : "";
+		this.imageURL = image != null && image.exists() ? image.getURL() : "";
 
 		this.isStructure = false;
 	}
