@@ -32,5 +32,7 @@ public abstract class Format {
 	public static final String TRAILING_SPACE_COMMA = ", ";
 	public static final String TRAILING_SPACE_COMMA_WITH_SUFFIX = ", %s";
 
+	public static final String TRAILING_PADDED_PIPE_WITH_SUFFIX =  " | %s";
+
 	private Format() {}
 }

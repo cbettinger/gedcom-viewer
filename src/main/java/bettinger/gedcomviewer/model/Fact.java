@@ -211,6 +211,10 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 			sb.append(String.format(Format.TRAILING_SPACE_COLON_WITH_SUFFIX, getValue()));
 		}
 
+		if (getDate() != null) {
+			sb.append(String.format(Format.TRAILING_PADDED_PIPE_WITH_SUFFIX, getDate().toString()));
+		}
+
 		return sb.toString();
 	}
 
