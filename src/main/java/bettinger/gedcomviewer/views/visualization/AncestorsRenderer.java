@@ -9,7 +9,7 @@ import org.w3c.dom.svg.SVGDocument;
 
 import bettinger.gedcomviewer.model.Individual;
 
-class AncestorsRenderer extends Renderer {
+public class AncestorsRenderer extends Renderer {
 
 	final List<Quartet<Node, Node, Node, String>> edges = new ArrayList<>();
 
