@@ -12,6 +12,7 @@ import bettinger.gedcomviewer.model.GEDCOM;
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.model.LineageMode;
 import bettinger.gedcomviewer.utils.FileUtils;
+import bettinger.gedcomviewer.views.tabs.map.MapPanel.View;
 
 public abstract class Preferences {
 
@@ -27,6 +28,7 @@ public abstract class Preferences {
 	private static final String PROBAND_KEY = "proband";
 	private static final String LINEAGE_MODE_KEY = "lineageMode";
 	private static final String GENERATIONS_KEY_PREFIX = "generations";
+	private static final String MAP_PANEL_VIEW_KEY = "mapPanelView";
 
 	public static void storeRecentFile(final File file) {
 		if (file != null) {
@@ -117,6 +119,17 @@ public abstract class Preferences {
 
 	public static int getGenerations(final JComponent component) {
 		return Integer.valueOf(java.util.prefs.Preferences.userRoot().node(FILENAME).get(String.format(Format.DOT_SEPARATED, GENERATIONS_KEY_PREFIX, component.getClass().getSimpleName()), "0"));
+	}
+
+	public static void setMapPanelView(final View view) {
+		if (view != null) {
+			java.util.prefs.Preferences.userRoot().node(FILENAME).put(MAP_PANEL_VIEW_KEY, view.name());
+		}
+	}
+
+	public static View getMapPanelView() {
+		final var view = java.util.prefs.Preferences.userRoot().node(FILENAME).get(MAP_PANEL_VIEW_KEY, null);
+		return view != null ? View.valueOf(view) : null;
 	}
 
 	private Preferences() {}

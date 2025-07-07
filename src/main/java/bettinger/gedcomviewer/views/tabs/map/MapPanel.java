@@ -112,7 +112,18 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 
 	private void reset() {
 		Platform.runLater(() -> {
-			radioButtons.selectToggle(locationsRadioButton);
+			var selectedRadioButton = locationsRadioButton;
+
+			final var view = Preferences.getMapPanelView();
+			if (view == View.LINEAGE) {
+				selectedRadioButton = lineageRadioButton;
+			} else if (view == View.ANCESTORS) {
+				selectedRadioButton = ancestorsRadioButton;
+			} else if (view == View.DESCENDANTS) {
+				selectedRadioButton = descendantsRadioButton;
+			}
+
+			radioButtons.selectToggle(selectedRadioButton);
 
 			if (proband != null) {
 				individualsComboBox.getSelectionModel().select(proband);
@@ -143,6 +154,8 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 	}
 
 	private void showLocations() {
+		Preferences.setMapPanelView(View.LOCATIONS);
+
 		Platform.runLater(() -> {
 			if (js != null && gedcom != null && gedcom.isLoaded()) {
 				js.call("showLocations", JSONUtils.toJSON(gedcom.getLocations()));
@@ -151,6 +164,8 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 	}
 
 	private void showLineage() {
+		Preferences.setMapPanelView(View.LINEAGE);
+
 		Platform.runLater(() -> {
 			if (js != null && gedcom != null && gedcom.isLoaded() && proband != null) {
 				js.call("showLineage", JSONUtils.toJSON(proband.getLineage(Preferences.getLineageMode()).stream().map(Quintet::getValue1).toList()));
@@ -159,6 +174,8 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 	}
 
 	private void showAncestors() {
+		Preferences.setMapPanelView(View.ANCESTORS);
+
 		Platform.runLater(() -> {
 			if (js != null && gedcom != null && gedcom.isLoaded() && proband != null) {
 				js.call("showAncestors", JSONUtils.toJSON(proband.getAncestorsList().stream().collect(Collectors.toMap(Quintet::getValue0, Quintet::getValue1))));
@@ -167,6 +184,8 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 	}
 
 	private void showDescendants() {
+		Preferences.setMapPanelView(View.DESCENDANTS);
+
 		Platform.runLater(() -> {
 			if (js != null && gedcom != null && gedcom.isLoaded() && proband != null) {
 				js.call("showDescendants", JSONUtils.toJSON(proband.getDescendantsList().stream().map(Quintet::getValue1).toList()));
@@ -177,5 +196,9 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 	@Override
 	public int getRecordCount() {
 		return locationCount;
+	}
+
+	public enum View {
+		LOCATIONS, LINEAGE, ANCESTORS, DESCENDANTS;
 	}
 }
