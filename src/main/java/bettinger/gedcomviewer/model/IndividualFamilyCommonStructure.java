@@ -216,7 +216,7 @@ public abstract class IndividualFamilyCommonStructure extends Structure implemen
 				if (wasAppended) {
 					HTMLUtils.appendLineBreak(sb);	// TODO: format
 				}
-				HTMLUtils.appendText(sb, HTMLUtils.createList(extensions, p -> String.format(Format.KEY_VALUE, p.getValue0(), p.getValue1()), true));
+				HTMLUtils.appendText(sb, HTMLUtils.createList(extensions, p -> String.format(Format.KEY_VALUE, I18N.get(p.getValue0()), p.getValue1()), true));
 			}
 		}
 
