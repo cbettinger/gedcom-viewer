@@ -9,6 +9,7 @@ import com.google.common.eventbus.Subscribe;
 import bettinger.gedcomviewer.Events;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.Preferences;
+import bettinger.gedcomviewer.Preferences.ProbandChangedEvent;
 import bettinger.gedcomviewer.model.GEDCOM;
 import bettinger.gedcomviewer.model.GEDCOM.GEDCOMEvent;
 import bettinger.gedcomviewer.model.Individual;
@@ -89,8 +90,14 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 			@Subscribe
 			void onGedcomEvent(final GEDCOMEvent event) {
 				gedcom = event.getGEDCOM();
-				proband = Preferences.getProband(gedcom);
 				locationCount = gedcom != null && gedcom.isLoaded() ? gedcom.getLocations().size() : 0;
+				proband = gedcom != null && gedcom.isLoaded() ? Preferences.getProband(gedcom) : null;
+				reset();
+			}
+
+			@Subscribe
+			void onProbandChangedEvent(final ProbandChangedEvent event) {
+				proband = event.getProband();
 				reset();
 			}
 		});
