@@ -54,7 +54,7 @@ public abstract class I18N {
 		byte[] data;
 		try {
 			data = I18N.class.getClassLoader().getResourceAsStream(String.format("locales/%s.png", locale.getLanguage())).readAllBytes();
-		} catch (IOException _) {
+		} catch (final IOException _) {
 			return null;
 		}
 

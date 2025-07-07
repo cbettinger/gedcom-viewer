@@ -74,7 +74,7 @@ public class MainFrame extends Frame {
 				if (SystemInfo.isMacOS) {
 					Taskbar.getTaskbar().setIconImage(icon);
 				}
-			} catch (IOException _) {
+			} catch (final IOException _) {
 				// intentionally left blank
 			}
 		}
