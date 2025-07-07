@@ -19,7 +19,6 @@ import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
@@ -49,45 +48,30 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 	private RadioButton descendantsRadioButton;
 	private IndividualsComboBox individualsComboBox;
 
-	@SuppressWarnings("unused")
 	public MapPanel() {
 		super(false, "map");
 
 		setEnabled(false);
 
 		configPane = new VBox();
-		radioButtons = new ToggleGroup();
+
 		locationsRadioButton = new RadioButton(I18N.get("Locations"));
 		lineageRadioButton = new RadioButton(I18N.get("Lineage"));
 		ancestorsRadioButton = new RadioButton(I18N.get("Ancestors"));
 		descendantsRadioButton = new RadioButton(I18N.get("Descendants"));
-		individualsComboBox = new IndividualsComboBox();
 
-		radioButtons.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) -> update());
-
-		locationsRadioButton.setOnAction(event -> showLocations());
+		radioButtons = new ToggleGroup();
+		radioButtons.selectedToggleProperty().addListener(_ -> update());
 		locationsRadioButton.setToggleGroup(radioButtons);
-
-		lineageRadioButton.setOnAction(event -> showLineage());
 		lineageRadioButton.setToggleGroup(radioButtons);
-
-		ancestorsRadioButton.setOnAction(event -> showAncestors());
 		ancestorsRadioButton.setToggleGroup(radioButtons);
-
-		descendantsRadioButton.setOnAction(event -> showDescendants());
 		descendantsRadioButton.setToggleGroup(radioButtons);
 
-		individualsComboBox.valueProperty().addListener((ObservableValue<? extends Individual> observable, Individual oldValue, Individual newValue) -> {
-			proband = newValue;
+		individualsComboBox = new IndividualsComboBox();
 
-			final var selectedRadioButton = radioButtons.getSelectedToggle();
-			if (selectedRadioButton == lineageRadioButton) {
-				showLineage();
-			} else if (selectedRadioButton == ancestorsRadioButton) {
-				showAncestors();
-			} else if (selectedRadioButton == descendantsRadioButton) {
-				showDescendants();
-			}
+		individualsComboBox.valueProperty().addListener((ObservableValue<? extends Individual> _, Individual _, Individual newValue) -> {
+			proband = newValue;
+			update();
 		});
 
 		configPane.setPadding(new Insets(PADDING, PADDING, PADDING, PADDING));
@@ -116,7 +100,7 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 	protected void onLoad() {
 		super.onLoad();
 
-		showLocations();
+		reset();
 	}
 
 	private void reset() {
@@ -128,17 +112,26 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 			} else {
 				individualsComboBox.getSelectionModel().clearSelection();
 			}
-
-			update();
-
-			showLocations();
 		});
 	}
 
 	private void update() {
 		Platform.runLater(() -> {
 			setEnabled(gedcom != null && gedcom.isLoaded());
-			individualsComboBox.setDisable(radioButtons.getSelectedToggle() == locationsRadioButton);
+
+			final var selectedRadioButton = radioButtons.getSelectedToggle();
+
+			individualsComboBox.setDisable(selectedRadioButton == locationsRadioButton);
+
+			if (selectedRadioButton == locationsRadioButton) {
+				showLocations();
+			} else if (selectedRadioButton == lineageRadioButton) {
+				showLineage();
+			} else if (selectedRadioButton == ancestorsRadioButton) {
+				showAncestors();
+			} else if (selectedRadioButton == descendantsRadioButton) {
+				showDescendants();
+			}
 		});
 	}
 
