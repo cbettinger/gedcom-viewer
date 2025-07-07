@@ -15,7 +15,7 @@ import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.model.Structure;
 
-class Node {
+public class Node {
 
 	static final int MINIMAL_WIDTH = 200;
 	static final int MINIMAL_HEIGHT = 100;
