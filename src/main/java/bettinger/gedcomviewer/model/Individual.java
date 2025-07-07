@@ -145,6 +145,11 @@ public class Individual extends IndividualFamilyCommonStructure {
 		return getSexSign(sex);
 	}
 
+	public Fact getBirthOrBaptism() {
+		final var fact = getBirth();
+		return fact != null ? fact : getBaptism();
+	}
+
 	public Date getBirthDate() {
 		final var fact = getBirth();
 		return fact == null ? null : fact.getDate();
@@ -189,6 +194,11 @@ public class Individual extends IndividualFamilyCommonStructure {
 
 	public Quality getBaptismQuality() {
 		return getQuality(BAPTISM_TAG);
+	}
+
+	public Fact getDeathOrBurial() {
+		final var fact = getDeath();
+		return fact != null ? fact : getBurial();
 	}
 
 	public Date getDeathDate() {
