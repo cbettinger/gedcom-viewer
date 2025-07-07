@@ -145,7 +145,7 @@ public abstract class IndividualFamilyCommonStructure extends Structure implemen
 		return new ArrayList<>(result);
 	}
 
-	Quality getQuality(final String tag) {
+	public Quality getQuality(final String tag) {
 		var qualityValue = Quality.UNKNOWN.getValue();
 
 		final var factsOfTag = getFacts(tag);
@@ -159,21 +159,21 @@ public abstract class IndividualFamilyCommonStructure extends Structure implemen
 		return Quality.fromValue(qualityValue);
 	}
 
-	Fact getBestFact(final String tag) {
+	public Fact getBestFact(final String tag) {
 		final var quality = getQuality(tag);
 		final var bestFacts = getFacts(tag).stream().filter(fact -> fact.getQuality() == quality).toList();
 		return bestFacts.isEmpty() ? null : bestFacts.get(0);
 	}
 
-	List<Fact> getFacts(final String tag) {
+	public List<Fact> getFacts(final String tag) {
 		return getFacts().stream().filter(fact -> fact.getTag().equals(tag)).toList();
 	}
 
-	List<Fact> getFacts() {
+	public List<Fact> getFacts() {
 		return getFacts(false);
 	}
 
-	List<Fact> getFacts(final boolean excludeConfidential) {
+	public List<Fact> getFacts(final boolean excludeConfidential) {
 		var result = facts;
 
 		if (excludeConfidential) {

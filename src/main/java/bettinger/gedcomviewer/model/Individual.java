@@ -14,17 +14,11 @@ import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.folg.gedcom.model.Name;
 import org.javatuples.Quintet;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-
 import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.utils.HTMLUtils;
 import bettinger.gedcomviewer.utils.Numbering;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-@JsonAutoDetect(fieldVisibility = Visibility.NONE, getterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
 public class Individual extends IndividualFamilyCommonStructure {
 
 	static final String TAG = "INDI";
@@ -64,7 +58,6 @@ public class Individual extends IndividualFamilyCommonStructure {
 	}
 
 	/* #region getter & setter */
-	@JsonProperty
 	public String getName() {
 		final var names = wrappedPerson.getNames();
 		if (names == null || names.isEmpty()) {
@@ -159,7 +152,6 @@ public class Individual extends IndividualFamilyCommonStructure {
 		return getPlace(getBirth());
 	}
 
-	@JsonProperty
 	public Location getBirthLocation() {
 		final var fact = getBirth();
 		return fact == null ? null : fact.getLocation();
@@ -182,7 +174,6 @@ public class Individual extends IndividualFamilyCommonStructure {
 		return getPlace(getBaptism());
 	}
 
-	@JsonProperty
 	public Location getBaptismLocation() {
 		final var fact = getBaptism();
 		return fact == null ? null : fact.getLocation();
@@ -259,7 +250,6 @@ public class Individual extends IndividualFamilyCommonStructure {
 		return parents == null ? null : parents.getWife();
 	}
 
-	@JsonProperty
 	public Family getParents() {
 		final var parentFamilies = wrappedPerson.getParentFamilyRefs();
 		return parentFamilies == null || parentFamilies.isEmpty() ? null : (Family) gedcom.getRecord(parentFamilies.get(0).getRef());
@@ -284,7 +274,6 @@ public class Individual extends IndividualFamilyCommonStructure {
 		return result;
 	}
 
-	@JsonProperty
 	public List<Family> getFamilies() {
 		return getFamilies(false);
 	}

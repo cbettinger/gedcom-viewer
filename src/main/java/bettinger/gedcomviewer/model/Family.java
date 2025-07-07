@@ -5,15 +5,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.utils.HTMLUtils;
 
-@JsonAutoDetect(fieldVisibility = Visibility.NONE, getterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
 public class Family extends IndividualFamilyCommonStructure {
 
 	static final String TAG = "FAM";
@@ -30,7 +25,6 @@ public class Family extends IndividualFamilyCommonStructure {
 	}
 
 	/* #region getter & setter */
-	@JsonProperty
 	public String getName() {
 		final var husband = getHusband();
 		final var wife = getWife();
@@ -57,13 +51,12 @@ public class Family extends IndividualFamilyCommonStructure {
 		return fact == null ? "" : fact.getPlace();
 	}
 
-	@JsonProperty
 	public Location getMarriageLocation() {
 		final var fact = getMarriage();
 		return fact == null ? null : fact.getLocation();
 	}
 
-	private Fact getMarriage() {
+	public Fact getMarriage() {
 		return getBestFact(MARRIAGE_TAG);
 	}
 
@@ -86,7 +79,7 @@ public class Family extends IndividualFamilyCommonStructure {
 		return fact == null ? null : fact.getLocation();
 	}
 
-	private Fact getDivorce() {
+	public Fact getDivorce() {
 		return getBestFact(DIVORCE_TAG);
 	}
 
