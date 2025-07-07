@@ -36,7 +36,7 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 		this.wrappedFact = eventFact;
 		this.parentStructure = parentStructure;
 
-		this.date = new Date(eventFact.getDate());
+		this.date = Date.parse(eventFact.getDate());
 
 		this.location = null;
 
