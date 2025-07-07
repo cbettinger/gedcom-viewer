@@ -146,21 +146,21 @@ public class Individual extends IndividualFamilyCommonStructure {
 	}
 
 	public Date getBirthDate() {
-		final var primaryFact = getPrimaryBirth();
-		return primaryFact == null ? null : primaryFact.getDate();
+		final var fact = getBirth();
+		return fact == null ? null : fact.getDate();
 	}
 
 	public String getBirthPlace() {
-		return getPlace(getPrimaryBirth());
+		return getPlace(getBirth());
 	}
 
 	@JsonProperty
 	public Location getBirthLocation() {
-		final var primaryFact = getPrimaryBirth();
-		return primaryFact == null ? null : primaryFact.getLocation();
+		final var fact = getBirth();
+		return fact == null ? null : fact.getLocation();
 	}
 
-	private Fact getPrimaryBirth() {
+	private Fact getBirth() {
 		return getBestFact(BIRTH_TAG);
 	}
 
@@ -169,21 +169,21 @@ public class Individual extends IndividualFamilyCommonStructure {
 	}
 
 	public Date getBaptismDate() {
-		final var primaryFact = getPrimaryBaptism();
-		return primaryFact == null ? null : primaryFact.getDate();
+		final var fact = getBaptism();
+		return fact == null ? null : fact.getDate();
 	}
 
 	public String getBaptismPlace() {
-		return getPlace(getPrimaryBaptism());
+		return getPlace(getBaptism());
 	}
 
 	@JsonProperty
 	public Location getBaptismLocation() {
-		final var primaryFact = getPrimaryBaptism();
-		return primaryFact == null ? null : primaryFact.getLocation();
+		final var fact = getBaptism();
+		return fact == null ? null : fact.getLocation();
 	}
 
-	private Fact getPrimaryBaptism() {
+	private Fact getBaptism() {
 		return getBestFact(BAPTISM_TAG);
 	}
 
@@ -192,20 +192,20 @@ public class Individual extends IndividualFamilyCommonStructure {
 	}
 
 	public Date getDeathDate() {
-		final var primaryFact = getPrimaryDeath();
-		return primaryFact == null ? null : primaryFact.getDate();
+		final var fact = getDeath();
+		return fact == null ? null : fact.getDate();
 	}
 
 	public String getDeathPlace() {
-		return getPlace(getPrimaryDeath());
+		return getPlace(getDeath());
 	}
 
 	public Location getDeathLocation() {
-		final var primaryFact = getPrimaryDeath();
-		return primaryFact == null ? null : primaryFact.getLocation();
+		final var fact = getDeath();
+		return fact == null ? null : fact.getLocation();
 	}
 
-	private Fact getPrimaryDeath() {
+	private Fact getDeath() {
 		return getBestFact(DEATH_TAG);
 	}
 
@@ -214,20 +214,20 @@ public class Individual extends IndividualFamilyCommonStructure {
 	}
 
 	public Date getBurialDate() {
-		final var primaryFact = getPrimaryBurial();
-		return primaryFact == null ? null : primaryFact.getDate();
+		final var fact = getBurial();
+		return fact == null ? null : fact.getDate();
 	}
 
 	public String getBurialPlace() {
-		return getPlace(getPrimaryBurial());
+		return getPlace(getBurial());
 	}
 
 	public Location getBurialLocation() {
-		final var primaryFact = getPrimaryBurial();
-		return primaryFact == null ? null : primaryFact.getLocation();
+		final var fact = getBurial();
+		return fact == null ? null : fact.getLocation();
 	}
 
-	private Fact getPrimaryBurial() {
+	private Fact getBurial() {
 		return getBestFact(BURIAL_TAG);
 	}
 
