@@ -12,10 +12,10 @@ import java.util.regex.Pattern;
 import org.jsoup.Jsoup;
 
 import bettinger.gedcomviewer.Format;
-import bettinger.gedcomviewer.model.Structure;
 
 public abstract class HTMLUtils {
 
+	public static final String DIVIDER = "―";
 	public static final String LINE_BREAK = "<br>";
 	public static final String SEPARATOR = "&#124;";
 	public static final String SPACE = "&emsp;";
@@ -164,20 +164,20 @@ public abstract class HTMLUtils {
 		}
 	}
 
-	public static <T extends Structure> String createList(final List<T> items, final Function<T, String> mapper) {
+	public static <T> String createList(final List<T> items, final Function<T, String> mapper) {
 		return createList(items, mapper, null);
 	}
 
-	public static <T extends Structure> String createList(final List<T> items, final Function<T, String> mapper, final String itemStyle) {
+	public static <T> String createList(final List<T> items, final Function<T, String> mapper, final String itemStyle) {
 		return createList(items, mapper, itemStyle, false);
 	}
 
-	public static <T extends Structure> String createList(final List<T> items, final Function<T, String> mapper, final boolean addDividers) {
+	public static <T> String createList(final List<T> items, final Function<T, String> mapper, final boolean addDividers) {
 		return createList(items, mapper, null, addDividers);
 	}
 
-	public static <T extends Structure> String createList(final List<T> items, final Function<T, String> mapper, final String itemStyle, final boolean addDividers) {
-		final var formatString = addDividers ? String.format("%s―%s", LINE_BREAK, LINE_BREAK) : LINE_BREAK;
+	public static <T> String createList(final List<T> items, final Function<T, String> mapper, final String itemStyle, final boolean addDividers) {
+		final var formatString = addDividers ? String.format("%s%s%s", LINE_BREAK, DIVIDER, LINE_BREAK) : LINE_BREAK;
 		var stream = items.stream().map(mapper);
 		if (!(itemStyle == null || itemStyle.isEmpty())) {
 			stream = stream.map(s -> String.format(Format.SPACED, itemStyle, s));
@@ -185,7 +185,7 @@ public abstract class HTMLUtils {
 		return String.join(formatString, stream.toList());
 	}
 
-	public static <T extends Structure> String createSingleLineList(final List<T> items, final Function<T, String> mapper, final String separator) {
+	public static <T> String createSingleLineList(final List<T> items, final Function<T, String> mapper, final String separator) {
 		final var stream = items.stream().map(mapper);
 		return String.join(String.format(Format.TRAILING_SPACE, separator), stream.toList());
 	}
