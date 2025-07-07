@@ -29,7 +29,6 @@ public abstract class Preferences {
 	private static final String GENERATIONS_KEY_PREFIX = "generations";
 
 	public static void storeRecentFile(final File file) {
-
 		if (file != null) {
 			final var recentFilePaths = getRecentFilePaths();
 
@@ -50,7 +49,7 @@ public abstract class Preferences {
 	}
 
 	public static List<File> getRecentFiles() {
-		return getRecentFilePaths().stream().map(FileUtils::getFile).toList();
+		return getRecentFilePaths().stream().map(FileUtils::getFile).filter(FileUtils::exists).toList();
 	}
 
 	private static List<String> getRecentFilePaths() {
