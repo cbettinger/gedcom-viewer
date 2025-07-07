@@ -5,7 +5,7 @@ const OPACITY = 0.7;
 const LINE_OPTIONS = { color: DEFAULT_COLOR, opacity: OPACITY };
 const CIRCLE_MARKER_OPTIONS = { ...LINE_OPTIONS, radius: 10, stroke: false, fillOpacity: OPACITY };
 
-const COLOR_PALETTE = ["#7bc17f", "#6dab8f", "#578886", "#b6587c", "#cf53cf", "#ae45d1", "#9a3dcc", "#7c30c8", "#fffd95", "#d2d29c", "#b2b2a4", "#78789e", "#aec2bb", "#97a8bd", "#8494c0", "#6975b2", "#4c549b", "#ffc337", "#feae34", "#e39a3b", "#be8042", "#9e6a43", "#ff964e", "#ff8643", "#d15842", "#b14a50"];	// TODO: improve palette
+const COLOR_PALETTE = ["maroon", "olive", "teal", "orange", "navy", "green", "blue", "purple"];
 
 let nextColor = 0;
 
@@ -81,7 +81,7 @@ function showLineage(json, paths = false, animate = false) {
 			let points = [];
 
 			for (let fact of factsOfIndividual) {
-				if (fact.date?.start && fact.location?.id && fact.location?.lat && fact.location?.lng) {
+				if (fact.location?.id && fact.location?.lat && fact.location?.lng && fact.date?.start) {
 					if (!locationInfos.has(fact.location.id)) {
 						locationInfos.set(fact.location.id, { location: fact.location, references: [] });
 					}
@@ -247,6 +247,8 @@ function resetMap(newContainer = L.layerGroup()) {
 
 	container = newContainer;
 
+	nextColor = 0;
+
 	if (timeline && timelineControl) {
 		timelineControl.removeTimelines(timeline);
 
@@ -258,8 +260,8 @@ function resetMap(newContainer = L.layerGroup()) {
 	}
 }
 
-function addLine(location1, location2) {
-	addPolyline([location1, location2]);
+function addLine(location1, location2, color = null) {
+	addPolyline([location1, location2], color);
 }
 
 function addPolyline(locations, color = null) {
