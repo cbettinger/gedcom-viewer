@@ -2,6 +2,7 @@ package bettinger.gedcomviewer.model;
 
 import java.awt.Rectangle;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -13,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.utils.HTMLUtils;
+import bettinger.gedcomviewer.utils.TagUtils;
 
 @JsonAutoDetect(fieldVisibility = Visibility.NONE, getterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
 public class Fact extends Substructure implements NoteContainer, MediaContainer, SourceCitationContainer, Comparable<Fact> {
@@ -26,6 +28,7 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 	private final SourceCitationManager sourceCitationManager;
 
 	private final org.folg.gedcom.model.EventFact wrappedFact;
+	private final org.folg.gedcom.model.GedcomTag wrappedTag;
 	private final IndividualFamilyCommonStructure parentStructure;
 
 	private final Date date;
@@ -40,10 +43,32 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 		this.sourceCitationManager = new SourceCitationManager(this, gedcom);
 
 		this.wrappedFact = eventFact;
+		this.wrappedTag = null;
 		this.parentStructure = parentStructure;
 
 		this.date = Date.parse(eventFact.getDate());
 
+		parseLocation();
+	}
+
+	Fact(final GEDCOM gedcom, final org.folg.gedcom.model.GedcomTag tag, final IndividualFamilyCommonStructure parentStructure) {
+		super(gedcom, tag.getTag(), tag, parentStructure);
+
+		this.noteManager = new NoteManager(this, gedcom, new ArrayList<>());
+		this.mediaManager = new MediaManager(this, gedcom, new ArrayList<>());
+		this.sourceCitationManager = new SourceCitationManager(this, gedcom);
+
+		this.wrappedFact = null;
+		this.wrappedTag = tag;
+		this.parentStructure = parentStructure;
+
+		final var dateTag = TagUtils.getChildTag(tag, "DATE");
+		this.date = dateTag != null ? Date.parse(dateTag.getValue()) : null;	// TODO: test
+
+		parseLocation();	// TODO: test
+	}
+
+	private void parseLocation() {
 		this.location = null;
 
 		final var locationTag = getFirstExtensionTag(Location.TAG);
