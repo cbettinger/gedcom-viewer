@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import org.javatuples.Pair;
+
+import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.utils.HTMLUtils;
 
@@ -20,6 +23,7 @@ public abstract class IndividualFamilyCommonStructure extends Structure implemen
 	protected final org.folg.gedcom.model.PersonFamilyCommonContainer wrappedPersonFamilyCommonContainer;
 
 	protected final List<Fact> facts;
+	protected final List<Pair<String, String>> extensions;
 
 	IndividualFamilyCommonStructure(final GEDCOM gedcom, final org.folg.gedcom.model.PersonFamilyCommonContainer personFamilyCommonContainer, final String id) {
 		super(gedcom, id, personFamilyCommonContainer);
@@ -32,6 +36,7 @@ public abstract class IndividualFamilyCommonStructure extends Structure implemen
 		this.wrappedPersonFamilyCommonContainer = personFamilyCommonContainer;
 
 		this.facts = personFamilyCommonContainer.getEventsFacts().stream().map(eventFact -> new Fact(gedcom, eventFact, this)).toList();
+		this.extensions = getExtensionTags().stream().filter(tag -> !tag.getTag().isEmpty() && !tag.getValue().isEmpty()).map(tag -> new Pair<>(tag.getTag(), tag.getValue())).toList();
 	}
 
 	/* #region container */
@@ -194,13 +199,25 @@ public abstract class IndividualFamilyCommonStructure extends Structure implemen
 		final var sb = new StringBuilder();
 
 		final var publicFacts = getFacts(options.contains(HTMLOption.NO_CONFIDENTIAL_DATA));
-		if (!publicFacts.isEmpty()) {
+		if (!publicFacts.isEmpty() || !extensions.isEmpty()) {
 			if (options.contains(HTMLOption.COMMONS_HEADINGS)) {
 				HTMLUtils.appendH2(sb, I18N.get("Facts"));
 			} else {
 				HTMLUtils.appendLineBreaks(sb, 2);
 			}
-			HTMLUtils.appendText(sb, HTMLUtils.createList(publicFacts, f -> f.toHTML(options), true));
+
+			var wasAppended = false;
+
+			if (!publicFacts.isEmpty()) {
+				HTMLUtils.appendText(sb, HTMLUtils.createList(publicFacts, f -> f.toHTML(options), true));
+				wasAppended = true;
+			}
+			if (!extensions.isEmpty()) {
+				if (wasAppended) {
+					HTMLUtils.appendLineBreak(sb);	// TODO: format
+				}
+				HTMLUtils.appendText(sb, HTMLUtils.createList(extensions, p -> String.format(Format.KEY_VALUE, p.getValue0(), p.getValue1()), true));
+			}
 		}
 
 		HTMLUtils.appendText(sb, noteManager.toHTML(options));
