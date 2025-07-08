@@ -31,7 +31,9 @@ public abstract class IndividualFamilyCommonStructure extends Structure implemen
 
 		this.wrappedPersonFamilyCommonContainer = personFamilyCommonContainer;
 
-		this.facts = personFamilyCommonContainer.getEventsFacts().stream().map(eventFact -> new Fact(gedcom, eventFact, this)).toList();
+		this.facts = new ArrayList<>();
+		this.facts.addAll(personFamilyCommonContainer.getEventsFacts().stream().map(eventFact -> new Fact(gedcom, eventFact, this)).toList());
+		this.facts.addAll(getExtensionTags().stream().filter(tag -> !tag.getTag().isEmpty() && !tag.getValue().isEmpty()).map(tag -> new Fact(gedcom, tag, this)).toList());
 	}
 
 	/* #region container */
@@ -200,6 +202,7 @@ public abstract class IndividualFamilyCommonStructure extends Structure implemen
 			} else {
 				HTMLUtils.appendLineBreaks(sb, 2);
 			}
+
 			HTMLUtils.appendText(sb, HTMLUtils.createList(publicFacts, f -> f.toHTML(options), true));
 		}
 
