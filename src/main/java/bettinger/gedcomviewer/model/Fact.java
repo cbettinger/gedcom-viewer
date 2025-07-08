@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import org.folg.gedcom.model.EventFact;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -18,7 +20,6 @@ import bettinger.gedcomviewer.utils.TagUtils;
 
 @JsonAutoDetect(fieldVisibility = Visibility.NONE, getterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
 public class Fact extends Substructure implements NoteContainer, MediaContainer, SourceCitationContainer, Comparable<Fact> {
-
 	private static final List<String> BAPTISM_TAGS = Arrays.asList("BAP", "BAPM", "BAPT", "BAPTISM", "ADULT_CHRISTNG", "CHR", "CHRA", "CHRISTENING");
 	private static final List<String> MARRIAGE_TAGS = Arrays.asList("MARC", "MARR", "MARRIAGE");
 	private static final List<String> DEATH_TAGS = Arrays.asList("DEAT", "DEATH");
@@ -54,8 +55,8 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 	Fact(final GEDCOM gedcom, final org.folg.gedcom.model.GedcomTag tag, final IndividualFamilyCommonStructure parentStructure) {
 		super(gedcom, tag.getTag(), tag, parentStructure);
 
-		this.noteManager = new NoteManager(this, gedcom, new ArrayList<>());
-		this.mediaManager = new MediaManager(this, gedcom, new ArrayList<>());
+		this.noteManager = new NoteManager(this, gedcom, new ArrayList<>()); // TODO
+		this.mediaManager = new MediaManager(this, gedcom, new ArrayList<>()); // TODO
 		this.sourceCitationManager = new SourceCitationManager(this, gedcom);
 
 		this.wrappedFact = null;
@@ -63,9 +64,9 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 		this.parentStructure = parentStructure;
 
 		final var dateTag = TagUtils.getChildTag(tag, "DATE");
-		this.date = dateTag != null ? Date.parse(dateTag.getValue()) : null;	// TODO: test
+		this.date = dateTag != null ? Date.parse(dateTag.getValue()) : null; // TODO: test
 
-		parseLocation();	// TODO: test
+		parseLocation(); // TODO: test
 	}
 
 	private void parseLocation() {
