@@ -32,7 +32,7 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 
 	private final Date date;
 	@JsonProperty
-	private Location location;
+	private final Location location;
 
 	Fact(final GEDCOM gedcom, final org.folg.gedcom.model.EventFact eventFact, final IndividualFamilyCommonStructure parentStructure) {
 		super(gedcom, eventFact.getTag(), eventFact, parentStructure);
@@ -47,7 +47,7 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 
 		this.date = Date.parse(eventFact.getDate());
 
-		parseLocation();
+		this.location = parseLocation();
 	}
 
 	Fact(final GEDCOM gedcom, final org.folg.gedcom.model.GedcomTag tag, final IndividualFamilyCommonStructure parentStructure) {
@@ -55,41 +55,43 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 
 		this.noteManager = new NoteManager(this, gedcom, new ArrayList<>());
 		this.mediaManager = new MediaManager(this, gedcom, new ArrayList<>());
-		this.sourceCitationManager = new SourceCitationManager(this, gedcom); // TODO: test
+		this.sourceCitationManager = new SourceCitationManager(this, gedcom);
 
 		this.wrappedFact = null;
 		this.wrappedTag = tag;
 		this.parentStructure = parentStructure;
 
 		final var dateTag = TagUtils.getChildTag(tag, "DATE");
-		this.date = dateTag != null ? Date.parse(dateTag.getValue()) : null; // TODO: test
+		this.date = dateTag != null ? Date.parse(dateTag.getValue()) : null;
 
-		parseLocation(); // TODO: test
+		this.location = parseLocation();
 	}
 
-	private void parseLocation() {
-		this.location = null;
+	private Location parseLocation() {
+		Location result = null;
 
 		final var locationTag = getFirstExtensionTag(Location.TAG);
 		if (locationTag != null) {
-			this.location = (Location) gedcom.getRecord(locationTag.getRef());
+			result = (Location) gedcom.getRecord(locationTag.getRef());
 		} else {
 			final var place = getPlace();
 			final var mapTag = getFirstExtensionTag("MAP");
 			final var latitude = Location.parseLatitude(mapTag);
 			final var longitude = Location.parseLongitude(mapTag);
 			if (!place.isEmpty()) {
-				this.location = gedcom.getPlace(place, latitude, longitude);
-				if (this.location == null) {
-					this.location = new Location(gedcom, place, latitude, longitude);
-					gedcom.addPlace(this.location);
+				result = gedcom.getPlace(place, latitude, longitude);
+				if (result == null) {
+					result = new Location(gedcom, place, latitude, longitude);
+					gedcom.addPlace(result);
 				}
 			}
 		}
 
-		if (this.location != null) {
-			this.location.addReference(this);
+		if (result != null) {
+			result.addReference(this);
 		}
+
+		return result;
 	}
 
 	/* #region container */
