@@ -7,8 +7,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import org.folg.gedcom.model.EventFact;
-
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -53,11 +51,11 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 	}
 
 	Fact(final GEDCOM gedcom, final org.folg.gedcom.model.GedcomTag tag, final IndividualFamilyCommonStructure parentStructure) {
-		super(gedcom, tag.getTag(), tag, parentStructure);
+		super(gedcom, tag, parentStructure);
 
-		this.noteManager = new NoteManager(this, gedcom, new ArrayList<>()); // TODO
-		this.mediaManager = new MediaManager(this, gedcom, new ArrayList<>()); // TODO
-		this.sourceCitationManager = new SourceCitationManager(this, gedcom);
+		this.noteManager = new NoteManager(this, gedcom, new ArrayList<>());
+		this.mediaManager = new MediaManager(this, gedcom, new ArrayList<>());
+		this.sourceCitationManager = new SourceCitationManager(this, gedcom); // TODO: test
 
 		this.wrappedFact = null;
 		this.wrappedTag = tag;
@@ -127,7 +125,9 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 
 	@Override
 	public void setSources() {
-		sourceCitationManager.setSources(wrappedFact.getSourceCitations());
+		if (wrappedFact != null) {
+			sourceCitationManager.setSources(wrappedFact.getSourceCitations());
+		}
 	}
 
 	@Override
@@ -161,17 +161,17 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 	}
 
 	public String getTag() {
-		final var tag = wrappedFact.getTag();
+		final var tag = wrappedFact != null ? wrappedFact.getTag() : wrappedTag.getTag();
 		return tag == null ? "" : tag;
 	}
 
 	public String getType() {
-		final var type = wrappedFact.getType();
+		final var type = wrappedFact != null ? wrappedFact.getType() : null;
 		return type == null ? "" : type;
 	}
 
 	public String getValue() {
-		final var value = wrappedFact.getValue();
+		final var value = wrappedFact != null ? wrappedFact.getValue() : wrappedTag.getValue();
 		return value == null ? "" : value;
 	}
 
@@ -180,7 +180,7 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 	}
 
 	public String getPlace() {
-		final var place = wrappedFact.getPlace();
+		final var place = wrappedFact != null ? wrappedFact.getPlace() : null;
 		return place == null ? "" : place;
 	}
 
@@ -189,7 +189,7 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 	}
 
 	public String getCause() {
-		final var cause = wrappedFact.getCause();
+		final var cause = wrappedFact != null ? wrappedFact.getCause() : null;
 		return cause == null ? "" : cause;
 	}
 

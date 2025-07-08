@@ -11,12 +11,11 @@ import org.folg.gedcom.model.GedcomTag;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.utils.HTMLUtils;
 import bettinger.gedcomviewer.utils.TagUtils;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonAutoDetect(fieldVisibility = Visibility.NONE, getterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
 public abstract class Structure {
