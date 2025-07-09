@@ -180,20 +180,26 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 	}
 
 	private void showLineage() {
-		showFacts(proband.getLineage(Preferences.getLineageMode()));
+		if (gedcom != null && gedcom.isLoaded() && proband != null) {
+			showFacts(proband.getLineage(Preferences.getLineageMode()));
+		}
 	}
 
 	private void showAncestors() {
-		showFacts(proband.getAncestorsList());
+		if (gedcom != null && gedcom.isLoaded() && proband != null) {
+			showFacts(proband.getAncestorsList());
+		}
 	}
 
 	private void showDescendants() {
-		showFacts(proband.getDescendantsList());
+		if (gedcom != null && gedcom.isLoaded() && proband != null) {
+			showFacts(proband.getDescendantsList());
+		}
 	}
 
 	private void showFacts(final List<Quintet<String, Individual, Family, Individual, Integer>> data) {
 		Platform.runLater(() -> {
-			if (js != null && gedcom != null && gedcom.isLoaded() && proband != null) {
+			if (js != null) {
 				final var facts = new ArrayList<ArrayList<Fact>>();
 
 				data.forEach(quintet -> {
