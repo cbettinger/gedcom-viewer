@@ -43,7 +43,7 @@ public class ConfigurationDialog extends JDialog {
 		parameterPane.setBackground(Constants.DEFAULT_CONTENT_COLOR);
 		parameterPane.add(vBox);
 
-		final var startButton = new JButton(I18N.get("StartFacialFeatureAnalysis"), IconFontSwing.buildIcon(MaterialIcons.PLAY_ARROW, Constants.BUTTON_ICON_SIZE));
+		final var startButton = new JButton(I18N.get("StartFacialFeatureAnalysis"), IconFontSwing.buildIcon(MaterialIcons.PLAY_ARROW, Constants.DEFAULT_ICON_SIZE));
 		startButton.addActionListener(_ -> {
 			new AnalysisBackgroundWorker(individual, maxDepthPicker.getValue(), maxNumPortraitsPicker.getValue()).execute();
 			setVisible(false);

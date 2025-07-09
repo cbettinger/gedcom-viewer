@@ -32,9 +32,9 @@ public class NavigationSideBar extends JPanel {
 		final var tabbedPane = new JTabbedPane();
 		tabbedPane.setBorder(BorderFactory.createEmptyBorder(Constants.BORDER_SIZE, 0, 0, 0));
 		tabbedPane.setTabPlacement(SwingConstants.LEFT);
-		tabbedPane.addTab(null, new FlatSVGIcon("icons/lineage.svg", Constants.TAB_ICON_SIZE, Constants.TAB_ICON_SIZE), new LineageTab(), I18N.get("Lineage"));
-		tabbedPane.addTab(null, new FlatSVGIcon("icons/ancestors.svg", Constants.TAB_ICON_SIZE, Constants.TAB_ICON_SIZE), new AncestorsTab(), I18N.get("AncestorsList"));
-		tabbedPane.addTab(null, new FlatSVGIcon("icons/descendants.svg", Constants.TAB_ICON_SIZE, Constants.TAB_ICON_SIZE), new DescendantsTab(), I18N.get("DescendantsList"));
+		tabbedPane.addTab(null, new FlatSVGIcon("icons/lineage.svg", Constants.DEFAULT_ICON_SIZE, Constants.DEFAULT_ICON_SIZE), new LineageTab(), I18N.get("Lineage"));
+		tabbedPane.addTab(null, new FlatSVGIcon("icons/ancestors.svg", Constants.DEFAULT_ICON_SIZE, Constants.DEFAULT_ICON_SIZE), new AncestorsTab(), I18N.get("AncestorsList"));
+		tabbedPane.addTab(null, new FlatSVGIcon("icons/descendants.svg", Constants.DEFAULT_ICON_SIZE, Constants.DEFAULT_ICON_SIZE), new DescendantsTab(), I18N.get("DescendantsList"));
 		tabbedPane.setSelectedIndex(Preferences.getNavigationTab());
 		tabbedPane.addChangeListener(_ -> Preferences.setNavigationTab(tabbedPane.getSelectedIndex()));
 		add(tabbedPane, BorderLayout.CENTER);
