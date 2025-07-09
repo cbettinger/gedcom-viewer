@@ -220,7 +220,7 @@ public class Node {
 
 		g.setFont(BOLD_FONT);
 
-		renderImages();
+		renderPortraits();
 
 		final int textPositionX = getTextPositionX();
 		for (final var line : text) {
@@ -230,7 +230,7 @@ public class Node {
 		}
 	}
 
-	protected void renderImages() {
+	protected void renderPortraits() {
 		if (portrait != null) {
 			g.drawImage(portrait, x + PADDING, y + PADDING, portraitWidth, PORTRAIT_HEIGHT, null);
 		}

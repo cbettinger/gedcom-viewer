@@ -102,8 +102,8 @@ public class DetailsNode extends Node {
     }
 
     @Override
-    protected void renderImages() {
-        super.renderImages();
+    protected void renderPortraits() {
+        super.renderPortraits();
         if (portraitTargetPerson != null) {
             g.drawImage(portraitTargetPerson, x + portraitWidth + 2 * PADDING, y + PADDING, portraitTargetPersonWidth, PORTRAIT_HEIGHT, null);
         }
