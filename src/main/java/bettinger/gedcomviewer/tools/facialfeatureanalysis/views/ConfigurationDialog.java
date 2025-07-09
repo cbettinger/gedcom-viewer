@@ -28,8 +28,8 @@ public class ConfigurationDialog extends JDialog {
 		final var infoPane = new HTMLTextPane();
 		infoPane.setText(I18N.get("FacialFeatureAnalysisStartInfo"));
 
-		final var maxDepthPicker = new IntegerPicker(I18N.get("MaxFacialFeatureComparisonDepth"), Constants.MIN_FACE_COMPARISON_DEPTH, Constants.MAX_FACE_COMPARISON_DEPTH, Constants.MAX_FACE_COMPARISON_DEPTH / 2);
-		final var maxNumPortraitsPicker = new IntegerPicker(I18N.get("MaxNumPortraitsPerPerson"), Constants.MIN_NUM_PORTRAITS_FOR_FACE_COMPARISON, Constants.MAX_NUM_PORTRAITS_FOR_FACE_COMPARISON, Constants.MAX_NUM_PORTRAITS_FOR_FACE_COMPARISON);
+		final var maxDepthPicker = new IntegerPicker(I18N.get("MaxFacialFeatureComparisonDepth"), Constants.MIN_FACIAL_FEATURE_ANALYSIS_DEPTH, Constants.MAX_FACIAL_FEATURE_ANALYSIS_DEPTH, Constants.MAX_FACIAL_FEATURE_ANALYSIS_DEPTH / 2);
+		final var maxNumPortraitsPicker = new IntegerPicker(I18N.get("MaxNumPortraitsPerPerson"), Constants.MIN_FACIAL_FEATURE_ANALYSIS_NUM_PORTRAITS, Constants.MAX_FACIAL_FEATURE_ANALYSIS_NUM_PORTRAITS, Constants.MAX_FACIAL_FEATURE_ANALYSIS_NUM_PORTRAITS);
 
 		var vBox = new JPanel();
 		vBox.setLayout(new BoxLayout(vBox, BoxLayout.PAGE_AXIS));
