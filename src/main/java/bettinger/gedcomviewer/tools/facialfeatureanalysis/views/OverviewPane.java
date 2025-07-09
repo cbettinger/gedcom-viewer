@@ -28,7 +28,7 @@ import bettinger.gedcomviewer.views.WebViewPanel;
 public class OverviewPane extends JPanel {
     private final WebViewPanel visualization;
 
-    public OverviewPane(final Individual proband, final int numGenerations, final TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results) {
+    public OverviewPane(final Individual proband, final int numGenerations, final Map<FacialFeatures, FacialFeatureAnalysisResult> results) {
         super();
         setLayout(new BorderLayout());
 
@@ -70,7 +70,7 @@ public class OverviewPane extends JPanel {
         update(proband, numGenerations, results);
     }
 
-    private void update(final Individual proband, final int numGenerations, final TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results) {
+    private void update(final Individual proband, final int numGenerations, final Map<FacialFeatures, FacialFeatureAnalysisResult> results) {
         OverviewRenderer renderer = null;
 
         try {

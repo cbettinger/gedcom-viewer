@@ -10,7 +10,6 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,12 +34,7 @@ import bettinger.gedcomviewer.model.GEDCOM;
 import bettinger.gedcomviewer.model.GEDCOM.GEDCOMEvent;
 import bettinger.gedcomviewer.model.GEDCOM.GEDCOMException;
 import bettinger.gedcomviewer.model.Individual;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureAnalyser;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureAnalysisException;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureAnalysisResult;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatures;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.views.FacialFeatureAnalysisDialog;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.views.ResultFrame;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.views.ConfigurationDialog;
 import bettinger.gedcomviewer.utils.DesktopUtils;
 import bettinger.gedcomviewer.utils.ExportUtils;
 import bettinger.gedcomviewer.utils.FileUtils;
@@ -136,7 +130,7 @@ public class MainFrame extends Frame {
 					case "EXPORT_LINEAGE" -> showExportLineageFileChooser();
 					case "EXPORT_ANCESTORS" -> showExportAncestorsFileChooser();
 					case "EXPORT_DESCENDANTS" -> showExportDescendantsFileChooser();
-					case "FACIAL_FEATURE_ANALYSIS" -> showFacialFeatureAnalysisDialog();
+					case "FACIAL_FEATURE_ANALYSIS" -> showFacialFeatureAnalysis();
 					case "SHOW_ABOUT" -> showAboutDialog();
 				}
 			}
@@ -503,40 +497,10 @@ public class MainFrame extends Frame {
 		}
 	}
 
-	private void showFacialFeatureAnalysisDialog() {
+	private void showFacialFeatureAnalysis() {
 		final var selectedRecord = tabbedPane.getSelectedRecord();
 		if (selectedRecord instanceof Individual individual) {
-			new FacialFeatureAnalysisDialog(individual, (proband, maxDepth, maxNumPortraits) -> this.showFacialFeatureAnalysisResults(proband, maxDepth, maxNumPortraits));
-		}
-	}
-
-	private void showFacialFeatureAnalysisResults(Individual proband, int maxDepth, int maxNumPortraits) {
-		if (proband != null) {
-			new BackgroundWorker(I18N.get("FacialFeatureAnalysis")) {
-				private TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results;
-
-				@Override
-				protected URI doInBackground() throws Exception {
-					var uri = super.doInBackground();
-
-					try {
-						results = FacialFeatureAnalyser.analyse(proband, maxDepth, maxNumPortraits);
-					} catch (FacialFeatureAnalysisException e) {
-						onError(e);
-					}
-
-					return uri;
-				}
-
-				@Override
-				protected void onSuccess(final URI uri) {
-					super.onSuccess(uri);
-
-					if (results != null) {
-						new ResultFrame(proband, maxDepth, results);
-					}
-				}
-			}.execute();
+			new ConfigurationDialog(individual);
 		}
 	}
 
@@ -565,11 +529,11 @@ public class MainFrame extends Frame {
 		instance.setVisible(true);
 	}
 
-	private class BackgroundWorker extends SwingWorker<URI, Void> {
+	public class BackgroundWorker extends SwingWorker<URI, Void> {
 
 		protected final String label;
 
-		BackgroundWorker(final String label) {
+		protected BackgroundWorker(final String label) {
 			this.label = label;
 		}
 

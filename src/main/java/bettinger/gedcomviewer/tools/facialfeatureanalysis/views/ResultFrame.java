@@ -1,6 +1,6 @@
 package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 
-import java.util.TreeMap;
+import java.util.Map;
 
 import javax.swing.JTabbedPane;
 
@@ -14,7 +14,7 @@ import bettinger.gedcomviewer.views.MainFrame;
 
 public class ResultFrame extends Frame {
 
-    public ResultFrame(final Individual proband, final int numGenerations, final TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results) {
+    public ResultFrame(final Individual proband, final int numGenerations, final Map<FacialFeatures, FacialFeatureAnalysisResult> results) {
         super();
         setTitle(String.format("%s: %s", I18N.get("FacialFeatureAnalysis"), proband.getName()));
 

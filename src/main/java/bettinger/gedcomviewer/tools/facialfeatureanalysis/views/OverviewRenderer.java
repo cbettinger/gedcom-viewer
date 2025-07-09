@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import org.javatuples.Pair;
 
@@ -31,7 +31,7 @@ class OverviewRenderer extends AncestorsRenderer {
     private HashMap<Color, ArrayList<String>> excludedIndividuals;
     private HashMap<Color, ArrayList<String>> maxPathIndividuals;
 
-    OverviewRenderer(final Individual proband, final TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results) {
+    OverviewRenderer(final Individual proband, final Map<FacialFeatures, FacialFeatureAnalysisResult> results) {
         super();
         this.maxSimilarityIndividuals = new HashMap<>();
         this.maxSimilarityEdges = new HashMap<>();
