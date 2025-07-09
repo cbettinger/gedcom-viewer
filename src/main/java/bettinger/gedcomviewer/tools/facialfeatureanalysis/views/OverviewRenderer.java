@@ -107,7 +107,7 @@ class OverviewRenderer extends AncestorsRenderer {
             boolean drawLeft = considerFather && !fatherExcludedEverywhere && maxSimilarityEdges.containsKey(new Pair<String, String>(rootNode.getIndividual().getId(), fatherNode.getIndividual().getId()));
             boolean drawRight = considerMother && !motherExcludedEverywhere && maxSimilarityEdges.containsKey(new Pair<String, String>(rootNode.getIndividual().getId(), motherNode.getIndividual().getId()));
 
-            g.setPaint(Constants.DEFAULT_CONTENT_COLOR);
+            g.setPaint(Color.WHITE);
             final Point parentsPoint = renderEdge(fatherNode, motherNode);
             if (parentsPoint != null) {
                 if (!drawLeft || !drawRight) {
