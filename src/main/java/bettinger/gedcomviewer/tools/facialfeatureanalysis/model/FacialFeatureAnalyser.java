@@ -19,8 +19,8 @@ import bettinger.gedcomviewer.utils.PythonUtils;
 
 public abstract class FacialFeatureAnalyser {
 
-    public static TreeMap<FacialFeatures, FacialFeatureAnalysisResult> analyse(final Individual individual, final int maxDepth, final int maxNumPortraits) throws FacialFeatureAnalysisException {
-        TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results = new TreeMap<>();
+    public static TreeMap<FacialFeature, FacialFeatureAnalysisResult> analyse(final Individual individual, final int maxDepth, final int maxNumPortraits) throws FacialFeatureAnalysisException {
+        TreeMap<FacialFeature, FacialFeatureAnalysisResult> results = new TreeMap<>();
 
         var defaultException = new FacialFeatureAnalysisException(I18N.get("FacialFeatureAnalysisFailed"));
 
@@ -54,7 +54,7 @@ public abstract class FacialFeatureAnalyser {
                 final var resultJson = JSONUtils.fromString(Files.readString(resultFilepath, Charsets.UTF_8));
                 Files.delete(resultFilepath);
 
-                for (final var feature : FacialFeatures.values()) {
+                for (final var feature : FacialFeature.values()) {
                     results.put(feature, FacialFeatureAnalysisResult.fromJSON(resultJson, feature.name()));
                 }
             } catch (IOException e) {

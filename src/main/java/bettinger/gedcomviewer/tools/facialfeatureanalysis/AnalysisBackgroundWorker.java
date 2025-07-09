@@ -8,7 +8,7 @@ import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureAnalyser;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureAnalysisException;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureAnalysisResult;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatures;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeature;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.views.ResultFrame;
 import bettinger.gedcomviewer.views.MainFrame;
 import bettinger.gedcomviewer.views.MainFrame.BackgroundWorker;
@@ -19,7 +19,7 @@ public class AnalysisBackgroundWorker extends BackgroundWorker {
 	private final int maxDepth;
 	private final int maxNumPortraits;
 
-	private Map<FacialFeatures, FacialFeatureAnalysisResult> results;
+	private Map<FacialFeature, FacialFeatureAnalysisResult> results;
 
 	public AnalysisBackgroundWorker(final Individual proband, final int maxDepth, final int maxNumPortraits) {
 		MainFrame.getInstance().super(I18N.get("FacialFeatureAnalysis"));
