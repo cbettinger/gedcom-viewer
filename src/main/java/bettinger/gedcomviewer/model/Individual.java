@@ -138,6 +138,10 @@ public class Individual extends IndividualFamilyCommonStructure {
 		return getSexSign(sex);
 	}
 
+	public List<Media> getFacialPortraits() {
+		return mediaManager.getFacialPortraits();
+	}
+
 	public Fact getBirthOrBaptism() {
 		final var fact = getBirth();
 		return fact != null ? fact : getBaptism();

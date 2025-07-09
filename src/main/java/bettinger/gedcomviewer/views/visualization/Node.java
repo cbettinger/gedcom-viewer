@@ -5,7 +5,6 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -246,14 +245,7 @@ public class Node {
 		if (individual != null) {
 			final var primaryImage = individual.getPrimaryImage(true);
 			if (primaryImage != null && primaryImage.exists()) {
-				var image = (BufferedImage) primaryImage.getImage();
-
-				final var clip = individual.getImageClip(primaryImage);
-				if (clip != null) {
-					image = image.getSubimage(clip.x, clip.y, clip.width, clip.height);
-				}
-
-				result = image.getScaledInstance(-1, PORTRAIT_HEIGHT, Image.SCALE_FAST);
+				result = individual.getClippedImage(primaryImage, -1, PORTRAIT_HEIGHT);
 			}
 		}
 

@@ -4,7 +4,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.Stroke;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -62,19 +61,10 @@ public class DetailsNode extends Node {
         Image result = null;
 
         if (individual != null) {
-            final var portraits = individual.getPortraits();
-            for (var entry : portraits.entrySet()) {
-                var media = entry.getKey();
-                if (media.getFilePath().equals(filePath)) {
-                    var image = (BufferedImage) media.getImage();
-
-                    final var clip = entry.getValue();
-                    if (clip != null) {
-                        image = image.getSubimage(clip.x, clip.y, clip.width, clip.height);
-                    }
-
-                    result = image.getScaledInstance(-1, PORTRAIT_HEIGHT, Image.SCALE_FAST);
-                    return result;
+            final var portraits = individual.getFacialPortraits();
+            for (var media : portraits) {
+                if (media.getFilePath().equals(filePath) && media.exists()) {
+                    return individual.getClippedImage(media, -1, PORTRAIT_HEIGHT);
                 }
             }
         }

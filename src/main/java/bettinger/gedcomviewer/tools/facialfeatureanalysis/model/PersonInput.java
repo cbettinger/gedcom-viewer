@@ -3,7 +3,6 @@ package bettinger.gedcomviewer.tools.facialfeatureanalysis.model;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
@@ -31,10 +30,9 @@ public class PersonInput {
 		this.mother = null;
 		this.father = null;
 
-		Map<Media, Rectangle> portraitData = individual.getPortraits();
-		for (Map.Entry<Media, Rectangle> entry : portraitData.entrySet()) {
-			Media medium = entry.getKey();
-			Rectangle clip = entry.getValue();
+		List<Media> portraits = individual.getFacialPortraits();
+		for (Media medium : portraits) {
+			Rectangle clip = individual.getImageClip(medium);
 
 			String filePath = medium.getFilePath();
 

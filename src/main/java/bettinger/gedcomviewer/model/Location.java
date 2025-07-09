@@ -1,5 +1,6 @@
 package bettinger.gedcomviewer.model;
 
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -146,6 +147,11 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 	@Override
 	public Rectangle getImageClip(final Media image) {
 		return mediaManager.getImageClip(image);
+	}
+
+	@Override
+	public Image getClippedImage(final Media image, final int width, final int height) {
+		return mediaManager.getClippedImage(image, width, height);
 	}
 	/* #endregion */
 

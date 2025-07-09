@@ -1,10 +1,10 @@
 package bettinger.gedcomviewer.model;
 
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.awt.Image;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,8 +25,8 @@ class MediaManager {
 
 	private final List<Media> media;
 	private Media primaryImage;
+	private final List<Media> facialPortraits;
 	private final Map<Media, Rectangle> imageClips;
-	private final Map<Media, Rectangle> portraits;
 
 	MediaManager(final Structure referencingStructure, final GEDCOM gedcom) {
 		this(referencingStructure, gedcom, referencingStructure.getExtensionTags(Media.TAG).stream().map(objeTag -> {
@@ -45,8 +45,8 @@ class MediaManager {
 	}
 
 	MediaManager(final Structure referencingStructure, final GEDCOM gedcom, final List<MediaRef> mediaRefs) {
+		this.facialPortraits = new ArrayList<>();
 		this.imageClips = new HashMap<>();
-		this.portraits = new HashMap<>();
 
 		this.media = mediaRefs.stream().map(mr -> {
 			final var medium = (Media) gedcom.getRecord(mr.getRef());
@@ -61,9 +61,9 @@ class MediaManager {
 					primaryImage = medium;
 				}
 
-				final var portrait = TagUtils.getFirstExtensionTagValue(mr, "_PORTRAIT");
+				final var portrait = TagUtils.getFirstExtensionTagValue(mr, "_PORTRAIT"); // TODO: rename to _FACIAL?
 				if (portrait.equals("Y")) {
-					portraits.put(medium, null);
+					facialPortraits.add(medium);
 				}
 
 				final var clip = TagUtils.getFirstExtensionTagValue(mr, "_POSITION");
@@ -77,10 +77,6 @@ class MediaManager {
 							final var y2 = Integer.parseInt(coordinates[3]);
 
 							imageClips.put(medium, new Rectangle(x1, y1, x2 - x1, y2 - y1));
-
-							if (portrait.equals("Y")) {
-								portraits.put(medium, new Rectangle(x1, y1, x2 - x1, y2 - y1));
-							}
 						} catch (final NumberFormatException _) {
 							// intentionally left blank
 						}
@@ -135,26 +131,23 @@ class MediaManager {
 		return image == null ? null : imageClips.get(image);
 	}
 
-	public Map<Media, Rectangle> getPortraits() {
-		return portraits;
-	}
+	public Image getClippedImage(final Media image, final int width, final int height) {
+		Image result = image.getImage();
 
-	public List<Image> getPortraitImages() {
-		List<Image> result = new ArrayList<Image>();
+		final var clip = imageClips.get(image);
+		if (result != null && clip != null) {
+			result = ((BufferedImage) result).getSubimage(clip.x, clip.y, clip.width, clip.height);
 
-		for (Map.Entry<Media, Rectangle> entry : portraits.entrySet()) {
-    		Media medium = entry.getKey();
-    		Rectangle clip = entry.getValue();
-    
-			var portrait = (BufferedImage) medium.getImage();
-			if (clip != null) {
-				portrait = portrait.getSubimage(clip.x, clip.y, clip.width, clip.height);
+			if (width != -1 || height != -1) {
+				result = result.getScaledInstance(width, height, Image.SCALE_FAST);
 			}
-
-			result.add(portrait);
 		}
 
 		return result;
+	}
+
+	public List<Media> getFacialPortraits() {
+		return facialPortraits;
 	}
 
 	public String toHTML(final Set<HTMLOption> options) {

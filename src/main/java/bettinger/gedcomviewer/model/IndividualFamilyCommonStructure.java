@@ -1,11 +1,11 @@
 package bettinger.gedcomviewer.model;
 
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -104,8 +104,9 @@ public abstract class IndividualFamilyCommonStructure extends Structure implemen
 		return mediaManager.getImageClip(image);
 	}
 
-	public Map<Media, Rectangle> getPortraits() {
-		return mediaManager.getPortraits();
+	@Override
+	public Image getClippedImage(final Media image, final int width, final int height) {
+		return mediaManager.getClippedImage(image, width, height);
 	}
 
 	@Override
