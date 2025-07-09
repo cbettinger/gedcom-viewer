@@ -9,7 +9,6 @@ import java.util.HashMap;
 
 import org.javatuples.Pair;
 
-import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureAnalysisResult;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureSimilarity;
