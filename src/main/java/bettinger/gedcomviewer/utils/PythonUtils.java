@@ -4,60 +4,49 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public interface PythonUtils {
 
-    public static List<String> callScript(final String scriptPath, String[] args) {
-        List<String> result = new ArrayList<String>();
+	@SuppressWarnings("java:S1192")
+	public static List<String> executeScript(final String path, final String[] args) {
+		final List<String> result = new ArrayList<>();
 
-        try {
-            Runtime runtime = Runtime.getRuntime();
+		final var logger = Logger.getLogger(PythonUtils.class.getName());
 
-            String[] pipInstall = { "python", "-m", "ensurepip", "--upgrade" };
-            Process p = runtime.exec(pipInstall);
-            p.waitFor();
-            Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "pip installed");
+		try {
+			final var runtime = Runtime.getRuntime();
 
-            String[] pipenvInstall = { "pip", "install", "--user", "pipenv" };
-            p = runtime.exec(pipenvInstall);
-            p.waitFor();
-            Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "pipenv installed");
+			final var installPip = runtime.exec(new String[] { "python", "-m", "ensurepip" });
+			installPip.waitFor();
+			logger.log(Level.INFO, "Installed pip");
 
-            String[] requirementsInstall = { "pipenv", "install" };
-            p = runtime.exec(requirementsInstall);
-            p.waitFor();
-            Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "requirements installed");
+			final var installPipenv = runtime.exec(new String[] { "pip", "install", "--user", "pipenv" });
+			installPipenv.waitFor();
+			logger.log(Level.INFO, "Installed pipenv");
 
-            ArrayList<String> command = new ArrayList<String>();
-            command.add("pipenv");
-            command.add("run");
-            command.add("python");
-            command.add(scriptPath);
-            for (String arg : args) {
-                command.add(arg);
-            }
+			final var installRequirements = runtime.exec(new String[] { "pipenv", "install" });
+			installRequirements.waitFor();
+			logger.log(Level.INFO, "Installed requirements from Pipfile");
 
-            Process pOut = runtime.exec(command.toArray(new String[0]));
-            pOut.waitFor();
-            Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "analysis done");
-            BufferedReader stdInput = new BufferedReader(new InputStreamReader(pOut.getInputStream()));
+			final ArrayList<String> command = new ArrayList<>();
+			command.addAll(Arrays.asList("pipenv", "run", "python", path));
+			command.addAll(Arrays.asList(args));
 
-            String s = null;
-            while ((s = stdInput.readLine()) != null) {
-                result.add(s);
-            }
-            Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, result.toString());
+			final Process script = runtime.exec(command.toArray(new String[0]));
+			script.waitFor();
+			logger.log(Level.INFO, "Executed script '{}'", path);
 
-            return result;
-        } catch (IOException e) {
-            Logger.getLogger(PythonUtils.class.getName()).log(Level.SEVERE, String.format("An error occured when calling python script %s.", scriptPath), e);
-            return result;
-        } catch (InterruptedException e) {
-            Logger.getLogger(PythonUtils.class.getName()).log(Level.SEVERE, String.format("An error occured when calling python script %s.", scriptPath), e);
-            return result;
-        }
-    }
+			final var output = new BufferedReader(new InputStreamReader(script.getInputStream()));
+			output.lines().forEach(result::add);
+		} catch (final IOException | InterruptedException e) {
+			logger.log(Level.SEVERE, String.format("Unable to execute script '%s'", path), e);
+			Thread.currentThread().interrupt();
+		}
+
+		return result;
+	}
 }
