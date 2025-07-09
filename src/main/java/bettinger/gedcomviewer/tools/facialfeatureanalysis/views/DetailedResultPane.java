@@ -34,22 +34,23 @@ public class DetailedResultPane extends JPanel {
     var legend = new JPanel();
     legend.setLayout(new BoxLayout(legend, BoxLayout.Y_AXIS));
 
-    var colorRampPane = new JPanel();
-    colorRampPane.setLayout(new BoxLayout(colorRampPane, BoxLayout.X_AXIS));
-    colorRampPane.add(new ColorRamp(PERFECT_MATCH_COLOR, NO_MATCH_COLOR));
-    var colorRampDescription = new JPanel();
-    colorRampDescription.setLayout(new BorderLayout());
-    colorRampDescription.add(new JLabel("100%"), BorderLayout.NORTH);
-    colorRampDescription.add(new JLabel("0%"), BorderLayout.SOUTH);
-    colorRampPane.add(colorRampDescription);
-    colorRampPane.setPreferredSize(new Dimension(LEGEND_WIDTH, COLOR_RAMP_HEIGHT));
+    var colorGradientPane = new JPanel();
+    colorGradientPane.setLayout(new BoxLayout(colorGradientPane, BoxLayout.X_AXIS));
+    colorGradientPane.add(new GradientPanel(PERFECT_MATCH_COLOR, NO_MATCH_COLOR));
+
+	var colorGradientDescription = new JPanel();
+    colorGradientDescription.setLayout(new BorderLayout());
+    colorGradientDescription.add(new JLabel("100%"), BorderLayout.NORTH);
+    colorGradientDescription.add(new JLabel("0%"), BorderLayout.SOUTH);
+    colorGradientPane.add(colorGradientDescription);
+    colorGradientPane.setPreferredSize(new Dimension(LEGEND_WIDTH, COLOR_RAMP_HEIGHT));
 
     var explanations = new JTextArea();
     explanations.setEditable(false);
     explanations.setLineWrap(true);
     explanations.setText(String.format("\n%s\n\n%s: %s\n\n%s: %s", I18N.get("PathSimilarityDetailsExplanation"), I18N.get("AvgSimilarity"), I18N.get("AvgSimilarityDetailsExplanation"), I18N.get("MaxSimilarity"), I18N.get("MaxSimilarityDetailsExplanation")));
 
-    legend.add(colorRampPane);
+    legend.add(colorGradientPane);
     legend.add(explanations);
 
     add(legend, BorderLayout.EAST);
