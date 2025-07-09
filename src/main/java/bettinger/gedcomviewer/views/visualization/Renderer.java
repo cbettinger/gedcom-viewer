@@ -1,6 +1,5 @@
 package bettinger.gedcomviewer.views.visualization;
 
-import java.awt.Font;
 import java.awt.Point;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,51 +15,48 @@ import bettinger.gedcomviewer.model.Location;
 import bettinger.gedcomviewer.model.Structure;
 import bettinger.gedcomviewer.utils.SVGUtils;
 
-public abstract class Renderer {
+abstract class Renderer {
 
-	static final Font DEFAULT_FONT = new Font("Arial", Font.PLAIN, 12);
-	public static final Font BOLD_FONT = DEFAULT_FONT.deriveFont(Font.BOLD);
+	protected static final int LEVEL_DISTANCE = 25;
 
-	static final int LEVEL_DISTANCE = 25;
+	private static final int EDGE_OFFSET = 5;
+	private static final int EDGE_LABEL_PADDING = 10;
 
-	static final int EDGE_OFFSET = 5;
-	static final int EDGE_LABEL_PADDING = 10;
+	private static final int MINIMAL_CHILDREN_GAP = 2 * EDGE_LABEL_PADDING;
+	private static final int SUBTREE_DISTANCE = 2 * EDGE_LABEL_PADDING;
 
-	static final int MINIMAL_CHILDREN_GAP = 2 * EDGE_LABEL_PADDING;
-	static final int SUBTREE_DISTANCE = 2 * EDGE_LABEL_PADDING;
+	protected final SVGDocument doc;
+	protected final SVGGraphics2D g;
 
-	final SVGDocument doc;
-	final protected SVGGraphics2D g;
-
-	final Orientation orientation;
+	protected final Orientation orientation;
 	protected final boolean renderRootNode;
 
 	protected Node rootNode;
-	Individual proband;
-	Node probandNode;
+	protected Individual proband;
+	protected Node probandNode;
 
-	int generations;
+	protected int generations;
 
-	final Set<Individual> created;
-	int individualCount;
+	private final Set<Individual> created;
+	private int individualCount;
 
 	private int maximalNodeHeight;
 	private int maximalDepth;
 	private int minimalX;
 
-	Renderer() {
+	protected Renderer() {
 		this(Orientation.BOTTOM_UP, true);
 	}
 
-	Renderer(final Orientation orientation, final boolean renderRootNode) {
+	protected Renderer(final Orientation orientation, final boolean renderRootNode) {
 		this(SVGUtils.createDocument(), orientation, renderRootNode);
 	}
 
-	Renderer(final SVGDocument doc, final Orientation orientation, final boolean renderRootNode) {
+	protected Renderer(final SVGDocument doc, final Orientation orientation, final boolean renderRootNode) {
 		this(doc, SVGUtils.createGraphics(doc), orientation, renderRootNode);
 	}
 
-	Renderer(final SVGDocument doc, final SVGGraphics2D g, final Orientation orientation, final boolean renderRootNode) {
+	protected Renderer(final SVGDocument doc, final SVGGraphics2D g, final Orientation orientation, final boolean renderRootNode) {
 		this.doc = doc;
 		this.g = g;
 
@@ -85,11 +81,11 @@ public abstract class Renderer {
 		return probandNode;
 	}
 
-	int getIndividualCount() {
+	protected int getIndividualCount() {
 		return renderRootNode ? individualCount : individualCount - 1;
 	}
 
-	void render(final Individual proband) {
+	public void render(final Individual proband) {
 		render(proband, 0);
 	}
 
@@ -97,7 +93,7 @@ public abstract class Renderer {
 		render(proband, generations, null);
 	}
 
-	void render(final Individual proband, final int generations, final Point offset) {
+	public void render(final Individual proband, final int generations, final Point offset) {
 		this.proband = proband;
 
 		this.generations = Math.max(0, generations);
@@ -118,15 +114,15 @@ public abstract class Renderer {
 		}
 	}
 
-	Node createNodes() {
+	protected Node createNodes() {
 		return createNodes(proband, null);
 	}
 
-	Node createNodes(final Individual individual, final Node parentNode) {
+	protected Node createNodes(final Individual individual, final Node parentNode) {
 		return createNodes(individual, parentNode, 1);
 	}
 
-	Node createNodes(final Individual individual, final Node parentNode, final int generation) {
+	protected Node createNodes(final Individual individual, final Node parentNode, final int generation) {
 		final var node = createNode(individual, parentNode);
 
 		if (individual != null) {
@@ -136,18 +132,18 @@ public abstract class Renderer {
 		return node;
 	}
 
-	Node createNode() {
+	protected Node createNode() {
 		return createNode(null);
 	}
 
-	Node createNode(final Individual individual) {
+	protected Node createNode(final Individual individual) {
 		return createNode(individual, null);
 	}
 
 	protected Node createNode(final Individual individual, final Node parentNode) {
 		final var isClone = isClone(individual);
 
-		final var node = getNewNode(individual, isClone, parentNode);
+		final var node = createNode(individual, isClone, parentNode);
 
 		if (!isClone) {
 			individualCount++;
@@ -167,15 +163,15 @@ public abstract class Renderer {
 		return node;
 	}
 
-	protected Node getNewNode(Individual individual, boolean isClone, Node parent) {
-		return new Node(g, individual, isClone, parent);
+	protected Node createNode(final Individual individual, final boolean isClone, final Node parentNode) {
+		return new Node(g, individual, isClone, parentNode);
 	}
 
-	boolean isClone(final Individual individual) {
+	protected boolean isClone(final Individual individual) {
 		return individual != null && created.contains(individual);
 	}
 
-	void createChildNodes(final Individual individual, final Node node, final int generation) {}
+	protected void createChildNodes(final Individual individual, final Node node, final int generation) {}
 
 	private void layoutNodes() {
 		if (rootNode != null) {
@@ -335,14 +331,14 @@ public abstract class Renderer {
 		}
 	}
 
-	void moveNodes(final Point offset) {
+	private void moveNodes(final Point offset) {
 		if (rootNode != null) {
 			final var probandPosition = getProbandNode().getPosition();
 			moveNodes(rootNode, new Point(offset.x - probandPosition.x, offset.y - probandPosition.y));
 		}
 	}
 
-	void moveNodes(final Node node, final Point offset) {
+	private void moveNodes(final Node node, final Point offset) {
 		node.x += offset.x;
 		node.y += offset.y;
 
@@ -351,7 +347,7 @@ public abstract class Renderer {
 		}
 	}
 
-	void renderNodes() {
+	protected void renderNodes() {
 		if (rootNode != null) {
 			renderNodes(rootNode);
 		}
@@ -367,27 +363,27 @@ public abstract class Renderer {
 		}
 	}
 
-	void renderEdges() {
-		g.setFont(DEFAULT_FONT);
+	protected void renderEdges() {
+		g.setFont(Node.DEFAULT_FONT);
 	}
 
 	protected Point renderEdge(final Node leftNode, final Node rightNode) {
-		return renderEdge(leftNode, rightNode, "", 0, true);
+		return renderEdge(leftNode, rightNode, null, 0, true);
 	}
 
-	Point renderEdge(final Node leftNode, final Node rightNode, final String label) {
+	protected Point renderEdge(final Node leftNode, final Node rightNode, final String label) {
 		return renderEdge(leftNode, rightNode, label, 0, true);
 	}
 
-	Point renderEdge(final Node leftNode, final Node rightNode, final int index) {
-		return renderEdge(leftNode, rightNode, "", index, false);
+	protected Point renderEdge(final Node leftNode, final Node rightNode, final int index) {
+		return renderEdge(leftNode, rightNode, null, index, false);
 	}
 
-	Point renderEdge(final Node leftNode, final Node rightNode, final String label, final int index) {
+	protected Point renderEdge(final Node leftNode, final Node rightNode, final String label, final int index) {
 		return renderEdge(leftNode, rightNode, label, index, false);
 	}
 
-	Point renderEdge(final Node leftNode, final Node rightNode, final String label, final int index, final boolean centerLabel) {
+	protected Point renderEdge(final Node leftNode, final Node rightNode, final String label, final int index, final boolean centerLabel) {
 		var centerX = 0;
 		var lineY = 0;
 
@@ -417,11 +413,11 @@ public abstract class Renderer {
 		return SVGUtils.toString(doc);
 	}
 
-	static String getEdgeLabel(final Family family) {
+	protected static String getEdgeLabel(final Family family) {
 		return family != null ? formatDateAndPlace(Structure.MARRIAGE_SIGN, family.getMarriageDate(), null, null) : "";
 	}
 
-	static String formatDateAndPlace(final String sign, final Date date, final String place, final Location location) {
+	protected static String formatDateAndPlace(final String sign, final Date date, final String place, final Location location) {
 		final var sb = new StringBuilder();
 
 		final var dateStr = date != null ? date.toString() : "";
@@ -448,7 +444,7 @@ public abstract class Renderer {
 		return sb.toString();
 	}
 
-	enum Orientation {
+	protected enum Orientation {
 		BOTTOM_UP, TOP_DOWN;
 	}
 }

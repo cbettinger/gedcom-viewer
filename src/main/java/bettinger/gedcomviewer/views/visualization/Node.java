@@ -1,6 +1,7 @@
 package bettinger.gedcomviewer.views.visualization;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -24,11 +25,14 @@ public class Node {
 
 	protected static final int PORTRAIT_HEIGHT = MINIMAL_HEIGHT - 2 * PADDING;
 
-	private static final Color UNKNOWN_COLOR = Color.LIGHT_GRAY;
-	private static final Color MALE_COLOR = new Color(173, 215, 229);
-	private static final Color MALE_CLONE_COLOR = new Color(206, 221, 226);
-	private static final Color FEMALE_COLOR = new Color(255, 193, 204);
-	private static final Color FEMALE_CLONE_COLOR = new Color(255, 232, 236);
+	protected static final Font DEFAULT_FONT = new Font("Arial", Font.PLAIN, 12);
+	protected static final Font BOLD_FONT = DEFAULT_FONT.deriveFont(Font.BOLD);
+
+	protected static final Color UNKNOWN_COLOR = Color.LIGHT_GRAY;
+	protected static final Color MALE_COLOR = new Color(173, 215, 229);
+	protected static final Color MALE_CLONE_COLOR = new Color(206, 221, 226);
+	protected static final Color FEMALE_COLOR = new Color(255, 193, 204);
+	protected static final Color FEMALE_CLONE_COLOR = new Color(255, 232, 236);
 
 	protected int x;
 	protected int y;
@@ -38,12 +42,12 @@ public class Node {
 	protected final SVGGraphics2D g;
 
 	protected final Individual individual;
-	private final boolean isClone;
+	protected final boolean isClone;
 
-	private final Node parent;
-	private final List<Node> children;
+	protected final Node parent;
+	protected final List<Node> children;
 
-	private final int depth;
+	protected final int depth;
 
 	protected Image portrait;
 	protected int portraitWidth;
@@ -58,15 +62,15 @@ public class Node {
 	private int change;
 	private int shift;
 
-	public Node(final SVGGraphics2D g, final Individual individual) {
+	protected Node(final SVGGraphics2D g, final Individual individual) {
 		this(g, individual, false);
 	}
 
-	public Node(final SVGGraphics2D g, final Individual individual, final boolean isClone) {
+	protected Node(final SVGGraphics2D g, final Individual individual, final boolean isClone) {
 		this(g, individual, isClone, null);
 	}
 
-	public Node(final SVGGraphics2D g, final Individual individual, final boolean isClone, final Node parent) {
+	protected Node(final SVGGraphics2D g, final Individual individual, final boolean isClone, final Node parent) {
 		this.g = g;
 
 		this.individual = individual;
@@ -78,7 +82,7 @@ public class Node {
 		this.parent = parent;
 		this.children = new ArrayList<>();
 
-		this.depth = parent == null ? 0 : parent.getDepth() + 1;
+		this.depth = parent == null ? 0 : parent.depth + 1;
 
 		this.mod = 0;
 		this.thread = null;
@@ -95,17 +99,13 @@ public class Node {
 		this.portrait = getPortrait();
 		this.portraitWidth = this.portrait == null ? 0 : this.portrait.getWidth(null);
 
-		g.setFont(Renderer.BOLD_FONT);
+		g.setFont(BOLD_FONT);
 		final var fontMetrics = g.getFontMetrics();
 		final var maximalLineWidth = fontMetrics.stringWidth(text.stream().max(Comparator.comparing(fontMetrics::stringWidth)).orElse(""));
 		this.lineHeight = fontMetrics.getHeight();
 
 		this.width = Math.max(MINIMAL_WIDTH, maximalLineWidth + 3 * PADDING + (this.portrait == null ? 0 : this.portraitWidth + PADDING));
 		this.height = Math.max(MINIMAL_HEIGHT, text.size() * (lineHeight + PADDING) + 2 * PADDING);
-	}
-
-	public int getWidth() {
-		return width;
 	}
 
 	public Point getPosition() {
@@ -116,31 +116,35 @@ public class Node {
 		return new Rectangle(x, y, width, height);
 	}
 
+	public int getWidth() {
+		return width;
+	}
+
 	public Individual getIndividual() {
 		return individual;
 	}
 
-	public Node getParent() {
+	protected Node getParent() {
 		return parent;
 	}
 
-	public int getDepth() {
+	protected int getDepth() {
 		return depth;
 	}
 
-	public int getChildIndex() {
+	protected int getChildIndex() {
 		return getParent() == null ? 0 : getParent().getChildren().indexOf(this);
 	}
 
-	public boolean hasChildren() {
+	protected boolean hasChildren() {
 		return !getChildren().isEmpty();
 	}
 
-	public int getChildCount() {
+	protected int getChildCount() {
 		return getChildren().size();
 	}
 
-	public Node getChild(final int index) {
+	protected Node getChild(final int index) {
 		return getChildren().get(index);
 	}
 
@@ -148,51 +152,51 @@ public class Node {
 		return children;
 	}
 
-	public int getMod() {
+	int getMod() {
 		return mod;
 	}
 
-	public void setMod(final int value) {
+	void setMod(final int value) {
 		mod = value;
 	}
 
-	public Node getThread() {
+	Node getThread() {
 		return thread;
 	}
 
-	public void setThread(final Node value) {
+	void setThread(final Node value) {
 		thread = value;
 	}
 
-	public int getPrelim() {
+	int getPrelim() {
 		return prelim;
 	}
 
-	public void setPrelim(final int value) {
+	void setPrelim(final int value) {
 		prelim = value;
 	}
 
-	public Node getAncestor() {
+	Node getAncestor() {
 		return ancestor;
 	}
 
-	public void setAncestor(final Node value) {
+	void setAncestor(final Node value) {
 		ancestor = value;
 	}
 
-	public int getChange() {
+	int getChange() {
 		return change;
 	}
 
-	public void setChange(final int value) {
+	void setChange(final int value) {
 		change = value;
 	}
 
-	public int getShift() {
+	int getShift() {
 		return shift;
 	}
 
-	public void setShift(final int value) {
+	void setShift(final int value) {
 		shift = value;
 	}
 
@@ -214,7 +218,7 @@ public class Node {
 
 		var nextY = y;
 
-		g.setFont(Renderer.BOLD_FONT);
+		g.setFont(BOLD_FONT);
 
 		renderImages();
 
@@ -222,18 +226,18 @@ public class Node {
 		for (final var line : text) {
 			nextY += (PADDING + lineHeight);
 			g.drawString(line, textPositionX, nextY);
-			g.setFont(Renderer.DEFAULT_FONT);
+			g.setFont(DEFAULT_FONT);
 		}
-	}
-
-	protected int getTextPositionX() {
-		return x + PADDING + (portrait == null ? 0 : this.portraitWidth + PADDING);
 	}
 
 	protected void renderImages() {
 		if (portrait != null) {
 			g.drawImage(portrait, x + PADDING, y + PADDING, portraitWidth, PORTRAIT_HEIGHT, null);
 		}
+	}
+
+	protected int getTextPositionX() {
+		return x + PADDING + (portrait == null ? 0 : this.portraitWidth + PADDING);
 	}
 
 	private Image getPortrait() {
@@ -256,7 +260,7 @@ public class Node {
 		return result;
 	}
 
-	protected List<String> getTextLines() {
+	private List<String> getTextLines() {
 		final List<String> result = new ArrayList<>();
 
 		if (individual == null) {

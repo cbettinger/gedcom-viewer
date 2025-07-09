@@ -17,18 +17,17 @@ import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.model.Structure;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureSimilarity;
 import bettinger.gedcomviewer.views.visualization.Node;
-import bettinger.gedcomviewer.views.visualization.Renderer;
 
 public class DetailsNode extends Node {
 
-    static final int BORDER_THICKNESS = 3;
+    private static final int BORDER_THICKNESS = 3;
 
     private Image portraitTargetPerson;
     private int portraitTargetPersonWidth;
 
     private Color borderColor;
 
-    public DetailsNode(SVGGraphics2D g, Individual individual, boolean isClone, Node parentNode) {
+    DetailsNode(SVGGraphics2D g, Individual individual, boolean isClone, Node parentNode) {
         super(g, individual, isClone, parentNode);
 
         this.portraitTargetPerson = null;
@@ -36,7 +35,7 @@ public class DetailsNode extends Node {
         this.borderColor = null;
     }
 
-    public void init(Individual target, FacialFeatureSimilarity similarity) {
+    void init(Individual target, FacialFeatureSimilarity similarity) {
         if (similarity != null) {
             portrait = getPortrait(individual, similarity.getMaxMatchAncestorFileName());
             portraitWidth = portrait == null ? 0 : portrait.getWidth(null);
@@ -46,7 +45,7 @@ public class DetailsNode extends Node {
 
             text = getTextLines(similarity.getAvgSimilarity(), similarity.getMaxSimilarity());
 
-            g.setFont(Renderer.BOLD_FONT);
+            g.setFont(BOLD_FONT);
             final var fontMetrics = g.getFontMetrics();
             final var maximalLineWidth = fontMetrics.stringWidth(text.stream().max(Comparator.comparing(fontMetrics::stringWidth)).orElse(""));
             this.width = Math.max(MINIMAL_WIDTH, maximalLineWidth + 3 * PADDING + (this.portrait == null ? 0 : this.portraitWidth + PADDING) + (this.portraitTargetPerson == null ? 0 : this.portraitTargetPersonWidth + PADDING));

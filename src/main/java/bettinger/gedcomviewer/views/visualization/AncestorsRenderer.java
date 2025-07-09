@@ -11,18 +11,18 @@ import bettinger.gedcomviewer.model.Individual;
 
 public class AncestorsRenderer extends Renderer {
 
-	final protected List<Quartet<Node, Node, Node, String>> edges = new ArrayList<>();
+	protected final List<Quartet<Node, Node, Node, String>> edges = new ArrayList<>();
 
 	public AncestorsRenderer() {
 		super(Orientation.BOTTOM_UP, true);
 	}
 
-	AncestorsRenderer(final SVGDocument doc, final SVGGraphics2D g, final boolean renderRootNode) {
+	protected AncestorsRenderer(final SVGDocument doc, final SVGGraphics2D g, final boolean renderRootNode) {
 		super(doc, g, Orientation.BOTTOM_UP, renderRootNode);
 	}
 
 	@Override
-	void createChildNodes(final Individual individual, final Node node, final int generation) {
+	protected void createChildNodes(final Individual individual, final Node node, final int generation) {
 		if (generations != 0 && generation == generations) {
 			return;
 		}
@@ -49,12 +49,12 @@ public class AncestorsRenderer extends Renderer {
 		}
 	}
 
-	boolean canRecurseFather(final Individual individual) {
+	protected boolean canRecurseFather(final Individual individual) {
 		final var father = individual.getFather();
 		return father != null && !isClone(father);
 	}
 
-	boolean canRecurseMother(final Individual individual) {
+	protected boolean canRecurseMother(final Individual individual) {
 		final var mother = individual.getMother();
 		return mother != null && !isClone(mother);
 	}
@@ -79,7 +79,7 @@ public class AncestorsRenderer extends Renderer {
 	}
 
 	@Override
-	public void renderEdges() {
+	protected void renderEdges() {
 		super.renderEdges();
 
 		for (final var edge : edges) {

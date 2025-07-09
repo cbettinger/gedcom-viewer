@@ -18,7 +18,7 @@ import bettinger.gedcomviewer.views.visualization.Node;
 
 public class DetailsRenderer extends AncestorsRenderer {
 
-    static final int LINE_THICKNESS = 3;
+    private static final int LINE_THICKNESS = 3;
 
     private final Individual targetPerson;
     private final HashMap<String, FacialFeatureSimilarity> personSimilarities;
@@ -26,7 +26,7 @@ public class DetailsRenderer extends AncestorsRenderer {
     private ArrayList<String> includedIndividuals;
     private HashMap<String, Float> lastIndividualsOfPath;
 
-    public DetailsRenderer(final Individual proband, final FacialFeatureAnalysisResult result) {
+    DetailsRenderer(final Individual proband, final FacialFeatureAnalysisResult result) {
         this.targetPerson = proband;
         this.personSimilarities = result.getPersonSimilarities();
         this.coloredEdges = new HashMap<>();
@@ -68,7 +68,7 @@ public class DetailsRenderer extends AncestorsRenderer {
     }
 
     @Override
-    public void renderEdges() {
+    protected void renderEdges() {
         for (final var edge : edges) {
             final var rootNode = edge.getValue0();
             final var fatherNode = edge.getValue1();
@@ -136,8 +136,8 @@ public class DetailsRenderer extends AncestorsRenderer {
     }
 
     @Override
-    protected Node getNewNode(Individual individual, boolean isClone, Node parent) {
-        var node = new DetailsNode(g, individual, isClone, parent);
+    protected Node createNode(final Individual individual, final boolean isClone, final Node parentNode) {
+        var node = new DetailsNode(g, individual, isClone, parentNode);
         if (individual != null && individual != targetPerson) {
             node.init(targetPerson, personSimilarities.get(individual.getId()));
         }

@@ -82,7 +82,7 @@ class OverviewRenderer extends AncestorsRenderer {
     }
 
     @Override
-    public void renderEdges() {
+    protected void renderEdges() {
         for (final var edge : edges) {
             final var rootNode = edge.getValue0();
             final var fatherNode = edge.getValue1();
@@ -127,7 +127,7 @@ class OverviewRenderer extends AncestorsRenderer {
         }
     }
 
-    void renderMaxSimilarityEdge(final Node rootNode, final Node parentNode, final Point parentsPoint, final Pair<String, String> tuple, final boolean left) {
+    private void renderMaxSimilarityEdge(final Node rootNode, final Node parentNode, final Point parentsPoint, final Pair<String, String> tuple, final boolean left) {
         final var edgeColors = maxSimilarityEdges.get(tuple);
         final Point parentNodePosition = parentNode.getPosition();
 

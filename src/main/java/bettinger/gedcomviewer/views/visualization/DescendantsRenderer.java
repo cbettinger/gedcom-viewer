@@ -15,26 +15,26 @@ import bettinger.gedcomviewer.model.Individual;
 
 public class DescendantsRenderer extends Renderer {
 
-	final Set<Family> recursed = new HashSet<>();
+	private final Set<Family> recursed = new HashSet<>();
 
 	private final List<Quartet<Node, Node, String, Integer>> spouseEdges = new ArrayList<>();
 	private final List<Pair<Node, Node>> childEdges = new ArrayList<>();
 
-	DescendantsRenderer() {
+	public DescendantsRenderer() {
 		super(Orientation.TOP_DOWN, false);
 	}
 
-	DescendantsRenderer(final SVGDocument doc, final SVGGraphics2D g, final boolean renderRootNode) {
+	protected DescendantsRenderer(final SVGDocument doc, final SVGGraphics2D g, final boolean renderRootNode) {
 		super(doc, g, Orientation.TOP_DOWN, renderRootNode);
 	}
 
 	@Override
-	Node createNodes() {
+	protected Node createNodes() {
 		return createNodes(proband, createNode()).getParent();
 	}
 
 	@Override
-	void createChildNodes(final Individual individual, final Node node, final int generation) {
+	protected void createChildNodes(final Individual individual, final Node node, final int generation) {
 		if (generations != 0 && generation == generations) {
 			return;
 		}
@@ -71,7 +71,7 @@ public class DescendantsRenderer extends Renderer {
 	}
 
 	@Override
-	void renderEdges() {
+	protected void renderEdges() {
 		super.renderEdges();
 
 		for (final var edge : spouseEdges) {

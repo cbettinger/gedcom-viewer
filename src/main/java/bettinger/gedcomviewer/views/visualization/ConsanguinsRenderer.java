@@ -22,7 +22,7 @@ public class ConsanguinsRenderer extends Renderer {
 	}
 
 	@Override
-	int getIndividualCount() {
+	protected int getIndividualCount() {
 		return (ancestorsRenderer == null ? 0 : ancestorsRenderer.getIndividualCount()) + (descendantsRenderer == null ? 0 : descendantsRenderer.getIndividualCount());
 	}
 }
