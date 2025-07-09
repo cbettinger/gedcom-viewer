@@ -53,8 +53,8 @@ public class AboutDialog extends JDialog {
 		textPane.setText(sb.toString());
 
 		pack();
-
 		setSize(Constants.DEFAULT_MODAL_DIALOG_WIDTH, Constants.DEFAULT_MODAL_DIALOG_HEIGHT);
+		setResizable(false);
 		setLocationRelativeTo(MainFrame.getInstance());
 
 		setVisible(true);

@@ -19,8 +19,6 @@ import bettinger.gedcomviewer.views.MainFrame;
 
 public class PropertiesDialog extends JDialog {
 
-	private final JTabbedPane tabbedPane;
-
 	private final HTMLTextPane authorPane;
 	private final HTMLTextPane contributorsPane;
 	private final HTMLTextPane metaDataPane;
@@ -37,20 +35,22 @@ public class PropertiesDialog extends JDialog {
 		this.metaDataPane = new HTMLTextPane();
 		this.statisticsTable = new AutoFitTable();
 
-		this.tabbedPane = new JTabbedPane();
-		this.tabbedPane.addTab(I18N.get("Author"), new JScrollPane(this.authorPane));
-		this.tabbedPane.addTab(I18N.get("Contributors"), new JScrollPane(this.contributorsPane));
-		this.tabbedPane.addTab(I18N.get("Metadata"), new JScrollPane(this.metaDataPane));
-		this.tabbedPane.addTab(I18N.get("Statistics"), new JScrollPane(this.statisticsTable));
-
-		add(this.tabbedPane, BorderLayout.CENTER);
+		final var tabbedPane = new JTabbedPane();
+		tabbedPane.addTab(I18N.get("Author"), new JScrollPane(this.authorPane));
+		tabbedPane.addTab(I18N.get("Contributors"), new JScrollPane(this.contributorsPane));
+		tabbedPane.addTab(I18N.get("Metadata"), new JScrollPane(this.metaDataPane));
+		tabbedPane.addTab(I18N.get("Statistics"), new JScrollPane(this.statisticsTable));
+		tabbedPane.setSelectedIndex(0);
+		add(tabbedPane, BorderLayout.CENTER);
 
 		pack();
-
 		setSize(Constants.DEFAULT_MODAL_DIALOG_WIDTH, Constants.DEFAULT_MODAL_DIALOG_HEIGHT);
+		setResizable(false);
 		setLocationRelativeTo(MainFrame.getInstance());
 
 		open(gedcom);
+
+		setVisible(true);
 	}
 
 	private void open(final GEDCOM gedcom) {
@@ -120,22 +120,7 @@ public class PropertiesDialog extends JDialog {
 				metaDataPane.setText(sb.toString());
 			}
 
-			statisticsTable.setModel(new DefaultTableModel(new String[][] {
-				{ I18N.get("NumberOfIndividuals"), Integer.toString(gedcom.getIndividuals().size()) },
-				{ I18N.get("NumberOfMales"), Integer.toString(gedcom.getIndividuals().stream().filter(i -> i.isMale()).toList().size()) },
-				{ I18N.get("NumberOfFemales"), Integer.toString(gedcom.getIndividuals().stream().filter(i -> i.isFemale()).toList().size()) },
-				{ I18N.get("NumberOfFamilies"), Integer.toString(gedcom.getFamilies().size()) },
-				{ I18N.get("NumberOfLocations"), Integer.toString(gedcom.getLocations().size()) },
-				{ I18N.get("NumberOfMedia"), Integer.toString(gedcom.getMedia().size()) },
-				{ I18N.get("NumberOfSources"), Integer.toString(gedcom.getSources().size()) },
-				{ I18N.get("NumberOfRepositories"), Integer.toString(gedcom.getRepositories().size()) },
-				{ I18N.get("NumberOfNotes"), Integer.toString(gedcom.getNotes().size()) },
-				{ I18N.get("NumberOfSubmitters"), Integer.toString(gedcom.getSubmitters().size()) }
-			}, new String[] { I18N.get("Name"), I18N.get("Value") }));
+			statisticsTable.setModel(new DefaultTableModel(new String[][] { { I18N.get("NumberOfIndividuals"), Integer.toString(gedcom.getIndividuals().size()) }, { I18N.get("NumberOfMales"), Integer.toString(gedcom.getIndividuals().stream().filter(i -> i.isMale()).toList().size()) }, { I18N.get("NumberOfFemales"), Integer.toString(gedcom.getIndividuals().stream().filter(i -> i.isFemale()).toList().size()) }, { I18N.get("NumberOfFamilies"), Integer.toString(gedcom.getFamilies().size()) }, { I18N.get("NumberOfLocations"), Integer.toString(gedcom.getLocations().size()) }, { I18N.get("NumberOfMedia"), Integer.toString(gedcom.getMedia().size()) }, { I18N.get("NumberOfSources"), Integer.toString(gedcom.getSources().size()) }, { I18N.get("NumberOfRepositories"), Integer.toString(gedcom.getRepositories().size()) }, { I18N.get("NumberOfNotes"), Integer.toString(gedcom.getNotes().size()) }, { I18N.get("NumberOfSubmitters"), Integer.toString(gedcom.getSubmitters().size()) } }, new String[] { I18N.get("Name"), I18N.get("Value") }));
 		}
-
-		tabbedPane.setSelectedIndex(0);
-
-		setVisible(true);
 	}
 }
