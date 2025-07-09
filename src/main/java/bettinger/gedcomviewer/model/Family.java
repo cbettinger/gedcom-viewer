@@ -5,17 +5,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-
-import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.utils.HTMLUtils;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-@JsonAutoDetect(fieldVisibility = Visibility.NONE, getterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
 public class Family extends IndividualFamilyCommonStructure {
 
 	static final String TAG = "FAM";
@@ -32,7 +25,6 @@ public class Family extends IndividualFamilyCommonStructure {
 	}
 
 	/* #region getter & setter */
-	@JsonProperty
 	public String getName() {
 		final var husband = getHusband();
 		final var wife = getWife();
@@ -50,22 +42,21 @@ public class Family extends IndividualFamilyCommonStructure {
 	}
 
 	public Date getMarriageDate() {
-		final var primaryFact = getPrimaryMarriage();
-		return primaryFact == null ? null : primaryFact.getDate();
+		final var fact = getMarriage();
+		return fact == null ? null : fact.getDate();
 	}
 
 	public String getMarriagePlace() {
-		final var primaryFact = getPrimaryMarriage();
-		return primaryFact == null ? "" : primaryFact.getPlace();
+		final var fact = getMarriage();
+		return fact == null ? "" : fact.getPlace();
 	}
 
-	@JsonProperty
 	public Location getMarriageLocation() {
-		final var primaryFact = getPrimaryMarriage();
-		return primaryFact == null ? null : primaryFact.getLocation();
+		final var fact = getMarriage();
+		return fact == null ? null : fact.getLocation();
 	}
 
-	private Fact getPrimaryMarriage() {
+	public Fact getMarriage() {
 		return getBestFact(MARRIAGE_TAG);
 	}
 
@@ -74,21 +65,21 @@ public class Family extends IndividualFamilyCommonStructure {
 	}
 
 	public Date getDivorceDate() {
-		final var primaryFact = getPrimaryDivorce();
-		return primaryFact == null ? null : primaryFact.getDate();
+		final var fact = getDivorce();
+		return fact == null ? null : fact.getDate();
 	}
 
 	public String getDivorcePlace() {
-		final var primaryFact = getPrimaryDivorce();
-		return primaryFact == null ? "" : primaryFact.getPlace();
+		final var fact = getDivorce();
+		return fact == null ? "" : fact.getPlace();
 	}
 
 	public Location getDivorceLocation() {
-		final var primaryFact = getPrimaryDivorce();
-		return primaryFact == null ? null : primaryFact.getLocation();
+		final var fact = getDivorce();
+		return fact == null ? null : fact.getLocation();
 	}
 
-	private Fact getPrimaryDivorce() {
+	public Fact getDivorce() {
 		return getBestFact(DIVORCE_TAG);
 	}
 
@@ -136,7 +127,7 @@ public class Family extends IndividualFamilyCommonStructure {
 
 		if (!options.contains(HTMLOption.EXPORT)) {
 			HTMLUtils.appendLineBreak(sb);
-			mediaManager.appendPrimaryImage(sb, true, Constants.PREVIEW_IMAGE_WIDTH);
+			mediaManager.appendPrimaryPhoto(sb);
 		}
 
 		final var husband = getHusband();

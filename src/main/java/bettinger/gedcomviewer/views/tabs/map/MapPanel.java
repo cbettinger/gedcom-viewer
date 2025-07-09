@@ -1,6 +1,9 @@
 package bettinger.gedcomviewer.views.tabs.map;
 
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import org.javatuples.Quintet;
 
@@ -9,6 +12,9 @@ import com.google.common.eventbus.Subscribe;
 import bettinger.gedcomviewer.Events;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.Preferences;
+import bettinger.gedcomviewer.Preferences.ProbandChangedEvent;
+import bettinger.gedcomviewer.model.Fact;
+import bettinger.gedcomviewer.model.Family;
 import bettinger.gedcomviewer.model.GEDCOM;
 import bettinger.gedcomviewer.model.GEDCOM.GEDCOMEvent;
 import bettinger.gedcomviewer.model.Individual;
@@ -18,8 +24,8 @@ import bettinger.gedcomviewer.views.tabs.IRecordCollectionView;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
@@ -48,53 +54,42 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 	private RadioButton ancestorsRadioButton;
 	private RadioButton descendantsRadioButton;
 	private IndividualsComboBox individualsComboBox;
+	private CheckBox pathsCheckBox;
 
-	@SuppressWarnings("unused")
 	public MapPanel() {
 		super(false, "map");
 
 		setEnabled(false);
 
 		configPane = new VBox();
-		radioButtons = new ToggleGroup();
+
 		locationsRadioButton = new RadioButton(I18N.get("Locations"));
 		lineageRadioButton = new RadioButton(I18N.get("Lineage"));
 		ancestorsRadioButton = new RadioButton(I18N.get("Ancestors"));
 		descendantsRadioButton = new RadioButton(I18N.get("Descendants"));
-		individualsComboBox = new IndividualsComboBox();
 
-		radioButtons.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) -> update());
-
-		locationsRadioButton.setOnAction(event -> showLocations());
+		radioButtons = new ToggleGroup();
+		radioButtons.selectedToggleProperty().addListener(_ -> update());
 		locationsRadioButton.setToggleGroup(radioButtons);
-
-		lineageRadioButton.setOnAction(event -> showLineage());
 		lineageRadioButton.setToggleGroup(radioButtons);
-
-		ancestorsRadioButton.setOnAction(event -> showAncestors());
 		ancestorsRadioButton.setToggleGroup(radioButtons);
-
-		descendantsRadioButton.setOnAction(event -> showDescendants());
 		descendantsRadioButton.setToggleGroup(radioButtons);
 
-		individualsComboBox.valueProperty().addListener((ObservableValue<? extends Individual> observable, Individual oldValue, Individual newValue) -> {
-			proband = newValue;
+		individualsComboBox = new IndividualsComboBox();
+		pathsCheckBox = new CheckBox(I18N.get("Paths"));
 
-			final var selectedRadioButton = radioButtons.getSelectedToggle();
-			if (selectedRadioButton == lineageRadioButton) {
-				showLineage();
-			} else if (selectedRadioButton == ancestorsRadioButton) {
-				showAncestors();
-			} else if (selectedRadioButton == descendantsRadioButton) {
-				showDescendants();
-			}
+		individualsComboBox.valueProperty().addListener((ObservableValue<? extends Individual> _, Individual _, Individual newValue) -> {
+			proband = newValue;
+			update();
 		});
+
+		pathsCheckBox.setOnAction(_ -> update());
 
 		configPane.setPadding(new Insets(PADDING, PADDING, PADDING, PADDING));
 		configPane.setSpacing(PADDING);
 		configPane.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(10), Insets.EMPTY)));
 		configPane.setBorder(new Border(new BorderStroke(Color.gray(0.69), BorderStrokeStyle.SOLID, new CornerRadii(3), new BorderWidths(2))));
-		configPane.getChildren().addAll(locationsRadioButton, lineageRadioButton, ancestorsRadioButton, descendantsRadioButton, individualsComboBox);
+		configPane.getChildren().addAll(locationsRadioButton, lineageRadioButton, ancestorsRadioButton, descendantsRadioButton, individualsComboBox, pathsCheckBox);
 
 		AnchorPane.setBottomAnchor(configPane, MARGIN);
 		AnchorPane.setLeftAnchor(configPane, MARGIN);
@@ -105,8 +100,14 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 			@Subscribe
 			void onGedcomEvent(final GEDCOMEvent event) {
 				gedcom = event.getGEDCOM();
-				proband = Preferences.getProband(gedcom);
 				locationCount = gedcom != null && gedcom.isLoaded() ? gedcom.getLocations().size() : 0;
+				proband = gedcom != null && gedcom.isLoaded() ? Preferences.getProband(gedcom) : null;
+				reset();
+			}
+
+			@Subscribe
+			void onProbandChangedEvent(final ProbandChangedEvent event) {
+				proband = event.getProband();
 				reset();
 			}
 		});
@@ -116,12 +117,23 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 	protected void onLoad() {
 		super.onLoad();
 
-		showLocations();
+		reset();
 	}
 
 	private void reset() {
 		Platform.runLater(() -> {
-			radioButtons.selectToggle(locationsRadioButton);
+			var selectedRadioButton = locationsRadioButton;
+
+			final var view = Preferences.getMapPanelView();
+			if (view == View.LINEAGE) {
+				selectedRadioButton = lineageRadioButton;
+			} else if (view == View.ANCESTORS) {
+				selectedRadioButton = ancestorsRadioButton;
+			} else if (view == View.DESCENDANTS) {
+				selectedRadioButton = descendantsRadioButton;
+			}
+
+			radioButtons.selectToggle(selectedRadioButton);
 
 			if (proband != null) {
 				individualsComboBox.getSelectionModel().select(proband);
@@ -129,16 +141,33 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 				individualsComboBox.getSelectionModel().clearSelection();
 			}
 
-			update();
-
-			showLocations();
+			pathsCheckBox.setSelected(Preferences.getMapPanelPathsOption());
 		});
 	}
 
 	private void update() {
 		Platform.runLater(() -> {
 			setEnabled(gedcom != null && gedcom.isLoaded());
-			individualsComboBox.setDisable(radioButtons.getSelectedToggle() == locationsRadioButton);
+
+			final var selectedRadioButton = radioButtons.getSelectedToggle();
+			individualsComboBox.setDisable(selectedRadioButton == locationsRadioButton);
+			pathsCheckBox.setDisable(selectedRadioButton == locationsRadioButton);
+
+			Preferences.setMapPanelPathsOption(pathsCheckBox.isSelected());
+
+			if (selectedRadioButton == locationsRadioButton) {
+				Preferences.setMapPanelView(View.LOCATIONS);
+				showLocations();
+			} else if (selectedRadioButton == lineageRadioButton) {
+				Preferences.setMapPanelView(View.LINEAGE);
+				showLineage();
+			} else if (selectedRadioButton == ancestorsRadioButton) {
+				Preferences.setMapPanelView(View.ANCESTORS);
+				showAncestors();
+			} else if (selectedRadioButton == descendantsRadioButton) {
+				Preferences.setMapPanelView(View.DESCENDANTS);
+				showDescendants();
+			}
 		});
 	}
 
@@ -151,25 +180,53 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 	}
 
 	private void showLineage() {
-		Platform.runLater(() -> {
-			if (js != null && gedcom != null && gedcom.isLoaded() && proband != null) {
-				js.call("showLineage", JSONUtils.toJSON(proband.getLineage(Preferences.getLineageMode()).stream().map(Quintet::getValue1).toList()));
-			}
-		});
+		showFacts(proband.getLineage(Preferences.getLineageMode()));
 	}
 
 	private void showAncestors() {
-		Platform.runLater(() -> {
-			if (js != null && gedcom != null && gedcom.isLoaded() && proband != null) {
-				js.call("showAncestors", JSONUtils.toJSON(proband.getAncestorsList().stream().collect(Collectors.toMap(Quintet::getValue0, Quintet::getValue1))));
-			}
-		});
+		showFacts(proband.getAncestorsList());
 	}
 
 	private void showDescendants() {
+		showFacts(proband.getDescendantsList());
+	}
+
+	private void showFacts(final List<Quintet<String, Individual, Family, Individual, Integer>> data) {
 		Platform.runLater(() -> {
 			if (js != null && gedcom != null && gedcom.isLoaded() && proband != null) {
-				js.call("showDescendants", JSONUtils.toJSON(proband.getDescendantsList().stream().map(Quintet::getValue1).toList()));
+				final var facts = new ArrayList<ArrayList<Fact>>();
+
+				data.forEach(quintet -> {
+					final var factsOfIndividual = new ArrayList<Fact>();
+
+					final var individual = quintet.getValue1();
+
+					final var birth = individual.getBirthOrBaptism();
+					if (birth != null && birth.getDate() != null && birth.getLocation() != null) {
+						factsOfIndividual.add(birth);
+					}
+
+					individual.getFacts("RESI").stream().filter(fact -> fact.getDate() != null && fact.getLocation() != null).forEach(factsOfIndividual::add);
+
+					final var death = individual.getDeathOrBurial();
+					if (death != null && death.getDate() != null && death.getLocation() != null) {
+						factsOfIndividual.add(death);
+					}
+
+					final var family = quintet.getValue2();
+					if (family != null) {
+						final var marriage = family.getMarriage();
+						if (marriage != null && marriage.getDate() != null && marriage.getLocation() != null) {
+							factsOfIndividual.add(marriage);
+						}
+					}
+
+					Collections.sort(factsOfIndividual, Comparator.comparing(Fact::getDate));
+
+					facts.add(factsOfIndividual);
+				});
+
+				js.call("showFacts", JSONUtils.toJSON(facts), pathsCheckBox.isSelected());
 			}
 		});
 	}
@@ -177,5 +234,9 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 	@Override
 	public int getRecordCount() {
 		return locationCount;
+	}
+
+	public enum View {
+		LOCATIONS, LINEAGE, ANCESTORS, DESCENDANTS;
 	}
 }

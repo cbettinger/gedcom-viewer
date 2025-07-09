@@ -81,7 +81,7 @@ public class MainFrame extends Frame {
 				if (SystemInfo.isMacOS) {
 					Taskbar.getTaskbar().setIconImage(icon);
 				}
-			} catch (IOException _) {
+			} catch (final IOException _) {
 				// intentionally left blank
 			}
 		}
@@ -152,7 +152,12 @@ public class MainFrame extends Frame {
 			}
 		});
 
-		gedcom.unload();
+		// gedcom.unload();
+		try {
+			gedcom.load(new File("../family-bettinger/ChristianBettinger_19841002_Trier.ged"));
+		} catch (GEDCOMException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private String buildTitle(final GEDCOM gedcom) {

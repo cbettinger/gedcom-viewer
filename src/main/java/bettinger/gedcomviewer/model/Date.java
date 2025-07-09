@@ -1,5 +1,6 @@
 package bettinger.gedcomviewer.model;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -21,11 +22,11 @@ public class Date implements Comparable<Date> {
 	private final String formatted;
 	private LocalDate timestamp;
 
-	Date(final String raw) {
+	private Date(final String raw) throws ParseException {
 		this.raw = raw == null ? "" : raw;
 		this.components = parseComponents(this.raw);
-		this.timestamp = parseTimestamp(components);
-		this.formatted = format(components);
+		this.formatted = format(this.components);
+		this.timestamp = parseTimestamp(this.components);
 	}
 
 	public String getRaw() {
@@ -51,10 +52,18 @@ public class Date implements Comparable<Date> {
 		}
 	}
 
-	private static String[] parseComponents(final String raw) {
+	public static Date parse(final String raw) {
+		try {
+			return new Date(raw);
+		} catch (final ParseException _) {
+			return null;
+		}
+	}
+
+	private static String[] parseComponents(final String raw) throws ParseException {
 		final var matcher = DATE_STRING_PATTERN.matcher(raw);
 		if (!matcher.find()) {
-			return new String[0];
+			throw new ParseException(String.format("Invalid date string '%s'", raw), 0);
 		}
 
 		final String[] result = new String[8];
@@ -84,10 +93,6 @@ public class Date implements Comparable<Date> {
 		}
 
 		return result;
-	}
-
-	private static LocalDate parseTimestamp(final String[] components) {
-		return components == null || components.length != 8 ? null : LocalDate.of(Integer.parseInt(components[3]), components[2] == null ? 1 : Integer.parseInt(components[2]), components[1] == null ? 1 : Integer.parseInt(components[1]));
 	}
 
 	private static String format(final String[] components) {
@@ -126,5 +131,13 @@ public class Date implements Comparable<Date> {
 		}
 
 		return sb.toString();
+	}
+
+	private static LocalDate parseTimestamp(final String[] components) {
+		try {
+			return LocalDate.of(Integer.parseInt(components[3]), components[2] == null ? 1 : Integer.parseInt(components[2]), components[1] == null ? 1 : Integer.parseInt(components[1]));
+		} catch (final Exception _) {
+			return null;
+		}
 	}
 }

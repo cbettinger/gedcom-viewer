@@ -3,7 +3,6 @@ package bettinger.gedcomviewer.model;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -31,7 +30,7 @@ public class Media extends Structure implements Record, NoteContainer, SourceCit
 	private final SourceCitationManager sourceCitationManager;
 
 	private String title;
-	private String fileName;
+	private String filePath;
 	private String format;
 	private Type type;
 
@@ -47,12 +46,12 @@ public class Media extends Structure implements Record, NoteContainer, SourceCit
 			this.title = getFirstExtensionTagValue("TITL");
 		}
 
-		final var mediaFileName = media.getFile();
-		if (mediaFileName.startsWith(STG_PREFIX)) {
+		final var mediaFilePath = media.getFile();
+		if (mediaFilePath.startsWith(STG_PREFIX)) {
 			final String gedcomFileBaseName = FileUtils.getBaseName(gedcom.getFileName());
-			this.fileName = FileUtils.getPath(gedcom.getDirectoryPath(), gedcomFileBaseName, mediaFileName.replaceFirst(STG_PREFIX, ""));
+			this.filePath = FileUtils.getPath(gedcom.getDirectoryPath(), gedcomFileBaseName, mediaFilePath.replaceFirst(STG_PREFIX, ""));
 		} else {
-			this.fileName = FileUtils.getPath(gedcom.getDirectoryPath(), mediaFileName);
+			this.filePath = FileUtils.getPath(gedcom.getDirectoryPath(), mediaFilePath);
 		}
 
 		final var formatTag = getFirstExtensionTag("FORM");
@@ -133,24 +132,20 @@ public class Media extends Structure implements Record, NoteContainer, SourceCit
 		return getId();
 	}
 
-	public File getFile() {
-		return new File(fileName);
-	}
-
-	public String getFileName() {
-		return fileName;
-	}
-
-	public URL getURL() {
-		URL fileURL = null;
-
+	public String getURL() {
 		try {
-			fileURL = new File(fileName).toURI().toURL();
+			return getFile().toURI().toURL().toString();
 		} catch (final Exception _) {
-			// intentionally left blank
+			return "";
 		}
+	}
 
-		return fileURL;
+	public boolean exists() {
+		return FileUtils.exists(getFile());
+	}
+
+	public File getFile() {
+		return new File(filePath);
 	}
 
 	public Type getType() {
@@ -192,27 +187,22 @@ public class Media extends Structure implements Record, NoteContainer, SourceCit
 
 		HTMLUtils.appendH1(sb, getTitle());
 
-		final URL fileURL = getURL();
-		if (fileURL != null) {
-			final var file = getFile();
-			final var fileExists = file.exists() && !file.isDirectory();
-			if (fileExists) {
-				if (isImage()) {
-					HTMLUtils.appendH2(sb, I18N.get("Preview"));
-					if (options.contains(HTMLOption.EXPORT)) {
-						HTMLUtils.appendImage(sb, fileURL.toString());
-					} else {
-						HTMLUtils.appendImage(sb, fileURL.toString(), Constants.PREVIEW_IMAGE_WIDTH);
-					}
-					HTMLUtils.appendLineBreak(sb);
+		if (exists()) {
+			if (isImage()) {
+				HTMLUtils.appendH2(sb, I18N.get("Preview"));
+				if (options.contains(HTMLOption.EXPORT)) {
+					HTMLUtils.appendImage(sb, getURL());
+				} else {
+					HTMLUtils.appendImage(sb, getURL(), Constants.PREVIEW_IMAGE_WIDTH);
 				}
+				HTMLUtils.appendLineBreak(sb);
+			}
 
-				if (!options.contains(HTMLOption.NO_OPEN_MEDIA_LINK)) {
-					if (options.contains(HTMLOption.EXPORT)) {
-						HTMLUtils.appendText(sb, HTMLUtils.createDownloadLink(fileURL.toString(), I18N.get("OpenFile")));
-					} else {
-						HTMLUtils.appendText(sb, HTMLUtils.createLink(fileURL.toString(), I18N.get("OpenFile")));
-					}
+			if (!options.contains(HTMLOption.NO_OPEN_MEDIA_LINK)) {
+				if (options.contains(HTMLOption.EXPORT)) {
+					HTMLUtils.appendText(sb, HTMLUtils.createDownloadLink(getURL(), I18N.get("OpenFile")));
+				} else {
+					HTMLUtils.appendText(sb, HTMLUtils.createLink(getURL(), I18N.get("OpenFile")));
 				}
 			}
 		}

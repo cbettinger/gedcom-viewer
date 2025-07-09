@@ -14,17 +14,11 @@ import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.folg.gedcom.model.Name;
 import org.javatuples.Quintet;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-
 import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.utils.HTMLUtils;
 import bettinger.gedcomviewer.utils.Numbering;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-@JsonAutoDetect(fieldVisibility = Visibility.NONE, getterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
 public class Individual extends IndividualFamilyCommonStructure {
 
 	static final String TAG = "INDI";
@@ -64,7 +58,6 @@ public class Individual extends IndividualFamilyCommonStructure {
 	}
 
 	/* #region getter & setter */
-	@JsonProperty
 	public String getName() {
 		final var names = wrappedPerson.getNames();
 		if (names == null || names.isEmpty()) {
@@ -145,22 +138,26 @@ public class Individual extends IndividualFamilyCommonStructure {
 		return getSexSign(sex);
 	}
 
+	public Fact getBirthOrBaptism() {
+		final var fact = getBirth();
+		return fact != null ? fact : getBaptism();
+	}
+
 	public Date getBirthDate() {
-		final var primaryFact = getPrimaryBirth();
-		return primaryFact == null ? null : primaryFact.getDate();
+		final var fact = getBirth();
+		return fact == null ? null : fact.getDate();
 	}
 
 	public String getBirthPlace() {
-		return getPlace(getPrimaryBirth());
+		return getPlace(getBirth());
 	}
 
-	@JsonProperty
 	public Location getBirthLocation() {
-		final var primaryFact = getPrimaryBirth();
-		return primaryFact == null ? null : primaryFact.getLocation();
+		final var fact = getBirth();
+		return fact == null ? null : fact.getLocation();
 	}
 
-	private Fact getPrimaryBirth() {
+	private Fact getBirth() {
 		return getBestFact(BIRTH_TAG);
 	}
 
@@ -169,21 +166,20 @@ public class Individual extends IndividualFamilyCommonStructure {
 	}
 
 	public Date getBaptismDate() {
-		final var primaryFact = getPrimaryBaptism();
-		return primaryFact == null ? null : primaryFact.getDate();
+		final var fact = getBaptism();
+		return fact == null ? null : fact.getDate();
 	}
 
 	public String getBaptismPlace() {
-		return getPlace(getPrimaryBaptism());
+		return getPlace(getBaptism());
 	}
 
-	@JsonProperty
 	public Location getBaptismLocation() {
-		final var primaryFact = getPrimaryBaptism();
-		return primaryFact == null ? null : primaryFact.getLocation();
+		final var fact = getBaptism();
+		return fact == null ? null : fact.getLocation();
 	}
 
-	private Fact getPrimaryBaptism() {
+	private Fact getBaptism() {
 		return getBestFact(BAPTISM_TAG);
 	}
 
@@ -191,21 +187,26 @@ public class Individual extends IndividualFamilyCommonStructure {
 		return getQuality(BAPTISM_TAG);
 	}
 
+	public Fact getDeathOrBurial() {
+		final var fact = getDeath();
+		return fact != null ? fact : getBurial();
+	}
+
 	public Date getDeathDate() {
-		final var primaryFact = getPrimaryDeath();
-		return primaryFact == null ? null : primaryFact.getDate();
+		final var fact = getDeath();
+		return fact == null ? null : fact.getDate();
 	}
 
 	public String getDeathPlace() {
-		return getPlace(getPrimaryDeath());
+		return getPlace(getDeath());
 	}
 
 	public Location getDeathLocation() {
-		final var primaryFact = getPrimaryDeath();
-		return primaryFact == null ? null : primaryFact.getLocation();
+		final var fact = getDeath();
+		return fact == null ? null : fact.getLocation();
 	}
 
-	private Fact getPrimaryDeath() {
+	private Fact getDeath() {
 		return getBestFact(DEATH_TAG);
 	}
 
@@ -214,20 +215,20 @@ public class Individual extends IndividualFamilyCommonStructure {
 	}
 
 	public Date getBurialDate() {
-		final var primaryFact = getPrimaryBurial();
-		return primaryFact == null ? null : primaryFact.getDate();
+		final var fact = getBurial();
+		return fact == null ? null : fact.getDate();
 	}
 
 	public String getBurialPlace() {
-		return getPlace(getPrimaryBurial());
+		return getPlace(getBurial());
 	}
 
 	public Location getBurialLocation() {
-		final var primaryFact = getPrimaryBurial();
-		return primaryFact == null ? null : primaryFact.getLocation();
+		final var fact = getBurial();
+		return fact == null ? null : fact.getLocation();
 	}
 
-	private Fact getPrimaryBurial() {
+	private Fact getBurial() {
 		return getBestFact(BURIAL_TAG);
 	}
 
@@ -249,7 +250,6 @@ public class Individual extends IndividualFamilyCommonStructure {
 		return parents == null ? null : parents.getWife();
 	}
 
-	@JsonProperty
 	public Family getParents() {
 		final var parentFamilies = wrappedPerson.getParentFamilyRefs();
 		return parentFamilies == null || parentFamilies.isEmpty() ? null : (Family) gedcom.getRecord(parentFamilies.get(0).getRef());
@@ -274,7 +274,6 @@ public class Individual extends IndividualFamilyCommonStructure {
 		return result;
 	}
 
-	@JsonProperty
 	public List<Family> getFamilies() {
 		return getFamilies(false);
 	}

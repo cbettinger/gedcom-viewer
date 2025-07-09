@@ -13,7 +13,7 @@ import org.w3c.dom.svg.SVGDocument;
 import bettinger.gedcomviewer.model.Family;
 import bettinger.gedcomviewer.model.Individual;
 
-class DescendantsRenderer extends Renderer {
+public class DescendantsRenderer extends Renderer {
 
 	final Set<Family> recursed = new HashSet<>();
 

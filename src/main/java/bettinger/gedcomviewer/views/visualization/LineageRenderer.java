@@ -4,7 +4,7 @@ import bettinger.gedcomviewer.Preferences;
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.model.LineageMode;
 
-class LineageRenderer extends AncestorsRenderer {
+public class LineageRenderer extends AncestorsRenderer {
 
 	@Override
 	boolean canRecurseFather(final Individual individual) {

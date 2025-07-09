@@ -40,7 +40,7 @@ public interface TagUtils {
 	}
 
 	public static List<GedcomTag> getExtensionTags(final ExtensionContainer extensionContainer, final List<String> tagNames) {
-		return getExtensionTags(extensionContainer).stream().filter(t -> tagNames.contains(t.getTag())).toList();
+		return getExtensionTags(extensionContainer).stream().filter(t -> tagNames.isEmpty() || tagNames.contains(t.getTag())).toList();
 	}
 
 	public static void replaceExtensionTags(final ExtensionContainer extensionContainer, final String tagName, final List<GedcomTag> tags) {

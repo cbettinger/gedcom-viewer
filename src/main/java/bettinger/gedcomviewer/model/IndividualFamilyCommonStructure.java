@@ -32,7 +32,9 @@ public abstract class IndividualFamilyCommonStructure extends Structure implemen
 
 		this.wrappedPersonFamilyCommonContainer = personFamilyCommonContainer;
 
-		this.facts = personFamilyCommonContainer.getEventsFacts().stream().map(eventFact -> new Fact(gedcom, eventFact, this)).toList();
+		this.facts = new ArrayList<>();
+		this.facts.addAll(personFamilyCommonContainer.getEventsFacts().stream().map(eventFact -> new Fact(gedcom, eventFact, this)).toList());
+		this.facts.addAll(getExtensionTags().stream().filter(tag -> !tag.getTag().isEmpty() && !tag.getValue().isEmpty()).map(tag -> new Fact(gedcom, tag, this)).toList());
 	}
 
 	/* #region container */
@@ -93,11 +95,6 @@ public abstract class IndividualFamilyCommonStructure extends Structure implemen
 	}
 
 	@Override
-	public String getPrimaryImageURL(final boolean onlyPhoto) {
-		return mediaManager.getPrimaryImageURL(onlyPhoto);
-	}
-
-	@Override
 	public Media getPrimaryImage(final boolean onlyPhoto) {
 		return mediaManager.getPrimaryImage(onlyPhoto);
 	}
@@ -155,7 +152,7 @@ public abstract class IndividualFamilyCommonStructure extends Structure implemen
 		return new ArrayList<>(result);
 	}
 
-	Quality getQuality(final String tag) {
+	public Quality getQuality(final String tag) {
 		var qualityValue = Quality.UNKNOWN.getValue();
 
 		final var factsOfTag = getFacts(tag);
@@ -169,21 +166,21 @@ public abstract class IndividualFamilyCommonStructure extends Structure implemen
 		return Quality.fromValue(qualityValue);
 	}
 
-	Fact getBestFact(final String tag) {
+	public Fact getBestFact(final String tag) {
 		final var quality = getQuality(tag);
 		final var bestFacts = getFacts(tag).stream().filter(fact -> fact.getQuality() == quality).toList();
 		return bestFacts.isEmpty() ? null : bestFacts.get(0);
 	}
 
-	List<Fact> getFacts(final String tag) {
+	public List<Fact> getFacts(final String tag) {
 		return getFacts().stream().filter(fact -> fact.getTag().equals(tag)).toList();
 	}
 
-	List<Fact> getFacts() {
+	public List<Fact> getFacts() {
 		return getFacts(false);
 	}
 
-	List<Fact> getFacts(final boolean excludeConfidential) {
+	public List<Fact> getFacts(final boolean excludeConfidential) {
 		var result = facts;
 
 		if (excludeConfidential) {
@@ -210,6 +207,7 @@ public abstract class IndividualFamilyCommonStructure extends Structure implemen
 			} else {
 				HTMLUtils.appendLineBreaks(sb, 2);
 			}
+
 			HTMLUtils.appendText(sb, HTMLUtils.createList(publicFacts, f -> f.toHTML(options), true));
 		}
 
