@@ -22,7 +22,7 @@ public class AboutDialog extends JDialog {
 		setLayout(new BorderLayout());
 
 		final var textPane = new HTMLTextPane();
-		textPane.setBorder(new EmptyBorder(2 * Constants.TEXT_PANE_MARGIN, 2 * Constants.TEXT_PANE_MARGIN, 2 * Constants.TEXT_PANE_MARGIN, 2 * Constants.TEXT_PANE_MARGIN));
+		textPane.setBorder(new EmptyBorder(Constants.DIALOG_PADDING, Constants.DIALOG_PADDING, Constants.DIALOG_PADDING, Constants.DIALOG_PADDING));
 		textPane.setFocusable(false);
 		add(new JScrollPane(textPane), BorderLayout.CENTER);
 

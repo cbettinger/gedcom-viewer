@@ -3,9 +3,8 @@ package bettinger.gedcomviewer.views.tabs.map;
 import com.google.common.eventbus.Subscribe;
 
 import bettinger.gedcomviewer.Events;
-import bettinger.gedcomviewer.Format;
-import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.model.GEDCOM.GEDCOMEvent;
+import bettinger.gedcomviewer.model.Individual;
 import javafx.application.Platform;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
@@ -19,7 +18,7 @@ class IndividualsComboBox extends ComboBox<Individual> {
 			@Override
 			protected void updateItem(Individual t, boolean bln) {
 				super.updateItem(t, bln);
-				setText(t == null ? null : String.format(Format.STRING_WITH_PARENTHESED_SUFFIX, t.getName(), t.getNumber()));
+				setText(t == null ? null : t.getNameAndNumber());
 			}
 		});
 

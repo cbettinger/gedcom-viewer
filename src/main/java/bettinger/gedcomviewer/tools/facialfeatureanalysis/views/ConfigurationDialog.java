@@ -1,18 +1,20 @@
 package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 
-import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JSpinner;
+import javax.swing.JTextArea;
+import javax.swing.SpinnerNumberModel;
 
 import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.AnalysisBackgroundWorker;
-import bettinger.gedcomviewer.views.HTMLTextPane;
-import bettinger.gedcomviewer.views.IntegerPicker;
 import bettinger.gedcomviewer.views.MainFrame;
 import bettinger.gedcomviewer.views.icons.MaterialIcons;
 import jiconfont.swing.IconFontSwing;
@@ -23,42 +25,72 @@ public class ConfigurationDialog extends JDialog {
 		setTitle(I18N.get("FacialFeatureAnalysis"));
 		setModal(true);
 
-		setLayout(new BorderLayout());
+		setLayout(new GridBagLayout());
 
-		final var infoPane = new HTMLTextPane();
-		infoPane.setText(I18N.get("FacialFeatureAnalysisStartInfo"));
+		final var c = new GridBagConstraints();
 
-		final var maxDepthPicker = new IntegerPicker(I18N.get("MaxFacialFeatureComparisonDepth"), Constants.MIN_FACIAL_FEATURE_ANALYSIS_DEPTH, Constants.MAX_FACIAL_FEATURE_ANALYSIS_DEPTH, Constants.MAX_FACIAL_FEATURE_ANALYSIS_DEPTH / 2);
-		final var maxNumPortraitsPicker = new IntegerPicker(I18N.get("MaxNumPortraitsPerPerson"), Constants.MIN_FACIAL_FEATURE_ANALYSIS_NUM_PORTRAITS, Constants.MAX_FACIAL_FEATURE_ANALYSIS_NUM_PORTRAITS, Constants.MAX_FACIAL_FEATURE_ANALYSIS_NUM_PORTRAITS);
+		c.fill = GridBagConstraints.BOTH;
 
-		var vBox = new JPanel();
-		vBox.setLayout(new BoxLayout(vBox, BoxLayout.PAGE_AXIS));
-		vBox.setBackground(Constants.DEFAULT_CONTENT_COLOR);
-		var proband = new HTMLTextPane();
-		proband.setText(String.format("%s: %s", I18N.get("Proband"), individual.getName()));
-		vBox.add(proband);
-		vBox.add(maxDepthPicker);
-		vBox.add(maxNumPortraitsPicker);
-		var parameterPane = new JPanel();
-		parameterPane.setBackground(Constants.DEFAULT_CONTENT_COLOR);
-		parameterPane.add(vBox);
+		final var generationsSpinner = new JSpinner(new SpinnerNumberModel(Constants.MAX_FACIAL_FEATURE_ANALYSIS_DEPTH, Constants.MIN_FACIAL_FEATURE_ANALYSIS_DEPTH, Constants.MAX_FACIAL_FEATURE_ANALYSIS_DEPTH, 1));
+		final var numberOfPortraitsSpinner = new JSpinner(new SpinnerNumberModel(Constants.MAX_FACIAL_FEATURE_ANALYSIS_NUM_PORTRAITS, Constants.MIN_FACIAL_FEATURE_ANALYSIS_NUM_PORTRAITS, Constants.MAX_FACIAL_FEATURE_ANALYSIS_NUM_PORTRAITS, 1));
+
+		c.gridx = 0;
+		c.gridy = 0;
+		c.gridwidth = 2;
+		c.insets = new Insets(2 * Constants.DIALOG_PADDING, Constants.DIALOG_PADDING, Constants.DIALOG_PADDING, Constants.DIALOG_PADDING);
+
+		final var info = new JTextArea(I18N.get("FacialFeatureAnalysisInfo"));
+		info.setBorder(null);
+		info.setFocusable(false);
+		info.setEditable(false);
+		info.setLineWrap(true);
+		info.setWrapStyleWord(true);
+		info.setColumns(40);
+		add(info, c);
+
+		c.gridy = 4;
+		c.insets = new Insets(0, Constants.DIALOG_PADDING, 2 * Constants.DIALOG_PADDING, Constants.DIALOG_PADDING);
 
 		final var startButton = new JButton(I18N.get("StartFacialFeatureAnalysis"), IconFontSwing.buildIcon(MaterialIcons.PLAY_ARROW, Constants.DEFAULT_ICON_SIZE));
 		startButton.addActionListener(_ -> {
-			new AnalysisBackgroundWorker(individual, maxDepthPicker.getValue(), maxNumPortraitsPicker.getValue()).execute();
+			new AnalysisBackgroundWorker(individual, (int) generationsSpinner.getValue(), (int) numberOfPortraitsSpinner.getValue()).execute();
+			dispose();
 			setVisible(false);
 		});
-		var buttonPanel = new JPanel();
-		buttonPanel.add(startButton);
+		add(startButton, c);
 
-		add(infoPane, BorderLayout.PAGE_START);
-		add(parameterPane, BorderLayout.CENTER);
-		add(buttonPanel, BorderLayout.PAGE_END);
+		c.gridwidth = 1;
+		c.weightx = 0.9;
+
+		c.gridy = 1;
+		c.insets = new Insets(0, Constants.DIALOG_PADDING, Constants.DIALOG_PADDING, Constants.DIALOG_PADDING);
+		add(new JLabel(I18N.get("Proband")), c);
+
+		c.gridy = 2;
+		add(new JLabel(I18N.get("Generations")), c);
+
+		c.gridy = 3;
+		add(new JLabel(I18N.get("NumberOfPortraitsPerPerson")), c);
+
+		c.gridx = 1;
+		c.weightx = 0.1;
+		c.insets = new Insets(0, 0, Constants.DIALOG_PADDING, Constants.DIALOG_PADDING);
+
+		c.gridy = 1;
+		add(new JLabel(individual.getNameAndNumber()), c);
+
+		c.gridy = 2;
+		add(generationsSpinner, c);
+
+		c.gridy = 3;
+		add(numberOfPortraitsSpinner, c);
 
 		pack();
-
-		setSize(Constants.DEFAULT_MODAL_DIALOG_WIDTH, Constants.DEFAULT_MODAL_DIALOG_HEIGHT);
+		setResizable(false);
 		setLocationRelativeTo(MainFrame.getInstance());
+
+		getRootPane().setDefaultButton(startButton);
+		startButton.requestFocusInWindow();
 
 		setVisible(true);
 	}

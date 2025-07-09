@@ -58,6 +58,10 @@ public class Individual extends IndividualFamilyCommonStructure {
 	}
 
 	/* #region getter & setter */
+	public String getNameAndNumber() {
+		return String.format(Format.STRING_WITH_PARENTHESED_SUFFIX, getName(), getNumber());
+	}
+
 	public String getName() {
 		final var names = wrappedPerson.getNames();
 		if (names == null || names.isEmpty()) {

@@ -28,9 +28,11 @@ public class ResultFrame extends Frame {
         tabbedPane.addTab(I18N.get("DetailedView"), detailedPane);
 
         add(tabbedPane);
+
         pack();
-        setSize(Constants.DEFAULT_FRAME_WIDTH, Constants.DEFAULT_FRAME_HEIGHT);
-        setLocationRelativeTo(MainFrame.getInstance());
-        setVisible(true);
+		setSize(Constants.DEFAULT_FRAME_WIDTH, Constants.DEFAULT_FRAME_HEIGHT);
+		setLocationRelativeTo(MainFrame.getInstance());
+
+		setVisible(true);
     }
 }

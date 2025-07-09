@@ -22,7 +22,7 @@ public class GenerationsComboBox extends JComboBox<Integer> {
 
 			@Override
 			public Component getListCellRendererComponent(JList<? extends Integer> list, Integer value, int index, boolean isSelected, boolean cellHasFocus) {
-				JLabel label = (JLabel) defaultRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				final var label = (JLabel) defaultRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 				if (label != null && value != null) {
 					label.setText(value == 0 ? "∞" : Numbering.getRoman(value));
 				}
