@@ -36,9 +36,9 @@ public class PersonInput {
 			Media medium = entry.getKey();
 			Rectangle clip = entry.getValue();
 
-			String fileName = medium.getFileName();
+			String filePath = medium.getFilePath();
 
-			PortraitInput portraitInput = new PortraitInput(fileName);
+			PortraitInput portraitInput = new PortraitInput(filePath);
 			if (clip != null) {
 				portraitInput.setBoxPoints(clip.x, clip.y, clip.x + clip.width, clip.y + clip.height);
 			}

@@ -59,14 +59,14 @@ public class DetailsNode extends Node {
         }
     }
 
-    private Image getPortrait(Individual individual, String filename) {
+    private Image getPortrait(Individual individual, String filePath) {
         Image result = null;
 
         if (individual != null) {
             final var portraits = individual.getPortraits();
             for (var entry : portraits.entrySet()) {
                 var media = entry.getKey();
-                if (media.getFileName().equals(filename)) {
+                if (media.getFilePath().equals(filePath)) {
                     var image = (BufferedImage) media.getImage();
 
                     final var clip = entry.getValue();
