@@ -671,7 +671,7 @@ public enum MaterialIcons implements IconCode {
 	PRESENT_TO_ALL('\uE0DF'),
 	PRINT('\uE8AD'),
 	PRIORITY_HIGH('\uE645'),
-	PSYCHOLOGY_ALT('\uf8ea'),
+	PSYCHOLOGY_ALT('\uF8EA'),
 	PUBLIC('\uE80B'),
 	PUBLISH('\uE255'),
 	QUERY_BUILDER('\uE8AE'),
