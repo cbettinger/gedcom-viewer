@@ -25,7 +25,7 @@ public interface Analyser {
 			throw new AnalysisException("Failed to create temp file");
 		}
 
-		final var inputFile = JSONUtils.toJSONFile(new PersonInput(proband, 0, depth), inputFilePath.toString());
+		final var inputFile = JSONUtils.toJSONFile(new IndividualDTO(proband, depth), inputFilePath.toString());
 		if (inputFile == null) {
 			throw new AnalysisException("Failed to write input file");
 		}
