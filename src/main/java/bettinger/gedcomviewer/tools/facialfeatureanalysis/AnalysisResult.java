@@ -40,7 +40,7 @@ public class AnalysisResult {
 					idsWithMaxSimilarity.clear();
 					idsWithMaxSimilarity.add(id);
 					maxSimilarity = avgSimilarity;
-				} else if (avgSimilarity == maxSimilarity) { // TODO: accept epsilon as below?
+				} else if (avgSimilarity == maxSimilarity) { // TODO: accept epsilon as below? yes
 					idsWithMaxSimilarity.add(id);
 				}
 			}

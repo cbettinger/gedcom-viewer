@@ -32,7 +32,7 @@ public class Similarity {
 	}
 
 	public static Similarity fromJSON(final JsonNode json) {
-		if (json.properties().isEmpty() && json.asText().isEmpty()) { // TODO: ||?
+		if (json.properties().isEmpty() && json.asText().isEmpty()) { // TODO: second operand can be deleted
 			return null;
 		}
 
