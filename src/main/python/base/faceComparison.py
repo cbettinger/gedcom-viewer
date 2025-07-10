@@ -17,7 +17,7 @@ def getFaceAnalysisResult(targetPerson, maxDepth=None):
     similarityResults = FaceAnalyser.analyse(targetPerson, maxDepth)
 
     if similarityResults is None:
-        return {"error": True, "message": "Not enough usable portraits"}
+        return {"error": True, "message": "Insufficient number of portraits"}
     paths = targetPerson.getPaths()
 
     nodes = dictUtils.getDicts(FACE_CHARACTERISTICS_OF_INTEREST)

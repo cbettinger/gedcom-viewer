@@ -6,7 +6,7 @@ from base.faceComparison import getFaceAnalysisResult
 from base.Person import Person
 
 if len(sys.argv) < 4:
-    print(json.dumps({"error": True, "message": "Not enough parameters"}))
+    print(json.dumps({"error": True, "message": "Invalid number of arguments"}))
 else:
     rootPerson = parseJSON.parseFile(sys.argv[1], int(sys.argv[2]))
     if len(sys.argv) > 4:
