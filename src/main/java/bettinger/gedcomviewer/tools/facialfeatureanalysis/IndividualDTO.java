@@ -1,4 +1,4 @@
-package bettinger.gedcomviewer.tools.facialfeatureanalysis.model;
+package bettinger.gedcomviewer.tools.facialfeatureanalysis;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +22,6 @@ class IndividualDTO {
 	@JsonProperty
 	private final IndividualDTO mother;
 
-	IndividualDTO(final Individual individual, final int maxDepth) {
-		this(individual, maxDepth, 0);
-	}
-
 	private IndividualDTO(final Individual individual, final int maxDepth, final int depth) {
 		this.id = individual.getId();
 
@@ -34,5 +30,9 @@ class IndividualDTO {
 
 		this.father = depth < maxDepth && individual.getFather() != null ? new IndividualDTO(individual.getFather(), maxDepth, depth + 1) : null;
 		this.mother = depth < maxDepth && individual.getMother() != null ? new IndividualDTO(individual.getMother(), maxDepth, depth + 1) : null;
+	}
+
+	static IndividualDTO build(final Individual individual, final int maxDepth) {
+		return new IndividualDTO(individual, maxDepth, 0);
 	}
 }

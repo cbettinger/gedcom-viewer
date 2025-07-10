@@ -1,4 +1,4 @@
-package bettinger.gedcomviewer.tools.facialfeatureanalysis.model;
+package bettinger.gedcomviewer.tools.facialfeatureanalysis;
 
 import java.awt.Color;
 

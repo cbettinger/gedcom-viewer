@@ -12,8 +12,8 @@ import java.util.Map;
 import org.javatuples.Pair;
 
 import bettinger.gedcomviewer.model.Individual;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.AnalysisResult;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.Similarity;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.AnalysisResult;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.Similarity;
 import bettinger.gedcomviewer.views.visualization.AncestorsRenderer;
 import bettinger.gedcomviewer.views.visualization.Node;
 

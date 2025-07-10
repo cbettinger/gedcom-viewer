@@ -1,4 +1,4 @@
-package bettinger.gedcomviewer.tools.facialfeatureanalysis.model;
+package bettinger.gedcomviewer.tools.facialfeatureanalysis;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -15,9 +15,9 @@ import bettinger.gedcomviewer.utils.FileUtils;
 import bettinger.gedcomviewer.utils.JSONUtils;
 import bettinger.gedcomviewer.utils.PythonUtils;
 
-public interface Analyser {
+interface Analyser {
 
-	public static Map<FacialFeature, AnalysisResult> analyse(final Individual proband, final int depth, final int numberOfPortraits) throws AnalysisException {
+	static Map<FacialFeature, AnalysisResult> analyse(final Individual proband, final int depth, final int numberOfPortraits) throws AnalysisException {
 		final TreeMap<FacialFeature, AnalysisResult> results = new TreeMap<>();
 
 		final var inputFilePath = FileUtils.createTempFile();
@@ -25,7 +25,7 @@ public interface Analyser {
 			throw new AnalysisException("Failed to create temp file");
 		}
 
-		final var inputFile = JSONUtils.toJSONFile(new IndividualDTO(proband, depth), inputFilePath.toString());
+		final var inputFile = JSONUtils.toJSONFile(IndividualDTO.build(proband, depth), inputFilePath.toString());
 		if (inputFile == null) {
 			throw new AnalysisException("Failed to write input file");
 		}

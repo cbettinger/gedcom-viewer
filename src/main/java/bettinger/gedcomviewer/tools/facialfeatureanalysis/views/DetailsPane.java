@@ -13,7 +13,7 @@ import javax.swing.JTextArea;
 
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Individual;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.AnalysisResult;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.AnalysisResult;
 import bettinger.gedcomviewer.views.WebViewPanel;
 
 public class DetailsPane extends JPanel {

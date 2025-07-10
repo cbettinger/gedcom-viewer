@@ -1,4 +1,4 @@
-package bettinger.gedcomviewer.tools.facialfeatureanalysis.model;
+package bettinger.gedcomviewer.tools.facialfeatureanalysis;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -32,7 +32,7 @@ public class Similarity {
 	}
 
 	public static Similarity fromJSON(final JsonNode json) {
-		if (json.properties().isEmpty() && json.asText().isEmpty()) {	// TODO: ||?
+		if (json.properties().isEmpty() && json.asText().isEmpty()) { // TODO: ||?
 			return null;
 		}
 

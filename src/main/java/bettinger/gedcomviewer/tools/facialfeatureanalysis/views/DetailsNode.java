@@ -14,7 +14,7 @@ import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.model.Structure;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.Similarity;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.Similarity;
 import bettinger.gedcomviewer.views.visualization.Node;
 
 public class DetailsNode extends Node {

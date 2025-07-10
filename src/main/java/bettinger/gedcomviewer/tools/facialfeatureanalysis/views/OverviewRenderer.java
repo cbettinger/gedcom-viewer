@@ -15,8 +15,8 @@ import java.util.Set;
 import org.javatuples.Pair;
 
 import bettinger.gedcomviewer.model.Individual;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeature;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.AnalysisResult;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.AnalysisResult;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.FacialFeature;
 import bettinger.gedcomviewer.views.visualization.AncestorsRenderer;
 import bettinger.gedcomviewer.views.visualization.Node;
 
