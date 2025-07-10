@@ -60,7 +60,7 @@ public abstract class FacialFeatureAnalyser {
             } catch (IOException e) {
                 String message = I18N.get("ProcessingFacialFeatureAnalysisResultFailed");
                 Logger.getLogger(FacialFeatureAnalyser.class.getName()).log(Level.SEVERE, message);
-                throw new FacialFeatureAnalysisException(message);
+                throw new FacialFeatureAnalysisException(message, e);
             }
         } else {
             Logger.getLogger(FacialFeatureAnalyser.class.getName()).log(Level.SEVERE, defaultException.getMessage());
