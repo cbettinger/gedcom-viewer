@@ -25,7 +25,7 @@ public class DetailsPane extends JPanel {
 
   private final WebViewPanel visualization;
 
-  public DetailsPane(final Individual proband, final int numGenerations, final FacialFeatureAnalysisResult result) {
+  public DetailsPane(final Individual proband, final int generations, final FacialFeatureAnalysisResult result) {
     setLayout(new BorderLayout());
 
     this.visualization = new WebViewPanel();
@@ -55,7 +55,7 @@ public class DetailsPane extends JPanel {
     add(legend, BorderLayout.EAST);
     add(visualization, BorderLayout.CENTER);
 
-    update(proband, numGenerations, result);
+    update(proband, generations, result);
   }
 
   private void update(final Individual proband, final int numGenerations, FacialFeatureAnalysisResult result) {

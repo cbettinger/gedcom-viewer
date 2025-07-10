@@ -15,15 +15,15 @@ import bettinger.gedcomviewer.views.MainFrame;
 
 public class ResultFrame extends Frame {
 
-	public ResultFrame(final Individual proband, final int generations, final Map<FacialFeature, FacialFeatureAnalysisResult> results) {
+	public ResultFrame(final Individual proband, final int depth, final Map<FacialFeature, FacialFeatureAnalysisResult> results) {
 		setTitle(String.format(Format.KEY_VALUE, I18N.get("FacialFeatureAnalysis"), proband.getNameAndNumber()));
 
 		final var tabbedPane = new JTabbedPane();
 
-		tabbedPane.addTab(I18N.get("Overview"), new OverviewPane(proband, generations, results));
+		tabbedPane.addTab(I18N.get("Overview"), new OverviewPane(proband, depth, results));
 
 		final var detailsPane = new JTabbedPane();
-		results.entrySet().forEach(entry -> detailsPane.addTab(I18N.get(entry.getKey().name()), new DetailsPane(proband, generations, entry.getValue())));
+		results.entrySet().forEach(entry -> detailsPane.addTab(I18N.get(entry.getKey().name()), new DetailsPane(proband, depth, entry.getValue())));
 		tabbedPane.addTab(I18N.get("Details"), detailsPane);
 
 		add(tabbedPane);

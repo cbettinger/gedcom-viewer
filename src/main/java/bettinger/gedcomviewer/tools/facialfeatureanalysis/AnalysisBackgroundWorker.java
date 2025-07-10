@@ -16,17 +16,17 @@ import bettinger.gedcomviewer.views.MainFrame.BackgroundWorker;
 public class AnalysisBackgroundWorker extends BackgroundWorker {
 
 	private final Individual proband;
-	private final int maxDepth;
-	private final int maxNumPortraits;
+	private final int depth;
+	private final int numberOfPortraits;
 
 	private Map<FacialFeature, FacialFeatureAnalysisResult> results;
 
-	public AnalysisBackgroundWorker(final Individual proband, final int maxDepth, final int maxNumPortraits) {
+	public AnalysisBackgroundWorker(final Individual proband, final int depth, final int numberOfPortraits) {
 		MainFrame.getInstance().super(I18N.get("FacialFeatureAnalysis"));
 
 		this.proband = proband;
-		this.maxDepth = maxDepth;
-		this.maxNumPortraits = maxNumPortraits;
+		this.depth = depth;
+		this.numberOfPortraits = numberOfPortraits;
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class AnalysisBackgroundWorker extends BackgroundWorker {
 		var uri = super.doInBackground();
 
 		try {
-			results = FacialFeatureAnalyser.analyse(proband, maxDepth, maxNumPortraits);
+			results = FacialFeatureAnalyser.analyse(proband, depth, numberOfPortraits);
 		} catch (final FacialFeatureAnalysisException e) {
 			onError(e);
 		}
@@ -47,7 +47,7 @@ public class AnalysisBackgroundWorker extends BackgroundWorker {
 		super.onSuccess(uri);
 
 		if (results != null) {
-			new ResultFrame(proband, maxDepth, results);
+			new ResultFrame(proband, depth, results);
 		}
 	}
 }

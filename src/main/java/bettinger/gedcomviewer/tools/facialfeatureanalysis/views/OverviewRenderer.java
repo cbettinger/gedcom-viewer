@@ -40,7 +40,7 @@ class OverviewRenderer extends AncestorsRenderer {
 			var color = FacialFeature.getColor(entry.getKey());
 			var res = entry.getValue();
 
-			var maxPersonSimilarityIDs = res.getMaxPersonSimilarity().getValue0();
+			var maxPersonSimilarityIDs = res.getMaxIndividualSimilarity().getValue0();
 			this.maxSimilarityIndividuals.put(color, maxPersonSimilarityIDs);
 			this.maxPathIndividuals.put(color, new ArrayList<>());
 

@@ -3,10 +3,8 @@ package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -18,13 +16,10 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
-import org.javatuples.Pair;
-
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Individual;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.AncestralLine;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureAnalysisResult;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeature;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureAnalysisResult;
 import bettinger.gedcomviewer.views.AutoFitTable;
 import bettinger.gedcomviewer.views.WebViewPanel;
 
@@ -44,63 +39,44 @@ public class OverviewPane extends JPanel {
 		}
 	};
 
-	private final WebViewPanel visualization;
-
-	public OverviewPane(final Individual proband, final int generations, final Map<FacialFeature, FacialFeatureAnalysisResult> results) {
+	public OverviewPane(final Individual proband, final int depth, final Map<FacialFeature, FacialFeatureAnalysisResult> results) {
 		setLayout(new BorderLayout());
 
-		this.visualization = new WebViewPanel();
-		TreeMap<FacialFeature, Pair<ArrayList<AncestralLine>, Float>> maxPathSimilarities = new TreeMap<>();
-		TreeMap<FacialFeature, Pair<ArrayList<String>, Float>> maxPersonSimilarities = new TreeMap<>();
-		final String[] columns = { I18N.get("FacialFeature"), I18N.get("LineColor"), I18N.get("MaxPathSimilarity"), I18N.get("MaxSimilarity") };
-		ArrayList<Object[]> tableData = new ArrayList<>();
+		final var renderer = new OverviewRenderer(proband, results);
+		renderer.render(proband, depth + 1);
+
+		final var visualization = new WebViewPanel();
+		visualization.setBody(renderer.toString());
+		visualization.scrollTo(renderer.getProbandNode().getPosition());
+		add(visualization, BorderLayout.CENTER);
+
+		final var sideBar = new JPanel();
+		sideBar.setLayout(new BoxLayout(sideBar, BoxLayout.Y_AXIS));
+
+		final List<Object[]> tableData = new ArrayList<>();
 
 		for (final var entry : results.entrySet()) {
 			final var feature = entry.getKey();
 			final var featureResult = entry.getValue();
+
 			final var maxPathSimilarity = featureResult.getMaxPathSimilarity();
-			maxPathSimilarities.put(feature, maxPathSimilarity);
-			final var maxPersonSimilarity = featureResult.getMaxPersonSimilarity();
-			maxPersonSimilarities.put(feature, maxPersonSimilarity);
-
-			Object[] row = { I18N.get(feature.name()), feature, String.format("%.2f%%", maxPathSimilarity.getValue1() * 100), String.format("%.2f%%", maxPersonSimilarity.getValue1() * 100) };
-			tableData.add(row);
+			final var maxIndividualSimilarity = featureResult.getMaxIndividualSimilarity();
+			tableData.add(new Object[] { I18N.get(feature.name()), feature, String.format("%.2f%%", maxPathSimilarity.getValue1() * 100), String.format("%.2f%%", maxIndividualSimilarity.getValue1() * 100) });
 		}
 
-		var table = new AutoFitTable();
-		Object[][] data = tableData.toArray(new Object[0][0]);
-		table.setModel(new DefaultTableModel(data, columns));
+		final var table = new AutoFitTable();
+		table.setModel(new DefaultTableModel(tableData.toArray(new Object[0][0]), new String[] { I18N.get("FacialFeature"), I18N.get("LineColor"), I18N.get("MaxPathSimilarity"), I18N.get("MaxSimilarity") }));
 		table.getColumnModel().getColumn(1).setCellRenderer(facialFeatureCellRenderer);
+		sideBar.add(new JScrollPane(table));
 
-		var explanations = new JTextArea();
-		explanations.setEditable(false);
-		explanations.setLineWrap(true);
-		explanations.setText(String.format("\n%s: %s\n\n%s: %s", I18N.get("MaxPathSimilarity"), I18N.get("MaxPathSimilarityOverviewExplanation"), I18N.get("MaxSimilarity"), I18N.get("MaxSimilarityOverviewExplanation")));
+		final var info = new JTextArea(String.format("%n%s: %s%n%n%s: %s", I18N.get("MaxPathSimilarity"), I18N.get("MaxPathSimilarityInfo"), I18N.get("MaxSimilarity"), I18N.get("MaxSimilarityInfo")));
+		info.setBorder(null); // TODO: necc?
+		info.setFocusable(false);
+		info.setEditable(false);
+		info.setLineWrap(true);
+		info.setWrapStyleWord(true);
+		sideBar.add(info);
 
-		var legend = new JPanel();
-		legend.setLayout(new BoxLayout(legend, BoxLayout.Y_AXIS));
-		legend.add(new JScrollPane(table));
-		legend.add(explanations);
-
-		add(legend, BorderLayout.EAST);
-		add(visualization, BorderLayout.CENTER);
-		update(proband, generations, results);
-	}
-
-	private void update(final Individual proband, final int numGenerations, final Map<FacialFeature, FacialFeatureAnalysisResult> results) {
-		OverviewRenderer renderer = null;
-
-		try {
-			renderer = new OverviewRenderer(proband, results);
-		} catch (final Exception e) {
-			Logger.getLogger(OverviewPane.class.getName()).log(Level.SEVERE, "Failed to create renderer", e);
-		}
-
-		if (renderer != null) {
-			renderer.render(proband, numGenerations + 1);
-
-			visualization.setBody(renderer.toString());
-			visualization.scrollTo(renderer.getProbandNode().getPosition());
-		}
+		add(sideBar, BorderLayout.EAST);
 	}
 }

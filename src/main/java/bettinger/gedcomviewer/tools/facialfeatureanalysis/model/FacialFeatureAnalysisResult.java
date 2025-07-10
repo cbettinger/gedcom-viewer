@@ -44,7 +44,7 @@ public class FacialFeatureAnalysisResult {
         return new FacialFeatureAnalysisResult(personSimilarities, pathSimilarities);
     }
 
-    public Pair<ArrayList<String>, Float> getMaxPersonSimilarity() {
+    public Pair<ArrayList<String>, Float> getMaxIndividualSimilarity() {
         ArrayList<String> idsWithMaxSim = new ArrayList<>();
         Float maxSimilarity = null;
         for (final var entry : personSimilarities.entrySet()) {

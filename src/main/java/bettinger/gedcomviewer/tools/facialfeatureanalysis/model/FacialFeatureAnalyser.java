@@ -19,14 +19,14 @@ import bettinger.gedcomviewer.utils.PythonUtils;
 
 public abstract class FacialFeatureAnalyser {
 
-    public static TreeMap<FacialFeature, FacialFeatureAnalysisResult> analyse(final Individual individual, final int maxDepth, final int maxNumPortraits) throws FacialFeatureAnalysisException {
+    public static TreeMap<FacialFeature, FacialFeatureAnalysisResult> analyse(final Individual proband, final int depth, final int numberOfPortraits) throws FacialFeatureAnalysisException {
         TreeMap<FacialFeature, FacialFeatureAnalysisResult> results = new TreeMap<>();
 
         var defaultException = new FacialFeatureAnalysisException(I18N.get("FacialFeatureAnalysisFailed"));
 
         File inputFile;
         try {
-            inputFile = createInputFile(individual, maxDepth);
+            inputFile = createInputFile(proband, depth);
         } catch (IOException e) {
             Logger.getLogger(FacialFeatureAnalyser.class.getName()).log(Level.SEVERE, defaultException.getMessage());
             throw defaultException;
@@ -35,7 +35,7 @@ public abstract class FacialFeatureAnalyser {
         final String pathToProject = System.getProperty("user.dir");
         final String pathToScript = Paths.get(pathToProject, "src", "main", "python", "familyFaceCompare.py").toString();
 
-        final String[] args = { inputFile.getAbsolutePath(), Integer.toString(maxNumPortraits), Integer.toString(maxDepth) };
+        final String[] args = { inputFile.getAbsolutePath(), Integer.toString(numberOfPortraits), Integer.toString(depth) };
         final List<String> outputs = PythonUtils.executeScript(pathToScript, args);
         inputFile.delete();
 
