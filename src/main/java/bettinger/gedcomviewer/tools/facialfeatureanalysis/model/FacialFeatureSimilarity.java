@@ -32,7 +32,7 @@ public class FacialFeatureSimilarity {
     }
 
     public static FacialFeatureSimilarity fromJSON(final JsonNode json) {
-        if (json.properties().isEmpty() && json.asText().isEmpty()) {
+        if (json.properties().isEmpty()) {
             return null;
         }
         Float maxSim = Float.parseFloat(json.get("maxSimilarity").asText());

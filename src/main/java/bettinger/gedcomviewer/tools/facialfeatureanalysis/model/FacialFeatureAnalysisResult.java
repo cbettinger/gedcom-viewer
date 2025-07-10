@@ -8,6 +8,8 @@ import org.javatuples.Pair;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class FacialFeatureAnalysisResult {
+    private static final float EPSILON = 0.000001f; 
+    
     private final HashMap<String, FacialFeatureSimilarity> personSimilarities;
     private final HashMap<AncestralLine, Float> pathSimilarities;
 
@@ -56,7 +58,7 @@ public class FacialFeatureAnalysisResult {
                     idsWithMaxSim.clear();
                     idsWithMaxSim.add(id);
                     maxSimilarity = avgSim;
-                } else if (avgSim == maxSimilarity) {
+                } else if (Math.abs(avgSim - maxSimilarity) < EPSILON) {
                     idsWithMaxSim.add(id);
                 }
             }
@@ -74,7 +76,7 @@ public class FacialFeatureAnalysisResult {
                 pathsWithMaxSim.clear();
                 pathsWithMaxSim.add(path);
                 maxSimilarity = avgSim;
-            } else if (Math.abs(avgSim - maxSimilarity) < 0.000001) {
+            } else if (Math.abs(avgSim - maxSimilarity) < EPSILON) {
                 pathsWithMaxSim.add(path);
             }
         }
