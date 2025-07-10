@@ -15,8 +15,6 @@ public class GenerationsComboBox extends JComboBox<Integer> {
 	private static final int MAXIMAL_GENERATIONS = 20;
 
 	public GenerationsComboBox() {
-		super();
-
 		setRenderer(new ListCellRenderer<Integer>() {
 			private static final DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
 

@@ -54,8 +54,6 @@ public class NavigationTable extends AutoFitTable {
 	};
 
 	public NavigationTable() {
-		super();
-
 		setDefaultRenderer(Quality.class, qualityRenderer);
 
 		getSelectionModel().addListSelectionListener(this);

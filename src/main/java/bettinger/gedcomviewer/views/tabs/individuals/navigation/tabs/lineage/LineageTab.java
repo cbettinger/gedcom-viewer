@@ -14,8 +14,6 @@ import bettinger.gedcomviewer.views.tabs.individuals.navigation.NavigationTab;
 public class LineageTab extends NavigationTab {
 
 	public LineageTab() {
-		super();
-
 		Events.register(new Object() {
 
 			@Subscribe

@@ -31,7 +31,6 @@ class OverviewRenderer extends AncestorsRenderer {
 	private HashMap<Color, ArrayList<String>> maxPathIndividuals;
 
 	OverviewRenderer(final Individual proband, final Map<FacialFeature, FacialFeatureAnalysisResult> results) {
-		super();
 		this.maxSimilarityIndividuals = new HashMap<>();
 		this.maxSimilarityEdges = new HashMap<>();
 		this.excludedIndividuals = new HashMap<>();

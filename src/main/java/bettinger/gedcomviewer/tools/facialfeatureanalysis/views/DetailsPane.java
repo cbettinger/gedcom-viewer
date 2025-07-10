@@ -26,7 +26,6 @@ public class DetailsPane extends JPanel {
   private final WebViewPanel visualization;
 
   public DetailsPane(final Individual proband, final int numGenerations, final FacialFeatureAnalysisResult result) {
-    super();
     setLayout(new BorderLayout());
 
     this.visualization = new WebViewPanel();
