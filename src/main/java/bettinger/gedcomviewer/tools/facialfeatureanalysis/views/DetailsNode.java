@@ -50,9 +50,9 @@ public class DetailsNode extends Node {
             this.width = Math.max(MINIMAL_WIDTH, maximalLineWidth + 3 * PADDING + (this.portrait == null ? 0 : this.portraitWidth + PADDING) + (this.portraitTargetPerson == null ? 0 : this.portraitTargetPersonWidth + PADDING));
             this.height = Math.max(MINIMAL_HEIGHT, text.size() * (lineHeight + PADDING) + 2 * PADDING);
 
-            int red = Math.min(255, (int) (DetailedResultPane.NO_MATCH_COLOR.getRed() + similarity.getAvgSimilarity() * DetailedResultPane.PERFECT_MATCH_COLOR.getRed()));
-            int green = Math.min(255, (int) (DetailedResultPane.NO_MATCH_COLOR.getGreen() + similarity.getAvgSimilarity() * DetailedResultPane.PERFECT_MATCH_COLOR.getGreen()));
-            int blue = Math.min(255, (int) (DetailedResultPane.NO_MATCH_COLOR.getBlue() + similarity.getAvgSimilarity() * DetailedResultPane.PERFECT_MATCH_COLOR.getBlue()));
+            int red = Math.min(255, (int) (DetailsPane.NO_MATCH_COLOR.getRed() + similarity.getAvgSimilarity() * DetailsPane.PERFECT_MATCH_COLOR.getRed()));
+            int green = Math.min(255, (int) (DetailsPane.NO_MATCH_COLOR.getGreen() + similarity.getAvgSimilarity() * DetailsPane.PERFECT_MATCH_COLOR.getGreen()));
+            int blue = Math.min(255, (int) (DetailsPane.NO_MATCH_COLOR.getBlue() + similarity.getAvgSimilarity() * DetailsPane.PERFECT_MATCH_COLOR.getBlue()));
             this.borderColor = new Color(red, green, blue, 255);
         }
     }

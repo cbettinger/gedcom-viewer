@@ -16,7 +16,7 @@ import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureAnalysisResult;
 import bettinger.gedcomviewer.views.WebViewPanel;
 
-public class DetailedResultPane extends JPanel {
+public class DetailsPane extends JPanel {
 
   static final Color PERFECT_MATCH_COLOR = Color.GREEN;
   static final Color NO_MATCH_COLOR = Color.DARK_GRAY;
@@ -25,7 +25,7 @@ public class DetailedResultPane extends JPanel {
 
   private final WebViewPanel visualization;
 
-  public DetailedResultPane(final Individual proband, final int numGenerations, final FacialFeatureAnalysisResult result) {
+  public DetailsPane(final Individual proband, final int numGenerations, final FacialFeatureAnalysisResult result) {
     super();
     setLayout(new BorderLayout());
 
@@ -65,7 +65,7 @@ public class DetailedResultPane extends JPanel {
     try {
       renderer = new DetailsRenderer(proband, result);
     } catch (final Exception e) {
-      Logger.getLogger(DetailedResultPane.class.getName()).log(Level.SEVERE, "Failed to create renderer", e);
+      Logger.getLogger(DetailsPane.class.getName()).log(Level.SEVERE, "Failed to create renderer", e);
     }
 
     if (renderer != null) {

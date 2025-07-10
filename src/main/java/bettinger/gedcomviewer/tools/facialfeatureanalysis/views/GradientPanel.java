@@ -24,7 +24,10 @@ public class GradientPanel extends JPanel {
 		final var width = getWidth();
 		final var height = getHeight();
 
-		((Graphics2D) g).setPaint(new GradientPaint(0, 0, color1, width, height, color2));
+		if (g instanceof Graphics2D g2d) {
+			g2d.setPaint(new GradientPaint(0, 0, color1, width, height, color2));
+		}
+
 		g.fillRect(0, 0, width, height);
 	}
 }

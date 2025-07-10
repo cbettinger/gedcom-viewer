@@ -23,7 +23,7 @@ public class ResultFrame extends Frame {
 		tabbedPane.addTab(I18N.get("Overview"), new OverviewPane(proband, generations, results));
 
 		final var detailsPane = new JTabbedPane();
-		results.entrySet().forEach(entry -> detailsPane.addTab(I18N.get(entry.getKey().name()), new DetailedResultPane(proband, generations, entry.getValue())));	// TODO: enum name?
+		results.entrySet().forEach(entry -> detailsPane.addTab(I18N.get(entry.getKey().name()), new DetailsPane(proband, generations, entry.getValue())));
 		tabbedPane.addTab(I18N.get("Details"), detailsPane);
 
 		add(tabbedPane);

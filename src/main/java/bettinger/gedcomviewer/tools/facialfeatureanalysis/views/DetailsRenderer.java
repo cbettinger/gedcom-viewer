@@ -105,9 +105,9 @@ public class DetailsRenderer extends AncestorsRenderer {
 
         final Stroke defaultStroke = g.getStroke();
 
-        int red = Math.min(255, (int) (DetailedResultPane.NO_MATCH_COLOR.getRed() + similarity * DetailedResultPane.PERFECT_MATCH_COLOR.getRed()));
-        int green = Math.min(255, (int) (DetailedResultPane.NO_MATCH_COLOR.getGreen() + similarity * DetailedResultPane.PERFECT_MATCH_COLOR.getGreen()));
-        int blue = Math.min(255, (int) (DetailedResultPane.NO_MATCH_COLOR.getBlue() + similarity * DetailedResultPane.PERFECT_MATCH_COLOR.getBlue()));
+        int red = Math.min(255, (int) (DetailsPane.NO_MATCH_COLOR.getRed() + similarity * DetailsPane.PERFECT_MATCH_COLOR.getRed()));
+        int green = Math.min(255, (int) (DetailsPane.NO_MATCH_COLOR.getGreen() + similarity * DetailsPane.PERFECT_MATCH_COLOR.getGreen()));
+        int blue = Math.min(255, (int) (DetailsPane.NO_MATCH_COLOR.getBlue() + similarity * DetailsPane.PERFECT_MATCH_COLOR.getBlue()));
         var color = new Color(red, green, blue, 255);
 
         if (parentsPoint != null) {
