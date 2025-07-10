@@ -62,7 +62,7 @@ public interface Analyser {
 
 			if (jsonResults != null) {
 				for (final var feature : FacialFeature.values()) {
-					results.put(feature, AnalysisResult.fromJSON(jsonResults, feature.name()));
+					results.put(feature, AnalysisResult.fromJSON(jsonResults, feature));
 				}
 			}
 		}

@@ -6,6 +6,8 @@ import java.awt.Point;
 import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.javatuples.Pair;
 
@@ -20,19 +22,19 @@ public class DetailsRenderer extends AncestorsRenderer {
     private static final int LINE_THICKNESS = 3;
 
     private final Individual targetPerson;
-    private final HashMap<String, Similarity> personSimilarities;
-    private HashMap<Pair<String, String>, Float> coloredEdges;
-    private ArrayList<String> includedIndividuals;
-    private HashMap<String, Float> lastIndividualsOfPath;
+    private final Map<String, Similarity> personSimilarities;
+    private Map<Pair<String, String>, Float> coloredEdges;
+    private List<String> includedIndividuals;
+    private Map<String, Float> lastIndividualsOfPath;
 
     DetailsRenderer(final Individual proband, final AnalysisResult result) {
         this.targetPerson = proband;
-        this.personSimilarities = result.getPersonSimilarities();
+        this.personSimilarities = result.getIndividualSimilarities();
         this.coloredEdges = new HashMap<>();
         this.includedIndividuals = new ArrayList<>();
         this.lastIndividualsOfPath = new HashMap<>();
 
-        for (final var entry : result.getPathSimilarities().entrySet()) {
+        for (final var entry : result.getLineSimilarities().entrySet()) {
             var pathIDs = entry.getKey().getIds();
             var similarity = entry.getValue();
 
@@ -88,11 +90,11 @@ public class DetailsRenderer extends AncestorsRenderer {
                     g.drawLine(parentsPoint.x, parentsPoint.y, parentsPoint.x, rootNode.getPosition().y);
                 }
                 if (drawLeft) {
-                    final Pair<String, String> tuple = new Pair<String, String>(rootNode.getIndividual().getId(), fatherNode.getIndividual().getId());
+                    final Pair<String, String> tuple = new Pair<>(rootNode.getIndividual().getId(), fatherNode.getIndividual().getId());
                     renderColoredEdge(rootNode, fatherNode, parentsPoint, tuple, true);
                 }
                 if (drawRight) {
-                    final Pair<String, String> tuple = new Pair<String, String>(rootNode.getIndividual().getId(), motherNode.getIndividual().getId());
+                    final Pair<String, String> tuple = new Pair<>(rootNode.getIndividual().getId(), motherNode.getIndividual().getId());
                     renderColoredEdge(rootNode, motherNode, parentsPoint, tuple, false);
                 }
             }

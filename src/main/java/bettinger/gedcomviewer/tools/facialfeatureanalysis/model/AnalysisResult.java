@@ -2,82 +2,86 @@ package bettinger.gedcomviewer.tools.facialfeatureanalysis.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.javatuples.Pair;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class AnalysisResult {
-    private final HashMap<String, Similarity> personSimilarities;
-    private final HashMap<AncestralLine, Float> pathSimilarities;
+	private final Map<String, Similarity> individualSimilarities;
+	private final Map<AncestralLine, Float> lineSimilarities;
 
-    public AnalysisResult(HashMap<String, Similarity> personSimilarities, HashMap<AncestralLine, Float> pathSimilarities) {
-        this.personSimilarities = personSimilarities;
-        this.pathSimilarities = pathSimilarities;
-    }
+	private AnalysisResult(final Map<String, Similarity> individualSimilarities, final Map<AncestralLine, Float> lineSimilarities) {
+		this.individualSimilarities = individualSimilarities;
+		this.lineSimilarities = lineSimilarities;
+	}
 
-    public HashMap<String, Similarity> getPersonSimilarities() {
-        return personSimilarities;
-    }
+	public Map<String, Similarity> getIndividualSimilarities() {
+		return individualSimilarities;
+	}
 
-    public HashMap<AncestralLine, Float> getPathSimilarities() {
-        return pathSimilarities;
-    }
+	public Map<AncestralLine, Float> getLineSimilarities() {
+		return lineSimilarities;
+	}
 
-    public static AnalysisResult fromJSON(final JsonNode json, final String facialFeature) {
-        final JsonNode personSimilaritiesNode = json.get("nodes").get(facialFeature);
-        final JsonNode pathSimilaritiesNode = json.get("pathSimilarities").get(facialFeature);
+	public Pair<ArrayList<String>, Float> getMaxIndividualSimilarity() {
+		final ArrayList<String> idsWithMaxSimilarity = new ArrayList<>();
+		Float maxSimilarity = null;
 
-        HashMap<String, Similarity> personSimilarities = new HashMap<>();
-        HashMap<AncestralLine, Float> pathSimilarities = new HashMap<>();
+		for (final var entry : individualSimilarities.entrySet()) {
+			final var id = entry.getKey();
+			final var featureSimilarity = entry.getValue();
 
-        final var personSimilarityEntries = personSimilaritiesNode.properties();
-        for (final var entry : personSimilarityEntries) {
-            personSimilarities.put(entry.getKey(), Similarity.fromJSON(entry.getValue()));
-        }
+			if (featureSimilarity != null) {
+				final var avgSimilarity = featureSimilarity.getAvgSimilarity();
 
-        final var pathSimilarityEntries = pathSimilaritiesNode.properties();
-        for (final var entry : pathSimilarityEntries) {
-            pathSimilarities.put(AncestralLine.parse(entry.getKey()), Float.parseFloat(entry.getValue().asText()));
-        }
+				if (maxSimilarity == null || avgSimilarity > maxSimilarity) {
+					idsWithMaxSimilarity.clear();
+					idsWithMaxSimilarity.add(id);
+					maxSimilarity = avgSimilarity;
+				} else if (avgSimilarity == maxSimilarity) { // TODO: accept epsilon as below?
+					idsWithMaxSimilarity.add(id);
+				}
+			}
+		}
 
-        return new AnalysisResult(personSimilarities, pathSimilarities);
-    }
+		return new Pair<>(idsWithMaxSimilarity, maxSimilarity);
+	}
 
-    public Pair<ArrayList<String>, Float> getMaxIndividualSimilarity() {
-        ArrayList<String> idsWithMaxSim = new ArrayList<>();
-        Float maxSimilarity = null;
-        for (final var entry : personSimilarities.entrySet()) {
-            final var id = entry.getKey();
-            final var featureSim = entry.getValue();
-            if (featureSim != null) {
-                final var avgSim = featureSim.getAvgSimilarity();
-                if (maxSimilarity == null || avgSim > maxSimilarity) {
-                    idsWithMaxSim.clear();
-                    idsWithMaxSim.add(id);
-                    maxSimilarity = avgSim;
-                } else if (avgSim == maxSimilarity) {
-                    idsWithMaxSim.add(id);
-                }
-            }
-        }
-        return new Pair<ArrayList<String>, Float>(idsWithMaxSim, maxSimilarity);
-    }
+	public Pair<ArrayList<AncestralLine>, Float> getMaxLineSimilarity() {
+		final ArrayList<AncestralLine> linesWithMaxSimilarity = new ArrayList<>();
+		Float maxSimilarity = null;
 
-    public Pair<ArrayList<AncestralLine>, Float> getMaxPathSimilarity() {
-        ArrayList<AncestralLine> pathsWithMaxSim = new ArrayList<>();
-        Float maxSimilarity = null;
-        for (final var entry : pathSimilarities.entrySet()) {
-            final var path = entry.getKey();
-            final var avgSim = entry.getValue();
-            if (maxSimilarity == null || avgSim > maxSimilarity) {
-                pathsWithMaxSim.clear();
-                pathsWithMaxSim.add(path);
-                maxSimilarity = avgSim;
-            } else if (Math.abs(avgSim - maxSimilarity) < 0.000001) {
-                pathsWithMaxSim.add(path);
-            }
-        }
-        return new Pair<ArrayList<AncestralLine>, Float>(pathsWithMaxSim, maxSimilarity);
-    }
+		for (final var entry : lineSimilarities.entrySet()) {
+			final var line = entry.getKey();
+			final var avgSimilarity = entry.getValue();
+
+			if (maxSimilarity == null || avgSimilarity > maxSimilarity) {
+				linesWithMaxSimilarity.clear();
+				linesWithMaxSimilarity.add(line);
+				maxSimilarity = avgSimilarity;
+			} else if (Math.abs(avgSimilarity - maxSimilarity) < 0.000001) {
+				linesWithMaxSimilarity.add(line);
+			}
+		}
+
+		return new Pair<>(linesWithMaxSimilarity, maxSimilarity);
+	}
+
+	public static AnalysisResult fromJSON(final JsonNode json, final FacialFeature facialFeature) {
+		final Map<String, Similarity> individualSimilarities = new HashMap<>();
+		final var individualSimilaritiesEntries = json.get("nodes").get(facialFeature.name()).properties();
+		for (final var entry : individualSimilaritiesEntries) {
+			individualSimilarities.put(entry.getKey(), Similarity.fromJSON(entry.getValue()));
+		}
+
+		final Map<AncestralLine, Float> lineSimilarities = new HashMap<>();
+		final var lineSimilaritiesEntries = json.get("pathSimilarities").get(facialFeature.name()).properties();
+		for (final var entry : lineSimilaritiesEntries) {
+			lineSimilarities.put(AncestralLine.parse(entry.getKey()), Float.parseFloat(entry.getValue().asText()));
+		}
+
+		return new AnalysisResult(individualSimilarities, lineSimilarities);
+	}
 }

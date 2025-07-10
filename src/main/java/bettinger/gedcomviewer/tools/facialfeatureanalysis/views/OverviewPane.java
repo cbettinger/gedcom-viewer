@@ -59,13 +59,13 @@ class OverviewPane extends JPanel {
 			final var feature = entry.getKey();
 			final var featureResult = entry.getValue();
 
-			final var maxPathSimilarity = featureResult.getMaxPathSimilarity();
+			final var maxLineSimilarity = featureResult.getMaxLineSimilarity();
 			final var maxIndividualSimilarity = featureResult.getMaxIndividualSimilarity();
-			tableData.add(new Object[] { I18N.get(feature.name()), feature, String.format("%.2f%%", maxPathSimilarity.getValue1() * 100), String.format("%.2f%%", maxIndividualSimilarity.getValue1() * 100) });
+			tableData.add(new Object[] { I18N.get(feature.name()), feature, String.format("%.2f%%", maxLineSimilarity.getValue1() * 100), String.format("%.2f%%", maxIndividualSimilarity.getValue1() * 100) });
 		}
 
 		final var table = new AutoFitTable();
-		table.setModel(new DefaultTableModel(tableData.toArray(new Object[0][0]), new String[] { I18N.get("FacialFeature"), I18N.get("LineColor"), I18N.get("MaxPathSimilarity"), I18N.get("MaxSimilarity") }));
+		table.setModel(new DefaultTableModel(tableData.toArray(new Object[0][0]), new String[] { I18N.get("FacialFeature"), I18N.get("LineColor"), I18N.get("MaxPathSimilarity"), I18N.get("MaxSimilarity") }));	// TODO: individualsim/linesim
 		table.getColumnModel().getColumn(1).setCellRenderer(facialFeatureCellRenderer);
 		sideBar.add(new JScrollPane(table));
 
