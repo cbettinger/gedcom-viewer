@@ -31,7 +31,7 @@ public class PersonInput {
 		this.mother = null;
 		this.father = null;
 
-		Map<Media, Rectangle> portraitData = individual.getPortraits();
+		Map<Media, Rectangle> portraitData = individual.getFacialPortraits();
 		for (Map.Entry<Media, Rectangle> entry : portraitData.entrySet()) {
 			Media medium = entry.getKey();
 			Rectangle clip = entry.getValue();

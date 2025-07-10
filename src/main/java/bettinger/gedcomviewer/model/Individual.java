@@ -560,8 +560,8 @@ public class Individual extends IndividualFamilyCommonStructure {
 		return occupations;
 	}
 
-	public Map<Media, Rectangle> getPortraits() {
-		return mediaManager.getPortraits();
+	public Map<Media, Rectangle> getFacialPortraits() {
+		return mediaManager.getFacialPortraits();
 	}
 	/* #endregion */
 

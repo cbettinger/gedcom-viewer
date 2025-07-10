@@ -501,11 +501,11 @@ public class MainFrame extends Frame {
 	private void showFacialFeatureAnalysisDialog() {
 		final var selectedRecord = tabbedPane.getSelectedRecord();
 		if (selectedRecord instanceof Individual individual) {
-			new FacialFeatureAnalysisDialog(individual, (proband, maxDepth, maxNumPortraits) -> this.showFacialFeatureAnalysisResults(proband, maxDepth, maxNumPortraits));
+			new FacialFeatureAnalysisDialog(individual, (proband, maxDepth, maxNumFacialPortraits) -> this.showFacialFeatureAnalysisResults(proband, maxDepth, maxNumFacialPortraits));
 		}
 	}
 
-	private void showFacialFeatureAnalysisResults(Individual proband, int maxDepth, int maxNumPortraits) {
+	private void showFacialFeatureAnalysisResults(Individual proband, int maxDepth, int maxNumFacialPortraits) {
 		if (proband != null) {
 			new BackgroundWorker(I18N.get("FacialFeatureAnalysis")) {
 				private TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results;
@@ -515,7 +515,7 @@ public class MainFrame extends Frame {
 					var uri = super.doInBackground();
 
 					try {
-						results = FacialFeatureAnalyser.analyse(proband, maxDepth, maxNumPortraits);
+						results = FacialFeatureAnalyser.analyse(proband, maxDepth, maxNumFacialPortraits);
 					} catch (FacialFeatureAnalysisException e) {
 						onError(e);
 					}

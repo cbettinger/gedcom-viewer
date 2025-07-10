@@ -34,7 +34,7 @@ public class FacialFeatureAnalysisDialog extends JDialog {
         this.infoPane.setText(I18N.get("FacialFeatureAnalysisStartInfo"));
 
         this.maxDepthPicker = new IntegerPicker(I18N.get("MaxFacialFeatureComparisonDepth"), Constants.MIN_FACE_COMPARISON_DEPTH, Constants.MAX_FACE_COMPARISON_DEPTH, Constants.MAX_FACE_COMPARISON_DEPTH / 2);
-        this.maxNumPortraitsPicker = new IntegerPicker(I18N.get("MaxNumPortraitsPerPerson"), Constants.MIN_NUM_PORTRAITS_FOR_FACE_COMPARISON, Constants.MAX_NUM_PORTRAITS_FOR_FACE_COMPARISON, Constants.MAX_NUM_PORTRAITS_FOR_FACE_COMPARISON);
+        this.maxNumPortraitsPicker = new IntegerPicker(I18N.get("MaxNumPortraitsPerPerson"), Constants.MIN_NUM_FACIAL_PORTRAITS_FOR_FACE_COMPARISON, Constants.MAX_NUM_FACIAL_PORTRAITS_FOR_FACE_COMPARISON, Constants.MAX_NUM_FACIAL_PORTRAITS_FOR_FACE_COMPARISON);
 
         var vBox = new JPanel();
         vBox.setLayout(new BoxLayout(vBox, BoxLayout.PAGE_AXIS));

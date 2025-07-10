@@ -63,7 +63,7 @@ public class DetailsNode extends Node {
         Image result = null;
 
         if (individual != null) {
-            final var portraits = individual.getPortraits();
+            final var portraits = individual.getFacialPortraits();
             for (var entry : portraits.entrySet()) {
                 var media = entry.getKey();
                 if (media.getFileName().equals(filename)) {
