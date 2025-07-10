@@ -33,7 +33,7 @@ public class DetailsRenderer extends AncestorsRenderer {
         this.lastIndividualsOfPath = new HashMap<>();
 
         for (final var entry : result.getPathSimilarities().entrySet()) {
-            var pathIDs = entry.getKey().getAncestorIDs();
+            var pathIDs = entry.getKey().getIds();
             var similarity = entry.getValue();
 
             var tuple = new Pair<String, String>(proband.getId(), pathIDs[0]);

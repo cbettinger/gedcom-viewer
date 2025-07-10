@@ -38,7 +38,7 @@ public class FacialFeatureAnalysisResult {
 
         final var pathSimilarityEntries = pathSimilaritiesNode.properties();
         for (final var entry : pathSimilarityEntries) {
-            pathSimilarities.put(AncestralLine.fromString(entry.getKey()), Float.parseFloat(entry.getValue().asText()));
+            pathSimilarities.put(AncestralLine.parse(entry.getKey()), Float.parseFloat(entry.getValue().asText()));
         }
 
         return new FacialFeatureAnalysisResult(personSimilarities, pathSimilarities);

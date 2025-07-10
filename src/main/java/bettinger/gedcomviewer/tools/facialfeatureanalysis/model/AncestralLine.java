@@ -5,36 +5,35 @@ import java.util.List;
 
 public class AncestralLine {
 
-    private final String[] ancestorIDs;
+	private final List<String> ids;
 
-    public AncestralLine(final String[] ancestorIDs) {
-        this.ancestorIDs = ancestorIDs;
-    }
+	private AncestralLine(final List<String> ids) {
+		this.ids = ids;
+	}
 
-    public String[] getAncestorIDs() {
-        return ancestorIDs;
-    }
+	public String[] getIds() {
+		return ids.toArray(new String[0]);
+	}
 
-    public static AncestralLine fromString(final String bottomUpLine) {
-        List<String> pathArray = Arrays.asList(bottomUpLine.split("\\s*,\\s*"));
-        return new AncestralLine(pathArray.toArray(new String[0]));
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof AncestralLine line) {
+			for (int i = 0; i < ids.size(); i++) {
+				if (ids.get(i) != line.ids.get(i)) {
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
 
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(ancestorIDs);
-    }
+	@Override
+	public int hashCode() {
+		return Arrays.hashCode(getIds());
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (o instanceof AncestralLine) {
-            for (int i = 0; i < ancestorIDs.length; i++) {
-                if (ancestorIDs[i] != ((AncestralLine) o).ancestorIDs[i]) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        return false;
-    }
+	public static AncestralLine parse(final String input) {
+		return new AncestralLine(Arrays.asList(input.split("\\s*,\\s*")));
+	}
 }

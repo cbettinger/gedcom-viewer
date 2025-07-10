@@ -48,7 +48,7 @@ class OverviewRenderer extends AncestorsRenderer {
 
 			var maxSimilarityPaths = res.getMaxPathSimilarity().getValue0();
 			for (final var path : maxSimilarityPaths) {
-				var pathIDs = path.getAncestorIDs();
+				var pathIDs = path.getIds();
 				this.maxPathIndividuals.get(color).addAll(Arrays.asList(pathIDs));
 
 				var tuple = new Pair<String, String>(proband.getId(), pathIDs[0]);
