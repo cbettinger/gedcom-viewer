@@ -35,7 +35,7 @@ def getFaceAnalysisResult(targetPerson, maxDepth=None):
             if maxSimRes.value is None:
                 nodes[c].update({id: ""})
             else:
-                individualResult = {"maxSimilarity": str(maxSimRes.value), "avgSimilarity": str(avgSim), "maxMatchImgTarget": maxSimRes.img1.fileName, "maxMatchImgAncestor": maxSimRes.img2.fileName}
+                individualResult = {"maxSimilarity": str(maxSimRes.value), "avgSimilarity": str(avgSim), "maxSimilarityProbandPortrait": maxSimRes.img1.fileName, "maxSimilarityAncestorPortrait": maxSimRes.img2.fileName}
                 nodes[c].update({id: individualResult})
 
         for path in paths:

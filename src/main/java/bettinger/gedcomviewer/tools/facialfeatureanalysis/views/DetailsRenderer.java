@@ -11,7 +11,7 @@ import org.javatuples.Pair;
 
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.AnalysisResult;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureSimilarity;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.Similarity;
 import bettinger.gedcomviewer.views.visualization.AncestorsRenderer;
 import bettinger.gedcomviewer.views.visualization.Node;
 
@@ -20,7 +20,7 @@ public class DetailsRenderer extends AncestorsRenderer {
     private static final int LINE_THICKNESS = 3;
 
     private final Individual targetPerson;
-    private final HashMap<String, FacialFeatureSimilarity> personSimilarities;
+    private final HashMap<String, Similarity> personSimilarities;
     private HashMap<Pair<String, String>, Float> coloredEdges;
     private ArrayList<String> includedIndividuals;
     private HashMap<String, Float> lastIndividualsOfPath;

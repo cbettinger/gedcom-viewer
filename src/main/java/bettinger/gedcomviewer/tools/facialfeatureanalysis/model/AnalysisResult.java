@@ -8,15 +8,15 @@ import org.javatuples.Pair;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class AnalysisResult {
-    private final HashMap<String, FacialFeatureSimilarity> personSimilarities;
+    private final HashMap<String, Similarity> personSimilarities;
     private final HashMap<AncestralLine, Float> pathSimilarities;
 
-    public AnalysisResult(HashMap<String, FacialFeatureSimilarity> personSimilarities, HashMap<AncestralLine, Float> pathSimilarities) {
+    public AnalysisResult(HashMap<String, Similarity> personSimilarities, HashMap<AncestralLine, Float> pathSimilarities) {
         this.personSimilarities = personSimilarities;
         this.pathSimilarities = pathSimilarities;
     }
 
-    public HashMap<String, FacialFeatureSimilarity> getPersonSimilarities() {
+    public HashMap<String, Similarity> getPersonSimilarities() {
         return personSimilarities;
     }
 
@@ -28,12 +28,12 @@ public class AnalysisResult {
         final JsonNode personSimilaritiesNode = json.get("nodes").get(facialFeature);
         final JsonNode pathSimilaritiesNode = json.get("pathSimilarities").get(facialFeature);
 
-        HashMap<String, FacialFeatureSimilarity> personSimilarities = new HashMap<>();
+        HashMap<String, Similarity> personSimilarities = new HashMap<>();
         HashMap<AncestralLine, Float> pathSimilarities = new HashMap<>();
 
         final var personSimilarityEntries = personSimilaritiesNode.properties();
         for (final var entry : personSimilarityEntries) {
-            personSimilarities.put(entry.getKey(), FacialFeatureSimilarity.fromJSON(entry.getValue()));
+            personSimilarities.put(entry.getKey(), Similarity.fromJSON(entry.getValue()));
         }
 
         final var pathSimilarityEntries = pathSimilaritiesNode.properties();

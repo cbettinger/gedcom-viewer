@@ -14,7 +14,7 @@ import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.model.Structure;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureSimilarity;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.Similarity;
 import bettinger.gedcomviewer.views.visualization.Node;
 
 public class DetailsNode extends Node {
@@ -34,12 +34,12 @@ public class DetailsNode extends Node {
         this.borderColor = null;
     }
 
-    void init(Individual target, FacialFeatureSimilarity similarity) {
+    void init(Individual target, Similarity similarity) {
         if (similarity != null) {
-            portrait = getPortrait(individual, similarity.getMaxMatchAncestorFileName());
+            portrait = getPortrait(individual, similarity.getMaxSimilarityAncestorPortrait());
             portraitWidth = portrait == null ? 0 : portrait.getWidth(null);
 
-            portraitTargetPerson = getPortrait(target, similarity.getMaxMatchTargetFileName());
+            portraitTargetPerson = getPortrait(target, similarity.getMaxSimilarityProbandsPortrait());
             portraitTargetPersonWidth = portraitTargetPerson == null ? 0 : portraitTargetPerson.getWidth(null);
 
             text = getTextLines(similarity.getAvgSimilarity(), similarity.getMaxSimilarity());
