@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -105,10 +104,6 @@ public abstract class IndividualFamilyCommonStructure extends Structure implemen
 	@Override
 	public Rectangle getImageClip(final Media image) {
 		return mediaManager.getImageClip(image);
-	}
-
-	public Map<Media, Rectangle> getPortraits() {
-		return mediaManager.getPortraits();
 	}
 
 	@Override

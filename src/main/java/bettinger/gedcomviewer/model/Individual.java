@@ -1,5 +1,6 @@
 package bettinger.gedcomviewer.model;
 
+import java.awt.Rectangle;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -557,6 +558,10 @@ public class Individual extends IndividualFamilyCommonStructure {
 
 	public List<Occupation> getOccupations() {
 		return occupations;
+	}
+
+	public Map<Media, Rectangle> getPortraits() {
+		return mediaManager.getPortraits();
 	}
 	/* #endregion */
 
