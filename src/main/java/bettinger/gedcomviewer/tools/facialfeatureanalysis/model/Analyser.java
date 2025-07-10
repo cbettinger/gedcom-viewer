@@ -1,0 +1,80 @@
+package bettinger.gedcomviewer.tools.facialfeatureanalysis.model;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import bettinger.gedcomviewer.I18N;
+import bettinger.gedcomviewer.model.Individual;
+import bettinger.gedcomviewer.utils.JSONUtils;
+import bettinger.gedcomviewer.utils.PythonUtils;
+
+public interface Analyser {
+
+	public static Map<FacialFeature, AnalysisResult> analyse(final Individual proband, final int depth, final int numberOfPortraits) throws AnalysisException {
+		TreeMap<FacialFeature, AnalysisResult> results = new TreeMap<>();
+
+		var defaultException = new AnalysisException(I18N.get("FacialFeatureAnalysisFailed"));
+
+		File inputFile;
+		try {
+			inputFile = createInputFile(proband, depth);
+		} catch (IOException e) {
+			Logger.getLogger(Analyser.class.getName()).log(Level.SEVERE, defaultException.getMessage());
+			throw defaultException;
+		}
+
+		final String pathToProject = System.getProperty("user.dir");
+		final String pathToScript = Paths.get(pathToProject, "src", "main", "python", "familyFaceCompare.py").toString();
+
+		final String[] args = { inputFile.getAbsolutePath(), Integer.toString(numberOfPortraits), Integer.toString(depth) };
+		final List<String> outputs = PythonUtils.executeScript(pathToScript, args);
+		inputFile.delete();
+
+		if (outputs.size() < 1) {
+			Logger.getLogger(Analyser.class.getName()).log(Level.SEVERE, defaultException.getMessage());
+			throw defaultException;
+		}
+		final var outputJSON = JSONUtils.fromString(outputs.getLast());
+		if (outputJSON.get("isError") != null) {
+			String message = I18N.get(outputJSON.get("messageKey").asText());
+			Logger.getLogger(Analyser.class.getName()).log(Level.SEVERE, message);
+			throw new AnalysisException(message);
+		} else if (outputJSON.get("success") != null) {
+			try {
+				var resultFilepath = Paths.get(outputJSON.get("filename").asText());
+				final var resultJson = JSONUtils.fromString(Files.readString(resultFilepath, StandardCharsets.UTF_8));
+				Files.delete(resultFilepath);
+
+				for (final var feature : FacialFeature.values()) {
+					results.put(feature, AnalysisResult.fromJSON(resultJson, feature.name()));
+				}
+			} catch (IOException e) {
+				String message = I18N.get("ProcessingFacialFeatureAnalysisResultFailed");
+				Logger.getLogger(Analyser.class.getName()).log(Level.SEVERE, message);
+				throw new AnalysisException(message, e);
+			}
+		} else {
+			Logger.getLogger(Analyser.class.getName()).log(Level.SEVERE, defaultException.getMessage());
+			throw defaultException;
+		}
+
+		return results;
+	}
+
+	private static File createInputFile(final Individual individual, final int maxDepth) throws IOException {
+		PersonInput inputObject = new PersonInput(individual, 0, maxDepth);
+		Date date = new Date();
+		long timeMillis = date.getTime();
+		Files.createDirectories(Paths.get("tmp"));
+		return JSONUtils.toJSONFile(inputObject, String.format("tmp/%d-%s.json", timeMillis, individual.getName()));
+	}
+}

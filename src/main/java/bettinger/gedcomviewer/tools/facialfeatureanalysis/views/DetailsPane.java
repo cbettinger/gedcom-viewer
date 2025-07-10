@@ -13,7 +13,7 @@ import javax.swing.JTextArea;
 
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Individual;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureAnalysisResult;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.AnalysisResult;
 import bettinger.gedcomviewer.views.WebViewPanel;
 
 public class DetailsPane extends JPanel {
@@ -25,7 +25,7 @@ public class DetailsPane extends JPanel {
 
   private final WebViewPanel visualization;
 
-  public DetailsPane(final Individual proband, final int generations, final FacialFeatureAnalysisResult result) {
+  public DetailsPane(final Individual proband, final int generations, final AnalysisResult result) {
     setLayout(new BorderLayout());
 
     this.visualization = new WebViewPanel();
@@ -58,7 +58,7 @@ public class DetailsPane extends JPanel {
     update(proband, generations, result);
   }
 
-  private void update(final Individual proband, final int numGenerations, FacialFeatureAnalysisResult result) {
+  private void update(final Individual proband, final int numGenerations, AnalysisResult result) {
     DetailsRenderer renderer = null;
 
     try {

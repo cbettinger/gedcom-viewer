@@ -8,14 +8,14 @@ import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Individual;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureAnalysisResult;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.AnalysisResult;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeature;
 import bettinger.gedcomviewer.views.Frame;
 import bettinger.gedcomviewer.views.MainFrame;
 
 public class ResultFrame extends Frame {
 
-	public ResultFrame(final Individual proband, final int depth, final Map<FacialFeature, FacialFeatureAnalysisResult> results) {
+	public ResultFrame(final Individual proband, final int depth, final Map<FacialFeature, AnalysisResult> results) {
 		setTitle(String.format(Format.KEY_VALUE, I18N.get("FacialFeatureAnalysis"), proband.getNameAndNumber()));
 
 		final var tabbedPane = new JTabbedPane();

@@ -5,9 +5,9 @@ import java.util.Map;
 
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Individual;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureAnalyser;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureAnalysisException;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureAnalysisResult;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.Analyser;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.AnalysisException;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.AnalysisResult;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeature;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.views.ResultFrame;
 import bettinger.gedcomviewer.views.MainFrame;
@@ -19,7 +19,7 @@ public class AnalysisBackgroundWorker extends BackgroundWorker {
 	private final int depth;
 	private final int numberOfPortraits;
 
-	private Map<FacialFeature, FacialFeatureAnalysisResult> results;
+	private Map<FacialFeature, AnalysisResult> results;
 
 	public AnalysisBackgroundWorker(final Individual proband, final int depth, final int numberOfPortraits) {
 		MainFrame.getInstance().super(I18N.get("FacialFeatureAnalysis"));
@@ -34,8 +34,8 @@ public class AnalysisBackgroundWorker extends BackgroundWorker {
 		var uri = super.doInBackground();
 
 		try {
-			results = FacialFeatureAnalyser.analyse(proband, depth, numberOfPortraits);
-		} catch (final FacialFeatureAnalysisException e) {
+			results = Analyser.analyse(proband, depth, numberOfPortraits);
+		} catch (final AnalysisException e) {
 			onError(e);
 		}
 

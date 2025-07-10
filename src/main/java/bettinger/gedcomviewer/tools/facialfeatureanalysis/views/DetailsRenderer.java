@@ -10,7 +10,7 @@ import java.util.HashMap;
 import org.javatuples.Pair;
 
 import bettinger.gedcomviewer.model.Individual;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureAnalysisResult;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.AnalysisResult;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureSimilarity;
 import bettinger.gedcomviewer.views.visualization.AncestorsRenderer;
 import bettinger.gedcomviewer.views.visualization.Node;
@@ -25,7 +25,7 @@ public class DetailsRenderer extends AncestorsRenderer {
     private ArrayList<String> includedIndividuals;
     private HashMap<String, Float> lastIndividualsOfPath;
 
-    DetailsRenderer(final Individual proband, final FacialFeatureAnalysisResult result) {
+    DetailsRenderer(final Individual proband, final AnalysisResult result) {
         this.targetPerson = proband;
         this.personSimilarities = result.getPersonSimilarities();
         this.coloredEdges = new HashMap<>();

@@ -16,7 +16,7 @@ import org.javatuples.Pair;
 
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeature;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureAnalysisResult;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.AnalysisResult;
 import bettinger.gedcomviewer.views.visualization.AncestorsRenderer;
 import bettinger.gedcomviewer.views.visualization.Node;
 
@@ -30,7 +30,7 @@ class OverviewRenderer extends AncestorsRenderer {
 	private Map<Color, ArrayList<String>> excludedIndividuals;
 	private Map<Color, ArrayList<String>> maxPathIndividuals;
 
-	OverviewRenderer(final Individual proband, final Map<FacialFeature, FacialFeatureAnalysisResult> results) {
+	OverviewRenderer(final Individual proband, final Map<FacialFeature, AnalysisResult> results) {
 		this.maxSimilarityIndividuals = new HashMap<>();
 		this.maxSimilarityEdges = new HashMap<>();
 		this.excludedIndividuals = new HashMap<>();
