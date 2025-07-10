@@ -23,7 +23,7 @@ import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureAna
 import bettinger.gedcomviewer.views.AutoFitTable;
 import bettinger.gedcomviewer.views.WebViewPanel;
 
-public class OverviewPane extends JPanel {
+class OverviewPane extends JPanel {
 
 	private static final TableCellRenderer facialFeatureCellRenderer = new DefaultTableCellRenderer() {
 		@Override
@@ -39,7 +39,7 @@ public class OverviewPane extends JPanel {
 		}
 	};
 
-	public OverviewPane(final Individual proband, final int depth, final Map<FacialFeature, FacialFeatureAnalysisResult> results) {
+	OverviewPane(final Individual proband, final int depth, final Map<FacialFeature, FacialFeatureAnalysisResult> results) {
 		setLayout(new BorderLayout());
 
 		final var renderer = new OverviewRenderer(proband, results);
