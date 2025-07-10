@@ -6,7 +6,7 @@ from base.faceComparison import getFaceAnalysisResult
 from base.Person import Person
 
 if len(sys.argv) < 4:
-    print(json.dumps({"isError": "y", "messageKey": "NotEnoughParameters"}))
+    print(json.dumps({"error": True, "message": "Not enough parameters"}))
 else:
     rootPerson = parseJSON.parseFile(sys.argv[1], int(sys.argv[2]))
     if len(sys.argv) > 4:
@@ -17,10 +17,10 @@ else:
 
     filename = sys.argv[1].replace(".json", "-result.json")
     result = getFaceAnalysisResult(rootPerson, int(sys.argv[3]))
-    if "isError" in result:
+    if "error" in result:
         print(json.dumps(result))
     else:
         with open(filename, 'w', encoding='utf-8') as f:
             json.dump(result, f, ensure_ascii=False, indent=4)
 
-        print(json.dumps({"success": "y", "filename": filename}))
+        print(json.dumps({"success": True, "file": filename}))

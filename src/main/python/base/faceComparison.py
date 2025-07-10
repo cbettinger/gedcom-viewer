@@ -15,9 +15,9 @@ def getAvgPathSimilarity(path, personSimilarities):
 
 def getFaceAnalysisResult(targetPerson, maxDepth=None):
     similarityResults = FaceAnalyser.analyse(targetPerson, maxDepth)
-    
+
     if similarityResults is None:
-        return {"isError": "y", "messageKey": "NotEnoughUsablePortraits"}
+        return {"error": True, "message": "Not enough usable portraits"}
     paths = targetPerson.getPaths()
 
     nodes = dictUtils.getDicts(FACE_CHARACTERISTICS_OF_INTEREST)
@@ -37,7 +37,7 @@ def getFaceAnalysisResult(targetPerson, maxDepth=None):
             else:
                 individualResult = {"maxSimilarity": str(maxSimRes.value), "avgSimilarity": str(avgSim), "maxMatchImgTarget": maxSimRes.img1.fileName, "maxMatchImgAncestor": maxSimRes.img2.fileName}
                 nodes[c].update({id: individualResult})
-        
+
         for path in paths:
             pathSimilarities[c].update({str(path).replace("[", "").replace("]", "").replace("'", ""): str(getAvgPathSimilarity(path, avgPersonSimilarities))})
 

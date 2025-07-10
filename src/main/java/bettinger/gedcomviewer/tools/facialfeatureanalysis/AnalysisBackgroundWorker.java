@@ -3,6 +3,7 @@ package bettinger.gedcomviewer.tools.facialfeatureanalysis;
 import java.net.URI;
 import java.util.Map;
 
+import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.Analyser;
@@ -36,7 +37,7 @@ public class AnalysisBackgroundWorker extends BackgroundWorker {
 		try {
 			results = Analyser.analyse(proband, depth, numberOfPortraits);
 		} catch (final AnalysisException e) {
-			onError(e);
+			onError(new AnalysisException(String.format(Format.KEY_VALUE, I18N.get("FacialFeatureAnalysisFailed"), e.getMessage())));
 		}
 
 		return uri;

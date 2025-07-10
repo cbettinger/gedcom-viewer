@@ -1,9 +1,14 @@
 package bettinger.gedcomviewer.utils;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -81,5 +86,16 @@ public interface FileUtils {
 
 	public static String sanitizeFileName(final String fileName) {
 		return fileName.replaceAll("[\\/:*?\"<>|#%&$!@=+`\']", "").trim().replaceAll(" +", " ");
+	}
+
+	public static Path createTempFile() {
+		try {
+			final var tempFile = Files.createTempFile(null, null);
+			tempFile.toFile().deleteOnExit();
+			return tempFile;
+		} catch (final IOException e) {
+			Logger.getLogger(JSONUtils.class.getName()).log(Level.SEVERE, "Failed to create temporary file", e);
+			return null;
+		}
 	}
 }
