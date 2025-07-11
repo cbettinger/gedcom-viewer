@@ -64,11 +64,11 @@ class OverviewPane extends JPanel {
 		}
 
 		final var table = new AutoFitTable();
-		table.setModel(new DefaultTableModel(tableData.toArray(new Object[0][0]), new String[] { I18N.get("FacialFeature"), I18N.get("LineColor"), I18N.get("MaxPathSimilarity"), I18N.get("MaxSimilarity") }));	// TODO: individualsim/linesim
+		table.setModel(new DefaultTableModel(tableData.toArray(new Object[0][0]), new String[] { I18N.get("FacialFeature"), I18N.get("LineColor"), I18N.get("MaxLineSimilarity"), I18N.get("MaxSimilarity") }));	// TODO: individualsim/linesim
 		table.getColumnModel().getColumn(1).setCellRenderer(facialFeatureCellRenderer);
 		sideBar.add(new JScrollPane(table));
 
-		final var info = new JTextArea(String.format("%n%s: %s%n%n%s: %s", I18N.get("MaxPathSimilarity"), I18N.get("MaxPathSimilarityInfo"), I18N.get("MaxSimilarity"), I18N.get("MaxSimilarityInfo")));
+		final var info = new JTextArea(String.format("%n%s: %s%n%n%s: %s", I18N.get("MaxLineSimilarity"), I18N.get("MaxLineSimilarityInfo"), I18N.get("MaxSimilarity"), I18N.get("MaxSimilarityInfo")));
 		info.setBorder(null); // TODO: necc?
 		info.setFocusable(false);
 		info.setEditable(false);
