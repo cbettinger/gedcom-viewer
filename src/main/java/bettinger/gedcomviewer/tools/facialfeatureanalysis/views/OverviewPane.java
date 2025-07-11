@@ -68,7 +68,7 @@ class OverviewPane extends JPanel {
 		table.getColumnModel().getColumn(1).setCellRenderer(facialFeatureCellRenderer);
 		sideBar.add(new JScrollPane(table));
 
-		final var info = new JTextArea(String.format("%n%s: %s%n%n%s: %s", I18N.get("MaxLineSimilarity"), I18N.get("MaxLineSimilarityInfo"), I18N.get("MaxSimilarity"), I18N.get("MaxSimilarityInfo")));
+		final var info = new JTextArea(String.format("%n%s: %s%n%n%s: %s", I18N.get("MaxLineSimilarity"), I18N.get("MaxLineSimilarityInfo"), I18N.get("MaxSimilarity"), I18N.get("MaxSimilarityOverviewInfo")));
 		info.setBorder(null); // TODO: necc?
 		info.setFocusable(false);
 		info.setEditable(false);
