@@ -28,8 +28,8 @@
 			<outputDirectory>/webview</outputDirectory>
 		</fileSet>
 		<fileSet>
-			<directory>${project.basedir}/thirdparty</directory>
-			<outputDirectory>/thirdparty</outputDirectory>
+			<directory>${project.basedir}/vendor</directory>
+			<outputDirectory>/vendor</outputDirectory>
 		</fileSet>
 	</fileSets>
 	<dependencySets>
