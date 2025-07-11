@@ -1,6 +1,7 @@
 package bettinger.gedcomviewer.tools.facialfeatureanalysis;
 
 import java.io.IOException;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -10,15 +11,47 @@ import java.util.TreeMap;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import bettinger.gedcomviewer.Format;
+import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Individual;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.views.ResultFrame;
 import bettinger.gedcomviewer.utils.FileUtils;
 import bettinger.gedcomviewer.utils.JSONUtils;
 import bettinger.gedcomviewer.utils.PythonUtils;
+import bettinger.gedcomviewer.views.MainFrame;
+import bettinger.gedcomviewer.views.MainFrame.BackgroundWorker;
 
-interface Analyser {
+public class Analyzer extends BackgroundWorker {
 
-	static Map<FacialFeature, AnalysisResult> analyse(final Individual proband, final int depth, final int numberOfPortraits) throws AnalysisException {
-		final TreeMap<FacialFeature, AnalysisResult> results = new TreeMap<>();
+	private final Individual proband;
+	private final int depth;
+	private final int numberOfPortraits;
+
+	private Map<FacialFeature, AnalysisResult> results;
+
+	public Analyzer(final Individual proband, final int depth, final int numberOfPortraits) {
+		MainFrame.getInstance().super(I18N.get("FacialFeatureAnalysis"));
+
+		this.proband = proband;
+		this.depth = depth;
+		this.numberOfPortraits = numberOfPortraits;
+	}
+
+	@Override
+	protected URI doInBackground() throws Exception {
+		var uri = super.doInBackground();
+
+		try {
+			results = analyse();
+		} catch (final AnalysisException e) {
+			onError(new AnalysisException(String.format(Format.KEY_VALUE, I18N.get("FacialFeatureAnalysisFailed"), e.getMessage())));
+		}
+
+		return uri;
+	}
+
+	private Map<FacialFeature, AnalysisResult> analyse() throws AnalysisException {
+		final TreeMap<FacialFeature, AnalysisResult> result = new TreeMap<>();
 
 		final var inputFilePath = FileUtils.createTempFile();
 		if (inputFilePath == null) {
@@ -62,11 +95,20 @@ interface Analyser {
 
 			if (jsonResults != null) {
 				for (final var feature : FacialFeature.values()) {
-					results.put(feature, AnalysisResult.fromJSON(jsonResults, feature));
+					result.put(feature, AnalysisResult.fromJSON(jsonResults, feature));
 				}
 			}
 		}
 
-		return results;
+		return result;
+	}
+
+	@Override
+	protected void onSuccess(final URI uri) {
+		super.onSuccess(uri);
+
+		if (results != null) {
+			new ResultFrame(proband, depth, results);
+		}
 	}
 }
