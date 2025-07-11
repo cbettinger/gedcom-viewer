@@ -28,6 +28,10 @@
 			<outputDirectory>/webview</outputDirectory>
 		</fileSet>
 		<fileSet>
+			<directory>${project.basedir}/src/main/resources/tools</directory>
+			<outputDirectory>/tools</outputDirectory>
+		</fileSet>
+		<fileSet>
 			<directory>${project.basedir}/vendor</directory>
 			<outputDirectory>/vendor</outputDirectory>
 		</fileSet>
