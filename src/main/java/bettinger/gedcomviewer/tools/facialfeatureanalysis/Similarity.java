@@ -32,10 +32,6 @@ public class Similarity {
 	}
 
 	public static Similarity fromJSON(final JsonNode json) {
-		if (json.properties().isEmpty() && json.asText().isEmpty()) { // TODO: second operand can be deleted
-			return null;
-		}
-
-		return new Similarity(Float.parseFloat(json.get("avgSimilarity").asText()), Float.parseFloat(json.get("maxSimilarity").asText()), json.get("maxSimilarityProbandPortrait").asText(), json.get("maxSimilarityAncestorPortrait").asText());
+		return json.properties().isEmpty() ? null :  new Similarity(Float.parseFloat(json.get("avgSimilarity").asText()), Float.parseFloat(json.get("maxSimilarity").asText()), json.get("maxSimilarityProbandPortrait").asText(), json.get("maxSimilarityAncestorPortrait").asText());
 	}
 }

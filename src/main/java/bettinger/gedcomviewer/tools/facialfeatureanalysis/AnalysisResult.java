@@ -9,6 +9,9 @@ import org.javatuples.Pair;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class AnalysisResult {
+
+	private static final float EPSILON = 0.000001f;
+
 	private final Map<String, Similarity> individualSimilarities;
 	private final Map<AncestralLine, Float> lineSimilarities;
 
@@ -40,7 +43,7 @@ public class AnalysisResult {
 					idsWithMaxSimilarity.clear();
 					idsWithMaxSimilarity.add(id);
 					maxSimilarity = avgSimilarity;
-				} else if (avgSimilarity == maxSimilarity) { // TODO: accept epsilon as below? yes
+				} else if (Math.abs(avgSimilarity - maxSimilarity) < EPSILON) {
 					idsWithMaxSimilarity.add(id);
 				}
 			}
@@ -61,7 +64,7 @@ public class AnalysisResult {
 				linesWithMaxSimilarity.clear();
 				linesWithMaxSimilarity.add(line);
 				maxSimilarity = avgSimilarity;
-			} else if (Math.abs(avgSimilarity - maxSimilarity) < 0.000001) {
+			} else if (Math.abs(avgSimilarity - maxSimilarity) < EPSILON) {
 				linesWithMaxSimilarity.add(line);
 			}
 		}
