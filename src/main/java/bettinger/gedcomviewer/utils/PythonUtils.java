@@ -24,16 +24,16 @@ public interface PythonUtils {
 			installPip.waitFor();
 			logger.log(Level.INFO, "Installed pip");
 
-			final var installPipenv = runtime.exec(new String[] { "pip", "install", "--user", "pipenv" });
+			final var installPipenv = runtime.exec(new String[] { "python", "-m", "pip", "install", "--user", "pipenv" });
 			installPipenv.waitFor();
 			logger.log(Level.INFO, "Installed pipenv");
 
-			final var installRequirements = runtime.exec(new String[] { "pipenv", "install" });
+			final var installRequirements = runtime.exec(new String[] {"python", "-m", "pipenv", "install" });
 			installRequirements.waitFor();
 			logger.log(Level.INFO, "Installed requirements from Pipfile");
 
 			final ArrayList<String> command = new ArrayList<>();
-			command.addAll(Arrays.asList("pipenv", "run", "python", path));
+			command.addAll(Arrays.asList("python", "-m", "pipenv", "run", "python", path));
 			command.addAll(Arrays.asList(args));
 
 			final Process script = runtime.exec(command.toArray(new String[0]));
