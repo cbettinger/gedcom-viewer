@@ -18,6 +18,9 @@ import bettinger.gedcomviewer.views.visualization.AncestorsRenderer;
 import bettinger.gedcomviewer.views.visualization.Node;
 
 public class DetailsRenderer extends AncestorsRenderer {
+	static final Color PERFECT_MATCH_COLOR = Color.GREEN;
+	static final Color NO_MATCH_COLOR = Color.DARK_GRAY;
+
 	private static final int LINE_WIDTH = 3;
 
 	private final Map<String, Similarity> personSimilarities;
@@ -104,11 +107,7 @@ public class DetailsRenderer extends AncestorsRenderer {
 
 		final Stroke defaultStroke = g.getStroke();
 
-		int red = Math.min(255, (int) (DetailsPane.NO_MATCH_COLOR.getRed() + similarity * DetailsPane.PERFECT_MATCH_COLOR.getRed()));
-		int green = Math.min(255, (int) (DetailsPane.NO_MATCH_COLOR.getGreen() + similarity * DetailsPane.PERFECT_MATCH_COLOR.getGreen()));
-		int blue = Math.min(255, (int) (DetailsPane.NO_MATCH_COLOR.getBlue() + similarity * DetailsPane.PERFECT_MATCH_COLOR.getBlue()));
-
-		var color = new Color(red, green, blue, 255);
+		var color = getSimilarityColor(similarity);
 
 		if (parentsPoint != null) {
 			final int offsetX = left ? -LINE_WIDTH / 2 : LINE_WIDTH / 2;
@@ -148,5 +147,12 @@ public class DetailsRenderer extends AncestorsRenderer {
 			result = g.getFontMetrics().stringWidth("100.00% 100.0%");
 		}
 		return result;
+	}
+
+	static Color getSimilarityColor(final float similarity) {
+		final int r = Math.min(255, (int) (NO_MATCH_COLOR.getRed() + similarity * PERFECT_MATCH_COLOR.getRed()));
+		final int g = Math.min(255, (int) (NO_MATCH_COLOR.getGreen() + similarity * PERFECT_MATCH_COLOR.getGreen()));
+		final int b = Math.min(255, (int) (NO_MATCH_COLOR.getBlue() + similarity * PERFECT_MATCH_COLOR.getBlue()));
+		return new Color(r, g, b, 255);
 	}
 }

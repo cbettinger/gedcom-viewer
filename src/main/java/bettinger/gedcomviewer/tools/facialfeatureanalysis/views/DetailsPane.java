@@ -1,7 +1,6 @@
 package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,8 +16,7 @@ import bettinger.gedcomviewer.tools.facialfeatureanalysis.AnalysisResult;
 import bettinger.gedcomviewer.views.WebViewPanel;
 
 public class DetailsPane extends JPanel {
-	static final Color PERFECT_MATCH_COLOR = Color.GREEN;
-	static final Color NO_MATCH_COLOR = Color.DARK_GRAY;
+
 	static final int LEGEND_WIDTH = 400;
 	static final int COLOR_RAMP_HEIGHT = 100;
 
@@ -34,7 +32,7 @@ public class DetailsPane extends JPanel {
 
 		var colorGradientPane = new JPanel();
 		colorGradientPane.setLayout(new BoxLayout(colorGradientPane, BoxLayout.X_AXIS));
-		colorGradientPane.add(new GradientPanel(PERFECT_MATCH_COLOR, NO_MATCH_COLOR));
+		colorGradientPane.add(new GradientPanel(DetailsRenderer.PERFECT_MATCH_COLOR, DetailsRenderer.NO_MATCH_COLOR));
 
 		var colorGradientDescription = new JPanel();
 		colorGradientDescription.setLayout(new BorderLayout());

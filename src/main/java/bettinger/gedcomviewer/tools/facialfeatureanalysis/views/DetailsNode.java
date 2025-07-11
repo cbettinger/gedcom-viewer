@@ -1,7 +1,6 @@
 package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Image;
 import java.awt.Stroke;
 import java.util.ArrayList;
@@ -50,7 +49,7 @@ class DetailsNode extends Node {
 	public void render(final int x, final int y) {
 		super.render(x, y);
 
-		final var borderColor = getBorderColor(similarity);
+		final var borderColor = similarity == null ? null : DetailsRenderer.getSimilarityColor(similarity.getAvgSimilarity());
 		if (borderColor != null) {
 			final var originalPaint = g.getPaint();
 			final var originalStroke = g.getStroke();
@@ -95,17 +94,6 @@ class DetailsNode extends Node {
 	@Override
 	protected int getTextPositionX() {
 		return super.getTextPositionX() + (probandPortrait == null ? 0 : probandPortraitWidth + 2 * PADDING);
-	}
-
-	private static Color getBorderColor(final Similarity similarity) {
-		if (similarity == null) {
-			return null;
-		}
-
-		final var r = Math.min(255, (int) (DetailsPane.NO_MATCH_COLOR.getRed() + similarity.getAvgSimilarity() * DetailsPane.PERFECT_MATCH_COLOR.getRed()));
-		final var g = Math.min(255, (int) (DetailsPane.NO_MATCH_COLOR.getGreen() + similarity.getAvgSimilarity() * DetailsPane.PERFECT_MATCH_COLOR.getGreen()));
-		final var b = Math.min(255, (int) (DetailsPane.NO_MATCH_COLOR.getBlue() + similarity.getAvgSimilarity() * DetailsPane.PERFECT_MATCH_COLOR.getBlue()));
-		return new Color(r, g, b, 255);
 	}
 
 	private static Image getPortrait(final Individual individual, final Similarity similarity) {
