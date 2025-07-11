@@ -17,7 +17,6 @@ import bettinger.gedcomviewer.tools.facialfeatureanalysis.AnalysisResult;
 import bettinger.gedcomviewer.views.WebViewPanel;
 
 public class DetailsPane extends JPanel {
-
   static final Color PERFECT_MATCH_COLOR = Color.GREEN;
   static final Color NO_MATCH_COLOR = Color.DARK_GRAY;
   static final int LEGEND_WIDTH = 400;

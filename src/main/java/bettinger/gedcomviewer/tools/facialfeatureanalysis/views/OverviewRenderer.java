@@ -21,7 +21,6 @@ import bettinger.gedcomviewer.views.visualization.AncestorsRenderer;
 import bettinger.gedcomviewer.views.visualization.Node;
 
 class OverviewRenderer extends AncestorsRenderer {
-
 	private static final float LINE_THICKNESS = 3.5f;
 	private static final int LINE_OFFSET = 5;
 

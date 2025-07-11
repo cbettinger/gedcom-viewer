@@ -24,7 +24,6 @@ import bettinger.gedcomviewer.views.AutoFitTable;
 import bettinger.gedcomviewer.views.WebViewPanel;
 
 class OverviewPane extends JPanel {
-
 	private static final TableCellRenderer facialFeatureCellRenderer = new DefaultTableCellRenderer() {
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {

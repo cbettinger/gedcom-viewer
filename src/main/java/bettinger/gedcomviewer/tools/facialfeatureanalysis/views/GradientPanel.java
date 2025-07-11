@@ -8,7 +8,6 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 public class GradientPanel extends JPanel {
-
 	private final Color color1;
 	private final Color color2;
 

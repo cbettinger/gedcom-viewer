@@ -14,7 +14,6 @@ import bettinger.gedcomviewer.views.Frame;
 import bettinger.gedcomviewer.views.MainFrame;
 
 public class ResultFrame extends Frame {
-
 	public ResultFrame(final Individual proband, final int depth, final Map<FacialFeature, AnalysisResult> results) {
 		setTitle(String.format(Format.KEY_VALUE, I18N.get("FacialFeatureAnalysis"), proband.getNameAndNumber()));
 

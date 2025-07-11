@@ -18,7 +18,6 @@ import bettinger.gedcomviewer.tools.facialfeatureanalysis.Similarity;
 import bettinger.gedcomviewer.views.visualization.Node;
 
 public class DetailsNode extends Node {
-
     private static final int BORDER_THICKNESS = 3;
 
     private Image portraitTargetPerson;

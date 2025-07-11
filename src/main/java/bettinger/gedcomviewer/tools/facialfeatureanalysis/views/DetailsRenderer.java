@@ -18,7 +18,6 @@ import bettinger.gedcomviewer.views.visualization.AncestorsRenderer;
 import bettinger.gedcomviewer.views.visualization.Node;
 
 public class DetailsRenderer extends AncestorsRenderer {
-
     private static final int LINE_THICKNESS = 3;
 
     private final Individual targetPerson;

@@ -20,7 +20,6 @@ import bettinger.gedcomviewer.views.icons.MaterialIcons;
 import jiconfont.swing.IconFontSwing;
 
 public class ConfigurationDialog extends JDialog {
-
 	public ConfigurationDialog(final Individual individual) {
 		setTitle(I18N.get("FacialFeatureAnalysis"));
 		setModal(true);
