@@ -61,7 +61,7 @@ class MediaManager {
 					primaryImage = medium;
 				}
 
-				final var portrait = TagUtils.getFirstExtensionTagValue(mr, "_PORTRAIT"); // TODO: rename to _FACIAL?
+				final var portrait = TagUtils.getFirstExtensionTagValue(mr, "_FACIAL");
 				if (portrait.equals("Y")) {
 					facialPortraits.add(medium);
 				}
