@@ -9,7 +9,6 @@ import org.javatuples.Pair;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class AnalysisResult {
-
 	private static final float EPSILON = 0.000001f;
 
 	private final Map<String, Similarity> individualSimilarities;

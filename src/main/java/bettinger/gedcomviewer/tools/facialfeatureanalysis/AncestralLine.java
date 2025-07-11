@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class AncestralLine {
-
 	private final List<String> ids;
 
 	private AncestralLine(final List<String> ids) {

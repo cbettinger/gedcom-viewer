@@ -22,7 +22,6 @@ import bettinger.gedcomviewer.views.MainFrame;
 import bettinger.gedcomviewer.views.MainFrame.BackgroundWorker;
 
 public class Analyzer extends BackgroundWorker {
-
 	private final Individual proband;
 	private final int depth;
 	private final int numberOfPortraits;
