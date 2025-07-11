@@ -10,8 +10,8 @@ public class AncestralLine {
 		this.ids = ids;
 	}
 
-	public String[] getIds() {
-		return ids.toArray(new String[0]);
+	public List<String> getIds() {
+		return ids;
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class AncestralLine {
 
 	@Override
 	public int hashCode() {
-		return Arrays.hashCode(getIds());
+		return Arrays.hashCode(ids.toArray(new String[0]));
 	}
 
 	public static AncestralLine parse(final String input) {
