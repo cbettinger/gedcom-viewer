@@ -18,16 +18,14 @@ import bettinger.gedcomviewer.views.visualization.AncestorsRenderer;
 import bettinger.gedcomviewer.views.visualization.Node;
 
 public class DetailsRenderer extends AncestorsRenderer {
-	private static final int LINE_THICKNESS = 3;
+	private static final int LINE_WIDTH = 3;
 
-	private final Individual targetPerson;
 	private final Map<String, Similarity> personSimilarities;
 	private Map<Pair<String, String>, Float> coloredEdges;
 	private List<String> includedIndividuals;
 	private Map<String, Float> lastIndividualsOfPath;
 
-	DetailsRenderer(final Individual proband, final AnalysisResult result) {
-		this.targetPerson = proband;
+	DetailsRenderer(final AnalysisResult result) {
 		this.personSimilarities = result.getIndividualSimilarities();
 		this.coloredEdges = new HashMap<>();
 		this.includedIndividuals = new ArrayList<>();
@@ -109,12 +107,13 @@ public class DetailsRenderer extends AncestorsRenderer {
 		int red = Math.min(255, (int) (DetailsPane.NO_MATCH_COLOR.getRed() + similarity * DetailsPane.PERFECT_MATCH_COLOR.getRed()));
 		int green = Math.min(255, (int) (DetailsPane.NO_MATCH_COLOR.getGreen() + similarity * DetailsPane.PERFECT_MATCH_COLOR.getGreen()));
 		int blue = Math.min(255, (int) (DetailsPane.NO_MATCH_COLOR.getBlue() + similarity * DetailsPane.PERFECT_MATCH_COLOR.getBlue()));
+
 		var color = new Color(red, green, blue, 255);
 
 		if (parentsPoint != null) {
-			final int offsetX = left ? -LINE_THICKNESS / 2 : LINE_THICKNESS / 2;
+			final int offsetX = left ? -LINE_WIDTH / 2 : LINE_WIDTH / 2;
 			final int endX = left ? parentNodePosition.x + parentNode.getWidth() : parentNodePosition.x;
-			g.setStroke(new BasicStroke(LINE_THICKNESS));
+			g.setStroke(new BasicStroke(LINE_WIDTH));
 			g.setPaint(color);
 			g.drawLine(parentsPoint.x + offsetX, parentsPoint.y, endX, parentsPoint.y);
 			g.drawLine(parentsPoint.x + offsetX, parentsPoint.y, parentsPoint.x + offsetX, rootNode.getPosition().y);
@@ -128,7 +127,7 @@ public class DetailsRenderer extends AncestorsRenderer {
 				final var label = String.format("%.2f%%", lastIndividualsOfPath.get(tuple.getValue1()) * 100);
 				final var labelWidth = g.getFontMetrics().stringWidth(label);
 				var labelX = centerX - labelWidth / 2;
-				final var labelY = parentsPoint.y - LINE_THICKNESS;
+				final var labelY = parentsPoint.y - LINE_WIDTH;
 
 				g.drawString(label, labelX, labelY);
 			}
@@ -137,10 +136,8 @@ public class DetailsRenderer extends AncestorsRenderer {
 
 	@Override
 	protected Node createNode(final Individual individual, final boolean isClone, final Node parentNode) {
-		var node = new DetailsNode(g, individual, isClone, parentNode);
-		if (individual != null && individual != targetPerson) {
-			node.init(targetPerson, personSimilarities.get(individual.getId()));
-		}
+		final var node = new DetailsNode(g, individual, isClone, parentNode, proband, personSimilarities.get(individual.getId()));
+		node.init();
 		return node;
 	}
 

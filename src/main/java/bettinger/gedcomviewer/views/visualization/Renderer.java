@@ -164,7 +164,9 @@ abstract class Renderer {
 	}
 
 	protected Node createNode(final Individual individual, final boolean isClone, final Node parentNode) {
-		return new Node(g, individual, isClone, parentNode);
+		final var node = new Node(g, individual, isClone, parentNode);
+		node.init();
+		return node;
 	}
 
 	protected boolean isClone(final Individual individual) {

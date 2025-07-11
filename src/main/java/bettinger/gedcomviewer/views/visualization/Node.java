@@ -33,11 +33,6 @@ public class Node {
 	protected static final Color FEMALE_COLOR = new Color(255, 193, 204);
 	protected static final Color FEMALE_CLONE_COLOR = new Color(255, 232, 236);
 
-	protected int x;
-	protected int y;
-	protected int width;
-	protected int height;
-
 	protected final SVGGraphics2D g;
 
 	protected final Individual individual;
@@ -48,11 +43,10 @@ public class Node {
 
 	protected final int depth;
 
-	protected Image portrait;
-	protected int portraitWidth;
-
-	protected List<String> text;
-	protected final int lineHeight;
+	protected int x;
+	protected int y;
+	protected int width;
+	protected int height;
 
 	private int mod;
 	private Node thread;
@@ -60,6 +54,12 @@ public class Node {
 	private Node ancestor;
 	private int change;
 	private int shift;
+
+	protected Image portrait;
+	protected int portraitWidth;
+
+	protected List<String> text;
+	protected int lineHeight;
 
 	protected Node(final SVGGraphics2D g, final Individual individual) {
 		this(g, individual, false);
@@ -89,22 +89,21 @@ public class Node {
 		this.ancestor = this;
 		this.change = 0;
 		this.shift = 0;
+	}
 
-		this.text = getTextLines();
-
-		this.width = MINIMAL_WIDTH;
-		this.height = MINIMAL_HEIGHT;
-
-		this.portrait = getPortrait();
-		this.portraitWidth = this.portrait == null ? 0 : this.portrait.getWidth(null);
+	protected void init() {
+		text = getTextLines();
 
 		g.setFont(BOLD_FONT);
 		final var fontMetrics = g.getFontMetrics();
 		final var maximalLineWidth = fontMetrics.stringWidth(text.stream().max(Comparator.comparing(fontMetrics::stringWidth)).orElse(""));
-		this.lineHeight = fontMetrics.getHeight();
+		lineHeight = fontMetrics.getHeight();
 
-		this.width = Math.max(MINIMAL_WIDTH, maximalLineWidth + 3 * PADDING + (this.portrait == null ? 0 : this.portraitWidth + PADDING));
-		this.height = Math.max(MINIMAL_HEIGHT, text.size() * (lineHeight + PADDING) + 2 * PADDING);
+		portrait = getPortrait();
+		portraitWidth = getPortraitWidth(portrait);
+
+		width = Math.max(MINIMAL_WIDTH, maximalLineWidth + 3 * PADDING + (portrait == null ? 0 : portraitWidth + PADDING));
+		height = Math.max(MINIMAL_HEIGHT, text.size() * (lineHeight + PADDING) + 2 * PADDING);
 	}
 
 	public Point getPosition() {
@@ -235,11 +234,7 @@ public class Node {
 		}
 	}
 
-	protected int getTextPositionX() {
-		return x + PADDING + (portrait == null ? 0 : this.portraitWidth + PADDING);
-	}
-
-	private Image getPortrait() {
+	protected Image getPortrait() {
 		Image result = null;
 
 		if (individual != null) {
@@ -252,15 +247,16 @@ public class Node {
 		return result;
 	}
 
-	private List<String> getTextLines() {
+	protected int getPortraitWidth(final Image image) {
+		return image == null ? 0 : image.getWidth(null);
+	}
+
+	protected List<String> getTextLines() {
 		final List<String> result = new ArrayList<>();
 
-		if (individual == null) {
-			result.add(Structure.UNKNOWN_STRING);
-		} else {
-			final var name = individual.getNickname().isEmpty() ? individual.getName() : String.format(Format.STRING_WITH_QUOTED_SUFFIX, individual.getName(), individual.getNickname());
-			result.add(name);
+		result.add(getFirstTextLine());
 
+		if (individual != null) {
 			final var birthLine = Renderer.formatDateAndPlace(Structure.BIRTH_SIGN, individual.getBirthDate(), individual.getBirthPlace(), individual.getBirthLocation());
 			result.add(birthLine);
 
@@ -279,5 +275,13 @@ public class Node {
 		}
 
 		return result.stream().filter(l -> !l.isEmpty()).toList();
+	}
+
+	protected String getFirstTextLine() {
+		return individual == null ? Structure.UNKNOWN_STRING : individual.getNickname().isEmpty() ? individual.getName() : String.format(Format.STRING_WITH_QUOTED_SUFFIX, individual.getName(), individual.getNickname());
+	}
+
+	protected int getTextPositionX() {
+		return x + PADDING + (portrait == null ? 0 : this.portraitWidth + PADDING);
 	}
 }

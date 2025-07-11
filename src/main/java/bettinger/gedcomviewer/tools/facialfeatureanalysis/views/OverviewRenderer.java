@@ -20,8 +20,8 @@ import bettinger.gedcomviewer.views.visualization.Node;
 
 class OverviewRenderer extends AncestorsRenderer {
 	private static final int LINE_OFFSET = 5;
-	private static final int LINE_THICKNESS = 3;
-	private static final Stroke STROKE = new BasicStroke(LINE_THICKNESS);
+	private static final int LINE_WIDTH = 3;
+	private static final Stroke STROKE = new BasicStroke(LINE_WIDTH);
 
 	private Map<Color, ArrayList<String>> maxIndividualSimilarityIds;
 	private Map<Color, ArrayList<String>> maxLineSimilarityIds;
@@ -85,7 +85,7 @@ class OverviewRenderer extends AncestorsRenderer {
 			for (final var borderColor : maxIndividualSimilarityIds.keySet()) {
 				if (node.getIndividual() != null && maxIndividualSimilarityIds.get(borderColor).contains(node.getIndividual().getId())) {
 					final var border = node.getRectangle();
-					final int offset = colorIndex * LINE_THICKNESS;
+					final int offset = colorIndex * LINE_WIDTH;
 
 					g.setPaint(borderColor);
 					g.drawRect(border.x - offset, border.y - offset, border.width + 2 * offset, border.height + 2 * offset);

@@ -46,7 +46,7 @@ public class DetailsPane extends JPanel {
 		var explanations = new JTextArea();
 		explanations.setEditable(false);
 		explanations.setLineWrap(true);
-		explanations.setText(String.format("\n%s\n\n%s: %s\n\n%s: %s", I18N.get("PathSimilarityDetailsExplanation"), I18N.get("AvgSimilarity"), I18N.get("AvgSimilarityDetailsExplanation"), I18N.get("MaxSimilarity"), I18N.get("MaxSimilarityDetailsExplanation")));
+		explanations.setText(String.format("%n%s%n%n%s: %s%n%n%s: %s", I18N.get("PathSimilarityDetailsExplanation"), I18N.get("AvgSimilarity"), I18N.get("AvgSimilarityDetailsExplanation"), I18N.get("MaxSimilarity"), I18N.get("MaxSimilarityDetailsExplanation")));
 
 		legend.add(colorGradientPane);
 		legend.add(explanations);
@@ -61,7 +61,7 @@ public class DetailsPane extends JPanel {
 		DetailsRenderer renderer = null;
 
 		try {
-			renderer = new DetailsRenderer(proband, result);
+			renderer = new DetailsRenderer(result);
 		} catch (final Exception e) {
 			Logger.getLogger(DetailsPane.class.getName()).log(Level.SEVERE, "Failed to create renderer", e);
 		}
