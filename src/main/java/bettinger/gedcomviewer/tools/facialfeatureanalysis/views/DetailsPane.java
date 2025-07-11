@@ -2,8 +2,6 @@ package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -16,59 +14,42 @@ import bettinger.gedcomviewer.tools.facialfeatureanalysis.AnalysisResult;
 import bettinger.gedcomviewer.views.WebViewPanel;
 
 public class DetailsPane extends JPanel {
-
-	static final int LEGEND_WIDTH = 400;
-	static final int COLOR_RAMP_HEIGHT = 100;
-
-	private final WebViewPanel visualization;
-
-	public DetailsPane(final Individual proband, final int generations, final AnalysisResult result) {
+	public DetailsPane(final Individual proband, final int depth, final AnalysisResult result) {
 		setLayout(new BorderLayout());
 
-		this.visualization = new WebViewPanel();
+		final var renderer = new DetailsRenderer(result);
+		renderer.render(proband, depth + 1);
 
-		var legend = new JPanel();
-		legend.setLayout(new BoxLayout(legend, BoxLayout.Y_AXIS));
-
-		var colorGradientPane = new JPanel();
-		colorGradientPane.setLayout(new BoxLayout(colorGradientPane, BoxLayout.X_AXIS));
-		colorGradientPane.add(new GradientPanel(DetailsRenderer.PERFECT_MATCH_COLOR, DetailsRenderer.NO_MATCH_COLOR));
-
-		var colorGradientDescription = new JPanel();
-		colorGradientDescription.setLayout(new BorderLayout());
-		colorGradientDescription.add(new JLabel("100%"), BorderLayout.NORTH);
-		colorGradientDescription.add(new JLabel("0%"), BorderLayout.SOUTH);
-		colorGradientPane.add(colorGradientDescription);
-		colorGradientPane.setPreferredSize(new Dimension(LEGEND_WIDTH, COLOR_RAMP_HEIGHT));
-
-		var explanations = new JTextArea();
-		explanations.setEditable(false);
-		explanations.setLineWrap(true);
-		explanations.setText(String.format("%n%s%n%n%s: %s%n%n%s: %s", I18N.get("PathSimilarityDetailsExplanation"), I18N.get("AvgSimilarity"), I18N.get("AvgSimilarityDetailsExplanation"), I18N.get("MaxSimilarity"), I18N.get("MaxSimilarityDetailsExplanation")));
-
-		legend.add(colorGradientPane);
-		legend.add(explanations);
-
-		add(legend, BorderLayout.EAST);
+		final var visualization = new WebViewPanel();
+		visualization.setBody(renderer.toString());
+		visualization.scrollTo(renderer.getProbandNode().getPosition());
 		add(visualization, BorderLayout.CENTER);
 
-		update(proband, generations, result);
-	}
+		final var sideBar = new JPanel();
+		sideBar.setLayout(new BoxLayout(sideBar, BoxLayout.Y_AXIS));
 
-	private void update(final Individual proband, final int numGenerations, AnalysisResult result) {
-		DetailsRenderer renderer = null;
+		final var colorGradientPane = new JPanel();
+		colorGradientPane.setPreferredSize(new Dimension(400, 100));
+		colorGradientPane.setLayout(new BoxLayout(colorGradientPane, BoxLayout.X_AXIS));
 
-		try {
-			renderer = new DetailsRenderer(result);
-		} catch (final Exception e) {
-			Logger.getLogger(DetailsPane.class.getName()).log(Level.SEVERE, "Failed to create renderer", e);
-		}
+		colorGradientPane.add(new GradientPanel(DetailsRenderer.PERFECT_MATCH_COLOR, DetailsRenderer.NO_MATCH_COLOR));
 
-		if (renderer != null) {
-			renderer.render(proband, numGenerations + 1);
+		final var colorGradientInfo = new JPanel();
+		colorGradientInfo.setLayout(new BorderLayout());
+		colorGradientInfo.add(new JLabel("100%"), BorderLayout.NORTH);
+		colorGradientInfo.add(new JLabel("0%"), BorderLayout.SOUTH);
+		colorGradientPane.add(colorGradientInfo);
 
-			visualization.setBody(renderer.toString());
-			visualization.scrollTo(renderer.getProbandNode().getPosition());
-		}
+		sideBar.add(colorGradientPane);
+
+		final var info = new JTextArea(String.format("%n%s%n%n%s: %s%n%n%s: %s", I18N.get("LineSimilarityInfo"), I18N.get("AvgSimilarity"), I18N.get("AvgSimilarityDetailsExplanation"), I18N.get("MaxSimilarity"), I18N.get("MaxSimilarityDetailsExplanation")));
+		info.setBorder(null); // TODO: necc?
+		info.setFocusable(false);
+		info.setEditable(false);
+		info.setLineWrap(true);
+		info.setWrapStyleWord(true);
+		sideBar.add(info);
+
+		add(sideBar, BorderLayout.EAST);
 	}
 }
