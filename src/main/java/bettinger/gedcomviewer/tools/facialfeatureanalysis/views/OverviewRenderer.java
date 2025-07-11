@@ -19,9 +19,10 @@ import bettinger.gedcomviewer.views.visualization.AncestorsRenderer;
 import bettinger.gedcomviewer.views.visualization.Node;
 
 class OverviewRenderer extends AncestorsRenderer {
-	private static final int LINE_OFFSET = 5;
-	private static final int LINE_WIDTH = 3;
-	private static final Stroke STROKE = new BasicStroke(LINE_WIDTH);
+	private static final int STROKE_WIDTH = 3;
+	private static final Stroke STROKE = new BasicStroke(STROKE_WIDTH);
+
+	private static final int EDGE_OFFSET = 5;
 
 	private Map<Color, ArrayList<String>> maxIndividualSimilarityIds;
 	private Map<Color, ArrayList<String>> maxLineSimilarityIds;
@@ -85,7 +86,7 @@ class OverviewRenderer extends AncestorsRenderer {
 			for (final var borderColor : maxIndividualSimilarityIds.keySet()) {
 				if (node.getIndividual() != null && maxIndividualSimilarityIds.get(borderColor).contains(node.getIndividual().getId())) {
 					final var border = node.getRectangle();
-					final int offset = colorIndex * LINE_WIDTH;
+					final int offset = colorIndex * STROKE_WIDTH;
 
 					g.setPaint(borderColor);
 					g.drawRect(border.x - offset, border.y - offset, border.width + 2 * offset, border.height + 2 * offset);
@@ -118,12 +119,12 @@ class OverviewRenderer extends AncestorsRenderer {
 
 			for (final var color : maxLineSimilarityIds.keySet()) {
 				final var maxPathIds = maxLineSimilarityIds.get(color);
-				final var excludedIds = excludedIndividuals.get(color);
+				final var excludedIndividualsIds = excludedIndividuals.get(color);
 
-				if (considerFather && maxPathIds.contains(fatherNode.getIndividual().getId()) && !excludedIds.contains(fatherNode.getIndividual().getId())) {
+				if (considerFather && maxPathIds.contains(fatherNode.getIndividual().getId()) && !excludedIndividualsIds.contains(fatherNode.getIndividual().getId())) {
 					fatherExcludedEverywhere = false;
 				}
-				if (considerMother && maxPathIds.contains(motherNode.getIndividual().getId()) && !excludedIds.contains(motherNode.getIndividual().getId())) {
+				if (considerMother && maxPathIds.contains(motherNode.getIndividual().getId()) && !excludedIndividualsIds.contains(motherNode.getIndividual().getId())) {
 					motherExcludedEverywhere = false;
 				}
 			}
@@ -154,7 +155,7 @@ class OverviewRenderer extends AncestorsRenderer {
 		}
 	}
 
-	private void renderMaxSimilarityEdge(final Node childNode, final Node parentNode, final Point parentsPoint, final Pair<String, String> tuple, final boolean left) {
+	private void renderMaxSimilarityEdge(final Node childNode, final Node parentNode, final Point parentsPoint, final Pair<String, String> tuple, final boolean maleLine) {
 		final var originalPaint = g.getPaint();
 		final var originalStroke = g.getStroke();
 
@@ -166,9 +167,9 @@ class OverviewRenderer extends AncestorsRenderer {
 		int edgeIndex = 0;
 		for (final var edgeColor : edgeColors) {
 			if (parentsPoint != null && !excludedIndividuals.get(edgeColor).contains(parentNode.getIndividual().getId())) {
-				final int offsetY = edgeIndex * LINE_OFFSET;
-				final int offsetX = left ? -offsetY - LINE_OFFSET / 2 : offsetY + LINE_OFFSET / 2;
-				final int endX = left ? parentNodePosition.x + LINE_OFFSET : parentNodePosition.x;
+				final int offsetY = edgeIndex * EDGE_OFFSET;
+				final int offsetX = maleLine ? -offsetY - EDGE_OFFSET / 2 : offsetY + EDGE_OFFSET / 2;
+				final int endX = maleLine ? parentNodePosition.x + EDGE_OFFSET : parentNodePosition.x;
 
 				g.setPaint(edgeColor);
 				g.drawLine(parentsPoint.x + offsetX, parentsPoint.y + offsetY, endX, parentsPoint.y + offsetY);
