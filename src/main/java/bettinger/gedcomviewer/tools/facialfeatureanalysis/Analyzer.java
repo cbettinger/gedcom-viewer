@@ -111,4 +111,14 @@ public class Analyzer extends BackgroundWorker {
 			new ResultFrame(proband, depth, results);
 		}
 	}
+
+	static class AnalysisException extends Exception {
+		AnalysisException(final String message) {
+			super(message);
+		}
+
+		AnalysisException(final String message, final Throwable cause) {
+			super(message, cause);
+		}
+	}
 }
