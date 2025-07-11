@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 public interface PythonUtils {
 
 	@SuppressWarnings("java:S1192")
-	public static List<String> executeScript(final String path, final String[] args) {
+	public static List<String> executeScript(final String path, final String[] args) throws IOException {
 		final List<String> result = new ArrayList<>();
 
 		final var logger = Logger.getLogger(PythonUtils.class.getName());
@@ -43,8 +43,11 @@ public interface PythonUtils {
 			final var output = new BufferedReader(new InputStreamReader(script.getInputStream()));
 			output.lines().forEach(result::add);
 		} catch (final IOException | InterruptedException e) {
-			logger.log(Level.SEVERE, String.format("Unable to execute script '%s'", path), e);
 			Thread.currentThread().interrupt();
+
+			final var ioe = new IOException(String.format("Unable to execute script '%s'", path), e);
+			logger.log(Level.SEVERE, ioe.getMessage(), ioe);
+			throw ioe;
 		}
 
 		return result;

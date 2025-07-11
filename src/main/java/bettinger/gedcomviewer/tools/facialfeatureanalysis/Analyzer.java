@@ -64,7 +64,12 @@ public class Analyzer extends BackgroundWorker {
 
 		final String scriptPath = FileUtils.getPath(System.getProperty("user.dir"), "src", "main", "python", "familyFaceCompare.py");
 
-		final List<String> output = PythonUtils.executeScript(scriptPath, new String[] { inputFile.getAbsolutePath(), Integer.toString(numberOfPortraits), Integer.toString(depth) }); // TODO: swap params in python script
+		List<String> output = null;
+		try {
+			output = PythonUtils.executeScript(scriptPath, new String[] { inputFile.getAbsolutePath(), Integer.toString(numberOfPortraits), Integer.toString(depth) });	// TODO: swap params in python script
+		} catch (final IOException e) {
+			throw new AnalysisException(e.getMessage(), e);
+		}
 
 		try {
 			Files.delete(inputFilePath);
