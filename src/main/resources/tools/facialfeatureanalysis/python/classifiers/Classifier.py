@@ -2,13 +2,13 @@ from abc import ABC, abstractmethod
 
 
 class Classifier(ABC):
-    def __init__(self, name, model, pretrainedFilename=None):
+    def __init__(self, name, model, filename=None):
         super().__init__()
         self.name = name
         self.model = model
 
-        if pretrainedFilename:
-            self.load(pretrainedFilename)
+        if filename:
+            self.load(filename)
 
     @abstractmethod
     def fit(self, x, y):

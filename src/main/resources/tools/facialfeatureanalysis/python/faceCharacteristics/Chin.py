@@ -1,4 +1,4 @@
-from classifiers.classifiers import XGB_CLASSIFIERS
+from classifiers.XGBClassifiers import XGB_CLASSIFIERS
 from faceCharacteristics.OneElementalFacePart import OneElementalFacePart
 
 
