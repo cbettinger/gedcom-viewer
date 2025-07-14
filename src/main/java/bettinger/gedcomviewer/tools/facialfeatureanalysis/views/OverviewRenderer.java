@@ -40,24 +40,22 @@ class OverviewRenderer extends AncestorsRenderer {
 
 	@Override
 	public void render(final Individual proband, final int generations, final Point offset) {
-		super.render(proband, generations, offset);
-
 		for (final var entry : results.entrySet()) {
 			final var color = FacialFeature.getColor(entry.getKey());
 			final var result = entry.getValue();
 
-			this.maxIndividualSimilarityIds.put(color, result.getMaxIndividualSimilarity().getValue0());
+			maxIndividualSimilarityIds.put(color, result.getMaxIndividualSimilarity().getValue0());
 
-			this.maxLineSimilarityIds.put(color, new ArrayList<>());
+			maxLineSimilarityIds.put(color, new ArrayList<>());
 
 			final var maxLineSimilarityLines = result.getMaxLineSimilarity().getValue0();
 			for (final var maxLineSimilarityLine : maxLineSimilarityLines) {
 				final var maxLineSimilarityLineIds = maxLineSimilarityLine.getIds();
-				this.maxLineSimilarityIds.get(color).addAll(maxLineSimilarityLineIds);
+				maxLineSimilarityIds.get(color).addAll(maxLineSimilarityLineIds);
 
 				final Pair<String, String> k1 = new Pair<>(proband.getId(), maxLineSimilarityLineIds.get(0));
-				this.maxLineSimilarityEdges.computeIfAbsent(k1, _ -> new HashSet<>());
-				this.maxLineSimilarityEdges.get(k1).add(color);
+				maxLineSimilarityEdges.computeIfAbsent(k1, _ -> new HashSet<>());
+				maxLineSimilarityEdges.get(k1).add(color);
 
 				final ArrayList<String> excludedIds = new ArrayList<>();
 
@@ -69,14 +67,16 @@ class OverviewRenderer extends AncestorsRenderer {
 					}
 
 					final Pair<String, String> k2 = new Pair<>(maxLineSimilarityLineIds.get(i), maxLineSimilarityLineIds.get(i + 1));
-					this.maxLineSimilarityEdges.computeIfAbsent(k2, _ -> new HashSet<>());
-					this.maxLineSimilarityEdges.get(k2).add(color);
+					maxLineSimilarityEdges.computeIfAbsent(k2, _ -> new HashSet<>());
+					maxLineSimilarityEdges.get(k2).add(color);
 				}
 
-				this.excludedIndividuals.computeIfAbsent(color, _ -> new ArrayList<>());
-				this.excludedIndividuals.get(color).addAll(excludedIds);
+				excludedIndividuals.computeIfAbsent(color, _ -> new ArrayList<>());
+				excludedIndividuals.get(color).addAll(excludedIds);
 			}
 		}
+
+		super.render(proband, generations, offset);
 	}
 
 	@Override
@@ -106,8 +106,8 @@ class OverviewRenderer extends AncestorsRenderer {
 		g.setPaint(originalPaint);
 		g.setStroke(originalStroke);
 
-		for (final var childNode : node.getChildren()) {
-			renderNodes(childNode);
+		for (final var child : node.getChildren()) {
+			renderNodes(child);
 		}
 	}
 

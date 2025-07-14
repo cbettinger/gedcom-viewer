@@ -56,7 +56,6 @@ class OverviewPane extends JPanel {
 		sideBar.setLayout(new BoxLayout(sideBar, BoxLayout.Y_AXIS));
 
 		final List<Object[]> tableData = new ArrayList<>();
-
 		for (final var entry : results.entrySet()) {
 			final var feature = entry.getKey();
 			final var featureResult = entry.getValue();

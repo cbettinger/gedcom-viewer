@@ -40,18 +40,16 @@ class DetailsRenderer extends AncestorsRenderer {
 
 	@Override
 	public void render(final Individual proband, final int generations, final Point offset) {
-		super.render(proband, generations, offset);
-
 		for (final var entry : result.getLineSimilarities().entrySet()) {
 			final var lineIds = entry.getKey().getIds();
 			final var similarity = entry.getValue();
 
 			final var k1 = new Pair<String, String>(proband.getId(), lineIds.get(0));
-			this.coloredEdges.computeIfAbsent(k1, _ -> 0.0f);
-			this.coloredEdges.put(k1, Math.max(this.coloredEdges.get(k1), similarity));
+			coloredEdges.computeIfAbsent(k1, _ -> 0.0f);
+			coloredEdges.put(k1, Math.max(coloredEdges.get(k1), similarity));
 
 			if (individualSimilarities.get(lineIds.get(0)) != null) {
-				this.includedIndividualsIds.add(lineIds.get(0));
+				includedIndividualsIds.add(lineIds.get(0));
 			}
 
 			String lastOfPath = null;
@@ -59,21 +57,23 @@ class DetailsRenderer extends AncestorsRenderer {
 
 			for (int i = 0; i < lineIds.size() - 1; i++) {
 				if (individualSimilarities.get(lineIds.get(i + 1)) != null) {
-					this.includedIndividualsIds.addAll(notIncluded);
+					includedIndividualsIds.addAll(notIncluded);
 					notIncluded.clear();
-					this.includedIndividualsIds.add(lineIds.get(i + 1));
+					includedIndividualsIds.add(lineIds.get(i + 1));
 					lastOfPath = lineIds.get(i + 1);
 				} else {
 					notIncluded.add(lineIds.get(i + 1));
 				}
 
 				final var k2 = new Pair<String, String>(lineIds.get(i), lineIds.get(i + 1));
-				this.coloredEdges.computeIfAbsent(k2, _ -> 0.0f);
-				this.coloredEdges.put(k1, Math.max(this.coloredEdges.get(k2), similarity));
+				coloredEdges.computeIfAbsent(k2, _ -> 0.0f);
+				coloredEdges.put(k1, Math.max(coloredEdges.get(k2), similarity));
 			}
 
-			this.lastIndividualsOfLine.put(lastOfPath, similarity);
+			lastIndividualsOfLine.put(lastOfPath, similarity);
 		}
+
+		super.render(proband, generations, offset);
 	}
 
 	@Override
