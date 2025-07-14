@@ -134,7 +134,7 @@ class DetailsRenderer extends AncestorsRenderer {
 		}
 	}
 
-	private void renderColoredEdge(final Node rootNode, final Node parentNode, final Point parentsPoint, final Pair<String, String> tuple, final boolean maleLine) {
+	private void renderColoredEdge(final Node rootNode, final Node parentNode, final Point parentsPoint, final Pair<String, String> tuple, final boolean ancestorIsMale) {
 		if (parentsPoint != null) {
 			final var originalPaint = g.getPaint();
 			final var originalStroke = g.getStroke();
@@ -142,8 +142,8 @@ class DetailsRenderer extends AncestorsRenderer {
 			g.setPaint(FacialFeature.getColor(facialFeature, coloredEdges.get(tuple)));
 			g.setStroke(EDGE_STROKE);
 
-			final int offsetX = maleLine ? -EDGE_WIDTH / 2 : EDGE_WIDTH / 2;
-			final int endX = maleLine ? parentNode.getPosition().x + parentNode.getWidth() : parentNode.getPosition().x;
+			final int offsetX = ancestorIsMale ? -EDGE_WIDTH / 2 : EDGE_WIDTH / 2;
+			final int endX = ancestorIsMale ? parentNode.getPosition().x + parentNode.getWidth() : parentNode.getPosition().x;
 
 			g.drawLine(parentsPoint.x + offsetX, parentsPoint.y, endX, parentsPoint.y);
 			g.drawLine(parentsPoint.x + offsetX, parentsPoint.y, parentsPoint.x + offsetX, rootNode.getPosition().y);
@@ -155,7 +155,7 @@ class DetailsRenderer extends AncestorsRenderer {
 				final var label = String.format("%.1f%%", lastIndividualsOfLine.get(tuple.getValue1()) * 100);
 				final var labelWidth = g.getFontMetrics().stringWidth(label);
 
-				final var lineStartX = maleLine ? endX : parentsPoint.x + offsetX;
+				final var lineStartX = ancestorIsMale ? endX : parentsPoint.x + offsetX;
 				final var centerX = lineStartX + Math.abs(parentsPoint.x + offsetX - endX) / 2;
 
 				g.drawString(label, centerX - labelWidth / 2, parentsPoint.y - EDGE_WIDTH);

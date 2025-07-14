@@ -162,7 +162,7 @@ class OverviewRenderer extends AncestorsRenderer {
 		}
 	}
 
-	private void renderMaxSimilarityEdge(final Node childNode, final Node parentNode, final Point parentsPoint, final Pair<String, String> tuple, final boolean maleLine) {
+	private void renderMaxSimilarityEdge(final Node childNode, final Node parentNode, final Point parentsPoint, final Pair<String, String> tuple, final boolean ancestorIsMale) {
 		final var originalPaint = g.getPaint();
 		final var originalStroke = g.getStroke();
 
@@ -175,8 +175,8 @@ class OverviewRenderer extends AncestorsRenderer {
 		for (final var edgeColor : edgeColors) {
 			if (parentsPoint != null && !excludedIndividuals.get(edgeColor).contains(parentNode.getIndividual().getId())) {
 				final int offsetY = edgeIndex * EDGE_OFFSET;
-				final int offsetX = maleLine ? -offsetY - EDGE_OFFSET / 2 : offsetY + EDGE_OFFSET / 2;
-				final int endX = maleLine ? parentNodePosition.x + EDGE_OFFSET : parentNodePosition.x;
+				final int offsetX = ancestorIsMale ? -offsetY - EDGE_OFFSET / 2 : offsetY + EDGE_OFFSET / 2;
+				final int endX = ancestorIsMale ? parentNodePosition.x + EDGE_OFFSET : parentNodePosition.x;
 
 				g.setPaint(edgeColor);
 				g.drawLine(parentsPoint.x + offsetX, parentsPoint.y + offsetY, endX, parentsPoint.y + offsetY);
