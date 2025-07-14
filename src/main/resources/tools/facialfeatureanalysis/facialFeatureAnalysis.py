@@ -13,7 +13,7 @@ else:
         try:
             rootPerson = Person.PERSONS[sys.argv[4]]
         except:
-            sys.exit("Es existiert kein Individuum mit ID {}.".format(sys.argv[4]))
+            sys.exit("There is no individual with ID {}.".format(sys.argv[4]))
 
     filename = sys.argv[1].replace(".json", "-result.json")
     result = getFaceAnalysisResult(rootPerson, int(sys.argv[3]))

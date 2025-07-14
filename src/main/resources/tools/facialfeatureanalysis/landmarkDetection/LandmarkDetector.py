@@ -5,7 +5,7 @@ from mediapipe.tasks.python import vision
 class LandmarkDetector:
 
     BASE_OPTIONS = python.BaseOptions(
-        model_asset_path="src/main/resources/tools/facialfeatureanalysis/landmarker/face_landmarker.task"
+        model_asset_path="landmarkDetection/face_landmarker.task"
     )
     OPTIONS = vision.FaceLandmarkerOptions(
         base_options=BASE_OPTIONS,
