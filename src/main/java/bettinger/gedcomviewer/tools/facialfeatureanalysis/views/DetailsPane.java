@@ -44,7 +44,7 @@ public class DetailsPane extends JPanel {
 
 		sideBar.add(colorGradientPane);
 
-		final var info = new JTextArea(String.format("%n%s%n%n%s: %s%n%n%s: %s", I18N.get("LineSimilarityInfo"), I18N.get("AvgSimilarity"), I18N.get("AvgSimilarityInfo"), I18N.get("MaxSimilarity"), I18N.get("MaxSimilarityDetailsInfo")));
+		final var info = new JTextArea(String.format("%n%s: %s%n%n%s: %s%n%n%s: %s", I18N.get("LineSimilarity"), I18N.get("LineSimilarityInfo"), I18N.get("AvgSimilarity"), I18N.get("AvgSimilarityInfo"), I18N.get("MaxSimilarity"), I18N.get("MaxSimilarityDetailsInfo")));
 		info.setBorder(BorderFactory.createEmptyBorder(Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN));
 		info.setFocusable(false);
 		info.setEditable(false);
