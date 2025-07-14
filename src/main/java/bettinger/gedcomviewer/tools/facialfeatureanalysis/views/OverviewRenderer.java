@@ -30,7 +30,7 @@ class OverviewRenderer extends AncestorsRenderer {
 	private final Map<Color, ArrayList<String>> excludedIndividuals;
 	private final Map<FacialFeature, AnalysisResult> results;
 
-	OverviewRenderer(final Individual proband, final Map<FacialFeature, AnalysisResult> results) {
+	OverviewRenderer(final Map<FacialFeature, AnalysisResult> results) {
 		this.maxIndividualSimilarityIds = new HashMap<>();
 		this.maxLineSimilarityIds = new HashMap<>();
 		this.maxLineSimilarityEdges = new HashMap<>();
@@ -80,35 +80,10 @@ class OverviewRenderer extends AncestorsRenderer {
 	}
 
 	@Override
-	protected void renderNodes(final Node node) {
-		final var originalPaint = g.getPaint();
-		final var originalStroke = g.getStroke();
-
-		g.setStroke(STROKE);
-
-		if (renderRootNode || node != rootNode) {
-			node.render(node.getPosition().x, node.getPosition().y);
-
-			int colorIndex = 0;
-			for (final var borderColor : maxIndividualSimilarityIds.keySet()) {
-				if (node.getIndividual() != null && maxIndividualSimilarityIds.get(borderColor).contains(node.getIndividual().getId())) {
-					final var border = node.getRectangle();
-					final int offset = colorIndex * STROKE_WIDTH;
-
-					g.setPaint(borderColor);
-					g.drawRect(border.x - offset, border.y - offset, border.width + 2 * offset, border.height + 2 * offset);
-
-					colorIndex++;
-				}
-			}
-		}
-
-		g.setPaint(originalPaint);
-		g.setStroke(originalStroke);
-
-		for (final var child : node.getChildren()) {
-			renderNodes(child);
-		}
+	protected Node createNode(final Individual individual, final boolean isClone, final Node parentNode) {
+		final var node = new OverviewNode(this, g, individual, isClone, parentNode, maxIndividualSimilarityIds);
+		node.init();
+		return node;
 	}
 
 	@Override
@@ -124,10 +99,11 @@ class OverviewRenderer extends AncestorsRenderer {
 			boolean fatherExcludedEverywhere = true;
 			boolean motherExcludedEverywhere = true;
 
-			for (final var color : maxLineSimilarityIds.keySet()) {
-				final var maxPathIds = maxLineSimilarityIds.get(color);
-				final var excludedIndividualsIds = excludedIndividuals.get(color);
+			for (final var entry : maxLineSimilarityIds.entrySet()) {
+				final var color = entry.getKey();
+				final var maxPathIds = entry.getValue();
 
+				final var excludedIndividualsIds = excludedIndividuals.get(color);
 				if (considerFather && maxPathIds.contains(fatherNode.getIndividual().getId()) && !excludedIndividualsIds.contains(fatherNode.getIndividual().getId())) {
 					fatherExcludedEverywhere = false;
 				}

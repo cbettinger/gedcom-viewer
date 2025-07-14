@@ -94,7 +94,7 @@ public class Node {
 		this.shift = 0;
 	}
 
-	protected void init() {
+	public void init() {
 		text = getTextLines();
 
 		g.setFont(BOLD_FONT);

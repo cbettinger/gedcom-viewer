@@ -30,7 +30,7 @@ class DetailsNode extends Node {
 	}
 
 	@Override
-	protected void init() {
+	public void init() {
 		super.init();
 
 		if (individual != null && renderer.getProband() != null && individual != renderer.getProband() && similarity != null) {

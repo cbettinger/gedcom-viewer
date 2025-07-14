@@ -43,7 +43,7 @@ class OverviewPane extends JPanel {
 	OverviewPane(final Individual proband, final int depth, final Map<FacialFeature, AnalysisResult> results) {
 		setLayout(new BorderLayout());
 
-		final var renderer = new OverviewRenderer(proband, results);
+		final var renderer = new OverviewRenderer(results);
 		renderer.render(proband, depth + 1);
 
 		final var visualization = new WebViewPanel();
