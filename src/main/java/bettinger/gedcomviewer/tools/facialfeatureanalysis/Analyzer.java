@@ -66,7 +66,7 @@ public class Analyzer extends BackgroundWorker {
 
 		List<String> output = null;
 		try {
-			output = PythonUtils.executeScript(scriptPath, new String[] { inputFile.getAbsolutePath(), Integer.toString(numberOfPortraits), Integer.toString(depth) });	// TODO: swap params in python script
+			output = PythonUtils.executeScript(scriptPath, new String[] { inputFile.getAbsolutePath(), Integer.toString(numberOfPortraits), Integer.toString(depth) });
 		} catch (final IOException e) {
 			throw new AnalysisException(e.getMessage(), e);
 		}
