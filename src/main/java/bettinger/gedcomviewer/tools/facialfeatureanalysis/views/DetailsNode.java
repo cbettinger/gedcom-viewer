@@ -17,16 +17,14 @@ class DetailsNode extends Node {
 	private static final int BORDER_WIDTH = 3;
 	private static final Stroke BORDER_STROKE = new BasicStroke(BORDER_WIDTH);
 
-	private final Individual proband;
 	private final Similarity similarity;
 
 	private Image probandPortrait;
 	private int probandPortraitWidth;
 
-	DetailsNode(final SVGGraphics2D g, final Individual individual, final boolean isClone, final Node parent, final Individual proband, final Similarity similarity) {
-		super(g, individual, isClone, parent);
+	DetailsNode(final DetailsRenderer renderer, final SVGGraphics2D g, final Individual individual, final boolean isClone, final Node parent, final Individual proband, final Similarity similarity) {
+		super(renderer, g, individual, isClone, parent);
 
-		this.proband = proband;
 		this.similarity = similarity;
 	}
 
@@ -34,8 +32,8 @@ class DetailsNode extends Node {
 	protected void init() {
 		super.init();
 
-		if (individual != null && individual != proband && similarity != null) {
-			probandPortrait = getPortrait(proband, similarity);
+		if (individual != null && renderer.getProband() != null && individual != renderer.getProband() && similarity != null) {
+			probandPortrait = getPortrait(renderer.getProband(), similarity);
 			probandPortraitWidth = getPortraitWidth(probandPortrait);
 
 			width += probandPortrait == null ? 0 : probandPortraitWidth + PADDING;

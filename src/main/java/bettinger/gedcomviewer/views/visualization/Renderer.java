@@ -15,7 +15,7 @@ import bettinger.gedcomviewer.model.Location;
 import bettinger.gedcomviewer.model.Structure;
 import bettinger.gedcomviewer.utils.SVGUtils;
 
-abstract class Renderer {
+public abstract class Renderer {
 
 	protected static final int LEVEL_DISTANCE = 25;
 
@@ -75,6 +75,10 @@ abstract class Renderer {
 		this.maximalNodeHeight = 0;
 		this.maximalDepth = 0;
 		this.minimalX = Integer.MAX_VALUE;
+	}
+
+	public Individual getProband() {
+		return proband;
 	}
 
 	public Node getProbandNode() {
@@ -164,7 +168,7 @@ abstract class Renderer {
 	}
 
 	protected Node createNode(final Individual individual, final boolean isClone, final Node parentNode) {
-		final var node = new Node(g, individual, isClone, parentNode);
+		final var node = new Node(this, g, individual, isClone, parentNode);
 		node.init();
 		return node;
 	}

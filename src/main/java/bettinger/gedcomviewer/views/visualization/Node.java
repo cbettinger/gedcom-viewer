@@ -33,6 +33,8 @@ public class Node {
 	protected static final Color FEMALE_COLOR = new Color(255, 193, 204);
 	protected static final Color FEMALE_CLONE_COLOR = new Color(255, 232, 236);
 
+	protected final Renderer renderer;
+
 	protected final SVGGraphics2D g;
 
 	protected final Individual individual;
@@ -61,15 +63,16 @@ public class Node {
 	protected List<String> text;
 	protected int lineHeight;
 
-	protected Node(final SVGGraphics2D g, final Individual individual) {
-		this(g, individual, false);
+	protected Node(final Renderer renderer, final SVGGraphics2D g, final Individual individual) {
+		this(renderer, g, individual, false);
 	}
 
-	protected Node(final SVGGraphics2D g, final Individual individual, final boolean isClone) {
-		this(g, individual, isClone, null);
+	protected Node(final Renderer renderer, final SVGGraphics2D g, final Individual individual, final boolean isClone) {
+		this(renderer, g, individual, isClone, null);
 	}
 
-	protected Node(final SVGGraphics2D g, final Individual individual, final boolean isClone, final Node parent) {
+	protected Node(final Renderer renderer, final SVGGraphics2D g, final Individual individual, final boolean isClone, final Node parent) {
+		this.renderer = renderer;
 		this.g = g;
 
 		this.individual = individual;
