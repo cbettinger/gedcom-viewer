@@ -148,7 +148,7 @@ class DetailsRenderer extends AncestorsRenderer {
 			g.setStroke(originalStroke);
 
 			if (lastIndividualsOfLine.containsKey(tuple.getValue1())) {
-				final var label = String.format("%.2f%%", lastIndividualsOfLine.get(tuple.getValue1()) * 100);
+				final var label = String.format("%.1f%%", lastIndividualsOfLine.get(tuple.getValue1()) * 100);
 				final var labelWidth = g.getFontMetrics().stringWidth(label);
 
 				final var lineStartX = maleLine ? endX : parentsPoint.x + offsetX;

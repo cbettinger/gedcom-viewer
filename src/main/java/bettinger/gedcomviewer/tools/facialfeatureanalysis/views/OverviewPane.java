@@ -63,7 +63,7 @@ class OverviewPane extends JPanel {
 
 			final var maxLineSimilarity = featureResult.getMaxLineSimilarity();
 			final var maxIndividualSimilarity = featureResult.getMaxIndividualSimilarity();
-			tableData.add(new Object[] { I18N.get(feature.name()), feature, String.format("%.2f%%", maxLineSimilarity.getValue1() * 100), String.format("%.2f%%", maxIndividualSimilarity.getValue1() * 100) });
+			tableData.add(new Object[] { I18N.get(feature.name()), feature, String.format("%.1f%%", maxLineSimilarity.getValue1() * 100), String.format("%.1f%%", maxIndividualSimilarity.getValue1() * 100) });
 		}
 
 		final var table = new AutoFitTable();
