@@ -392,15 +392,15 @@ abstract class Renderer {
 		if (leftNode != null && rightNode != null) {
 			centerX = leftNode.x + leftNode.width + ((rightNode.x - leftNode.x - leftNode.width) / 2);
 
-			final var labelWidth = g.getFontMetrics().stringWidth(label);
-			final var labelX = centerLabel ? centerX - labelWidth / 2 : rightNode.x - EDGE_LABEL_PADDING - labelWidth;
 			final var labelY = leftNode.y + Node.MINIMAL_HEIGHT / 2 + (index * EDGE_OFFSET);
-
 			lineY = labelY + EDGE_OFFSET;
 
 			g.drawLine(leftNode.x + leftNode.width, lineY, rightNode.x, lineY);
 
 			if (label != null && !label.isEmpty()) {
+				final var labelWidth = g.getFontMetrics().stringWidth(label);
+				final var labelX = centerLabel ? centerX - labelWidth / 2 : rightNode.x - EDGE_LABEL_PADDING - labelWidth;
+
 				g.drawString(label, labelX, labelY);
 			}
 		}
