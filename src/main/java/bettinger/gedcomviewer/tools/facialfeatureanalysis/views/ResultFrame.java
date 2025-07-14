@@ -21,9 +21,7 @@ public class ResultFrame extends Frame {
 
 		tabbedPane.addTab(I18N.get("Overview"), new OverviewPane(proband, depth, results));
 
-		final var detailsPane = new JTabbedPane();
-		results.entrySet().forEach(entry -> detailsPane.addTab(I18N.get(entry.getKey().name()), new DetailsPane(proband, depth, entry.getValue())));
-		tabbedPane.addTab(I18N.get("Details"), detailsPane);
+		results.entrySet().forEach(entry -> tabbedPane.addTab(I18N.get(entry.getKey().name()), new DetailsPane(proband, depth, entry.getValue())));
 
 		add(tabbedPane);
 
