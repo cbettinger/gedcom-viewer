@@ -13,29 +13,33 @@ import org.javatuples.Pair;
 
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.AnalysisResult;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.FacialFeature;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.Similarity;
 import bettinger.gedcomviewer.views.visualization.AncestorsRenderer;
 import bettinger.gedcomviewer.views.visualization.Node;
 
 class DetailsRenderer extends AncestorsRenderer {
-	static final Color PERFECT_MATCH_COLOR = Color.GREEN;
-	static final Color NO_MATCH_COLOR = Color.DARK_GRAY;
-
 	private static final int EDGE_WIDTH = 3;
 	private static final Stroke EDGE_STROKE = new BasicStroke(EDGE_WIDTH);
 
+	private final FacialFeature facialFeature;
 	private final Map<String, Similarity> individualSimilarities;
 	private final Map<Pair<String, String>, Float> coloredEdges;
 	private final List<String> includedIndividualsIds;
 	private final Map<String, Float> lastIndividualsOfLine;
 	private final AnalysisResult result;
 
-	DetailsRenderer(final AnalysisResult result) {
+	DetailsRenderer(final FacialFeature facialFeature, final AnalysisResult result) {
+		this.facialFeature = facialFeature;
 		this.individualSimilarities = result.getIndividualSimilarities();
 		this.coloredEdges = new HashMap<>();
 		this.includedIndividualsIds = new ArrayList<>();
 		this.lastIndividualsOfLine = new HashMap<>();
 		this.result = result;
+	}
+
+	FacialFeature getFacialFeature() {
+		return facialFeature;
 	}
 
 	@Override
@@ -78,7 +82,7 @@ class DetailsRenderer extends AncestorsRenderer {
 
 	@Override
 	protected Node createNode(final Individual individual, final boolean isClone, final Node parentNode) {
-		final var node = new DetailsNode(g, individual, isClone, parentNode, proband, individual != null ? individualSimilarities.get(individual.getId()) : null);
+		final var node = new DetailsNode(this, g, individual, isClone, parentNode, individual != null ? individualSimilarities.get(individual.getId()) : null);
 		node.init();
 		return node;
 	}
@@ -135,7 +139,7 @@ class DetailsRenderer extends AncestorsRenderer {
 			final var originalPaint = g.getPaint();
 			final var originalStroke = g.getStroke();
 
-			g.setPaint(getSimilarityColor(coloredEdges.get(tuple)));
+			g.setPaint(FacialFeature.getColor(facialFeature, coloredEdges.get(tuple)));
 			g.setStroke(EDGE_STROKE);
 
 			final int offsetX = maleLine ? -EDGE_WIDTH / 2 : EDGE_WIDTH / 2;
@@ -157,12 +161,5 @@ class DetailsRenderer extends AncestorsRenderer {
 				g.drawString(label, centerX - labelWidth / 2, parentsPoint.y - EDGE_WIDTH);
 			}
 		}
-	}
-
-	static Color getSimilarityColor(final float similarity) {
-		final int r = Math.min(255, (int) (NO_MATCH_COLOR.getRed() + similarity * PERFECT_MATCH_COLOR.getRed()));
-		final int g = Math.min(255, (int) (NO_MATCH_COLOR.getGreen() + similarity * PERFECT_MATCH_COLOR.getGreen()));
-		final int b = Math.min(255, (int) (NO_MATCH_COLOR.getBlue() + similarity * PERFECT_MATCH_COLOR.getBlue()));
-		return new Color(r, g, b, 255);
 	}
 }

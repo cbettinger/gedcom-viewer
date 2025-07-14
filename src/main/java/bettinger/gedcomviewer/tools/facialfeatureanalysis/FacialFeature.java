@@ -33,4 +33,14 @@ public enum FacialFeature {
 
 		return Color.WHITE;
 	}
+
+	public static Color getColor(final FacialFeature value, final float similarity) {
+		final var color = getColor(value);
+
+		final int r = Math.min(255, (int) (Color.BLACK.getRed() + similarity * color.getRed()));
+		final int g = Math.min(255, (int) (Color.BLACK.getGreen() + similarity * color.getGreen()));
+		final int b = Math.min(255, (int) (Color.BLACK.getBlue() + similarity * color.getBlue()));
+
+		return new Color(r, g, b, 255);
+	}
 }

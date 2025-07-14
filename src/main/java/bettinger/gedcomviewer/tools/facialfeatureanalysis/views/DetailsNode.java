@@ -10,6 +10,7 @@ import org.apache.batik.svggen.SVGGraphics2D;
 
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Individual;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.FacialFeature;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.Similarity;
 import bettinger.gedcomviewer.views.visualization.Node;
 
@@ -22,7 +23,7 @@ class DetailsNode extends Node {
 	private Image probandPortrait;
 	private int probandPortraitWidth;
 
-	DetailsNode(final DetailsRenderer renderer, final SVGGraphics2D g, final Individual individual, final boolean isClone, final Node parent, final Individual proband, final Similarity similarity) {
+	DetailsNode(final DetailsRenderer renderer, final SVGGraphics2D g, final Individual individual, final boolean isClone, final Node parent, final Similarity similarity) {
 		super(renderer, g, individual, isClone, parent);
 
 		this.similarity = similarity;
@@ -47,7 +48,7 @@ class DetailsNode extends Node {
 	public void render(final int x, final int y) {
 		super.render(x, y);
 
-		final var borderColor = similarity == null ? null : DetailsRenderer.getSimilarityColor(similarity.getAvgSimilarity());
+		final var borderColor = similarity == null ? null : FacialFeature.getColor(((DetailsRenderer) renderer).getFacialFeature(), similarity.getAvgSimilarity());
 		if (borderColor != null) {
 			final var originalPaint = g.getPaint();
 			final var originalStroke = g.getStroke();

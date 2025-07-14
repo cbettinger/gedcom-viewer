@@ -1,6 +1,7 @@
 package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -11,13 +12,14 @@ import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.AnalysisResult;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.FacialFeature;
 import bettinger.gedcomviewer.views.WebViewPanel;
 
 public class DetailsPane extends JPanel {
-	public DetailsPane(final Individual proband, final int depth, final AnalysisResult result) {
+	public DetailsPane(final Individual proband, final int depth, final FacialFeature facialFeature, final AnalysisResult result) {
 		setLayout(new BorderLayout());
 
-		final var renderer = new DetailsRenderer(result);
+		final var renderer = new DetailsRenderer(facialFeature, result);
 		renderer.render(proband, depth + 1);
 
 		final var visualization = new WebViewPanel();
@@ -29,7 +31,7 @@ public class DetailsPane extends JPanel {
 		sideBar.setBorder(BorderFactory.createEmptyBorder(Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN));
 		sideBar.setLayout(new BoxLayout(sideBar, BoxLayout.Y_AXIS));
 
-		sideBar.add(new Gradient(400, 20, DetailsRenderer.NO_MATCH_COLOR, DetailsRenderer.PERFECT_MATCH_COLOR));
+		sideBar.add(new Gradient(400, 20, Color.BLACK, FacialFeature.getColor(facialFeature)));
 
 		final var info = new JTextArea(String.format("%s: %s%n%n%s: %s%n%n%s: %s", I18N.get("LineSimilarity"), I18N.get("LineSimilarityInfo"), I18N.get("AvgSimilarity"), I18N.get("AvgSimilarityInfo"), I18N.get("MaxSimilarity"), I18N.get("MaxSimilarityDetailsInfo")));
 		info.setBorder(BorderFactory.createEmptyBorder(Constants.TEXT_PANE_MARGIN, 0, 0, 0));
