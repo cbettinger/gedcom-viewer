@@ -52,6 +52,7 @@ class OverviewPane extends JPanel {
 		add(visualization, BorderLayout.CENTER);
 
 		final var sideBar = new JPanel();
+		sideBar.setBorder(BorderFactory.createEmptyBorder(Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN));
 		sideBar.setLayout(new BoxLayout(sideBar, BoxLayout.Y_AXIS));
 
 		final List<Object[]> tableData = new ArrayList<>();
@@ -70,8 +71,8 @@ class OverviewPane extends JPanel {
 		table.getColumnModel().getColumn(1).setCellRenderer(facialFeatureCellRenderer);
 		sideBar.add(new JScrollPane(table));
 
-		final var info = new JTextArea(String.format("%n%s: %s%n%n%s: %s", I18N.get("MaxLineSimilarity"), I18N.get("MaxLineSimilarityInfo"), I18N.get("MaxSimilarity"), I18N.get("MaxSimilarityOverviewInfo")));
-		info.setBorder(BorderFactory.createEmptyBorder(Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN));
+		final var info = new JTextArea(String.format("%s: %s%n%n%s: %s", I18N.get("MaxLineSimilarity"), I18N.get("MaxLineSimilarityInfo"), I18N.get("MaxSimilarity"), I18N.get("MaxSimilarityOverviewInfo")));
+		info.setBorder(BorderFactory.createEmptyBorder(Constants.TEXT_PANE_MARGIN, 0, 0, 0));
 		info.setFocusable(false);
 		info.setEditable(false);
 		info.setLineWrap(true);
