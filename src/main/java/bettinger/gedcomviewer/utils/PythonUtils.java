@@ -23,7 +23,7 @@ public interface PythonUtils {
 		} catch (final IOException | InterruptedException e) {
 			Thread.currentThread().interrupt();
 
-			final var ioe = new IOException(String.format("Unable to execute script '%s'", path), e);
+			final var ioe = new IOException(String.format("Failed to execute script '%s'", path), e);
 			logger.log(Level.SEVERE, ioe.getMessage(), ioe);
 			throw ioe;
 		}

@@ -26,7 +26,7 @@ class Person(BinaryTreeItem):
             for p in portraits:
                 if maxNumPortraits is not None and len(self.faces) == maxNumPortraits:
                     print(
-                        "Für Individuum {} sind mehr Fotos verfügbar als verwendet werden. Es werden die folgenden Fotos genutzt: {}".format(
+                        "For the individual {} there are more portraits than configured to use. The following portraits are used: {}".format(
                             id, usedFiles
                         )
                     )
@@ -42,10 +42,7 @@ class Person(BinaryTreeItem):
                     usedFiles.append(filePath)
                 except Exception as e:
                     print(
-                        filePath,
-                        "konnte nicht geladen werden oder es war kein Gesicht erkennbar ({})".format(
-                            e
-                        ),
+                        "Unable to load portrait file {}: {}".format(filePath, e),
                     )
 
     def hasFaces(self):

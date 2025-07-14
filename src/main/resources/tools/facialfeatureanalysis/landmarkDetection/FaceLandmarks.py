@@ -12,7 +12,7 @@ class FaceLandmarks:
         try:
             normalizedLandmarks = np.asarray(LandmarkDetector.detectLandmarks(mpImg))
         except:
-            raise Exception("Es konnte kein Gesicht erkannt werden.")
+            raise Exception("Failed to detect a face")
 
         img = mpImg.numpy_view()
 

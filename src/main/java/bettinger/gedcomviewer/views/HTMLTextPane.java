@@ -120,7 +120,7 @@ public class HTMLTextPane extends JTextPane {
 				getStyledDocument().setCharacterAttributes(matcher.start(), highlight.length(), HIGHLIGHTING, false);
 			}
 		} catch (final BadLocationException e) {
-			Logger.getLogger(HTMLTextPane.class.getName()).log(Level.SEVERE, "Unable to apply highlighting", e);
+			Logger.getLogger(HTMLTextPane.class.getName()).log(Level.SEVERE, "Failed to apply highlighting", e);
 		}
 	}
 }

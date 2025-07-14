@@ -69,7 +69,7 @@ public class ConfigurationDialog extends JDialog {
 		add(new JLabel(I18N.get("Generations")), c);
 
 		c.gridy = 3;
-		add(new JLabel(I18N.get("NumberOfPortraitsPerPerson")), c);
+		add(new JLabel(I18N.get("PortraitsPerPerson")), c);
 
 		c.gridx = 1;
 		c.weightx = 0.1;
