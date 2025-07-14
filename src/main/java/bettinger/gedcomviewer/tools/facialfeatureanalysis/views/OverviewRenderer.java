@@ -24,11 +24,11 @@ class OverviewRenderer extends AncestorsRenderer {
 
 	private static final int EDGE_OFFSET = 5;
 
-	private Map<Color, ArrayList<String>> maxIndividualSimilarityIds;
-	private Map<Color, ArrayList<String>> maxLineSimilarityIds;
-	private Map<Pair<String, String>, Set<Color>> maxLineSimilarityEdges;
-	private Map<Color, ArrayList<String>> excludedIndividuals;
-	final Map<FacialFeature, AnalysisResult> results;
+	private final Map<Color, ArrayList<String>> maxIndividualSimilarityIds;
+	private final Map<Color, ArrayList<String>> maxLineSimilarityIds;
+	private final Map<Pair<String, String>, Set<Color>> maxLineSimilarityEdges;
+	private final Map<Color, ArrayList<String>> excludedIndividuals;
+	private final Map<FacialFeature, AnalysisResult> results;
 
 	OverviewRenderer(final Individual proband, final Map<FacialFeature, AnalysisResult> results) {
 		this.maxIndividualSimilarityIds = new HashMap<>();

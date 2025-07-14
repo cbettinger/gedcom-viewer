@@ -25,10 +25,10 @@ class DetailsRenderer extends AncestorsRenderer {
 	private static final Stroke EDGE_STROKE = new BasicStroke(EDGE_WIDTH);
 
 	private final Map<String, Similarity> individualSimilarities;
-	private Map<Pair<String, String>, Float> coloredEdges;
-	private List<String> includedIndividualsIds;
-	private Map<String, Float> lastIndividualsOfLine;
-	private AnalysisResult result;
+	private final Map<Pair<String, String>, Float> coloredEdges;
+	private final List<String> includedIndividualsIds;
+	private final Map<String, Float> lastIndividualsOfLine;
+	private final AnalysisResult result;
 
 	DetailsRenderer(final AnalysisResult result) {
 		this.individualSimilarities = result.getIndividualSimilarities();
@@ -85,13 +85,13 @@ class DetailsRenderer extends AncestorsRenderer {
 
 	@Override
 	protected int getEdgeLabelWidth(final Node v, final Node w) {
-		var result = super.getEdgeLabelWidth(v, w);
+		var r = super.getEdgeLabelWidth(v, w);
 
 		if (v != null && w != null && v.getIndividual() != null && w.getIndividual() != null && (includedIndividualsIds.contains(v.getIndividual().getId()) || includedIndividualsIds.contains(w.getIndividual().getId()))) {
-			result = g.getFontMetrics().stringWidth("100.00% 100.0%");
+			r = g.getFontMetrics().stringWidth("100.00% 100.0%");
 		}
 
-		return result;
+		return r;
 	}
 
 	@Override
