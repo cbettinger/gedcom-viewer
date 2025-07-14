@@ -11,12 +11,12 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class GradientPanel extends JPanel {
+public class Gradient extends JPanel {
 
-	public GradientPanel(final int gradientWidth, final int gradientHeight, final Color leftColor, final Color rightColor) {
+	public Gradient(final int gradientWidth, final int gradientHeight, final Color leftColor, final Color rightColor) {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		final var gradient = new Gradient(leftColor, rightColor);
+		final var gradient = new GradientBox(leftColor, rightColor);
 		gradient.setPreferredSize(new Dimension(gradientWidth, gradientHeight));
 		add(gradient);
 
@@ -28,11 +28,11 @@ public class GradientPanel extends JPanel {
 		add(labels);
 	}
 
-	private static class Gradient extends JPanel {
+	private static class GradientBox extends JPanel {
 		private final Color leftColor;
 		private final Color rightColor;
 
-		public Gradient(final Color leftColor, final Color rightColor) {
+		public GradientBox(final Color leftColor, final Color rightColor) {
 			this.leftColor = leftColor;
 			this.rightColor = rightColor;
 		}
