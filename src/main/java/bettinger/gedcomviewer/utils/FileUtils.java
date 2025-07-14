@@ -55,6 +55,10 @@ public interface FileUtils {
 		return getPath(file.getParentFile());
 	}
 
+	public static String getDirectoryPath(final String filePath) {
+		return getPath(getFile(filePath).getParentFile());
+	}
+
 	public static String getPath(final String firstSegment, final String... moreSegments) {
 		return getPath(Paths.get(firstSegment, moreSegments).toFile());
 	}

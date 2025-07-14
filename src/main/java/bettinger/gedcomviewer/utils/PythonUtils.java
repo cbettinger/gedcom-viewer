@@ -9,39 +9,17 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@SuppressWarnings("java:S1192")
 public interface PythonUtils {
 
-	@SuppressWarnings("java:S1192")
-	public static List<String> executeScript(final String path, final String[] args) throws IOException {
-		final List<String> result = new ArrayList<>();
+	static final Logger logger = Logger.getLogger(PythonUtils.class.getName());
+	static final Runtime runtime = Runtime.getRuntime();
 
-		final var logger = Logger.getLogger(PythonUtils.class.getName());
-
+	public static List<String> executeScript(final String path, final String... args) throws IOException {
 		try {
-			final var runtime = Runtime.getRuntime();
-
-			final var installPip = runtime.exec(new String[] { "python", "-m", "ensurepip" });
-			installPip.waitFor();
-			logger.log(Level.INFO, "Installed pip");
-
-			final var installPipenv = runtime.exec(new String[] { "python", "-m", "pip", "install", "--user", "pipenv" });
-			installPipenv.waitFor();
-			logger.log(Level.INFO, "Installed pipenv");
-
-			final var installRequirements = runtime.exec(new String[] {"python", "-m", "pipenv", "install" });
-			installRequirements.waitFor();
-			logger.log(Level.INFO, "Installed requirements from Pipfile");
-
-			final ArrayList<String> command = new ArrayList<>();
-			command.addAll(Arrays.asList("python", "-m", "pipenv", "run", "python", path));
-			command.addAll(Arrays.asList(args));
-
-			final Process script = runtime.exec(command.toArray(new String[0]));
-			script.waitFor();
-			logger.log(Level.INFO, "Executed script '{}'", path);
-
-			final var output = new BufferedReader(new InputStreamReader(script.getInputStream()));
-			output.lines().forEach(result::add);
+			final var pipFileDirectory = FileUtils.getDirectoryPath(path);
+			setupPipEnv(pipFileDirectory);
+			return executeScriptInPipEnv(pipFileDirectory, path, args);
 		} catch (final IOException | InterruptedException e) {
 			Thread.currentThread().interrupt();
 
@@ -49,6 +27,44 @@ public interface PythonUtils {
 			logger.log(Level.SEVERE, ioe.getMessage(), ioe);
 			throw ioe;
 		}
+	}
+
+	private static void setupPipEnv(final String pipFileDirectory) throws IOException, InterruptedException {
+		executeCommand(pipFileDirectory, "ensurepip");
+		executeCommand(pipFileDirectory, "pip", "install", "--user", "pipenv");
+		executeCommand(pipFileDirectory, "pipenv", "install");
+	}
+
+	private static List<String> executeScriptInPipEnv(final String pipFileDirectory, final String path, final String... args) throws IOException, InterruptedException {
+		final List<String> cmdList = new ArrayList<>();
+		cmdList.addAll(Arrays.asList("pipenv", "run", "python"));
+		cmdList.add(path);
+		cmdList.addAll(Arrays.asList(args));
+
+		return executeCommand(pipFileDirectory, cmdList.toArray(new String[0]));
+	}
+
+	@SuppressWarnings("java:S2629")
+	private static List<String> executeCommand(final String workingDirectory, final String... cmdArray) throws IOException, InterruptedException {
+		final List<String> result = new ArrayList<>();
+
+		final List<String> fullCmd = new ArrayList<>();
+		fullCmd.addAll(Arrays.asList("python", "-m"));
+		fullCmd.addAll(Arrays.asList(cmdArray));
+
+		final var fullCmdArray = fullCmd.toArray(new String[0]);
+
+		final var processBuilder = new ProcessBuilder(fullCmdArray);
+		if (workingDirectory != null && !workingDirectory.isEmpty()) {
+			processBuilder.directory(FileUtils.getFile(workingDirectory));
+		}
+		final var process = processBuilder.start();
+		process.waitFor();
+
+		final var output = new BufferedReader(new InputStreamReader(process.getInputStream()));
+		output.lines().forEach(result::add);
+
+		logger.log(Level.INFO, String.format("Executed command '%s'%n%s", String.join(" ", fullCmdArray), String.join("\n", result)));
 
 		return result;
 	}

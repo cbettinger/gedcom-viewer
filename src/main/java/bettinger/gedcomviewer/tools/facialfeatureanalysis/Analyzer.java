@@ -62,19 +62,13 @@ public class Analyzer extends BackgroundWorker {
 			throw new AnalysisException("Failed to write input file");
 		}
 
-		final String scriptPath = FileUtils.getPath(System.getProperty("user.dir"), "tools", "facialfeatureanalysis", "python", "familyFaceCompare.py");
+		final String scriptPath = FileUtils.getPath(System.getProperty("user.dir"), "src", "main", "resources", "tools", "facialfeatureanalysis", "python", "facialFeatureAnalysis.py");	// TODO: change path
 
 		List<String> output = null;
 		try {
-			output = PythonUtils.executeScript(scriptPath, new String[] { inputFile.getAbsolutePath(), Integer.toString(numberOfPortraits), Integer.toString(depth) });
+			output = PythonUtils.executeScript(scriptPath, inputFile.getAbsolutePath(), Integer.toString(numberOfPortraits), Integer.toString(depth));
 		} catch (final IOException e) {
 			throw new AnalysisException(e.getMessage(), e);
-		}
-
-		try {
-			Files.delete(inputFilePath);
-		} catch (final IOException _) {
-			// intentionally left blank
 		}
 
 		if (output.isEmpty()) {
