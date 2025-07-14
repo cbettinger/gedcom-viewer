@@ -5,6 +5,8 @@ import java.awt.Color;
 public enum FacialFeature {
 	CHEEKS, CHIN, EYEBROWS, EYES, FACESHAPE, LIPS, NOSE;
 
+	public static final Color DEFAULT_COLOR = Color.BLACK;
+
 	private static final Color CHEEKS_COLOR = Color.decode("#4363d8");
 	private static final Color CHIN_COLOR = Color.decode("#42d4f4");
 	private static final Color EYEBROWS_COLOR = Color.decode("#f58231");
@@ -37,9 +39,9 @@ public enum FacialFeature {
 	public static Color getColor(final FacialFeature value, final float similarity) {
 		final var color = getColor(value);
 
-		final int r = Math.min(255, (int) (Color.BLACK.getRed() + similarity * color.getRed()));
-		final int g = Math.min(255, (int) (Color.BLACK.getGreen() + similarity * color.getGreen()));
-		final int b = Math.min(255, (int) (Color.BLACK.getBlue() + similarity * color.getBlue()));
+		final int r = Math.min(255, (int) (DEFAULT_COLOR.getRed() + similarity * color.getRed()));
+		final int g = Math.min(255, (int) (DEFAULT_COLOR.getGreen() + similarity * color.getGreen()));
+		final int b = Math.min(255, (int) (DEFAULT_COLOR.getBlue() + similarity * color.getBlue()));
 
 		return new Color(r, g, b, 255);
 	}

@@ -1,7 +1,6 @@
 package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -31,9 +30,9 @@ public class DetailsPane extends JPanel {
 		sideBar.setBorder(BorderFactory.createEmptyBorder(Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN));
 		sideBar.setLayout(new BoxLayout(sideBar, BoxLayout.Y_AXIS));
 
-		sideBar.add(new Gradient(400, 20, Color.BLACK, FacialFeature.getColor(facialFeature)));
+		sideBar.add(new Gradient(400, 20, facialFeature));
 
-		final var info = new JTextArea(String.format("%s: %s%n%n%s: %s%n%n%s: %s", I18N.get("LineSimilarity"), I18N.get("LineSimilarityInfo"), I18N.get("AvgSimilarity"), I18N.get("AvgSimilarityInfo"), I18N.get("MaxSimilarity"), I18N.get("MaxSimilarityDetailsInfo")));
+		final var info = new JTextArea(String.format("%s: %s%n%n%s: %s%n%n%s: %s", I18N.get("AvgSimilarity"), I18N.get("AvgSimilarityInfo"), I18N.get("MaxSimilarity"), I18N.get("MaxSimilarityDetailsInfo"), I18N.get("LineSimilarity"), I18N.get("LineSimilarityInfo")));
 		info.setBorder(BorderFactory.createEmptyBorder(Constants.TEXT_PANE_MARGIN, 0, 0, 0));
 		info.setFocusable(false);
 		info.setEditable(false);

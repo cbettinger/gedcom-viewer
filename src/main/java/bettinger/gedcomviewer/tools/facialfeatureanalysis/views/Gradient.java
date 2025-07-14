@@ -11,18 +11,23 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import bettinger.gedcomviewer.I18N;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.FacialFeature;
+
 public class Gradient extends JPanel {
 
-	public Gradient(final int gradientWidth, final int gradientHeight, final Color leftColor, final Color rightColor) {
+	public Gradient(final int gradientWidth, final int gradientHeight, final FacialFeature facialFeature) {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		final var gradient = new GradientBox(leftColor, rightColor);
+		final var gradient = new GradientBox(FacialFeature.DEFAULT_COLOR, FacialFeature.getColor(facialFeature));
 		gradient.setPreferredSize(new Dimension(gradientWidth, gradientHeight));
 		add(gradient);
 
 		final var labels = new JPanel();
 		labels.setLayout(new BoxLayout(labels, BoxLayout.X_AXIS));
 		labels.add(new JLabel("0%"));
+		labels.add(Box.createHorizontalGlue());
+		labels.add(new JLabel(I18N.get(facialFeature.name())));
 		labels.add(Box.createHorizontalGlue());
 		labels.add(new JLabel("100%"));
 		add(labels);
