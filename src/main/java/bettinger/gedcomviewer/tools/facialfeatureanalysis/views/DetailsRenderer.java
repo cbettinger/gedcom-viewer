@@ -158,7 +158,7 @@ class DetailsRenderer extends AncestorsRenderer {
 				final var lineStartX = ancestorIsMale ? endX : parentsPoint.x + offsetX;
 				final var centerX = lineStartX + Math.abs(parentsPoint.x + offsetX - endX) / 2;
 
-				g.drawString(label, centerX - labelWidth / 2, parentsPoint.y - EDGE_WIDTH);
+				g.drawString(label, centerX - labelWidth / 2, parentsPoint.y - 2 * EDGE_WIDTH);
 			}
 		}
 	}
