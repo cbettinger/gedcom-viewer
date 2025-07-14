@@ -1,11 +1,9 @@
 package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
@@ -28,24 +26,13 @@ public class DetailsPane extends JPanel {
 		add(visualization, BorderLayout.CENTER);
 
 		final var sideBar = new JPanel();
+		sideBar.setBorder(BorderFactory.createEmptyBorder(Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN));
 		sideBar.setLayout(new BoxLayout(sideBar, BoxLayout.Y_AXIS));
 
-		final var colorGradientPane = new JPanel();
-		colorGradientPane.setPreferredSize(new Dimension(400, 100));
-		colorGradientPane.setLayout(new BoxLayout(colorGradientPane, BoxLayout.X_AXIS));
+		sideBar.add(new GradientPanel(400, 20, DetailsRenderer.NO_MATCH_COLOR, DetailsRenderer.PERFECT_MATCH_COLOR));
 
-		colorGradientPane.add(new GradientPanel(DetailsRenderer.PERFECT_MATCH_COLOR, DetailsRenderer.NO_MATCH_COLOR));
-
-		final var colorGradientInfo = new JPanel();
-		colorGradientInfo.setLayout(new BorderLayout());
-		colorGradientInfo.add(new JLabel("100%"), BorderLayout.NORTH);
-		colorGradientInfo.add(new JLabel("0%"), BorderLayout.SOUTH);
-		colorGradientPane.add(colorGradientInfo);
-
-		sideBar.add(colorGradientPane);
-
-		final var info = new JTextArea(String.format("%n%s: %s%n%n%s: %s%n%n%s: %s", I18N.get("LineSimilarity"), I18N.get("LineSimilarityInfo"), I18N.get("AvgSimilarity"), I18N.get("AvgSimilarityInfo"), I18N.get("MaxSimilarity"), I18N.get("MaxSimilarityDetailsInfo")));
-		info.setBorder(BorderFactory.createEmptyBorder(Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN));
+		final var info = new JTextArea(String.format("%s: %s%n%n%s: %s%n%n%s: %s", I18N.get("LineSimilarity"), I18N.get("LineSimilarityInfo"), I18N.get("AvgSimilarity"), I18N.get("AvgSimilarityInfo"), I18N.get("MaxSimilarity"), I18N.get("MaxSimilarityDetailsInfo")));
+		info.setBorder(BorderFactory.createEmptyBorder(Constants.TEXT_PANE_MARGIN, 0, 0, 0));
 		info.setFocusable(false);
 		info.setEditable(false);
 		info.setLineWrap(true);
