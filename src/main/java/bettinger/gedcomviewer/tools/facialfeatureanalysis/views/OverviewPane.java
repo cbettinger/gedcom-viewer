@@ -64,7 +64,7 @@ class OverviewPane extends JPanel {
 		}
 
 		final var table = new AutoFitTable();
-		table.setModel(new DefaultTableModel(tableData.toArray(new Object[0][0]), new String[] { I18N.get("FacialFeature"), I18N.get("LineColor"), I18N.get("MaxLineSimilarity"), I18N.get("MaxSimilarity") }));	// TODO: individualsim/linesim
+		table.setModel(new DefaultTableModel(tableData.toArray(new Object[0][0]), new String[] { I18N.get("FacialFeature"), I18N.get("LineColor"), I18N.get("MaxLineSimilarity"), I18N.get("MaxSimilarity") }));
 		table.getColumnModel().getColumn(1).setCellRenderer(facialFeatureCellRenderer);
 		sideBar.add(new JScrollPane(table));
 
