@@ -20,7 +20,7 @@ else:
     if "error" in result:
         print(json.dumps(result))
     else:
-        with open(filename, 'w', encoding='utf-8') as f:
+        with open(filename, "w", encoding="utf-8") as f:
             json.dump(result, f, ensure_ascii=False, indent=4)
 
         print(json.dumps({"success": True, "file": filename}))

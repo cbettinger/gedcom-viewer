@@ -2,13 +2,18 @@ from base.SimilarityResult import SimilarityResult
 from base.config import MAX_COMPARISON_DEPTH, FACE_CHARACTERISTICS_OF_INTEREST
 from utils import dictUtils
 
+
 class FaceAnalyser:
 
-    @classmethod 
+    @classmethod
     def analyse(cls, targetPerson, maxDepth=MAX_COMPARISON_DEPTH):
-        if not targetPerson.hasFaces() or not cls._isComparable(targetPerson.parent1) or not cls._isComparable(targetPerson.parent2):
+        if (
+            not targetPerson.hasFaces()
+            or not cls._isComparable(targetPerson.parent1)
+            or not cls._isComparable(targetPerson.parent2)
+        ):
             return None
-        
+
         depth = 0
         similarities = {}
         individualsToCheck = [targetPerson.parent1, targetPerson.parent2]
@@ -19,9 +24,9 @@ class FaceAnalyser:
 
             for i in range(len(individualsToCheck)):
                 p = individualsToCheck[i]
-                sMax, sAvg = cls._getSimilaritiesToIndividual(targetPerson, p)   
+                sMax, sAvg = cls._getSimilaritiesToIndividual(targetPerson, p)
                 similarities.update({p.value: {"max": sMax, "avg": sAvg}})
-                
+
                 if p.parent1:
                     nextIndividualsToCheck.append(p.parent1)
                 if p.parent2:
@@ -34,7 +39,7 @@ class FaceAnalyser:
     @classmethod
     def _isComparable(cls, other):
         return other is not None and other.hasFaces()
-    
+
     @classmethod
     def _getSimilaritiesToIndividual(cls, targetPerson, other):
         maxSimilarities = dictUtils.getZeros(FACE_CHARACTERISTICS_OF_INTEREST)
@@ -76,7 +81,15 @@ class FaceAnalyser:
             else:
                 f1, f2 = faces
                 maxResult.update({c: SimilarityResult(s, f1.srcImg, f2.srcImg)})
-                avgResult.update({c: avgSimilarities[c]/len(comparedPairs)})
-                avgMaxResult.update({c: SimilarityResult(avgMaxSimilarities[c]/len(targetPerson.faces), f1.srcImg, f2.srcImg)})
-            
+                avgResult.update({c: avgSimilarities[c] / len(comparedPairs)})
+                avgMaxResult.update(
+                    {
+                        c: SimilarityResult(
+                            avgMaxSimilarities[c] / len(targetPerson.faces),
+                            f1.srcImg,
+                            f2.srcImg,
+                        )
+                    }
+                )
+
         return maxResult, avgResult

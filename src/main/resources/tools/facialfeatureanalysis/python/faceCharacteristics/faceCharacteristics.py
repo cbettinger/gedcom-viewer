@@ -6,4 +6,12 @@ from faceCharacteristics.FaceShape import FaceShape
 from faceCharacteristics.Lips import Lips
 from faceCharacteristics.Nose import Nose
 
-CHARACTERISTICS = {"CHEEKS": Cheeks, "CHIN": Chin, "EYEBROWS": Eyebrows, "EYES": Eyes, "FACESHAPE": FaceShape, "LIPS": Lips, "NOSE": Nose}
+CHARACTERISTICS = {
+    "CHEEKS": Cheeks,
+    "CHIN": Chin,
+    "EYEBROWS": Eyebrows,
+    "EYES": Eyes,
+    "FACESHAPE": FaceShape,
+    "LIPS": Lips,
+    "NOSE": Nose,
+}

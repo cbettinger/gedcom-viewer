@@ -1,8 +1,11 @@
 from base.config import MAX_COMPARISON_DEPTH
 
+
 class BinaryTreeItem:
 
-    def __init__(self, name, value, parent1Name, parent2Name, parent1=None, parent2=None):
+    def __init__(
+        self, name, value, parent1Name, parent2Name, parent1=None, parent2=None
+    ):
         self.name = name
         self.value = value
         self.parent1Name = parent1Name
@@ -21,11 +24,15 @@ class BinaryTreeItem:
     def tree(self, tabbing=""):
         s = "\n{t}{n}: {v}".format(t=tabbing, n=self.name, v=self.value)
         if self.parent1:
-            s += "\n{t}{n}: {v}".format(t=tabbing, n=self.parent1Name, v=self.parent1.tree(tabbing+"  "))
+            s += "\n{t}{n}: {v}".format(
+                t=tabbing, n=self.parent1Name, v=self.parent1.tree(tabbing + "  ")
+            )
         if self.parent2:
-            s += "\n{t}{n}: {v}".format(t=tabbing, n=self.parent2Name, v=self.parent2.tree(tabbing+"  "))
+            s += "\n{t}{n}: {v}".format(
+                t=tabbing, n=self.parent2Name, v=self.parent2.tree(tabbing + "  ")
+            )
         return s
-    
+
     def getPaths(self, includeSelf=False, maxDepth=MAX_COMPARISON_DEPTH):
         if includeSelf:
             return [p for p in BinaryTreeItem._paths(self, maxDepth=maxDepth)]
@@ -40,7 +47,7 @@ class BinaryTreeItem:
         parents = [node.parent1, node.parent2]
         if any(parents) and (maxDepth is None or depth < maxDepth):
             for p in parents:
-                for path in BinaryTreeItem._paths(p, depth+1, maxDepth):
+                for path in BinaryTreeItem._paths(p, depth + 1, maxDepth):
                     yield [v] + path
         else:
             yield [v]
