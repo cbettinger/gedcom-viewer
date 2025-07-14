@@ -28,12 +28,19 @@ class OverviewRenderer extends AncestorsRenderer {
 	private Map<Color, ArrayList<String>> maxLineSimilarityIds;
 	private Map<Pair<String, String>, Set<Color>> maxLineSimilarityEdges;
 	private Map<Color, ArrayList<String>> excludedIndividuals;
+	final Map<FacialFeature, AnalysisResult> results;
 
 	OverviewRenderer(final Individual proband, final Map<FacialFeature, AnalysisResult> results) {
 		this.maxIndividualSimilarityIds = new HashMap<>();
 		this.maxLineSimilarityIds = new HashMap<>();
 		this.maxLineSimilarityEdges = new HashMap<>();
 		this.excludedIndividuals = new HashMap<>();
+		this.results = results;
+	}
+
+	@Override
+	public void render(final Individual proband, final int generations, final Point offset) {
+		super.render(proband, generations, offset);
 
 		for (final var entry : results.entrySet()) {
 			final var color = FacialFeature.getColor(entry.getKey());

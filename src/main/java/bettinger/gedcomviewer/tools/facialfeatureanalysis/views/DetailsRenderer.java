@@ -28,12 +28,19 @@ class DetailsRenderer extends AncestorsRenderer {
 	private Map<Pair<String, String>, Float> coloredEdges;
 	private List<String> includedIndividualsIds;
 	private Map<String, Float> lastIndividualsOfLine;
+	private AnalysisResult result;
 
 	DetailsRenderer(final AnalysisResult result) {
 		this.individualSimilarities = result.getIndividualSimilarities();
 		this.coloredEdges = new HashMap<>();
 		this.includedIndividualsIds = new ArrayList<>();
 		this.lastIndividualsOfLine = new HashMap<>();
+		this.result = result;
+	}
+
+	@Override
+	public void render(final Individual proband, final int generations, final Point offset) {
+		super.render(proband, generations, offset);
 
 		for (final var entry : result.getLineSimilarities().entrySet()) {
 			final var lineIds = entry.getKey().getIds();
@@ -71,7 +78,7 @@ class DetailsRenderer extends AncestorsRenderer {
 
 	@Override
 	protected Node createNode(final Individual individual, final boolean isClone, final Node parentNode) {
-		final var node = new DetailsNode(g, individual, isClone, parentNode, proband, individualSimilarities.get(individual.getId()));
+		final var node = new DetailsNode(g, individual, isClone, parentNode, proband, individual != null ? individualSimilarities.get(individual.getId()) : null);
 		node.init();
 		return node;
 	}

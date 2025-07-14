@@ -83,7 +83,7 @@ class DetailsNode extends Node {
 
 		result.add(getFirstTextLine());
 
-		if (individual != null) {
+		if (individual != null && similarity != null) {
 			result.add(String.format("%s: %.2f%%", I18N.get("AvgSimilarity"), similarity.getAvgSimilarity() * 100));
 			result.add(String.format("%s: %.2f%%", I18N.get("MaxSimilarity"), similarity.getMaxSimilarity() * 100));
 		}
