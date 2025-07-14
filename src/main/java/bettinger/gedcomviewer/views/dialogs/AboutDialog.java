@@ -2,9 +2,9 @@ package bettinger.gedcomviewer.views.dialogs;
 
 import java.awt.BorderLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.JDialog;
 import javax.swing.JScrollPane;
-import javax.swing.border.EmptyBorder;
 
 import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.Format;
@@ -22,7 +22,7 @@ public class AboutDialog extends JDialog {
 		setLayout(new BorderLayout());
 
 		final var textPane = new HTMLTextPane();
-		textPane.setBorder(new EmptyBorder(Constants.DIALOG_PADDING, Constants.DIALOG_PADDING, Constants.DIALOG_PADDING, Constants.DIALOG_PADDING));
+		textPane.setBorder(BorderFactory.createEmptyBorder(Constants.DIALOG_PADDING, Constants.DIALOG_PADDING, Constants.DIALOG_PADDING, Constants.DIALOG_PADDING));
 		textPane.setFocusable(false);
 		add(new JScrollPane(textPane), BorderLayout.CENTER);
 

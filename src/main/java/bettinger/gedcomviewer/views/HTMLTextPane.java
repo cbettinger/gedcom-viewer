@@ -6,8 +6,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
+import javax.swing.BorderFactory;
 import javax.swing.JTextPane;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
@@ -37,7 +37,7 @@ public class HTMLTextPane extends JTextPane {
 		setEditable(false);
 		setOpaque(true);
 		setBackground(Color.WHITE);
-		setBorder(new EmptyBorder(Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN));
+		setBorder(BorderFactory.createEmptyBorder(Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN));
 		setContentType("text/html");
 
 		final var editorKit = new HTMLEditorKit();

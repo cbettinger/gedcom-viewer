@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -16,6 +17,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
+import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.AnalysisResult;
@@ -69,7 +71,7 @@ class OverviewPane extends JPanel {
 		sideBar.add(new JScrollPane(table));
 
 		final var info = new JTextArea(String.format("%n%s: %s%n%n%s: %s", I18N.get("MaxLineSimilarity"), I18N.get("MaxLineSimilarityInfo"), I18N.get("MaxSimilarity"), I18N.get("MaxSimilarityOverviewInfo")));
-		info.setBorder(null); // TODO: necc?
+		info.setBorder(BorderFactory.createEmptyBorder(Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN));
 		info.setFocusable(false);
 		info.setEditable(false);
 		info.setLineWrap(true);

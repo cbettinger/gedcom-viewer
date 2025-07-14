@@ -3,11 +3,13 @@ package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.AnalysisResult;
@@ -43,7 +45,7 @@ public class DetailsPane extends JPanel {
 		sideBar.add(colorGradientPane);
 
 		final var info = new JTextArea(String.format("%n%s%n%n%s: %s%n%n%s: %s", I18N.get("LineSimilarityInfo"), I18N.get("AvgSimilarity"), I18N.get("AvgSimilarityInfo"), I18N.get("MaxSimilarity"), I18N.get("MaxSimilarityDetailsInfo")));
-		info.setBorder(null); // TODO: necc?
+		info.setBorder(BorderFactory.createEmptyBorder(Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN));
 		info.setFocusable(false);
 		info.setEditable(false);
 		info.setLineWrap(true);
