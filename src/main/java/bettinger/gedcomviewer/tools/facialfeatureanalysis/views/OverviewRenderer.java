@@ -27,7 +27,7 @@ class OverviewRenderer extends AncestorsRenderer {
 	private final Map<FacialFeature, ArrayList<String>> maxSimilarIds;
 	private final Map<FacialFeature, ArrayList<String>> maxSimilarLineIds;
 	private final Map<Pair<String, String>, Set<FacialFeature>> maxSimilarLineEdges;
-	private final Map<FacialFeature, ArrayList<String>> excludedIds; // TODO: ?
+	private final Map<FacialFeature, ArrayList<String>> excludedIds;
 
 	OverviewRenderer(final Map<FacialFeature, AnalysisResult> results) {
 		this.results = results;
@@ -91,8 +91,8 @@ class OverviewRenderer extends AncestorsRenderer {
 			final var fatherNode = edge.getValue1();
 			final var motherNode = edge.getValue2();
 
-			final boolean considerFather = fatherNode != null && fatherNode.getIndividual() != null;
-			final boolean considerMother = motherNode != null && motherNode.getIndividual() != null;
+			final boolean fatherExists = fatherNode != null && fatherNode.getIndividual() != null;
+			final boolean motherExists = motherNode != null && motherNode.getIndividual() != null;
 
 			boolean fatherExcludedEverywhere = true;
 			boolean motherExcludedEverywhere = true;
@@ -102,16 +102,16 @@ class OverviewRenderer extends AncestorsRenderer {
 				final var lineIds = entry.getValue();
 
 				final var excluded = excludedIds.get(facialFeature);
-				if (considerFather && lineIds.contains(fatherNode.getIndividual().getId()) && !excluded.contains(fatherNode.getIndividual().getId())) {
+				if (fatherExists && lineIds.contains(fatherNode.getIndividual().getId()) && !excluded.contains(fatherNode.getIndividual().getId())) {
 					fatherExcludedEverywhere = false;
 				}
-				if (considerMother && lineIds.contains(motherNode.getIndividual().getId()) && !excluded.contains(motherNode.getIndividual().getId())) {
+				if (motherExists && lineIds.contains(motherNode.getIndividual().getId()) && !excluded.contains(motherNode.getIndividual().getId())) {
 					motherExcludedEverywhere = false;
 				}
 			}
 
-			boolean renderEdgeToFather = considerFather && !fatherExcludedEverywhere && maxSimilarLineEdges.containsKey(new Pair<String, String>(node.getIndividual().getId(), fatherNode.getIndividual().getId()));
-			boolean renderEdgeToMother = considerMother && !motherExcludedEverywhere && maxSimilarLineEdges.containsKey(new Pair<String, String>(node.getIndividual().getId(), motherNode.getIndividual().getId()));
+			boolean renderEdgeToFather = fatherExists && !fatherExcludedEverywhere && maxSimilarLineEdges.containsKey(new Pair<String, String>(node.getIndividual().getId(), fatherNode.getIndividual().getId()));
+			boolean renderEdgeToMother = motherExists && !motherExcludedEverywhere && maxSimilarLineEdges.containsKey(new Pair<String, String>(node.getIndividual().getId(), motherNode.getIndividual().getId()));
 
 			final Point parentsPoint = renderEdge(fatherNode, motherNode);
 			if (parentsPoint != null) {
