@@ -32,7 +32,7 @@ public class AncestralLine {
 		return Arrays.hashCode(ids.toArray(new String[0]));
 	}
 
-	public static AncestralLine parse(final String input) {
-		return new AncestralLine(Arrays.asList(input.split("\\s*,\\s*")));
+	public static AncestralLine parse(final String idList) {
+		return new AncestralLine(Arrays.asList(idList.split("\\s*,\\s*")));
 	}
 }

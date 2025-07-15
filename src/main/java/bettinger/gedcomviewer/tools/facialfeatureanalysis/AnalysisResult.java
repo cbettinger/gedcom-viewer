@@ -73,7 +73,7 @@ public class AnalysisResult {
 
 	public static AnalysisResult fromJSON(final JsonNode json, final FacialFeature facialFeature) {
 		final Map<String, Similarity> similarities = new HashMap<>();
-		final var similarityProperties = json.get("nodes").get(facialFeature.name()).properties();
+		final var similarityProperties = json.get("similarities").get(facialFeature.name()).properties();
 		for (final var entry : similarityProperties) {
 			similarities.put(entry.getKey(), Similarity.fromJSON(entry.getValue()));
 		}

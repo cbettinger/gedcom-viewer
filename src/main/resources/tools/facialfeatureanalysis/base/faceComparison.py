@@ -22,7 +22,7 @@ def getFaceAnalysisResult(targetPerson, maxDepth=None):
         return {"error": True, "message": "Insufficient number of portraits"}
     paths = targetPerson.getPaths()
 
-    nodes = dictUtils.getDicts(FACE_CHARACTERISTICS_OF_INTEREST)
+    similarities = dictUtils.getDicts(FACE_CHARACTERISTICS_OF_INTEREST)
     lineSimilarities = dictUtils.getDicts(FACE_CHARACTERISTICS_OF_INTEREST)
 
     for c in FACE_CHARACTERISTICS_OF_INTEREST:
@@ -35,7 +35,7 @@ def getFaceAnalysisResult(targetPerson, maxDepth=None):
             avgPersonSimilarities.update({id: avgSim})
 
             if maxSimRes.value is None:
-                nodes[c].update({id: ""})
+                similarities[c].update({id: ""})
             else:
                 individualResult = {
                     "maxSimilarity": str(maxSimRes.value),
@@ -43,7 +43,7 @@ def getFaceAnalysisResult(targetPerson, maxDepth=None):
                     "maxSimilarProbandPortraitFilePath": maxSimRes.img1.fileName,
                     "maxSimilarAncestorPortraitFilePath": maxSimRes.img2.fileName,
                 }
-                nodes[c].update({id: individualResult})
+                similarities[c].update({id: individualResult})
 
         for path in paths:
             lineSimilarities[c].update(
@@ -57,4 +57,4 @@ def getFaceAnalysisResult(targetPerson, maxDepth=None):
                 }
             )
 
-    return {"lineSimilarities": lineSimilarities, "nodes": nodes}
+    return {"lineSimilarities": lineSimilarities, "similarities": similarities}
