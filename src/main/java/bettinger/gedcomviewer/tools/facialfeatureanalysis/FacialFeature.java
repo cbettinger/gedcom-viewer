@@ -3,14 +3,14 @@ package bettinger.gedcomviewer.tools.facialfeatureanalysis;
 import java.awt.Color;
 
 public enum FacialFeature {
-	CHEEKS, CHIN, EYEBROWS, EYES, FACESHAPE, LIPS, NOSE;
+	CHEEKS, CHIN, EYEBROWS, EYESHAPE, FACESHAPE, LIPS, NOSE;
 
 	public static final Color DEFAULT_COLOR = Color.DARK_GRAY;
 
 	private static final Color CHEEKS_COLOR = Color.decode("#4363d8");
 	private static final Color CHIN_COLOR = Color.decode("#42d4f4");
 	private static final Color EYEBROWS_COLOR = Color.decode("#f58231");
-	private static final Color EYES_COLOR = Color.decode("#911eb4");
+	private static final Color EYESHAPE_COLOR = Color.decode("#911eb4");
 	private static final Color FACESHAPE_COLOR = Color.decode("#3cb44b");
 	private static final Color LIPS_COLOR = Color.decode("#f032e6");
 	private static final Color NOSE_COLOR = Color.decode("#ffe119");
@@ -23,8 +23,8 @@ public enum FacialFeature {
 				return CHIN_COLOR;
 			case EYEBROWS:
 				return EYEBROWS_COLOR;
-			case EYES:
-				return EYES_COLOR;
+			case EYESHAPE:
+				return EYESHAPE_COLOR;
 			case FACESHAPE:
 				return FACESHAPE_COLOR;
 			case LIPS:
