@@ -58,7 +58,7 @@ public class Analyzer extends BackgroundWorker {
 			throw new AnalysisException("Failed to create temp file");
 		}
 
-		final var inputFile = JSONUtils.toJSONFile(IndividualDTO.build(proband, depth), inputFilePath.toString());
+		final var inputFile = JSONUtils.toJSONFile(JSONSerializer.build(proband, depth), inputFilePath.toString());
 		if (inputFile == null) {
 			throw new AnalysisException("Failed to write input file");
 		}
