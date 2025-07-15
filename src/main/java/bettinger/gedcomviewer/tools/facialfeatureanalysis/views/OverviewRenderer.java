@@ -1,7 +1,6 @@
 package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Point;
 import java.awt.Stroke;
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ class OverviewRenderer extends AncestorsRenderer {
 	private final Map<FacialFeature, ArrayList<String>> maxSimilarIds;
 	private final Map<FacialFeature, ArrayList<String>> maxSimilarLineIds;
 	private final Map<Pair<String, String>, Set<FacialFeature>> maxSimilarLineEdges;
-	private final Map<FacialFeature, ArrayList<String>> excludedIds;	// TODO: ?
+	private final Map<FacialFeature, ArrayList<String>> excludedIds; // TODO: ?
 
 	OverviewRenderer(final Map<FacialFeature, AnalysisResult> results) {
 		this.results = results;
@@ -89,7 +88,7 @@ class OverviewRenderer extends AncestorsRenderer {
 	@Override
 	protected void renderEdges() {
 		for (final var edge : edges) {
-			final var childNode = edge.getValue0();
+			final var node = edge.getValue0();
 			final var fatherNode = edge.getValue1();
 			final var motherNode = edge.getValue2();
 
@@ -112,35 +111,33 @@ class OverviewRenderer extends AncestorsRenderer {
 				}
 			}
 
-			boolean renderEdgeToFather = considerFather && !fatherExcludedEverywhere && maxSimilarLineEdges.containsKey(new Pair<String, String>(childNode.getIndividual().getId(), fatherNode.getIndividual().getId()));
-			boolean renderEdgeToMother = considerMother && !motherExcludedEverywhere && maxSimilarLineEdges.containsKey(new Pair<String, String>(childNode.getIndividual().getId(), motherNode.getIndividual().getId()));
+			boolean renderEdgeToFather = considerFather && !fatherExcludedEverywhere && maxSimilarLineEdges.containsKey(new Pair<String, String>(node.getIndividual().getId(), fatherNode.getIndividual().getId()));
+			boolean renderEdgeToMother = considerMother && !motherExcludedEverywhere && maxSimilarLineEdges.containsKey(new Pair<String, String>(node.getIndividual().getId(), motherNode.getIndividual().getId()));
 
 			final Point parentsPoint = renderEdge(fatherNode, motherNode);
 			if (parentsPoint != null) {
 				if (!renderEdgeToFather || !renderEdgeToMother) {
-					g.setPaint(Color.BLACK);
-					renderEdge(fatherNode, motherNode);
-					g.drawLine(parentsPoint.x, parentsPoint.y, parentsPoint.x, childNode.getPosition().y);
-				}	// TODO: necc?
+					g.drawLine(parentsPoint.x, parentsPoint.y, parentsPoint.x, node.getPosition().y);
+				}
 
 				if (renderEdgeToFather) {
-					renderMaxSimilarLineEdge(childNode, fatherNode, parentsPoint, new Pair<>(childNode.getIndividual().getId(), fatherNode.getIndividual().getId()), true);
+					renderMaxSimilarLineEdge(node, fatherNode, parentsPoint, true);
 				}
 
 				if (renderEdgeToMother) {
-					renderMaxSimilarLineEdge(childNode, motherNode, parentsPoint, new Pair<>(childNode.getIndividual().getId(), motherNode.getIndividual().getId()), false);
+					renderMaxSimilarLineEdge(node, motherNode, parentsPoint, false);
 				}
 			}
 		}
 	}
 
-	private void renderMaxSimilarLineEdge(final Node childNode, final Node parentNode, final Point parentsPoint, final Pair<String, String> edge, final boolean ancestorIsMale) {
+	private void renderMaxSimilarLineEdge(final Node childNode, final Node parentNode, final Point parentsPoint, final boolean ancestorIsMale) {
 		final var originalPaint = g.getPaint();
 		final var originalStroke = g.getStroke();
 
 		g.setStroke(STROKE);
 
-		final var facialFeatures = maxSimilarLineEdges.get(edge);
+		final var facialFeatures = maxSimilarLineEdges.get(new Pair<>(childNode.getIndividual().getId(), parentNode.getIndividual().getId()));
 		final var parentNodePosition = parentNode.getPosition();
 
 		int i = 0;
