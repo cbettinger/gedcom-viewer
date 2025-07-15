@@ -4,7 +4,7 @@ FACE_CHARACTERISTICS_OF_INTEREST = [
     "CHEEKS",
     "CHIN",
     "EYEBROWS",
-    "EYES",
+    "EYESHAPE",
     "FACESHAPE",
     "LIPS",
     "NOSE",

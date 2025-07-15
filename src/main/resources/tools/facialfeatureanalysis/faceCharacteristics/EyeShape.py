@@ -2,7 +2,7 @@ from classifiers.XGBClassifiers import XGB_CLASSIFIERS
 from faceCharacteristics.TwoElementalFacePart import TwoElementalFacePart
 
 
-class Eyes(TwoElementalFacePart):
+class EyeShape(TwoElementalFacePart):
     rightEyeIndices = [
         33,
         7,
@@ -106,18 +106,18 @@ class Eyes(TwoElementalFacePart):
 
     def __init__(self, faceLandmarks):
         super().__init__(
-            "Augen",
+            "Augenform",
             faceLandmarks,
             "rechtes Auge",
             "linkes Auge",
-            Eyes.rightEyeLidsIndices,
-            Eyes.leftEyeLidsIndices,
+            EyeShape.rightEyeLidsIndices,
+            EyeShape.leftEyeLidsIndices,
             133,
             362,
             230,
             450,
             None,
             None,
-            classifier1=XGB_CLASSIFIERS["EYES"]["first"],
-            classifier2=XGB_CLASSIFIERS["EYES"]["second"],
+            classifier1=XGB_CLASSIFIERS["EYESHAPE"]["first"],
+            classifier2=XGB_CLASSIFIERS["EYESHAPE"]["second"],
         )

@@ -35,16 +35,16 @@ XGB_CLASSIFIERS = {
             6,
         ),
     },
-    "EYES": {
+    "EYESHAPE": {
         "first": XGBooster(
-            "xgb_20_6_eyes_first",
-            "classifiers/xgboost/xgb_20_6_eyes_edgeDifference_first.json",
+            "xgb_20_6_eyeshape_first",
+            "classifiers/xgboost/xgb_20_6_eyeshape_edgeDifference_first.json",
             20,
             6,
         ),
         "second": XGBooster(
-            "xgb_20_6_eyes_second",
-            "classifiers/xgboost/xgb_20_6_eyes_edgeDifference_second.json",
+            "xgb_20_6_eyeshape_second",
+            "classifiers/xgboost/xgb_20_6_eyeshape_edgeDifference_second.json",
             20,
             6,
         ),
