@@ -32,7 +32,7 @@ public class DetailsPane extends JPanel {
 
 		sideBar.add(new Gradient(400, 20, facialFeature));
 
-		final var info = new JTextArea(String.format("%s: %s%n%n%s: %s%n%n%s: %s", I18N.get("AvgSimilarity"), I18N.get("AvgSimilarityInfo"), I18N.get("MaxSimilarity"), I18N.get("MaxSimilarityDetailsInfo"), I18N.get("LineSimilarity"), I18N.get("LineSimilarityInfo")));
+		final var info = new JTextArea(String.format("%s%n%n%s%n%n%s", I18N.get("AvgSimilarityInfo"), I18N.get("MaxSimilarityInfo"), I18N.get("LineSimilarityInfo")));
 		info.setBorder(BorderFactory.createEmptyBorder(Constants.TEXT_PANE_MARGIN, 0, 0, 0));
 		info.setFocusable(false);
 		info.setEditable(false);

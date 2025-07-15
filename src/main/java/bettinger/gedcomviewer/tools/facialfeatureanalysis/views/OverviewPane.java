@@ -58,11 +58,8 @@ class OverviewPane extends JPanel {
 		final List<Object[]> tableData = new ArrayList<>();
 		for (final var entry : results.entrySet()) {
 			final var feature = entry.getKey();
-			final var featureResult = entry.getValue();
-
-			final var maxLineSimilarity = featureResult.getMaxLineSimilarity();
-			final var maxIndividualSimilarity = featureResult.getMaxIndividualSimilarity();
-			tableData.add(new Object[] { I18N.get(feature.name()), feature, String.format("%.1f%%", maxLineSimilarity.getValue1() * 100), String.format("%.1f%%", maxIndividualSimilarity.getValue1() * 100) });
+			final var result = entry.getValue();
+			tableData.add(new Object[] { I18N.get(feature.name()), feature, String.format("%.1f%%", result.getMaxLineSimilarity().getValue1() * 100), String.format("%.1f%%", result.getMaxSimilarity().getValue1() * 100) });
 		}
 
 		final var table = new AutoFitTable();
@@ -70,7 +67,7 @@ class OverviewPane extends JPanel {
 		table.getColumnModel().getColumn(1).setCellRenderer(facialFeatureCellRenderer);
 		sideBar.add(new JScrollPane(table));
 
-		final var info = new JTextArea(String.format("%s%n%n%s", I18N.get("MaxSimilarityOverviewInfo"), I18N.get("MaxLineSimilarityInfo")));
+		final var info = new JTextArea(String.format("%s%n%n%s%n%n%s%n%n%s", I18N.get("MaxSimilarity"), I18N.get("MaxSimilarPersonInfo"), I18N.get("MaxLineSimilarity"), I18N.get("MaxSimilarLineInfo")));
 		info.setBorder(BorderFactory.createEmptyBorder(Constants.TEXT_PANE_MARGIN, 0, 0, 0));
 		info.setFocusable(false);
 		info.setEditable(false);

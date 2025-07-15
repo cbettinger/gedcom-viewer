@@ -98,7 +98,7 @@ class DetailsNode extends Node {
 	private static Image getPortrait(final Individual individual, final Similarity similarity) {
 		if (individual != null && similarity != null) {
 			final var portraits = individual.getFacialPortraits();
-			final var filePath = similarity.getMaxSimilarityAncestorPortrait();
+			final var filePath = similarity.getMaxSimilarAncestorPortraitFilePath();
 			for (final var portrait : portraits) {
 				if (portrait.getFilePath().equals(filePath) && portrait.exists()) {
 					return individual.getClippedImage(portrait, -1, PORTRAIT_HEIGHT);

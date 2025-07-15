@@ -5,14 +5,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class Similarity {
 	private final float avgSimilarity;
 	private final float maxSimilarity;
-	private final String maxSimilarityProbandPortrait;
-	private final String maxSimilarityAncestorPortrait;
+	private final String maxSimilarProbandPortraitFilePath;
+	private final String maxSimilarAncestorPortraitFilePath;
 
-	private Similarity(final float avgSimilarity, final float maxSimilarity, final String maxSimilarityProbandPortrait, final String maxSimilarityAncestorPortrait) {
+	private Similarity(final float avgSimilarity, final float maxSimilarity, final String maxSimilarProbandPortraitFilePath, final String maxSimilarAncestorPortraitFilePath) {
 		this.avgSimilarity = avgSimilarity;
 		this.maxSimilarity = maxSimilarity;
-		this.maxSimilarityProbandPortrait = maxSimilarityProbandPortrait;
-		this.maxSimilarityAncestorPortrait = maxSimilarityAncestorPortrait;
+		this.maxSimilarProbandPortraitFilePath = maxSimilarProbandPortraitFilePath;
+		this.maxSimilarAncestorPortraitFilePath = maxSimilarAncestorPortraitFilePath;
 	}
 
 	public float getAvgSimilarity() {
@@ -23,15 +23,15 @@ public class Similarity {
 		return maxSimilarity;
 	}
 
-	public String getMaxSimilarityProbandsPortrait() {
-		return maxSimilarityProbandPortrait;
+	public String getMaxSimilarProbandsPortraitFilePath() {
+		return maxSimilarProbandPortraitFilePath;
 	}
 
-	public String getMaxSimilarityAncestorPortrait() {
-		return maxSimilarityAncestorPortrait;
+	public String getMaxSimilarAncestorPortraitFilePath() {
+		return maxSimilarAncestorPortraitFilePath;
 	}
 
 	public static Similarity fromJSON(final JsonNode json) {
-		return json.properties().isEmpty() ? null :  new Similarity(Float.parseFloat(json.get("avgSimilarity").asText()), Float.parseFloat(json.get("maxSimilarity").asText()), json.get("maxSimilarityProbandPortrait").asText(), json.get("maxSimilarityAncestorPortrait").asText());
+		return json.properties().isEmpty() ? null : new Similarity(Float.parseFloat(json.get("avgSimilarity").asText()), Float.parseFloat(json.get("maxSimilarity").asText()), json.get("maxSimilarProbandPortraitFilePath").asText(), json.get("maxSimilarAncestorPortraitFilePath").asText());
 	}
 }

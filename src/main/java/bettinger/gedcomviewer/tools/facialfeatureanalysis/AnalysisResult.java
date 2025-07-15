@@ -11,32 +11,32 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class AnalysisResult {
 	private static final float EPSILON = 0.000001f;
 
-	private final Map<String, Similarity> individualSimilarities;
+	private final Map<String, Similarity> similarities;
 	private final Map<AncestralLine, Float> lineSimilarities;
 
-	private AnalysisResult(final Map<String, Similarity> individualSimilarities, final Map<AncestralLine, Float> lineSimilarities) {
-		this.individualSimilarities = individualSimilarities;
+	private AnalysisResult(final Map<String, Similarity> similarities, final Map<AncestralLine, Float> lineSimilarities) {
+		this.similarities = similarities;
 		this.lineSimilarities = lineSimilarities;
 	}
 
-	public Map<String, Similarity> getIndividualSimilarities() {
-		return individualSimilarities;
+	public Map<String, Similarity> getSimilarities() {
+		return similarities;
 	}
 
 	public Map<AncestralLine, Float> getLineSimilarities() {
 		return lineSimilarities;
 	}
 
-	public Pair<ArrayList<String>, Float> getMaxIndividualSimilarity() {
+	public Pair<ArrayList<String>, Float> getMaxSimilarity() {
 		final ArrayList<String> idsWithMaxSimilarity = new ArrayList<>();
 		Float maxSimilarity = null;
 
-		for (final var entry : individualSimilarities.entrySet()) {
+		for (final var entry : similarities.entrySet()) {
 			final var id = entry.getKey();
-			final var featureSimilarity = entry.getValue();
+			final var similarity = entry.getValue();
 
-			if (featureSimilarity != null) {
-				final var avgSimilarity = featureSimilarity.getAvgSimilarity();
+			if (similarity != null) {
+				final var avgSimilarity = similarity.getAvgSimilarity();
 
 				if (maxSimilarity == null || avgSimilarity > maxSimilarity) {
 					idsWithMaxSimilarity.clear();
@@ -72,18 +72,18 @@ public class AnalysisResult {
 	}
 
 	public static AnalysisResult fromJSON(final JsonNode json, final FacialFeature facialFeature) {
-		final Map<String, Similarity> individualSimilarities = new HashMap<>();
-		final var individualSimilaritiesEntries = json.get("nodes").get(facialFeature.name()).properties();
-		for (final var entry : individualSimilaritiesEntries) {
-			individualSimilarities.put(entry.getKey(), Similarity.fromJSON(entry.getValue()));
+		final Map<String, Similarity> similarities = new HashMap<>();
+		final var similarityProperties = json.get("nodes").get(facialFeature.name()).properties();
+		for (final var entry : similarityProperties) {
+			similarities.put(entry.getKey(), Similarity.fromJSON(entry.getValue()));
 		}
 
 		final Map<AncestralLine, Float> lineSimilarities = new HashMap<>();
-		final var lineSimilaritiesEntries = json.get("pathSimilarities").get(facialFeature.name()).properties();
-		for (final var entry : lineSimilaritiesEntries) {
+		final var lineSimilarityProperties = json.get("pathSimilarities").get(facialFeature.name()).properties();
+		for (final var entry : lineSimilarityProperties) {
 			lineSimilarities.put(AncestralLine.parse(entry.getKey()), Float.parseFloat(entry.getValue().asText()));
 		}
 
-		return new AnalysisResult(individualSimilarities, lineSimilarities);
+		return new AnalysisResult(similarities, lineSimilarities);
 	}
 }

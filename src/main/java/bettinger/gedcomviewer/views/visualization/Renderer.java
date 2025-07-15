@@ -18,8 +18,8 @@ import bettinger.gedcomviewer.utils.SVGUtils;
 public abstract class Renderer {
 
 	protected static final int LEVEL_DISTANCE = 25;
+	protected static final int EDGE_OFFSET = 5;
 
-	private static final int EDGE_OFFSET = 5;
 	private static final int EDGE_LABEL_PADDING = 10;
 
 	private static final int MINIMAL_CHILDREN_GAP = 2 * EDGE_LABEL_PADDING;

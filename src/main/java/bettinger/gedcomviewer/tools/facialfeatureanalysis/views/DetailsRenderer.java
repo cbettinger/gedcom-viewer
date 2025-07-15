@@ -23,7 +23,7 @@ class DetailsRenderer extends AncestorsRenderer {
 	private static final Stroke EDGE_STROKE = new BasicStroke(EDGE_WIDTH);
 
 	private final FacialFeature facialFeature;
-	private final Map<String, Similarity> individualSimilarities;
+	private final Map<String, Similarity> similarities;
 	private final Map<Pair<String, String>, Float> coloredEdges;
 	private final List<String> includedIndividualsIds;
 	private final Map<String, Float> lastIndividualsOfLine;
@@ -31,7 +31,7 @@ class DetailsRenderer extends AncestorsRenderer {
 
 	DetailsRenderer(final FacialFeature facialFeature, final AnalysisResult result) {
 		this.facialFeature = facialFeature;
-		this.individualSimilarities = result.getIndividualSimilarities();
+		this.similarities = result.getSimilarities();
 		this.coloredEdges = new HashMap<>();
 		this.includedIndividualsIds = new ArrayList<>();
 		this.lastIndividualsOfLine = new HashMap<>();
@@ -46,13 +46,13 @@ class DetailsRenderer extends AncestorsRenderer {
 	public void render(final Individual proband, final int generations, final Point offset) {
 		for (final var entry : result.getLineSimilarities().entrySet()) {
 			final var lineIds = entry.getKey().getIds();
-			final var similarity = entry.getValue();
+			final var lineSimilarity = entry.getValue();
 
 			final var k1 = new Pair<String, String>(proband.getId(), lineIds.get(0));
 			coloredEdges.computeIfAbsent(k1, _ -> 0.0f);
-			coloredEdges.put(k1, Math.max(coloredEdges.get(k1), similarity));
+			coloredEdges.put(k1, Math.max(coloredEdges.get(k1), lineSimilarity));
 
-			if (individualSimilarities.get(lineIds.get(0)) != null) {
+			if (similarities.get(lineIds.get(0)) != null) {
 				includedIndividualsIds.add(lineIds.get(0));
 			}
 
@@ -60,7 +60,7 @@ class DetailsRenderer extends AncestorsRenderer {
 			final ArrayList<String> notIncluded = new ArrayList<>();
 
 			for (int i = 0; i < lineIds.size() - 1; i++) {
-				if (individualSimilarities.get(lineIds.get(i + 1)) != null) {
+				if (similarities.get(lineIds.get(i + 1)) != null) {
 					includedIndividualsIds.addAll(notIncluded);
 					notIncluded.clear();
 					includedIndividualsIds.add(lineIds.get(i + 1));
@@ -71,10 +71,10 @@ class DetailsRenderer extends AncestorsRenderer {
 
 				final var k2 = new Pair<String, String>(lineIds.get(i), lineIds.get(i + 1));
 				coloredEdges.computeIfAbsent(k2, _ -> 0.0f);
-				coloredEdges.put(k1, Math.max(coloredEdges.get(k2), similarity));
+				coloredEdges.put(k1, Math.max(coloredEdges.get(k2), lineSimilarity));
 			}
 
-			lastIndividualsOfLine.put(lastOfPath, similarity);
+			lastIndividualsOfLine.put(lastOfPath, lineSimilarity);
 		}
 
 		super.render(proband, generations, offset);
@@ -82,7 +82,7 @@ class DetailsRenderer extends AncestorsRenderer {
 
 	@Override
 	protected Node createNode(final Individual individual, final boolean isClone, final Node parentNode) {
-		final var node = new DetailsNode(this, g, individual, isClone, parentNode, individual != null ? individualSimilarities.get(individual.getId()) : null);
+		final var node = new DetailsNode(this, g, individual, isClone, parentNode, individual != null ? similarities.get(individual.getId()) : null);
 		node.init();
 		return node;
 	}
