@@ -26,8 +26,6 @@ public class Analyzer extends BackgroundWorker {
 	private final int depth;
 	private final int numberOfPortraits;
 
-	private Map<FacialFeature, AnalysisResult> results;
-
 	public Analyzer(final Individual proband, final int depth, final int numberOfPortraits) {
 		MainFrame.getInstance().super(I18N.get("FacialFeatureAnalysis"));
 
@@ -41,7 +39,10 @@ public class Analyzer extends BackgroundWorker {
 		var uri = super.doInBackground();
 
 		try {
-			results = analyse();
+			final var results = analyse();
+			if (!results.isEmpty()) {
+				new ResultsFrame(proband, depth, results);
+			}
 		} catch (final AnalysisException e) {
 			onError(new AnalysisException(String.format(Format.KEY_VALUE, I18N.get("FacialFeatureAnalysisFailed"), e.getMessage())));
 		}
@@ -99,15 +100,6 @@ public class Analyzer extends BackgroundWorker {
 		}
 
 		return result;
-	}
-
-	@Override
-	protected void onSuccess(final URI uri) {
-		super.onSuccess(uri);	// TODO: below
-
-		if (results != null) {
-			new ResultsFrame(proband, depth, results);
-		}
 	}
 
 	static class AnalysisException extends Exception {
