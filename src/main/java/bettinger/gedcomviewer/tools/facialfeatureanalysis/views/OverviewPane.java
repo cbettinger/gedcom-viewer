@@ -59,7 +59,7 @@ class OverviewPane extends JPanel {
 		for (final var entry : results.entrySet()) {
 			final var feature = entry.getKey();
 			final var result = entry.getValue();
-			tableData.add(new Object[] { I18N.get(feature.name()), feature, String.format("%.1f%%", result.getMaxLineSimilarity().getValue1() * 100), String.format("%.1f%%", result.getMaxSimilarity().getValue1() * 100) });
+			tableData.add(new Object[] { I18N.get(feature.name()), feature, String.format("%.1f%%", result.getMaxSimilarity().getValue1() * 100), String.format("%.1f%%", result.getMaxLineSimilarity().getValue1() * 100) });
 		}
 
 		final var table = new AutoFitTable();
