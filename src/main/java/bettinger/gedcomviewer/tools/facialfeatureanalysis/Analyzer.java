@@ -102,7 +102,7 @@ public class Analyzer extends BackgroundWorker {
 		return result;
 	}
 
-	static class AnalysisException extends Exception {
+	private static class AnalysisException extends Exception {
 		AnalysisException(final String message) {
 			super(message);
 		}
