@@ -58,14 +58,13 @@ class OverviewRenderer extends AncestorsRenderer {
 
 				final ArrayList<String> excluded = new ArrayList<>();
 				for (int i = 0; i < lineIds.size() - 1; i++) {
-					final var nextLineId = lineIds.get(i + 1);
-					if (result.getSimilarities().containsKey(nextLineId)) {
-						excluded.add(nextLineId);
+					if (result.getSimilarities().get(lineIds.get(i + 1)) == null) {
+						excluded.add(lineIds.get(i + 1));
 					} else {
 						excluded.clear();
 					}
 
-					edge = new Pair<>(lineIds.get(i), nextLineId);
+					edge = new Pair<>(lineIds.get(i), lineIds.get(i + 1));
 					maxSimilarLineEdges.computeIfAbsent(edge, _ -> new HashSet<>());
 					maxSimilarLineEdges.get(edge).add(facialFeature);
 				}
