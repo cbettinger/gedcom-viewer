@@ -1,15 +1,12 @@
 package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -23,9 +20,8 @@ import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.AnalysisResult;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.FacialFeature;
 import bettinger.gedcomviewer.views.AutoFitTable;
-import bettinger.gedcomviewer.views.WebViewPanel;
 
-class OverviewPane extends JPanel {
+class OverviewPane extends ResultsPane {
 	private static final TableCellRenderer facialFeatureCellRenderer = new DefaultTableCellRenderer() {
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
@@ -41,19 +37,7 @@ class OverviewPane extends JPanel {
 	};
 
 	OverviewPane(final Individual proband, final int depth, final Map<FacialFeature, AnalysisResult> results) {
-		setLayout(new BorderLayout());
-
-		final var renderer = new OverviewRenderer(results);
-		renderer.render(proband, depth + 1);
-
-		final var visualization = new WebViewPanel();
-		visualization.setBody(renderer.toString());
-		visualization.scrollTo(renderer.getProbandNode().getPosition());
-		add(visualization, BorderLayout.CENTER);
-
-		final var sideBar = new JPanel();
-		sideBar.setBorder(BorderFactory.createEmptyBorder(Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN));
-		sideBar.setLayout(new BoxLayout(sideBar, BoxLayout.Y_AXIS));
+		super(new OverviewRenderer(results), proband, depth);
 
 		final List<Object[]> tableData = new ArrayList<>();
 		for (final var entry : results.entrySet()) {
@@ -74,7 +58,5 @@ class OverviewPane extends JPanel {
 		info.setLineWrap(true);
 		info.setWrapStyleWord(true);
 		sideBar.add(info);
-
-		add(sideBar, BorderLayout.EAST);
 	}
 }

@@ -1,10 +1,6 @@
 package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 
-import java.awt.BorderLayout;
-
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import bettinger.gedcomviewer.Constants;
@@ -12,23 +8,10 @@ import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.AnalysisResult;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.FacialFeature;
-import bettinger.gedcomviewer.views.WebViewPanel;
 
-public class DetailsPane extends JPanel {
-	public DetailsPane(final Individual proband, final int depth, final FacialFeature facialFeature, final AnalysisResult result) {
-		setLayout(new BorderLayout());
-
-		final var renderer = new DetailsRenderer(facialFeature, result);
-		renderer.render(proband, depth + 1);
-
-		final var visualization = new WebViewPanel();
-		visualization.setBody(renderer.toString());
-		visualization.scrollTo(renderer.getProbandNode().getPosition());
-		add(visualization, BorderLayout.CENTER);
-
-		final var sideBar = new JPanel();
-		sideBar.setBorder(BorderFactory.createEmptyBorder(Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN, Constants.TEXT_PANE_MARGIN));
-		sideBar.setLayout(new BoxLayout(sideBar, BoxLayout.Y_AXIS));
+class DetailsPane extends ResultsPane {
+	DetailsPane(final Individual proband, final int depth, final FacialFeature facialFeature, final AnalysisResult result) {
+		super(new DetailsRenderer(facialFeature, result), proband, depth);
 
 		sideBar.add(new Gradient(400, 20, facialFeature));
 
@@ -39,7 +22,5 @@ public class DetailsPane extends JPanel {
 		info.setLineWrap(true);
 		info.setWrapStyleWord(true);
 		sideBar.add(info);
-
-		add(sideBar, BorderLayout.EAST);
 	}
 }
