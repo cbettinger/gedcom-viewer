@@ -23,7 +23,7 @@ public class Similarity {
 		return maxSimilarity;
 	}
 
-	public String getMaxSimilarProbandsPortraitFilePath() {
+	public String getMaxSimilarProbandPortraitFilePath() {
 		return maxSimilarProbandPortraitFilePath;
 	}
 

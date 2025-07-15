@@ -31,17 +31,17 @@ class DetailsNode extends Node {
 
 	@Override
 	public void init() {
-		super.init();
-
 		if (individual != null && renderer.getProband() != null && individual != renderer.getProband() && similarity != null) {
-			probandPortrait = getPortrait(renderer.getProband(), similarity);
+			probandPortrait = getPortrait(renderer.getProband(), similarity.getMaxSimilarProbandPortraitFilePath());
 			probandPortraitWidth = getPortraitWidth(probandPortrait);
-
-			width += probandPortrait == null ? 0 : probandPortraitWidth + PADDING;
 		} else {
 			probandPortrait = null;
 			probandPortraitWidth = 0;
 		}
+
+		super.init();
+
+		width += probandPortrait == null ? 0 : probandPortraitWidth + PADDING;
 	}
 
 	@Override
@@ -73,7 +73,7 @@ class DetailsNode extends Node {
 
 	@Override
 	protected Image getPortrait() {
-		return getPortrait(individual, similarity);
+		return similarity == null ? super.getPortrait() : getPortrait(individual, similarity.getMaxSimilarAncestorPortraitFilePath());
 	}
 
 	@Override
@@ -95,10 +95,9 @@ class DetailsNode extends Node {
 		return super.getTextPositionX() + (probandPortrait == null ? 0 : probandPortraitWidth + 2 * PADDING);
 	}
 
-	private static Image getPortrait(final Individual individual, final Similarity similarity) {
-		if (individual != null && similarity != null) {
+	private static Image getPortrait(final Individual individual, final String filePath) {
+		if (individual != null && filePath != null && !filePath.isEmpty()) {
 			final var portraits = individual.getFacialPortraits();
-			final var filePath = similarity.getMaxSimilarAncestorPortraitFilePath();
 			for (final var portrait : portraits) {
 				if (portrait.getFilePath().equals(filePath) && portrait.exists()) {
 					return individual.getClippedImage(portrait, -1, PORTRAIT_HEIGHT);
