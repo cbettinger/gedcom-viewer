@@ -6,6 +6,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class DateTimeUtils {
 
@@ -30,6 +32,10 @@ public abstract class DateTimeUtils {
 	private static final DateTimeFormatter ORIGINAL_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.ENGLISH);
 	private static final DateTimeFormatter ORIGINAL_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
 	private static final DateTimeFormatter DISPLAY_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+	public static void logTimestamp() {
+		Logger.getLogger(DateTimeUtils.class.getName()).log(Level.INFO, "{0}", format(LocalDateTime.now()));
+	}
 
 	public static org.folg.gedcom.model.DateTime now() {
 		final var now = LocalDateTime.now();

@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Individual;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.views.ResultFrame;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.views.ResultsFrame;
 import bettinger.gedcomviewer.utils.FileUtils;
 import bettinger.gedcomviewer.utils.JSONUtils;
 import bettinger.gedcomviewer.utils.PythonUtils;
@@ -106,7 +106,7 @@ public class Analyzer extends BackgroundWorker {
 		super.onSuccess(uri);	// TODO: below
 
 		if (results != null) {
-			new ResultFrame(proband, depth, results);
+			new ResultsFrame(proband, depth, results);
 		}
 	}
 
