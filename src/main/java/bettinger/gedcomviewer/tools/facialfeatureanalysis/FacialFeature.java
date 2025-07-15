@@ -5,7 +5,7 @@ import java.awt.Color;
 public enum FacialFeature {
 	CHEEKS, CHIN, EYEBROWS, EYES, FACESHAPE, LIPS, NOSE;
 
-	public static final Color DEFAULT_COLOR = Color.BLACK;
+	public static final Color DEFAULT_COLOR = Color.DARK_GRAY;
 
 	private static final Color CHEEKS_COLOR = Color.decode("#4363d8");
 	private static final Color CHIN_COLOR = Color.decode("#42d4f4");

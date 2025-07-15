@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Stroke;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.batik.svggen.SVGGraphics2D;
@@ -49,5 +50,12 @@ class OverviewNode extends Node {
 
 		g.setPaint(originalPaint);
 		g.setStroke(originalStroke);
+	}
+
+	@Override
+	protected List<String> getTextLines() {
+		final List<String> result = new ArrayList<>();
+		result.add(getFirstTextLine());
+		return result;
 	}
 }
