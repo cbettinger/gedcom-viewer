@@ -124,14 +124,17 @@ class DetailsRenderer extends AncestorsRenderer {
 		if (parentsPoint != null) {
 			final var edge = new Pair<>(childNode.getIndividual().getId(), parentNode.getIndividual().getId());
 
-			g.setPaint(FacialFeature.getColor(facialFeature, coloredEdges.get(edge)));
-			g.setStroke(Renderer.BOLD_STROKE);
-
 			final int offsetX = parentIsMale ? -Renderer.BOLD_STROKE_WIDTH / 2 : Renderer.BOLD_STROKE_WIDTH / 2;
 			final int endX = parentIsMale ? parentNode.getPosition().x + parentNode.getWidth() : parentNode.getPosition().x;
 
+			g.setPaint(FacialFeature.getColor(facialFeature, coloredEdges.get(edge)));
+			g.setStroke(Renderer.BOLD_STROKE);
+
 			g.drawLine(parentsPoint.x + offsetX, parentsPoint.y, endX, parentsPoint.y);
 			g.drawLine(parentsPoint.x + offsetX, parentsPoint.y, parentsPoint.x + offsetX, childNode.getPosition().y);
+
+			g.setPaint(Renderer.DEFAULT_COLOR);
+			g.setStroke(Renderer.DEFAULT_STROKE);
 
 			if (lastIdOfLine.containsKey(edge.getValue1())) {
 				final var label = String.format("%.1f%%", lastIdOfLine.get(edge.getValue1()) * 100);
@@ -142,9 +145,6 @@ class DetailsRenderer extends AncestorsRenderer {
 
 				g.drawString(label, centerX - labelWidth / 2, parentsPoint.y - 2 * Renderer.BOLD_STROKE_WIDTH);
 			}
-
-			g.setPaint(Renderer.DEFAULT_COLOR);
-			g.setStroke(Renderer.DEFAULT_STROKE);
 		}
 	}
 }
