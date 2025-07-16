@@ -12,6 +12,7 @@ import java.util.function.Predicate;
 
 import org.folg.gedcom.model.GedcomTag;
 import org.folg.gedcom.model.MediaRef;
+import org.javatuples.Triplet;
 
 import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.Format;
@@ -27,6 +28,7 @@ class MediaManager {
 	private Media primaryImage;
 	private final List<Media> facialPortraits;
 	private final Map<Media, Rectangle> imageClips;
+	private final Map<Triplet<Media, Integer, Integer>, Image> cachedClippedImages;
 
 	MediaManager(final Structure referencingStructure, final GEDCOM gedcom) {
 		this(referencingStructure, gedcom, referencingStructure.getExtensionTags(Media.TAG).stream().map(objeTag -> {
@@ -47,6 +49,7 @@ class MediaManager {
 	MediaManager(final Structure referencingStructure, final GEDCOM gedcom, final List<MediaRef> mediaRefs) {
 		this.facialPortraits = new ArrayList<>();
 		this.imageClips = new HashMap<>();
+		this.cachedClippedImages = new HashMap<>();
 
 		this.media = mediaRefs.stream().map(mr -> {
 			final var medium = (Media) gedcom.getRecord(mr.getRef());
@@ -61,8 +64,8 @@ class MediaManager {
 					primaryImage = medium;
 				}
 
-				final var portrait = TagUtils.getFirstExtensionTagValue(mr, "_FACIAL");
-				if (portrait.equals("Y")) {
+				final var facial = TagUtils.getFirstExtensionTagValue(mr, "_FACIAL");
+				if (facial.equals("Y")) {
 					facialPortraits.add(medium);
 				}
 
@@ -132,6 +135,11 @@ class MediaManager {
 	}
 
 	public Image getClippedImage(final Media image, final int width, final int height) {
+		final var key = new Triplet<>(image, width, height);
+		if (cachedClippedImages.containsKey(key)) {
+			return cachedClippedImages.get(key);
+		}
+
 		Image result = image.getImage();
 
 		final var clip = imageClips.get(image);
@@ -141,6 +149,8 @@ class MediaManager {
 			if (width != -1 || height != -1) {
 				result = result.getScaledInstance(width, height, Image.SCALE_FAST);
 			}
+
+			cachedClippedImages.put(key, result);
 		}
 
 		return result;
