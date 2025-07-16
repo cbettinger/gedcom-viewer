@@ -88,7 +88,7 @@ class OverviewRenderer extends AncestorsRenderer {
 	@Override
 	protected void renderEdges() {
 		for (final var edge : edges) {
-			final var node = edge.getValue0();
+			final var childNode = edge.getValue0();
 			final var fatherNode = edge.getValue1();
 			final var motherNode = edge.getValue2();
 
@@ -111,27 +111,27 @@ class OverviewRenderer extends AncestorsRenderer {
 				}
 			}
 
-			boolean renderEdgeToFather = fatherExists && !fatherExcludedEverywhere && maxSimilarLineEdges.containsKey(new Pair<String, String>(node.getIndividual().getId(), fatherNode.getIndividual().getId()));
-			boolean renderEdgeToMother = motherExists && !motherExcludedEverywhere && maxSimilarLineEdges.containsKey(new Pair<String, String>(node.getIndividual().getId(), motherNode.getIndividual().getId()));
+			boolean renderEdgeToFather = fatherExists && !fatherExcludedEverywhere && maxSimilarLineEdges.containsKey(new Pair<String, String>(childNode.getIndividual().getId(), fatherNode.getIndividual().getId()));
+			boolean renderEdgeToMother = motherExists && !motherExcludedEverywhere && maxSimilarLineEdges.containsKey(new Pair<String, String>(childNode.getIndividual().getId(), motherNode.getIndividual().getId()));
 
 			final Point parentsPoint = renderEdge(fatherNode, motherNode);
 			if (parentsPoint != null) {
 				if (!renderEdgeToFather || !renderEdgeToMother) {
-					g.drawLine(parentsPoint.x, parentsPoint.y, parentsPoint.x, node.getPosition().y);
+					g.drawLine(parentsPoint.x, parentsPoint.y, parentsPoint.x, childNode.getPosition().y);
 				}
 
 				if (renderEdgeToFather) {
-					renderMaxSimilarLineEdge(node, fatherNode, parentsPoint, true);
+					renderMaxSimilarLineEdge(childNode, fatherNode, parentsPoint, true);
 				}
 
 				if (renderEdgeToMother) {
-					renderMaxSimilarLineEdge(node, motherNode, parentsPoint, false);
+					renderMaxSimilarLineEdge(childNode, motherNode, parentsPoint, false);
 				}
 			}
 		}
 	}
 
-	private void renderMaxSimilarLineEdge(final Node childNode, final Node parentNode, final Point parentsPoint, final boolean ancestorIsMale) {
+	private void renderMaxSimilarLineEdge(final Node childNode, final Node parentNode, final Point parentsPoint, final boolean parentIsMale) {
 		final var originalPaint = g.getPaint();
 		final var originalStroke = g.getStroke();
 
@@ -144,8 +144,8 @@ class OverviewRenderer extends AncestorsRenderer {
 		for (final var facialFeature : facialFeatures) {
 			if (parentsPoint != null && !excludedIds.get(facialFeature).contains(parentNode.getIndividual().getId())) {
 				final int offsetY = i++ * EDGE_OFFSET;
-				final int offsetX = ancestorIsMale ? -offsetY - EDGE_OFFSET / 2 : offsetY + EDGE_OFFSET / 2;
-				final int endX = ancestorIsMale ? parentNodePosition.x + EDGE_OFFSET : parentNodePosition.x;
+				final int offsetX = parentIsMale ? -offsetY - EDGE_OFFSET / 2 : offsetY + EDGE_OFFSET / 2;
+				final int endX = parentIsMale ? parentNodePosition.x + EDGE_OFFSET : parentNodePosition.x;
 
 				g.setPaint(FacialFeature.getColor(facialFeature));
 				g.drawLine(parentsPoint.x + offsetX, parentsPoint.y + offsetY, endX, parentsPoint.y + offsetY);
