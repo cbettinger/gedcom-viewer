@@ -41,7 +41,7 @@ class DetailsNode extends Node {
 
 		super.init();
 
-		width += probandPortrait == null ? 0 : probandPortraitWidth + PADDING;
+		width += (probandPortrait == null ? 0 : (probandPortraitWidth + PADDING));
 	}
 
 	@Override
@@ -67,7 +67,7 @@ class DetailsNode extends Node {
 		super.renderPortraits();
 
 		if (probandPortrait != null) {
-			g.drawImage(probandPortrait, x + portraitWidth + 2 * PADDING, y + PADDING, probandPortraitWidth, PORTRAIT_HEIGHT, null);
+			g.drawImage(probandPortrait, x + PADDING + portraitWidth + PADDING, y + PADDING, probandPortraitWidth, PORTRAIT_HEIGHT, null);
 		}
 	}
 
@@ -92,7 +92,7 @@ class DetailsNode extends Node {
 
 	@Override
 	protected int getTextPositionX() {
-		return super.getTextPositionX() + (probandPortrait == null ? 0 : probandPortraitWidth + 2 * PADDING);
+		return super.getTextPositionX() + (probandPortrait == null ? 0 : (probandPortraitWidth + PADDING));
 	}
 
 	private static Image getPortrait(final Individual individual, final String filePath) {

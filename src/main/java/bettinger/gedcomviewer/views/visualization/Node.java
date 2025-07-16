@@ -99,13 +99,13 @@ public class Node {
 
 		g.setFont(BOLD_FONT);
 		final var fontMetrics = g.getFontMetrics();
-		final var maximalLineWidth = fontMetrics.stringWidth(text.stream().max(Comparator.comparing(fontMetrics::stringWidth)).orElse(""));
+		final var maximalLineWidth = PADDING + fontMetrics.stringWidth(text.stream().max(Comparator.comparing(fontMetrics::stringWidth)).orElse(""));
 		lineHeight = fontMetrics.getHeight();
 
 		portrait = getPortrait();
 		portraitWidth = getPortraitWidth(portrait);
 
-		width = Math.max(MINIMAL_WIDTH, maximalLineWidth + 3 * PADDING + (portrait == null ? 0 : portraitWidth + PADDING));
+		width = Math.max(MINIMAL_WIDTH, maximalLineWidth + 2 * PADDING + (portrait == null ? 0 : portraitWidth + PADDING));
 		height = Math.max(MINIMAL_HEIGHT, text.size() * (lineHeight + PADDING) + 2 * PADDING);
 	}
 
