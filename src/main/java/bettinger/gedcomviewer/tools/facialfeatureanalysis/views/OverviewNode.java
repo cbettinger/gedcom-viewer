@@ -11,6 +11,7 @@ import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.FacialFeature;
 import bettinger.gedcomviewer.views.visualization.Node;
+import bettinger.gedcomviewer.views.visualization.Renderer;
 
 class OverviewNode extends Node {
 
@@ -26,25 +27,22 @@ class OverviewNode extends Node {
 	public void render(final int x, final int y) {
 		super.render(x, y);
 
-		final var originalPaint = g.getPaint();
-		final var originalStroke = g.getStroke();
-
 		final var border = getRectangle();
 
-		g.setStroke(OverviewRenderer.STROKE);
+		g.setStroke(Renderer.BOLD_STROKE);
 
 		int i = 0;
 		for (final var entry : maxSimilarIds.entrySet()) {
 			if (individual != null && entry.getValue().getValue0().contains(individual.getId())) {
-				final int offset = i++ * OverviewRenderer.STROKE_WIDTH;
+				final int offset = i++ * Renderer.BOLD_STROKE_WIDTH;
 
 				g.setPaint(FacialFeature.getColor(entry.getKey()));
 				g.drawRect(border.x - offset, border.y - offset, border.width + 2 * offset, border.height + 2 * offset);
 			}
 		}
 
-		g.setPaint(originalPaint);
-		g.setStroke(originalStroke);
+		g.setPaint(Renderer.DEFAULT_COLOR);
+		g.setStroke(Renderer.DEFAULT_STROKE);
 	}
 
 	@Override

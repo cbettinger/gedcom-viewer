@@ -1,6 +1,10 @@
 package bettinger.gedcomviewer.views.visualization;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Point;
+import java.awt.Stroke;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,6 +20,16 @@ import bettinger.gedcomviewer.model.Structure;
 import bettinger.gedcomviewer.utils.SVGUtils;
 
 public abstract class Renderer {
+
+	public static final Font DEFAULT_FONT = new Font("Arial", Font.PLAIN, 12);
+	public static final Font BOLD_FONT = DEFAULT_FONT.deriveFont(Font.BOLD);
+
+	public static final Color DEFAULT_COLOR = Color.BLACK;
+
+	public static final int DEFAULT_STROKE_WIDTH = 1;
+	public static final Stroke DEFAULT_STROKE = new BasicStroke(DEFAULT_STROKE_WIDTH);
+	public static final int BOLD_STROKE_WIDTH = 3;
+	public static final Stroke BOLD_STROKE = new BasicStroke(BOLD_STROKE_WIDTH);
 
 	protected static final int LEVEL_DISTANCE = 25;
 	protected static final int EDGE_OFFSET = 5;
@@ -98,6 +112,10 @@ public abstract class Renderer {
 	}
 
 	public void render(final Individual proband, final int generations, final Point offset) {
+		g.setPaint(DEFAULT_COLOR);
+		g.setFont(DEFAULT_FONT);
+		g.setStroke(DEFAULT_STROKE);
+
 		this.proband = proband;
 
 		this.generations = Math.max(0, generations);
@@ -370,7 +388,7 @@ public abstract class Renderer {
 	}
 
 	protected void renderEdges() {
-		g.setFont(Node.DEFAULT_FONT);
+
 	}
 
 	protected Point renderEdge(final Node leftNode, final Node rightNode) {

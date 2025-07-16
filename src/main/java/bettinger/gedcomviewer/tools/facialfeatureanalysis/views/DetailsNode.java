@@ -1,8 +1,6 @@
 package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 
-import java.awt.BasicStroke;
 import java.awt.Image;
-import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,10 +11,9 @@ import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.FacialFeature;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.Similarity;
 import bettinger.gedcomviewer.views.visualization.Node;
+import bettinger.gedcomviewer.views.visualization.Renderer;
 
 class DetailsNode extends Node {
-	private static final int BORDER_WIDTH = 3;
-	private static final Stroke BORDER_STROKE = new BasicStroke(BORDER_WIDTH);
 
 	private final Similarity similarity;
 
@@ -50,15 +47,13 @@ class DetailsNode extends Node {
 
 		final var borderColor = similarity == null ? null : FacialFeature.getColor(((DetailsRenderer) renderer).getFacialFeature(), similarity.getAvgSimilarity());
 		if (borderColor != null) {
-			final var originalPaint = g.getPaint();
-			final var originalStroke = g.getStroke();
-
 			g.setPaint(borderColor);
-			g.setStroke(BORDER_STROKE);
+			g.setStroke(Renderer.BOLD_STROKE);
+
 			g.drawRect(this.x, this.y, this.width, this.height);
 
-			g.setPaint(originalPaint);
-			g.setStroke(originalStroke);
+			g.setPaint(Renderer.DEFAULT_COLOR);
+			g.setStroke(Renderer.DEFAULT_STROKE);
 		}
 	}
 

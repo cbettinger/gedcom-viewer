@@ -1,8 +1,6 @@
 package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 
-import java.awt.BasicStroke;
 import java.awt.Point;
-import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -17,11 +15,9 @@ import bettinger.gedcomviewer.tools.facialfeatureanalysis.AnalysisResult;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.FacialFeature;
 import bettinger.gedcomviewer.views.visualization.AncestorsRenderer;
 import bettinger.gedcomviewer.views.visualization.Node;
+import bettinger.gedcomviewer.views.visualization.Renderer;
 
 class OverviewRenderer extends AncestorsRenderer {
-
-	public static final int STROKE_WIDTH = 3;
-	public static final Stroke STROKE = new BasicStroke(STROKE_WIDTH);
 
 	private final Map<FacialFeature, AnalysisResult> results;
 
@@ -132,10 +128,7 @@ class OverviewRenderer extends AncestorsRenderer {
 	}
 
 	private void renderMaxSimilarLineEdge(final Node childNode, final Node parentNode, final Point parentsPoint, final boolean parentIsMale) {
-		final var originalPaint = g.getPaint();
-		final var originalStroke = g.getStroke();
-
-		g.setStroke(STROKE);
+		g.setStroke(Renderer.BOLD_STROKE);
 
 		final var facialFeatures = maxSimilarLineEdges.get(new Pair<>(childNode.getIndividual().getId(), parentNode.getIndividual().getId()));
 		final var parentNodePosition = parentNode.getPosition();
@@ -153,7 +146,7 @@ class OverviewRenderer extends AncestorsRenderer {
 			}
 		}
 
-		g.setPaint(originalPaint);
-		g.setStroke(originalStroke);
+		g.setPaint(Renderer.DEFAULT_COLOR);
+		g.setStroke(Renderer.DEFAULT_STROKE);
 	}
 }

@@ -1,7 +1,6 @@
 package bettinger.gedcomviewer.views.visualization;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -23,9 +22,6 @@ public class Node {
 	protected static final int PADDING = 10;
 
 	protected static final int PORTRAIT_HEIGHT = MINIMAL_HEIGHT - 2 * PADDING;
-
-	protected static final Font DEFAULT_FONT = new Font("Arial", Font.PLAIN, 12);
-	protected static final Font BOLD_FONT = DEFAULT_FONT.deriveFont(Font.BOLD);
 
 	protected static final Color UNKNOWN_COLOR = Color.LIGHT_GRAY;
 	protected static final Color MALE_COLOR = new Color(173, 215, 229);
@@ -97,10 +93,11 @@ public class Node {
 	public void init() {
 		text = getTextLines();
 
-		g.setFont(BOLD_FONT);
+		g.setFont(Renderer.BOLD_FONT);
 		final var fontMetrics = g.getFontMetrics();
 		final var maximalLineWidth = PADDING + fontMetrics.stringWidth(text.stream().max(Comparator.comparing(fontMetrics::stringWidth)).orElse(""));
 		lineHeight = fontMetrics.getHeight();
+		g.setFont(Renderer.DEFAULT_FONT);
 
 		portrait = getPortrait();
 		portraitWidth = getPortraitWidth(portrait);
@@ -215,19 +212,17 @@ public class Node {
 		g.setPaint(fillColor);
 		g.fill(getRectangle());
 
-		g.setPaint(Color.BLACK);
-
-		var nextY = y;
-
-		g.setFont(BOLD_FONT);
+		g.setPaint(Renderer.DEFAULT_COLOR);
 
 		renderPortraits();
 
 		final int textPositionX = getTextPositionX();
+		var textPositionY = y;
+		g.setFont(Renderer.BOLD_FONT);
 		for (final var line : text) {
-			nextY += (PADDING + lineHeight);
-			g.drawString(line, textPositionX, nextY);
-			g.setFont(DEFAULT_FONT);
+			textPositionY += (PADDING + lineHeight);
+			g.drawString(line, textPositionX, textPositionY);
+			g.setFont(Renderer.DEFAULT_FONT);
 		}
 	}
 

@@ -1,8 +1,6 @@
 package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 
-import java.awt.BasicStroke;
 import java.awt.Point;
-import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,10 +13,9 @@ import bettinger.gedcomviewer.tools.facialfeatureanalysis.AnalysisResult;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.FacialFeature;
 import bettinger.gedcomviewer.views.visualization.AncestorsRenderer;
 import bettinger.gedcomviewer.views.visualization.Node;
+import bettinger.gedcomviewer.views.visualization.Renderer;
 
 class DetailsRenderer extends AncestorsRenderer {
-	private static final int EDGE_WIDTH = 3;
-	private static final Stroke EDGE_STROKE = new BasicStroke(EDGE_WIDTH);
 
 	private final FacialFeature facialFeature;
 	private final AnalysisResult result;
@@ -90,7 +87,7 @@ class DetailsRenderer extends AncestorsRenderer {
 		var r = super.getEdgeLabelWidth(v, w);
 
 		if (v != null && w != null && v.getIndividual() != null && w.getIndividual() != null && (includedIds.contains(v.getIndividual().getId()) || includedIds.contains(w.getIndividual().getId()))) {
-			r = g.getFontMetrics().stringWidth("100.00% 100.0%");
+			r = g.getFontMetrics().stringWidth("100.0% 100.0%");
 		}
 
 		return r;
@@ -127,20 +124,14 @@ class DetailsRenderer extends AncestorsRenderer {
 		if (parentsPoint != null) {
 			final var edge = new Pair<>(childNode.getIndividual().getId(), parentNode.getIndividual().getId());
 
-			final var originalPaint = g.getPaint();
-			final var originalStroke = g.getStroke();
-
 			g.setPaint(FacialFeature.getColor(facialFeature, coloredEdges.get(edge)));
-			g.setStroke(EDGE_STROKE);
+			g.setStroke(Renderer.BOLD_STROKE);
 
-			final int offsetX = parentIsMale ? -EDGE_WIDTH / 2 : EDGE_WIDTH / 2;
+			final int offsetX = parentIsMale ? -Renderer.BOLD_STROKE_WIDTH / 2 : Renderer.BOLD_STROKE_WIDTH / 2;
 			final int endX = parentIsMale ? parentNode.getPosition().x + parentNode.getWidth() : parentNode.getPosition().x;
 
 			g.drawLine(parentsPoint.x + offsetX, parentsPoint.y, endX, parentsPoint.y);
 			g.drawLine(parentsPoint.x + offsetX, parentsPoint.y, parentsPoint.x + offsetX, childNode.getPosition().y);
-
-			g.setPaint(originalPaint);
-			g.setStroke(originalStroke);
 
 			if (lastIdOfLine.containsKey(edge.getValue1())) {
 				final var label = String.format("%.1f%%", lastIdOfLine.get(edge.getValue1()) * 100);
@@ -149,8 +140,11 @@ class DetailsRenderer extends AncestorsRenderer {
 				final var lineStartX = parentIsMale ? endX : parentsPoint.x + offsetX;
 				final var centerX = lineStartX + Math.abs(parentsPoint.x + offsetX - endX) / 2;
 
-				g.drawString(label, centerX - labelWidth / 2, parentsPoint.y - 2 * EDGE_WIDTH);
+				g.drawString(label, centerX - labelWidth / 2, parentsPoint.y - 2 * Renderer.BOLD_STROKE_WIDTH);
 			}
+
+			g.setPaint(Renderer.DEFAULT_COLOR);
+			g.setStroke(Renderer.DEFAULT_STROKE);
 		}
 	}
 }
