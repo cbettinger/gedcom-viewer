@@ -1,7 +1,6 @@
 package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Point;
 import java.awt.Stroke;
 import java.util.ArrayList;
@@ -14,7 +13,6 @@ import org.javatuples.Pair;
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.AnalysisResult;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.FacialFeature;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.Similarity;
 import bettinger.gedcomviewer.views.visualization.AncestorsRenderer;
 import bettinger.gedcomviewer.views.visualization.Node;
 
@@ -23,19 +21,19 @@ class DetailsRenderer extends AncestorsRenderer {
 	private static final Stroke EDGE_STROKE = new BasicStroke(EDGE_WIDTH);
 
 	private final FacialFeature facialFeature;
-	private final Map<String, Similarity> similarities;
-	private final Map<Pair<String, String>, Float> coloredEdges;
-	private final List<String> includedIndividualsIds;
-	private final Map<String, Float> lastIndividualsOfLine;
 	private final AnalysisResult result;
+
+	private final Map<Pair<String, String>, Float> coloredEdges;
+	private final List<String> includedIds;
+	private final Map<String, Float> lastIdOfLine;
 
 	DetailsRenderer(final FacialFeature facialFeature, final AnalysisResult result) {
 		this.facialFeature = facialFeature;
-		this.similarities = result.getSimilarities();
-		this.coloredEdges = new HashMap<>();
-		this.includedIndividualsIds = new ArrayList<>();
-		this.lastIndividualsOfLine = new HashMap<>();
 		this.result = result;
+
+		this.coloredEdges = new HashMap<>();
+		this.includedIds = new ArrayList<>();
+		this.lastIdOfLine = new HashMap<>();
 	}
 
 	FacialFeature getFacialFeature() {
@@ -48,33 +46,33 @@ class DetailsRenderer extends AncestorsRenderer {
 			final var lineIds = entry.getKey().getIds();
 			final var lineSimilarity = entry.getValue();
 
-			final var k1 = new Pair<String, String>(proband.getId(), lineIds.get(0));
-			coloredEdges.computeIfAbsent(k1, _ -> 0.0f);
-			coloredEdges.put(k1, Math.max(coloredEdges.get(k1), lineSimilarity));
+			var edge = new Pair<String, String>(proband.getId(), lineIds.get(0));
+			coloredEdges.computeIfAbsent(edge, _ -> 0.0f);
+			coloredEdges.put(edge, Math.max(coloredEdges.get(edge), lineSimilarity));
 
-			if (similarities.get(lineIds.get(0)) != null) {
-				includedIndividualsIds.add(lineIds.get(0));
+			if (result.getSimilarities().get(lineIds.get(0)) != null) {
+				includedIds.add(lineIds.get(0));
 			}
 
 			String lastOfPath = null;
-			final ArrayList<String> notIncluded = new ArrayList<>();
+			final ArrayList<String> notIncludedIds = new ArrayList<>();
 
 			for (int i = 0; i < lineIds.size() - 1; i++) {
-				if (similarities.get(lineIds.get(i + 1)) != null) {
-					includedIndividualsIds.addAll(notIncluded);
-					notIncluded.clear();
-					includedIndividualsIds.add(lineIds.get(i + 1));
+				if (result.getSimilarities().get(lineIds.get(i + 1)) != null) {
+					includedIds.addAll(notIncludedIds);
+					notIncludedIds.clear();
+					includedIds.add(lineIds.get(i + 1));
 					lastOfPath = lineIds.get(i + 1);
 				} else {
-					notIncluded.add(lineIds.get(i + 1));
+					notIncludedIds.add(lineIds.get(i + 1));
 				}
 
-				final var k2 = new Pair<String, String>(lineIds.get(i), lineIds.get(i + 1));
-				coloredEdges.computeIfAbsent(k2, _ -> 0.0f);
-				coloredEdges.put(k1, Math.max(coloredEdges.get(k2), lineSimilarity));
+				edge = new Pair<String, String>(lineIds.get(i), lineIds.get(i + 1));
+				coloredEdges.computeIfAbsent(edge, _ -> 0.0f);
+				coloredEdges.put(edge, Math.max(coloredEdges.get(edge), lineSimilarity));
 			}
 
-			lastIndividualsOfLine.put(lastOfPath, lineSimilarity);
+			lastIdOfLine.put(lastOfPath, lineSimilarity);
 		}
 
 		super.render(proband, generations, offset);
@@ -82,7 +80,7 @@ class DetailsRenderer extends AncestorsRenderer {
 
 	@Override
 	protected Node createNode(final Individual individual, final boolean isClone, final Node parentNode) {
-		final var node = new DetailsNode(this, g, individual, isClone, parentNode, individual != null ? similarities.get(individual.getId()) : null);
+		final var node = new DetailsNode(this, g, individual, isClone, parentNode, individual != null ? result.getSimilarities().get(individual.getId()) : null);
 		node.init();
 		return node;
 	}
@@ -91,7 +89,7 @@ class DetailsRenderer extends AncestorsRenderer {
 	protected int getEdgeLabelWidth(final Node v, final Node w) {
 		var r = super.getEdgeLabelWidth(v, w);
 
-		if (v != null && w != null && v.getIndividual() != null && w.getIndividual() != null && (includedIndividualsIds.contains(v.getIndividual().getId()) || includedIndividualsIds.contains(w.getIndividual().getId()))) {
+		if (v != null && w != null && v.getIndividual() != null && w.getIndividual() != null && (includedIds.contains(v.getIndividual().getId()) || includedIds.contains(w.getIndividual().getId()))) {
 			r = g.getFontMetrics().stringWidth("100.00% 100.0%");
 		}
 
@@ -105,57 +103,50 @@ class DetailsRenderer extends AncestorsRenderer {
 			final var fatherNode = edge.getValue1();
 			final var motherNode = edge.getValue2();
 
-			final boolean considerFather = fatherNode != null && fatherNode.getIndividual() != null && includedIndividualsIds.contains(fatherNode.getIndividual().getId());
-			final boolean considerMother = motherNode != null && motherNode.getIndividual() != null && includedIndividualsIds.contains(motherNode.getIndividual().getId());
-
-			boolean drawFather = considerFather && coloredEdges.containsKey(new Pair<String, String>(childNode.getIndividual().getId(), fatherNode.getIndividual().getId()));
-			boolean drawMother = considerMother && coloredEdges.containsKey(new Pair<String, String>(childNode.getIndividual().getId(), motherNode.getIndividual().getId()));
-
-			g.setPaint(Color.WHITE);
+			final boolean renderEdgeToFather = fatherNode != null && fatherNode.getIndividual() != null && includedIds.contains(fatherNode.getIndividual().getId()) && coloredEdges.containsKey(new Pair<String, String>(childNode.getIndividual().getId(), fatherNode.getIndividual().getId()));
+			final boolean renderEdgeToMother = motherNode != null && motherNode.getIndividual() != null && includedIds.contains(motherNode.getIndividual().getId()) && coloredEdges.containsKey(new Pair<String, String>(childNode.getIndividual().getId(), motherNode.getIndividual().getId()));
 
 			final Point parentsPoint = renderEdge(fatherNode, motherNode);
 			if (parentsPoint != null) {
-				if (!drawFather || !drawMother) {
-					g.setPaint(Color.BLACK);
-					renderEdge(fatherNode, motherNode);
+				if (!renderEdgeToFather || !renderEdgeToMother) {
 					g.drawLine(parentsPoint.x, parentsPoint.y, parentsPoint.x, childNode.getPosition().y);
 				}
 
-				if (drawFather) {
-					final Pair<String, String> tuple = new Pair<>(childNode.getIndividual().getId(), fatherNode.getIndividual().getId());
-					renderColoredEdge(childNode, fatherNode, parentsPoint, tuple, true);
+				if (renderEdgeToFather) {
+					renderMaxSimilarLineEdge(childNode, fatherNode, parentsPoint, true);
 				}
 
-				if (drawMother) {
-					final Pair<String, String> tuple = new Pair<>(childNode.getIndividual().getId(), motherNode.getIndividual().getId());
-					renderColoredEdge(childNode, motherNode, parentsPoint, tuple, false);
+				if (renderEdgeToMother) {
+					renderMaxSimilarLineEdge(childNode, motherNode, parentsPoint, false);
 				}
 			}
 		}
 	}
 
-	private void renderColoredEdge(final Node rootNode, final Node parentNode, final Point parentsPoint, final Pair<String, String> tuple, final boolean ancestorIsMale) {
+	private void renderMaxSimilarLineEdge(final Node childNode, final Node parentNode, final Point parentsPoint, final boolean parentIsMale) {
 		if (parentsPoint != null) {
+			final var edge = new Pair<>(childNode.getIndividual().getId(), parentNode.getIndividual().getId());
+
 			final var originalPaint = g.getPaint();
 			final var originalStroke = g.getStroke();
 
-			g.setPaint(FacialFeature.getColor(facialFeature, coloredEdges.get(tuple)));
+			g.setPaint(FacialFeature.getColor(facialFeature, coloredEdges.get(edge)));
 			g.setStroke(EDGE_STROKE);
 
-			final int offsetX = ancestorIsMale ? -EDGE_WIDTH / 2 : EDGE_WIDTH / 2;
-			final int endX = ancestorIsMale ? parentNode.getPosition().x + parentNode.getWidth() : parentNode.getPosition().x;
+			final int offsetX = parentIsMale ? -EDGE_WIDTH / 2 : EDGE_WIDTH / 2;
+			final int endX = parentIsMale ? parentNode.getPosition().x + parentNode.getWidth() : parentNode.getPosition().x;
 
 			g.drawLine(parentsPoint.x + offsetX, parentsPoint.y, endX, parentsPoint.y);
-			g.drawLine(parentsPoint.x + offsetX, parentsPoint.y, parentsPoint.x + offsetX, rootNode.getPosition().y);
+			g.drawLine(parentsPoint.x + offsetX, parentsPoint.y, parentsPoint.x + offsetX, childNode.getPosition().y);
 
 			g.setPaint(originalPaint);
 			g.setStroke(originalStroke);
 
-			if (lastIndividualsOfLine.containsKey(tuple.getValue1())) {
-				final var label = String.format("%.1f%%", lastIndividualsOfLine.get(tuple.getValue1()) * 100);
+			if (lastIdOfLine.containsKey(edge.getValue1())) {
+				final var label = String.format("%.1f%%", lastIdOfLine.get(edge.getValue1()) * 100);
 				final var labelWidth = g.getFontMetrics().stringWidth(label);
 
-				final var lineStartX = ancestorIsMale ? endX : parentsPoint.x + offsetX;
+				final var lineStartX = parentIsMale ? endX : parentsPoint.x + offsetX;
 				final var centerX = lineStartX + Math.abs(parentsPoint.x + offsetX - endX) / 2;
 
 				g.drawString(label, centerX - labelWidth / 2, parentsPoint.y - 2 * EDGE_WIDTH);
