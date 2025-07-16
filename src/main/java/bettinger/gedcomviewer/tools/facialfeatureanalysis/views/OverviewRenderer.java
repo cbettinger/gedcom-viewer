@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Point;
 import java.awt.Stroke;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -24,7 +25,7 @@ class OverviewRenderer extends AncestorsRenderer {
 
 	private final Map<FacialFeature, AnalysisResult> results;
 
-	private final Map<FacialFeature, ArrayList<String>> maxSimilarIds;
+	private final Map<FacialFeature, Pair<ArrayList<String>, Float>> maxSimilarIds;
 	private final Map<FacialFeature, ArrayList<String>> maxSimilarLineIds;
 	private final Map<Pair<String, String>, Set<FacialFeature>> maxSimilarLineEdges;
 	private final Map<FacialFeature, ArrayList<String>> excludedIds;
@@ -32,10 +33,10 @@ class OverviewRenderer extends AncestorsRenderer {
 	OverviewRenderer(final Map<FacialFeature, AnalysisResult> results) {
 		this.results = results;
 
-		this.maxSimilarIds = new HashMap<>();
-		this.maxSimilarLineIds = new HashMap<>();
+		this.maxSimilarIds = new EnumMap<>(FacialFeature.class);
+		this.maxSimilarLineIds = new EnumMap<>(FacialFeature.class);
 		this.maxSimilarLineEdges = new HashMap<>();
-		this.excludedIds = new HashMap<>();
+		this.excludedIds = new EnumMap<>(FacialFeature.class);
 	}
 
 	@Override
@@ -44,7 +45,7 @@ class OverviewRenderer extends AncestorsRenderer {
 			final var facialFeature = entry.getKey();
 			final var result = entry.getValue();
 
-			maxSimilarIds.put(facialFeature, result.getMaxSimilarity().getValue0());
+			maxSimilarIds.put(facialFeature, result.getMaxSimilarity());
 			maxSimilarLineIds.put(facialFeature, new ArrayList<>());
 
 			final var maxSimilarLines = result.getMaxLineSimilarity().getValue0();
