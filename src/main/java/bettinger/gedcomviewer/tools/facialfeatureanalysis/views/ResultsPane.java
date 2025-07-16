@@ -39,4 +39,8 @@ abstract class ResultsPane extends JPanel {
 		sideBar.setLayout(new BoxLayout(sideBar, BoxLayout.Y_AXIS));
 		add(sideBar, BorderLayout.EAST);
 	}
+
+	WebViewPanel getVisualization() {
+		return visualization;
+	}
 }

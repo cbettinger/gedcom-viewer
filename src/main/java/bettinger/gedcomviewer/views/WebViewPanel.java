@@ -22,6 +22,8 @@ public class WebViewPanel extends JFXPanel {
 	private static final int ZOOM_MAX = 300;
 	private static final int ZOOM_DELTA = 10;
 
+	private String body;
+
 	private boolean isZoomable;
 	private int zoom;
 
@@ -35,6 +37,8 @@ public class WebViewPanel extends JFXPanel {
 	}
 
 	public WebViewPanel(final boolean isZoomable, final String resourceFolder) {
+		this.body = "";
+
 		this.isZoomable = isZoomable;
 		this.zoom = 100;
 
@@ -83,9 +87,14 @@ public class WebViewPanel extends JFXPanel {
 	public void setBody(final String innerHTML) {
 		Platform.runLater(() -> {
 			if (js != null && innerHTML != null) {
+				body = innerHTML;
 				js.call("setBody", innerHTML);
 			}
 		});
+	}
+
+	public String getBody() {
+		return body;
 	}
 
 	public void scrollTo(final Point target) {
