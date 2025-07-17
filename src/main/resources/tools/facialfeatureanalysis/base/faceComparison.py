@@ -16,9 +16,9 @@ def getAvgLineSimilarity(path, personSimilarities):
 
 
 def getFaceAnalysisResult(targetPerson, maxDepth=None):
-    similarities = FaceAnalyser.analyse(targetPerson, maxDepth)
+    results = FaceAnalyser.analyse(targetPerson, maxDepth)
 
-    if similarities is None:
+    if results is None:
         return {"error": True, "message": "Insufficient number of portraits"}
     paths = targetPerson.getPaths()
 
@@ -28,7 +28,7 @@ def getFaceAnalysisResult(targetPerson, maxDepth=None):
     for c in FACE_CHARACTERISTICS_OF_INTEREST:
         avgPersonSimilarities = {}
 
-        for id, personResults in similarities.items():
+        for id, personResults in results.items():
             maxSimRes = personResults["max"][c]
             avgSim = personResults["avg"][c]
 
