@@ -5,14 +5,14 @@ import numpy as np
 
 
 class FaceLandmarks:
-    def __init__(self, mp_image):
+    def __init__(self, image):
         normalizedLandmarks = None
         try:
-            normalizedLandmarks = np.asarray(LandmarkDetector.execute(mp_image))
+            normalizedLandmarks = np.asarray(LandmarkDetector.execute(image))
         except:
             raise Exception("Failed to detect a face")
 
-        img = mp_image.numpy_view()
+        img = image.mp_image.numpy_view()
 
         imgWidth = img.shape[1]
         imgHeight = img.shape[0]

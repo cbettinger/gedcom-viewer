@@ -1,5 +1,5 @@
 from base.BinaryTreeNode import BinaryTreeNode
-from base.config import DEFAULT_NUM_PORTRAITS, FACIAL_FEATURES
+from base.config import DEFAULT_NUM_PORTRAITS
 from base.Face import Face
 from base.Image import Image
 import json
@@ -41,7 +41,6 @@ class Person(BinaryTreeNode):
                     self.faces.append(
                         Face(
                             Image(filepath, p.get("clip")),
-                            FACIAL_FEATURES,
                         )
                     )
                     considered_filepaths.append(filepath)
