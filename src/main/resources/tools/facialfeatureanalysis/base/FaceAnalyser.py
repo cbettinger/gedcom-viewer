@@ -79,14 +79,14 @@ class FaceAnalyser:
                 avgMaxResult.update({c: Similarity(None, None, None)})
             else:
                 f1, f2 = faces
-                maxResult.update({c: Similarity(s, f1.image, f2.image)})
+                maxResult.update({c: Similarity(f1.image, f2.image, s)})
                 avgResult.update({c: avgSimilarities[c] / len(comparedPairs)})
                 avgMaxResult.update(
                     {
                         c: Similarity(
-                            avgMaxSimilarities[c] / len(targetPerson.faces),
                             f1.image,
                             f2.image,
+                            avgMaxSimilarities[c] / len(targetPerson.faces),
                         )
                     }
                 )

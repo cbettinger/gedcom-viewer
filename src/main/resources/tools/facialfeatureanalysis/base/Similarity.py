@@ -1,8 +1,8 @@
 class Similarity:
-    def __init__(self, value, image1, image2):
-        self.value = value
+    def __init__(self, image1, image2, value):
         self.image1 = image1
         self.image2 = image2
+        self.value = value
 
     def __str__(self):
         return str(self.value)
