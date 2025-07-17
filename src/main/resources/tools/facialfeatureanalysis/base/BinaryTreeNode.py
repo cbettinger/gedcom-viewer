@@ -2,29 +2,17 @@ from base.config import DEFAULT_DEPTH
 
 
 class BinaryTreeNode:
-    def __init__(self, id, father=None, mother=None):
-        self.id = id
+    def __init__(self, value, father=None, mother=None):
+        self.value = value
         self.father = father
         self.mother = mother
 
     def __str__(self):
-        s = "id: {}".format(self.id)
+        s = "value: {}".format(self.value)
         if self.father:
-            s += "\nfather: {}".format(self.father.id)
+            s += "\n  father: {}".format(self.father.value)
         if self.mother:
-            s += "\nmother: {}".format(self.mother.id)
-        return s
-
-    def tree(self, indentation=""):
-        s = "\n{t}id: {v}".format(t=indentation, v=self.id)
-        if self.father:
-            s += "\n{t}father: {v}".format(
-                t=indentation, v=self.father.tree(indentation + "  ")
-            )
-        if self.mother:
-            s += "\n{t}mother: {v}".format(
-                t=indentation, v=self.mother.tree(indentation + "  ")
-            )
+            s += "\n  mother: {}".format(self.mother.value)
         return s
 
     def get_paths(self, include_self=False, max_depth=DEFAULT_DEPTH):
@@ -38,12 +26,12 @@ class BinaryTreeNode:
         if node is None:
             return
 
-        nid = node.id
+        v = node.value
         parents = [node.father, node.mother]
 
         if any(parents) and (max_depth is None or depth < max_depth):
             for parent in parents:
                 for path in BinaryTreeNode._paths(parent, depth + 1, max_depth):
-                    yield [nid] + path
+                    yield [v] + path
         else:
-            yield [nid]
+            yield [v]
