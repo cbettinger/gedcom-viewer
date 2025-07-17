@@ -1,4 +1,4 @@
-from base.config import FACE_CHARACTERISTICS_OF_INTEREST
+from base.config import FACIAL_FEATURES
 from base.FaceAnalyser import FaceAnalyser
 from utils import dictUtils
 
@@ -20,12 +20,12 @@ def getFaceAnalysisResult(targetPerson, maxDepth=None):
 
     if results is None:
         return {"error": True, "message": "Insufficient number of portraits"}
-    paths = targetPerson.getPaths()
+    paths = targetPerson.get_paths()
 
-    similarities = dictUtils.getDicts(FACE_CHARACTERISTICS_OF_INTEREST)
-    lineSimilarities = dictUtils.getDicts(FACE_CHARACTERISTICS_OF_INTEREST)
+    similarities = dictUtils.getDicts(FACIAL_FEATURES)
+    lineSimilarities = dictUtils.getDicts(FACIAL_FEATURES)
 
-    for c in FACE_CHARACTERISTICS_OF_INTEREST:
+    for c in FACIAL_FEATURES:
         avgPersonSimilarities = {}
 
         for id, personResults in results.items():

@@ -1,11 +1,11 @@
-from base.BinaryTreeItem import BinaryTreeItem
-from base.config import MAX_IMAGES_PER_PERSON, FACE_CHARACTERISTICS_OF_INTEREST
+from base.BinaryTreeNode import BinaryTreeNode
+from base.config import DEFAULT_NUM_PORTRAITS, FACIAL_FEATURES
 from base.Face import Face
 from base.Image import Image
 import json
 
 
-class Person(BinaryTreeItem):
+class Person(BinaryTreeNode):
 
     PERSONS = {}
 
@@ -15,9 +15,9 @@ class Person(BinaryTreeItem):
         portraits,
         father=None,
         mother=None,
-        num_portraits=MAX_IMAGES_PER_PERSON,
+        num_portraits=DEFAULT_NUM_PORTRAITS,
     ):
-        super().__init__("ID", id, "Father", "Mother", father, mother)
+        super().__init__(id, father, mother)
         Person.PERSONS.update({str(id): self})
 
         self.faces = []
@@ -36,7 +36,7 @@ class Person(BinaryTreeItem):
                     self.faces.append(
                         Face(
                             Image(filePath, p.get("boxPoints")),
-                            FACE_CHARACTERISTICS_OF_INTEREST,
+                            FACIAL_FEATURES,
                         )
                     )
                     usedFiles.append(filePath)
@@ -49,7 +49,7 @@ class Person(BinaryTreeItem):
         return len(self.faces) > 0
 
     @classmethod
-    def parse(cls, filepath, num_portraits=MAX_IMAGES_PER_PERSON):
+    def parse(cls, filepath, num_portraits=DEFAULT_NUM_PORTRAITS):
         f = open(filepath, encoding="utf-8")
         json_object = json.load(f)
         f.close()

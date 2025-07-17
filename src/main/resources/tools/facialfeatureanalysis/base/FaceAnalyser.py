@@ -1,12 +1,12 @@
 from base.Similarity import Similarity
-from base.config import MAX_COMPARISON_DEPTH, FACE_CHARACTERISTICS_OF_INTEREST
+from base.config import DEFAULT_DEPTH, FACIAL_FEATURES
 from utils import dictUtils
 
 
 class FaceAnalyser:
 
     @classmethod
-    def analyse(cls, targetPerson, maxDepth=MAX_COMPARISON_DEPTH):
+    def analyse(cls, targetPerson, maxDepth=DEFAULT_DEPTH):
         if (
             not targetPerson.hasFaces()
             or not cls._isComparable(targetPerson.parent1)
@@ -42,20 +42,20 @@ class FaceAnalyser:
 
     @classmethod
     def _getSimilaritiesToIndividual(cls, targetPerson, other):
-        maxSimilarities = dictUtils.getZeros(FACE_CHARACTERISTICS_OF_INTEREST)
+        maxSimilarities = dictUtils.getZeros(FACIAL_FEATURES)
         mostSimilarFaces = {}
         maxResult = {}
         comparedPairs = []
 
-        avgSimilarities = dictUtils.getZeros(FACE_CHARACTERISTICS_OF_INTEREST)
+        avgSimilarities = dictUtils.getZeros(FACIAL_FEATURES)
         avgResult = {}
 
-        avgMaxSimilarities = dictUtils.getZeros(FACE_CHARACTERISTICS_OF_INTEREST)
+        avgMaxSimilarities = dictUtils.getZeros(FACIAL_FEATURES)
         avgMaxResult = {}
 
         if cls._isComparable(other):
             for ownFace in targetPerson.faces:
-                maxSims = dictUtils.getZeros(FACE_CHARACTERISTICS_OF_INTEREST)
+                maxSims = dictUtils.getZeros(FACIAL_FEATURES)
                 for otherFace in other.faces:
                     if ownFace is otherFace or {ownFace, otherFace} in comparedPairs:
                         continue
