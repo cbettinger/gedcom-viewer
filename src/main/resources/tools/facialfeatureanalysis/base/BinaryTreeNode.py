@@ -1,6 +1,3 @@
-from base.config import DEFAULT_DEPTH
-
-
 class BinaryTreeNode:
     def __init__(self, value, father=None, mother=None):
         self.value = value
@@ -15,7 +12,7 @@ class BinaryTreeNode:
             s += "\n  mother: {}".format(self.mother.value)
         return s
 
-    def get_paths(self, include_self=False, max_depth=DEFAULT_DEPTH):
+    def get_paths(self, max_depth=None, include_self=False):
         if include_self:
             return list(BinaryTreeNode._paths(self, max_depth=max_depth))
         else:

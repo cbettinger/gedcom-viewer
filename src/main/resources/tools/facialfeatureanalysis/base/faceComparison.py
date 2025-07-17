@@ -2,6 +2,8 @@ from base.config import FACIAL_FEATURES
 from base.FaceAnalyser import FaceAnalyser
 from utils import dictUtils
 
+DEFAULT_DEPTH = 5
+
 
 def getAvgLineSimilarity(path, personSimilarities):
     numEntries = len(path)
@@ -15,12 +17,12 @@ def getAvgLineSimilarity(path, personSimilarities):
     return lineSim / numEntries
 
 
-def getFaceAnalysisResult(targetPerson, maxDepth=None):
+def getFaceAnalysisResult(targetPerson, maxDepth=DEFAULT_DEPTH):
     results = FaceAnalyser.analyse(targetPerson, maxDepth)
 
     if results is None:
         return {"error": True, "message": "Insufficient number of portraits"}
-    paths = targetPerson.get_paths()
+    paths = targetPerson.get_paths(maxDepth)
 
     similarities = dictUtils.getDicts(FACIAL_FEATURES)
     lineSimilarities = dictUtils.getDicts(FACIAL_FEATURES)

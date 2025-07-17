@@ -1,5 +1,4 @@
 from base.BinaryTreeNode import BinaryTreeNode
-from base.config import DEFAULT_NUM_PORTRAITS
 from base.Face import Face
 from base.Image import Image
 import json
@@ -7,15 +6,17 @@ import json
 
 class Person(BinaryTreeNode):
 
+    DEFAULT_NUM_PORTRAITS = 5
+
     PERSONS = {}
 
     def __init__(
         self,
         id,
         portraits,
+        num_portraits,
         father=None,
         mother=None,
-        num_portraits=DEFAULT_NUM_PORTRAITS,
     ):
         super().__init__(id, father, mother)
 
@@ -53,21 +54,21 @@ class Person(BinaryTreeNode):
         return len(self.faces) > 0
 
     @classmethod
-    def parse(cls, filepath, num_portraits=DEFAULT_NUM_PORTRAITS):
+    def from_json(cls, filepath, num_portraits=DEFAULT_NUM_PORTRAITS):
         f = open(filepath, encoding="utf-8")
         json_object = json.load(f)
         f.close()
-        return Person.from_json(json_object, num_portraits)
+        return Person._from_json(json_object, num_portraits)
 
     @classmethod
-    def from_json(cls, json_object, num_portraits):
+    def _from_json(cls, json_object, num_portraits):
         if json_object is None or json_object.get("id") in Person.PERSONS.keys():
             return None
         else:
             return Person(
                 json_object.get("id"),
                 json_object.get("portraits"),
-                Person.from_json(json_object.get("father"), num_portraits),
-                Person.from_json(json_object.get("mother"), num_portraits),
                 num_portraits,
+                Person._from_json(json_object.get("father"), num_portraits),
+                Person._from_json(json_object.get("mother"), num_portraits),
             )

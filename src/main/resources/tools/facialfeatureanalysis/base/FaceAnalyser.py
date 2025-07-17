@@ -1,12 +1,11 @@
 from base.Similarity import Similarity
-from base.config import DEFAULT_DEPTH, FACIAL_FEATURES
+from base.config import FACIAL_FEATURES
 from utils import dictUtils
 
 
 class FaceAnalyser:
-
     @classmethod
-    def analyse(cls, targetPerson, maxDepth=DEFAULT_DEPTH):
+    def analyse(cls, targetPerson, maxDepth):
         if (
             not targetPerson.hasFaces()
             or not cls._isComparable(targetPerson.father)
