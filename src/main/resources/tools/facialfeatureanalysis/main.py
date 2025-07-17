@@ -13,7 +13,14 @@ else:
         try:
             proband = Individual.LIST[sys.argv[4]]
         except:
-            print(json.dumps({"error": True, "message": "Proband {} not found".format(sys.argv[4])}))
+            print(
+                json.dumps(
+                    {
+                        "error": True,
+                        "message": "Proband {} not found".format(sys.argv[4]),
+                    }
+                )
+            )
             sys.exit(1)
 
     result = getFaceAnalysisResult(proband, int(sys.argv[3]))
