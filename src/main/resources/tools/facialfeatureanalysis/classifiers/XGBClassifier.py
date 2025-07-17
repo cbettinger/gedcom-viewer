@@ -1,5 +1,5 @@
 from classifiers.Classifier import Classifier
-from utils import csvUtils
+import pandas as pd
 import xgboost as xgb
 
 
@@ -17,7 +17,7 @@ class XGBClassifier(Classifier):
     def predict(self, input):
         return self.model.predict(input)
 
-    def getMatchProbability(self, input):
+    def get_match_probability(self, input):
         return self.model.predict_proba(input)[:, 1]
 
     def save(self, filebasename):
@@ -27,5 +27,8 @@ class XGBClassifier(Classifier):
         self.model.load_model(filepath)
 
     @classmethod
-    def loadData(cls, filepath):
-        return csvUtils.load_classification_data(filepath)
+    def load_data(cls, filepath):
+        df = pd.read_csv(filepath, sep="\t", header=None)
+        y = df.iloc[:, 0]
+        x = df.iloc[:, 1:]
+        return x.to_numpy(), y.to_numpy()

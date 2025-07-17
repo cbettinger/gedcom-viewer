@@ -20,7 +20,7 @@ class Classifier(ABC):
         pass
 
     @abstractmethod
-    def getMatchProbability(self, input):
+    def get_match_probability(self, input):
         pass
 
     @abstractmethod
@@ -33,5 +33,5 @@ class Classifier(ABC):
 
     @classmethod
     @abstractmethod
-    def loadData(cls, filepath):
+    def load_data(cls, filepath):
         pass

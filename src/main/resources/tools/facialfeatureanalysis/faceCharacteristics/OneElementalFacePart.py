@@ -98,4 +98,4 @@ class OneElementalFacePart(FaceCharacteristic):
             inputData.append(fx[i] - fy[i])
         inputData = np.asarray([inputData])
 
-        return self.classifier.getMatchProbability(inputData)[0]
+        return self.classifier.get_match_probability(inputData)[0]
