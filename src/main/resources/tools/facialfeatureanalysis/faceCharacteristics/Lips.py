@@ -1,4 +1,4 @@
-from classifiers.XGBClassifiers import XGB_CLASSIFIERS
+from classifiers.xgb_models.XGBModels import XGB_MODELS
 from faceCharacteristics.TwoElementalFacePart import TwoElementalFacePart
 
 
@@ -110,6 +110,6 @@ class Lips(TwoElementalFacePart):
             17,
             None,
             None,
-            classifier1=XGB_CLASSIFIERS["LIPS"]["first"],
-            classifier2=XGB_CLASSIFIERS["LIPS"]["second"],
+            classifier1=XGB_MODELS["LIPS"]["first"],
+            classifier2=XGB_MODELS["LIPS"]["second"],
         )

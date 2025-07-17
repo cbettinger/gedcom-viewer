@@ -1,6 +1,6 @@
-import numpy as np
-from classifiers.XGBClassifiers import XGB_CLASSIFIERS
+from classifiers.xgb_models.XGBModels import XGB_MODELS
 from faceCharacteristics.OneElementalFacePart import OneElementalFacePart
+import numpy as np
 
 
 class FaceShape(OneElementalFacePart):
@@ -119,7 +119,7 @@ class FaceShape(OneElementalFacePart):
             10,
             152,
             None,
-            XGB_CLASSIFIERS["FACESHAPE"],
+            XGB_MODELS["FACESHAPE"],
         )
 
     def _generateContourLineIndices(self, originalIndices):

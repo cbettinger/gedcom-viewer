@@ -1,4 +1,4 @@
-from classifiers.XGBClassifiers import XGB_CLASSIFIERS
+from classifiers.xgb_models.XGBModels import XGB_MODELS
 from faceCharacteristics.TwoElementalFacePart import TwoElementalFacePart
 
 
@@ -118,6 +118,6 @@ class EyeShape(TwoElementalFacePart):
             450,
             None,
             None,
-            classifier1=XGB_CLASSIFIERS["EYESHAPE"]["first"],
-            classifier2=XGB_CLASSIFIERS["EYESHAPE"]["second"],
+            classifier1=XGB_MODELS["EYESHAPE"]["first"],
+            classifier2=XGB_MODELS["EYESHAPE"]["second"],
         )

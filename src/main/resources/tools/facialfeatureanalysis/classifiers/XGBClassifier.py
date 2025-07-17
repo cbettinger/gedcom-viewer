@@ -1,6 +1,6 @@
-import xgboost as xgb
 from classifiers.Classifier import Classifier
 from utils import csvUtils
+import xgboost as xgb
 
 
 class XGBClassifier(Classifier):
@@ -27,5 +27,5 @@ class XGBClassifier(Classifier):
         self.model.load_model(filepath)
 
     @classmethod
-    def loadData(cls, src):
-        return csvUtils.load_classification_data(src)
+    def loadData(cls, filepath):
+        return csvUtils.load_classification_data(filepath)

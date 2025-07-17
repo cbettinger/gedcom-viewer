@@ -1,4 +1,4 @@
-from classifiers.XGBClassifiers import XGB_CLASSIFIERS
+from classifiers.xgb_models.XGBModels import XGB_MODELS
 from faceCharacteristics.TwoElementalFacePart import TwoElementalFacePart
 
 
@@ -121,6 +121,6 @@ class Cheeks(TwoElementalFacePart):
             436,
             Cheeks.rightAdditionalFaces,
             Cheeks.leftAdditionalFaces,
-            classifier1=XGB_CLASSIFIERS["CHEEKS"]["first"],
-            classifier2=XGB_CLASSIFIERS["CHEEKS"]["second"],
+            classifier1=XGB_MODELS["CHEEKS"]["first"],
+            classifier2=XGB_MODELS["CHEEKS"]["second"],
         )

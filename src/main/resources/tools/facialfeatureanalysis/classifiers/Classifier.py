@@ -2,13 +2,14 @@ from abc import ABC, abstractmethod
 
 
 class Classifier(ABC):
-    def __init__(self, name, model, filename=None):
+    def __init__(self, name, model, filepath=None):
         super().__init__()
+
         self.name = name
         self.model = model
 
-        if filename:
-            self.load(filename)
+        if filepath:
+            self.load(filepath)
 
     @abstractmethod
     def fit(self, x, y):
@@ -23,14 +24,14 @@ class Classifier(ABC):
         pass
 
     @abstractmethod
-    def save(self, filename):
+    def save(self, filebasename):
         pass
 
     @abstractmethod
-    def load(self, filename):
+    def load(self, filepath):
         pass
 
     @classmethod
     @abstractmethod
-    def loadData(cls, src):
+    def loadData(cls, filepath):
         pass

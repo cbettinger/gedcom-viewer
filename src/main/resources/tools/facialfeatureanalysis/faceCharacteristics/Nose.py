@@ -1,4 +1,4 @@
-from classifiers.XGBClassifiers import XGB_CLASSIFIERS
+from classifiers.xgb_models.XGBModels import XGB_MODELS
 from faceCharacteristics.OneElementalFacePart import OneElementalFacePart
 
 
@@ -113,5 +113,5 @@ class Nose(OneElementalFacePart):
             168,
             2,
             Nose.additionalFaces,
-            XGB_CLASSIFIERS["NOSE"],
+            XGB_MODELS["NOSE"],
         )

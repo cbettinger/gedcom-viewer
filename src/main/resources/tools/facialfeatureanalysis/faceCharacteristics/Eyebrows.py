@@ -1,4 +1,4 @@
-from classifiers.XGBClassifiers import XGB_CLASSIFIERS
+from classifiers.xgb_models.XGBModels import XGB_MODELS
 from faceCharacteristics.TwoElementalFacePart import TwoElementalFacePart
 
 
@@ -75,6 +75,6 @@ class Eyebrows(TwoElementalFacePart):
             295,
             Eyebrows.rightAdditionalFaces,
             Eyebrows.leftAdditionalFaces,
-            classifier1=XGB_CLASSIFIERS["EYEBROWS"]["first"],
-            classifier2=XGB_CLASSIFIERS["EYEBROWS"]["second"],
+            classifier1=XGB_MODELS["EYEBROWS"]["first"],
+            classifier2=XGB_MODELS["EYEBROWS"]["second"],
         )

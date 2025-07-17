@@ -1,4 +1,4 @@
-from classifiers.XGBClassifiers import XGB_CLASSIFIERS
+from classifiers.xgb_models.XGBModels import XGB_MODELS
 from faceCharacteristics.OneElementalFacePart import OneElementalFacePart
 
 
@@ -48,5 +48,5 @@ class Chin(OneElementalFacePart):
             Chin.landmarkIndices,
             18,
             152,
-            classifier=XGB_CLASSIFIERS["CHIN"],
+            classifier=XGB_MODELS["CHIN"],
         )
