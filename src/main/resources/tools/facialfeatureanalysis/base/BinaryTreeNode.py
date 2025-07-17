@@ -8,7 +8,7 @@ class BinaryTreeNode:
         self.parent2 = parent2
 
     def __str__(self):
-        s = "ID: {}".format(self.id)
+        s = "id: {}".format(self.id)
         if self.parent1:
             s += "\nparent1: {}".format(self.parent1.id)
         if self.parent2:
@@ -16,7 +16,7 @@ class BinaryTreeNode:
         return s
 
     def tree(self, indentation=""):
-        s = "\n{t}ID: {v}".format(t=indentation, v=self.id)
+        s = "\n{t}id: {v}".format(t=indentation, v=self.id)
         if self.parent1:
             s += "\n{t}parent1: {v}".format(
                 t=indentation, v=self.parent1.tree(indentation + "  ")
@@ -31,7 +31,7 @@ class BinaryTreeNode:
         if include_self:
             return list(BinaryTreeNode._paths(self, max_depth=max_depth))
         else:
-            return [p[1:] for p in BinaryTreeNode._paths(self, max_depth=max_depth)]
+            return [paths[1:] for paths in BinaryTreeNode._paths(self, max_depth=max_depth)]
 
     @classmethod
     def _paths(cls, node, depth=0, max_depth=None):
