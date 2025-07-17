@@ -26,7 +26,7 @@ class OneElementalFacePart(FaceCharacteristic):
 
         # so skalieren, dass alle Instanzen eines Gesichtsteils aligned sind
         self.realLandmarks = self._getAlignedRealLandmarks(
-            faceLandmarks.realLandmarks[self.landmarkIndices],
+            faceLandmarks.real_landmarks[self.landmarkIndices],
             landmarkIndices.index(allAlignIndex),
             landmarkIndices.index(zAlignIndex),
         )

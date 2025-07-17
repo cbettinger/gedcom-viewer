@@ -1,13 +1,13 @@
 from base.config import FACIAL_FEATURES
 from faceCharacteristics.faceCharacteristics import CHARACTERISTICS
-from landmarkdetection.FaceLandmarks import FaceLandmarks
+from landmarkdetection.Landmarks import Landmarks
 
 
 class Face:
     def __init__(self, image):
         self.image = image
 
-        landmarks = FaceLandmarks(image)
+        landmarks = Landmarks(image)
 
         self.characteristics = {}
         for c in FACIAL_FEATURES:
