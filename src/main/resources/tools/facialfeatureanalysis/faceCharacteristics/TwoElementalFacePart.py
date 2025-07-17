@@ -42,9 +42,9 @@ class TwoElementalFacePart(FaceCharacteristic):
             classifier2,
         )
 
-    def calculateSimilarityTo(self, other):
+    def calculate_similarity(self, other):
         assert type(self) is type(other)
         return (
-            self.firstPart.calculateSimilarityTo(other.firstPart)
-            + self.secondPart.calculateSimilarityTo(other.secondPart)
+            self.firstPart.calculate_similarity(other.firstPart)
+            + self.secondPart.calculate_similarity(other.secondPart)
         ) / 2

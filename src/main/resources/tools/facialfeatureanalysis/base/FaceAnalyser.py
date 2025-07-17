@@ -58,7 +58,7 @@ class FaceAnalyser:
                 for otherFace in other.faces:
                     if ownFace is otherFace or {ownFace, otherFace} in comparedPairs:
                         continue
-                    similarities = ownFace.getSimilaritiesTo(otherFace)
+                    similarities = ownFace.similarities(otherFace)
                     for c in ownFace.characteristics.keys():
                         s = similarities.get(c)
                         avgSimilarities[c] += s

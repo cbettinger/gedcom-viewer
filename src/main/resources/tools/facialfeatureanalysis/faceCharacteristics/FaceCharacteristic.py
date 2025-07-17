@@ -8,5 +8,5 @@ class FaceCharacteristic(ABC):
         self.name = name
 
     @abstractmethod
-    def calculateSimilarityTo(self, other):
+    def calculate_similarity(self, other):
         pass

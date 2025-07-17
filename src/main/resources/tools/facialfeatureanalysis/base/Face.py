@@ -13,14 +13,17 @@ class Face:
         for c in FACIAL_FEATURES:
             self.characteristics.update({c: CHARACTERISTICS.get(c)(landmarks)})
 
-    def getSimilaritiesTo(self, other):
+    def similarities(self, other):
         assert (
             type(self) is type(other)
             and self.characteristics.keys() == other.characteristics.keys()
         )
+
         similarities = {}
+
         for c, o in self.characteristics.items():
             similarities.update(
-                {c: o.calculateSimilarityTo(other.characteristics.get(c))}
+                {c: o.calculate_similarity(other.characteristics.get(c))}
             )
+
         return similarities

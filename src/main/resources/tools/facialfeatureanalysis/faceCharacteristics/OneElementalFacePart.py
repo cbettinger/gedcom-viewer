@@ -87,7 +87,7 @@ class OneElementalFacePart(FaceCharacteristic):
                 doneEdges.extend([[a1, a2], [a2, a1]])
         return flatEdges
 
-    def calculateSimilarityTo(self, other):
+    def calculate_similarity(self, other):
         if self.classifier is None:
             return None
 
