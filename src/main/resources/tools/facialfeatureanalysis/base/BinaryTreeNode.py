@@ -8,7 +8,7 @@ class BinaryTreeNode:
         self.parent2 = parent2
 
     def __str__(self):
-        s = s = "ID: {}".format(self.id)
+        s = "ID: {}".format(self.id)
         if self.parent1:
             s += "\nparent1: {}".format(self.parent1.value)
         if self.parent2:
