@@ -1,6 +1,6 @@
-from base.Similarity import Similarity
+from base import dictUtils
 from base.config import FACIAL_FEATURES
-from utils import dictUtils
+from base.Similarity import Similarity
 
 
 class FaceAnalyser:

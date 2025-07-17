@@ -1,6 +1,6 @@
+from base import dictUtils
 from base.config import FACIAL_FEATURES
 from base.FaceAnalyser import FaceAnalyser
-from utils import dictUtils
 
 DEFAULT_DEPTH = 5
 
