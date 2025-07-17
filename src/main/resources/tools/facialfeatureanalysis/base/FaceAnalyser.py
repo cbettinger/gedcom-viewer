@@ -9,14 +9,14 @@ class FaceAnalyser:
     def analyse(cls, targetPerson, maxDepth=DEFAULT_DEPTH):
         if (
             not targetPerson.hasFaces()
-            or not cls._isComparable(targetPerson.parent1)
-            or not cls._isComparable(targetPerson.parent2)
+            or not cls._isComparable(targetPerson.father)
+            or not cls._isComparable(targetPerson.mother)
         ):
             return None
 
         depth = 0
         similarities = {}
-        individualsToCheck = [targetPerson.parent1, targetPerson.parent2]
+        individualsToCheck = [targetPerson.father, targetPerson.mother]
 
         while depth < maxDepth:
             depth += 1
@@ -27,10 +27,10 @@ class FaceAnalyser:
                 sMax, sAvg = cls._getSimilaritiesToIndividual(targetPerson, p)
                 similarities.update({p.value: {"max": sMax, "avg": sAvg}})
 
-                if p.parent1:
-                    nextIndividualsToCheck.append(p.parent1)
-                if p.parent2:
-                    nextIndividualsToCheck.append(p.parent2)
+                if p.father:
+                    nextIndividualsToCheck.append(p.father)
+                if p.mother:
+                    nextIndividualsToCheck.append(p.mother)
 
             individualsToCheck = nextIndividualsToCheck
 
