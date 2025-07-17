@@ -1,16 +1,25 @@
-from base.config import FACIAL_FEATURES
 from faceCharacteristics.faceCharacteristics import CHARACTERISTICS
 from landmarkdetection.Landmarks import Landmarks
 
 
 class Face:
+    FEATURES = [
+        "CHEEKS",
+        "CHIN",
+        "EYEBROWS",
+        "EYESHAPE",
+        "FACESHAPE",
+        "LIPS",
+        "NOSE",
+    ]
+
     def __init__(self, image):
         self.image = image
 
         landmarks = Landmarks(image)
 
         self.characteristics = {}
-        for c in FACIAL_FEATURES:
+        for c in Face.FEATURES:
             self.characteristics.update({c: CHARACTERISTICS.get(c)(landmarks)})
 
     def similarities(self, other):
