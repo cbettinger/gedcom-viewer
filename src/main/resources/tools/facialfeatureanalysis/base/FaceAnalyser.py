@@ -1,4 +1,4 @@
-from base import dictUtils
+from base import DictUtils
 from base.Face import Face
 from base.Similarity import Similarity
 
@@ -41,20 +41,20 @@ class FaceAnalyser:
 
     @classmethod
     def _getSimilaritiesToIndividual(cls, proband, other):
-        maxSimilarities = dictUtils.zeros(Face.FEATURES)
+        maxSimilarities = DictUtils.zeros(Face.FEATURES)
         mostSimilarFaces = {}
         maxResult = {}
         comparedPairs = []
 
-        avgSimilarities = dictUtils.zeros(Face.FEATURES)
+        avgSimilarities = DictUtils.zeros(Face.FEATURES)
         avgResult = {}
 
-        avgMaxSimilarities = dictUtils.zeros(Face.FEATURES)
+        avgMaxSimilarities = DictUtils.zeros(Face.FEATURES)
         avgMaxResult = {}
 
         if cls._isComparable(other):
             for ownFace in proband.faces:
-                maxSims = dictUtils.zeros(Face.FEATURES)
+                maxSims = DictUtils.zeros(Face.FEATURES)
                 for otherFace in other.faces:
                     if ownFace is otherFace or {ownFace, otherFace} in comparedPairs:
                         continue
