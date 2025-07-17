@@ -47,7 +47,16 @@ public class ConfigurationDialog extends JDialog {
 		info.setColumns(40);
 		add(info, c);
 
-		c.gridy = 4;
+		c.gridy = 1;
+		c.insets = new Insets(0, Constants.DIALOG_PADDING, Constants.DIALOG_PADDING, Constants.DIALOG_PADDING);
+
+		final var gedcomExample = new JTextArea("0 @I1@ INDI\n1 OBJE @O1@\n2 _FACIAL Y\n2 _POSITION 324 40 496 290\n");
+		gedcomExample.setBorder(null);
+		gedcomExample.setEditable(false);
+		gedcomExample.putClientProperty("FlatLaf.styleClass", "monospaced");
+		add(gedcomExample, c);
+
+		c.gridy = 5;
 		c.insets = new Insets(0, Constants.DIALOG_PADDING, 2 * Constants.DIALOG_PADDING, Constants.DIALOG_PADDING);
 
 		final var startButton = new JButton(I18N.get("Start"), IconFontSwing.buildIcon(MaterialIcons.PLAY_ARROW, Constants.DEFAULT_ICON_SIZE));
@@ -61,27 +70,27 @@ public class ConfigurationDialog extends JDialog {
 		c.gridwidth = 1;
 		c.weightx = 0.9;
 
-		c.gridy = 1;
+		c.gridy = 2;
 		c.insets = new Insets(0, Constants.DIALOG_PADDING, Constants.DIALOG_PADDING, Constants.DIALOG_PADDING);
 		add(new JLabel(I18N.get("Proband")), c);
 
-		c.gridy = 2;
+		c.gridy = 3;
 		add(new JLabel(I18N.get("Generations")), c);
 
-		c.gridy = 3;
+		c.gridy = 4;
 		add(new JLabel(I18N.get("PortraitsPerPerson")), c);
 
 		c.gridx = 1;
 		c.weightx = 0.1;
 		c.insets = new Insets(0, 0, Constants.DIALOG_PADDING, Constants.DIALOG_PADDING);
 
-		c.gridy = 1;
+		c.gridy = 2;
 		add(new JLabel(individual.getNameAndNumber()), c);
 
-		c.gridy = 2;
+		c.gridy = 3;
 		add(generationsSpinner, c);
 
-		c.gridy = 3;
+		c.gridy = 4;
 		add(numberOfPortraitsSpinner, c);
 
 		pack();
