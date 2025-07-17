@@ -2,13 +2,12 @@ from base.faceComparison import getFaceAnalysisResult
 from base.Person import Person
 import json
 import sys
-import utils.parseJSON as parseJSON
 
 
 if len(sys.argv) < 4:
     print(json.dumps({"error": True, "message": "Invalid arguments"}))
 else:
-    rootPerson = parseJSON.parseFile(sys.argv[1], int(sys.argv[2]))
+    rootPerson = Person.parse(sys.argv[1], int(sys.argv[2]))
     if len(sys.argv) > 4:
         try:
             rootPerson = Person.PERSONS[sys.argv[4]]

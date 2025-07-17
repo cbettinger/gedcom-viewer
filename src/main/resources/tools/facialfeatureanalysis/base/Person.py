@@ -1,8 +1,8 @@
-import os
-from base.Face import Face
-from base.Image import Image
 from base.BinaryTreeItem import BinaryTreeItem
 from base.config import MAX_IMAGES_PER_PERSON, FACE_CHARACTERISTICS_OF_INTEREST
+from base.Face import Face
+from base.Image import Image
+import json
 
 
 class Person(BinaryTreeItem):
@@ -15,7 +15,7 @@ class Person(BinaryTreeItem):
         portraits,
         father=None,
         mother=None,
-        maxNumPortraits=MAX_IMAGES_PER_PERSON,
+        num_portraits=MAX_IMAGES_PER_PERSON,
     ):
         super().__init__("ID", id, "Father", "Mother", father, mother)
         Person.PERSONS.update({str(id): self})
@@ -24,7 +24,7 @@ class Person(BinaryTreeItem):
         if portraits is not None:
             usedFiles = []
             for p in portraits:
-                if maxNumPortraits is not None and len(self.faces) == maxNumPortraits:
+                if num_portraits is not None and len(self.faces) == num_portraits:
                     print(
                         "For the individual {} there are more portraits than configured to use. The following portraits are used: {}".format(
                             id, usedFiles
@@ -49,14 +49,21 @@ class Person(BinaryTreeItem):
         return len(self.faces) > 0
 
     @classmethod
-    def fromJSON(cls, jsonObject, maxNumPortraits=None):
-        if jsonObject is None or jsonObject.get("id") in Person.PERSONS.keys():
+    def parse(cls, filepath, num_portraits=MAX_IMAGES_PER_PERSON):
+        f = open(filepath, encoding="utf-8")
+        json_object = json.load(f)
+        f.close()
+        return Person.from_json(json_object, num_portraits)
+
+    @classmethod
+    def from_json(cls, json_object, num_portraits):
+        if json_object is None or json_object.get("id") in Person.PERSONS.keys():
             return None
         else:
             return Person(
-                jsonObject.get("id"),
-                jsonObject.get("portraits"),
-                Person.fromJSON(jsonObject.get("father"), maxNumPortraits),
-                Person.fromJSON(jsonObject.get("mother"), maxNumPortraits),
-                maxNumPortraits,
+                json_object.get("id"),
+                json_object.get("portraits"),
+                Person.from_json(json_object.get("father"), num_portraits),
+                Person.from_json(json_object.get("mother"), num_portraits),
+                num_portraits,
             )
