@@ -1,4 +1,4 @@
-def getZeros(keys):
+def zeros(keys):
     d = {}
 
     for k in keys:
@@ -7,7 +7,7 @@ def getZeros(keys):
     return d
 
 
-def getDicts(keys):
+def dicts(keys):
     d = {}
 
     for k in keys:

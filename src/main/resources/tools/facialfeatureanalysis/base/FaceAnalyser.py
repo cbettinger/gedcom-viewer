@@ -41,20 +41,20 @@ class FaceAnalyser:
 
     @classmethod
     def _getSimilaritiesToIndividual(cls, proband, other):
-        maxSimilarities = dictUtils.getZeros(FACIAL_FEATURES)
+        maxSimilarities = dictUtils.zeros(FACIAL_FEATURES)
         mostSimilarFaces = {}
         maxResult = {}
         comparedPairs = []
 
-        avgSimilarities = dictUtils.getZeros(FACIAL_FEATURES)
+        avgSimilarities = dictUtils.zeros(FACIAL_FEATURES)
         avgResult = {}
 
-        avgMaxSimilarities = dictUtils.getZeros(FACIAL_FEATURES)
+        avgMaxSimilarities = dictUtils.zeros(FACIAL_FEATURES)
         avgMaxResult = {}
 
         if cls._isComparable(other):
             for ownFace in proband.faces:
-                maxSims = dictUtils.getZeros(FACIAL_FEATURES)
+                maxSims = dictUtils.zeros(FACIAL_FEATURES)
                 for otherFace in other.faces:
                     if ownFace is otherFace or {ownFace, otherFace} in comparedPairs:
                         continue

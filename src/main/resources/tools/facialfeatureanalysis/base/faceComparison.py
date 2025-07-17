@@ -12,8 +12,8 @@ def getFaceAnalysisResult(proband, maxDepth=DEFAULT_DEPTH):
         return {"error": True, "message": "Insufficient number of portraits"}
     paths = proband.get_paths(maxDepth)
 
-    similarities = dictUtils.getDicts(FACIAL_FEATURES)
-    lineSimilarities = dictUtils.getDicts(FACIAL_FEATURES)
+    similarities = dictUtils.dicts(FACIAL_FEATURES)
+    lineSimilarities = dictUtils.dicts(FACIAL_FEATURES)
 
     for c in FACIAL_FEATURES:
         avgPersonSimilarities = {}
