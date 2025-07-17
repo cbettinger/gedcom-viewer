@@ -1,5 +1,5 @@
 from base.faceComparison import getFaceAnalysisResult
-from base.Person import Person
+from base.Individual import Individual
 import json
 import sys
 
@@ -7,10 +7,10 @@ import sys
 if len(sys.argv) < 4:
     print(json.dumps({"error": True, "message": "Invalid arguments"}))
 else:
-    proband = Person.from_json(sys.argv[1], int(sys.argv[2]))
+    proband = Individual.from_json(sys.argv[1], int(sys.argv[2]))
     if len(sys.argv) > 4:
         try:
-            proband = Person.PERSONS[sys.argv[4]]
+            proband = Individual.LIST[sys.argv[4]]
         except:
             sys.exit("Proband {} not found".format(sys.argv[4]))
 

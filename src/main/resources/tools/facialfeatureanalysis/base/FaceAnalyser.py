@@ -5,17 +5,17 @@ from base.Similarity import Similarity
 
 class FaceAnalyser:
     @classmethod
-    def analyse(cls, targetPerson, maxDepth):
+    def analyse(cls, proband, maxDepth):
         if (
-            not targetPerson.hasFaces()
-            or not cls._isComparable(targetPerson.father)
-            or not cls._isComparable(targetPerson.mother)
+            not proband.hasFaces()
+            or not cls._isComparable(proband.father)
+            or not cls._isComparable(proband.mother)
         ):
             return None
 
         depth = 0
         similarities = {}
-        individualsToCheck = [targetPerson.father, targetPerson.mother]
+        individualsToCheck = [proband.father, proband.mother]
 
         while depth < maxDepth:
             depth += 1
@@ -23,7 +23,7 @@ class FaceAnalyser:
 
             for i in range(len(individualsToCheck)):
                 p = individualsToCheck[i]
-                sMax, sAvg = cls._getSimilaritiesToIndividual(targetPerson, p)
+                sMax, sAvg = cls._getSimilaritiesToIndividual(proband, p)
                 similarities.update({p.value: {"max": sMax, "avg": sAvg}})
 
                 if p.father:
@@ -40,7 +40,7 @@ class FaceAnalyser:
         return other is not None and other.hasFaces()
 
     @classmethod
-    def _getSimilaritiesToIndividual(cls, targetPerson, other):
+    def _getSimilaritiesToIndividual(cls, proband, other):
         maxSimilarities = dictUtils.getZeros(FACIAL_FEATURES)
         mostSimilarFaces = {}
         maxResult = {}
@@ -53,7 +53,7 @@ class FaceAnalyser:
         avgMaxResult = {}
 
         if cls._isComparable(other):
-            for ownFace in targetPerson.faces:
+            for ownFace in proband.faces:
                 maxSims = dictUtils.getZeros(FACIAL_FEATURES)
                 for otherFace in other.faces:
                     if ownFace is otherFace or {ownFace, otherFace} in comparedPairs:
@@ -86,7 +86,7 @@ class FaceAnalyser:
                         c: Similarity(
                             f1.image,
                             f2.image,
-                            avgMaxSimilarities[c] / len(targetPerson.faces),
+                            avgMaxSimilarities[c] / len(proband.faces),
                         )
                     }
                 )

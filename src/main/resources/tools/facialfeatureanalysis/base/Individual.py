@@ -4,11 +4,11 @@ from base.Image import Image
 import json
 
 
-class Person(BinaryTreeNode):
+class Individual(BinaryTreeNode):
 
     DEFAULT_NUM_PORTRAITS = 5
 
-    PERSONS = {}
+    LIST = {}
 
     def __init__(
         self,
@@ -20,7 +20,7 @@ class Person(BinaryTreeNode):
     ):
         super().__init__(id, father, mother)
 
-        Person.PERSONS.update({str(id): self})
+        Individual.LIST.update({str(id): self})
 
         self.faces = []
 
@@ -58,17 +58,17 @@ class Person(BinaryTreeNode):
         f = open(filepath, encoding="utf-8")
         json_object = json.load(f)
         f.close()
-        return Person._from_json(json_object, num_portraits)
+        return Individual._from_json(json_object, num_portraits)
 
     @classmethod
     def _from_json(cls, json_object, num_portraits):
-        if json_object is None or json_object.get("id") in Person.PERSONS.keys():
+        if json_object is None or json_object.get("id") in Individual.LIST.keys():
             return None
         else:
-            return Person(
+            return Individual(
                 json_object.get("id"),
                 json_object.get("portraits"),
                 num_portraits,
-                Person._from_json(json_object.get("father"), num_portraits),
-                Person._from_json(json_object.get("mother"), num_portraits),
+                Individual._from_json(json_object.get("father"), num_portraits),
+                Individual._from_json(json_object.get("mother"), num_portraits),
             )
