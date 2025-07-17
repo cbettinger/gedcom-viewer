@@ -5,7 +5,7 @@ from landmarkdetection.FaceLandmarks import FaceLandmarks
 class Face:
     def __init__(self, image, characteristicsToUse):
         self.image = image
-        landmarks = FaceLandmarks(image.mpImage)
+        landmarks = FaceLandmarks(image.mp_image)
         self.characteristics = {}
         for c in characteristicsToUse:
             self.characteristics.update({c: CHARACTERISTICS.get(c)(landmarks)})

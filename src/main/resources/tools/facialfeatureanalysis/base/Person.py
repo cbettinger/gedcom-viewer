@@ -18,31 +18,36 @@ class Person(BinaryTreeNode):
         num_portraits=DEFAULT_NUM_PORTRAITS,
     ):
         super().__init__(id, father, mother)
+
         Person.PERSONS.update({str(id): self})
 
         self.faces = []
+
         if portraits is not None:
-            usedFiles = []
+            considered_filepaths = []
+
             for p in portraits:
                 if num_portraits is not None and len(self.faces) == num_portraits:
                     print(
                         "For the individual {} there are more portraits than configured to use. The following portraits are used: {}".format(
-                            id, usedFiles
+                            id, considered_filepaths
                         )
                     )
                     break
-                filePath = p.get("filePath")
+
+                filepath = p.get("filePath")
+
                 try:
                     self.faces.append(
                         Face(
-                            Image(filePath, p.get("boxPoints")),
+                            Image(filepath, p.get("boxPoints")),
                             FACIAL_FEATURES,
                         )
                     )
-                    usedFiles.append(filePath)
+                    considered_filepaths.append(filepath)
                 except Exception as e:
                     print(
-                        "Unable to load portrait file {}: {}".format(filePath, e),
+                        "Unable to load portrait {}: {}".format(filepath, e),
                     )
 
     def hasFaces(self):

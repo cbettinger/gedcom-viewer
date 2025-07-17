@@ -19,7 +19,9 @@ class BinaryTreeNode:
         if include_self:
             return list(BinaryTreeNode._paths(self, max_depth=max_depth))
         else:
-            return [paths[1:] for paths in BinaryTreeNode._paths(self, max_depth=max_depth)]
+            return [
+                paths[1:] for paths in BinaryTreeNode._paths(self, max_depth=max_depth)
+            ]
 
     @classmethod
     def _paths(cls, node, depth=0, max_depth=None):

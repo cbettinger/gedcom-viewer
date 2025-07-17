@@ -12,7 +12,7 @@ else:
         try:
             rootPerson = Person.PERSONS[sys.argv[4]]
         except:
-            sys.exit("No individual with ID {} found".format(sys.argv[4]))
+            sys.exit("No individual {} found".format(sys.argv[4]))
 
     result = getFaceAnalysisResult(rootPerson, int(sys.argv[3]))
 

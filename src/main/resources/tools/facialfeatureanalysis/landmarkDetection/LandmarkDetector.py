@@ -15,5 +15,5 @@ class LandmarkDetector:
     )
 
     @classmethod
-    def execute(cls, mpImage):
-        return cls.DETECTOR.detect(mpImage).face_landmarks[0]
+    def execute(cls, mp_image):
+        return cls.DETECTOR.detect(mp_image).face_landmarks[0]
