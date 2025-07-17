@@ -9,5 +9,5 @@ def readImage(filePath, boxPoints=None):
         minCol, minRow = boxPoints[0]
         maxCol, maxRow = boxPoints[1]
         img = img[minRow:maxRow, minCol:maxCol]
-    mpImg = mp.Image(image_format=mp.ImageFormat.SRGB, data=np.array(img))
-    return mpImg
+    mpImage = mp.Image(image_format=mp.ImageFormat.SRGB, data=np.array(img))
+    return mpImage

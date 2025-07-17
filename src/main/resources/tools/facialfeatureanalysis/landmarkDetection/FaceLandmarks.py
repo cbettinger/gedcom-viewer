@@ -1,20 +1,18 @@
-import math
-
-import numpy as np
-from landmarkDetection.LandmarkDetector import LandmarkDetector
+from landmarkdetection.LandmarkDetector import LandmarkDetector
 from utils.mathUtils import getRotationMatrixToAlignVectors
+import math
+import numpy as np
 
 
 class FaceLandmarks:
-
-    def __init__(self, mpImg):
+    def __init__(self, mpImage):
         normalizedLandmarks = None
         try:
-            normalizedLandmarks = np.asarray(LandmarkDetector.detectLandmarks(mpImg))
+            normalizedLandmarks = np.asarray(LandmarkDetector.execute(mpImage))
         except:
             raise Exception("Failed to detect a face")
 
-        img = mpImg.numpy_view()
+        img = mpImage.numpy_view()
 
         imgWidth = img.shape[1]
         imgHeight = img.shape[0]
