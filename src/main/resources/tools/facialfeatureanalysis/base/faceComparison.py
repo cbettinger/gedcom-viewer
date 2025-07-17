@@ -40,8 +40,8 @@ def getFaceAnalysisResult(targetPerson, maxDepth=None):
                 individualResult = {
                     "maxSimilarity": str(maxSimRes.value),
                     "avgSimilarity": str(avgSim),
-                    "maxSimilarProbandPortraitFilePath": maxSimRes.image1.fileName,
-                    "maxSimilarAncestorPortraitFilePath": maxSimRes.image2.fileName,
+                    "maxSimilarProbandPortraitFilePath": maxSimRes.image1.filepath,
+                    "maxSimilarAncestorPortraitFilePath": maxSimRes.image2.filepath,
                 }
                 similarities[c].update({id: individualResult})
 
