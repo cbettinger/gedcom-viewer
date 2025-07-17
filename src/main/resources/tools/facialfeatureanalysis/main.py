@@ -7,14 +7,14 @@ import sys
 if len(sys.argv) < 4:
     print(json.dumps({"error": True, "message": "Invalid arguments"}))
 else:
-    rootPerson = Person.from_json(sys.argv[1], int(sys.argv[2]))
+    proband = Person.from_json(sys.argv[1], int(sys.argv[2]))
     if len(sys.argv) > 4:
         try:
-            rootPerson = Person.PERSONS[sys.argv[4]]
+            proband = Person.PERSONS[sys.argv[4]]
         except:
-            sys.exit("No individual {} found".format(sys.argv[4]))
+            sys.exit("Proband {} not found".format(sys.argv[4]))
 
-    result = getFaceAnalysisResult(rootPerson, int(sys.argv[3]))
+    result = getFaceAnalysisResult(proband, int(sys.argv[3]))
 
     if "error" in result:
         print(json.dumps(result))
