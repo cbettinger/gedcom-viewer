@@ -50,7 +50,7 @@ public class ConfigurationDialog extends JDialog {
 		c.gridy = 4;
 		c.insets = new Insets(0, Constants.DIALOG_PADDING, 2 * Constants.DIALOG_PADDING, Constants.DIALOG_PADDING);
 
-		final var startButton = new JButton(I18N.get("StartFacialFeatureAnalysis"), IconFontSwing.buildIcon(MaterialIcons.PLAY_ARROW, Constants.DEFAULT_ICON_SIZE));
+		final var startButton = new JButton(I18N.get("Start"), IconFontSwing.buildIcon(MaterialIcons.PLAY_ARROW, Constants.DEFAULT_ICON_SIZE));
 		startButton.addActionListener(_ -> {
 			new Analyzer(individual, (int) generationsSpinner.getValue(), (int) numberOfPortraitsSpinner.getValue()).execute();
 			dispose();
