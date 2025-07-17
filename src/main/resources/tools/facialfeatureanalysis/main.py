@@ -7,7 +7,7 @@ import sys
 if len(sys.argv) < 4:
     print(json.dumps({"error": True, "message": "Invalid arguments"}))
 else:
-    proband = Individual.from_json(sys.argv[1], int(sys.argv[2]))
+    proband = Individual.parse(sys.argv[1], int(sys.argv[2]))
     if len(sys.argv) > 4:
         try:
             proband = Individual.LIST[sys.argv[4]]

@@ -54,14 +54,14 @@ class Individual(BinaryTreeNode):
         return len(self.faces) > 0
 
     @classmethod
-    def from_json(cls, filepath, num_portraits=DEFAULT_NUM_PORTRAITS):
+    def parse(cls, filepath, num_portraits=DEFAULT_NUM_PORTRAITS):
         f = open(filepath, encoding="utf-8")
         json_object = json.load(f)
         f.close()
-        return Individual._from_json(json_object, num_portraits)
+        return Individual._parse(json_object, num_portraits)
 
     @classmethod
-    def _from_json(cls, json_object, num_portraits):
+    def _parse(cls, json_object, num_portraits):
         if json_object is None or json_object.get("id") in Individual.LIST.keys():
             return None
         else:
@@ -69,6 +69,6 @@ class Individual(BinaryTreeNode):
                 json_object.get("id"),
                 json_object.get("portraits"),
                 num_portraits,
-                Individual._from_json(json_object.get("father"), num_portraits),
-                Individual._from_json(json_object.get("mother"), num_portraits),
+                Individual._parse(json_object.get("father"), num_portraits),
+                Individual._parse(json_object.get("mother"), num_portraits),
             )
