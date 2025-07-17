@@ -6,10 +6,10 @@ import numpy as np
 class Image:
     def __init__(self, filepath, clip):
         self.filepath = filepath
-        self.mp_image = Image._read_image(filepath, clip)
+        self.mp_image = Image._read(filepath, clip)
 
     @classmethod
-    def _read_image(cls, filepath, clip=None):
+    def _read(cls, filepath, clip=None):
         image_data = np.asarray(PILImage.open(filepath))
 
         if clip:
