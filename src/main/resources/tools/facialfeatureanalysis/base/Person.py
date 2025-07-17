@@ -40,7 +40,7 @@ class Person(BinaryTreeNode):
                 try:
                     self.faces.append(
                         Face(
-                            Image(filepath, p.get("boxPoints")),
+                            Image(filepath, p.get("clip")),
                             FACIAL_FEATURES,
                         )
                     )

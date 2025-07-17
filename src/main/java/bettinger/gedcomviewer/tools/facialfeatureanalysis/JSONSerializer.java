@@ -43,15 +43,15 @@ abstract class JSONSerializer {
 		@JsonProperty
 		private final String filePath;
 		@JsonProperty
-		private final int[][] boxPoints;
+		private final int[][] clip;
 
 		Portrait(final String filePath, final Rectangle clip) {
 			this.filePath = filePath;
-			this.boxPoints = getBoxPoints(clip);
+			this.clip = getClip(clip);
 		}
 
 		@SuppressWarnings("java:S1168")
-		private int[][] getBoxPoints(final Rectangle clip) {
+		private int[][] getClip(final Rectangle clip) {
 			if (clip == null) {
 				return null;
 			}
