@@ -17,7 +17,7 @@ class XGBClassifier(Classifier):
     def predict(self, input):
         return self.model.predict(input)
 
-    def get_match_probability(self, input):
+    def match_probability(self, input):
         return self.model.predict_proba(input)[:, 1]
 
     def save(self, filebasename):

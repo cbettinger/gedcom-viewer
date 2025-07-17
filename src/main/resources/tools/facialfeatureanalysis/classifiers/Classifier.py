@@ -20,7 +20,7 @@ class Classifier(ABC):
         pass
 
     @abstractmethod
-    def get_match_probability(self, input):
+    def match_probability(self, input):
         pass
 
     @abstractmethod
