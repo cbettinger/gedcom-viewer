@@ -1,6 +1,6 @@
-import numpy as np
+from faceCharacteristics import meshTriangles
 from faceCharacteristics.FaceCharacteristic import FaceCharacteristic
-from utils import meshTriangles
+import numpy as np
 
 
 class OneElementalFacePart(FaceCharacteristic):
