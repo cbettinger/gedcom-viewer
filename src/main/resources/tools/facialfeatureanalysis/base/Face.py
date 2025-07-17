@@ -3,9 +3,8 @@ from faceCharacteristics.faceCharacteristics import CHARACTERISTICS
 
 
 class Face:
-
     def __init__(self, image, characteristicsToUse):
-        self.srcImg = image
+        self.image = image
         landmarks = FaceLandmarks(image.mpImg)
         self.characteristics = {}
         for c in characteristicsToUse:

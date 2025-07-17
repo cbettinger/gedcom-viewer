@@ -1,4 +1,4 @@
-from base.SimilarityResult import SimilarityResult
+from base.Similarity import Similarity
 from base.config import MAX_COMPARISON_DEPTH, FACE_CHARACTERISTICS_OF_INTEREST
 from utils import dictUtils
 
@@ -75,19 +75,19 @@ class FaceAnalyser:
         for c, s in maxSimilarities.items():
             faces = mostSimilarFaces.get(c)
             if faces is None:
-                maxResult.update({c: SimilarityResult(None, None, None)})
+                maxResult.update({c: Similarity(None, None, None)})
                 avgResult.update({c: None})
-                avgMaxResult.update({c: SimilarityResult(None, None, None)})
+                avgMaxResult.update({c: Similarity(None, None, None)})
             else:
                 f1, f2 = faces
-                maxResult.update({c: SimilarityResult(s, f1.srcImg, f2.srcImg)})
+                maxResult.update({c: Similarity(s, f1.image, f2.image)})
                 avgResult.update({c: avgSimilarities[c] / len(comparedPairs)})
                 avgMaxResult.update(
                     {
-                        c: SimilarityResult(
+                        c: Similarity(
                             avgMaxSimilarities[c] / len(targetPerson.faces),
-                            f1.srcImg,
-                            f2.srcImg,
+                            f1.image,
+                            f2.image,
                         )
                     }
                 )

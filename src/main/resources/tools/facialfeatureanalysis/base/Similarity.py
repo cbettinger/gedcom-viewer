@@ -1,8 +1,8 @@
-class SimilarityResult:
-    def __init__(self, value, srcImg1, srcImg2):
+class Similarity:
+    def __init__(self, value, image1, image2):
         self.value = value
-        self.img1 = srcImg1
-        self.img2 = srcImg2
+        self.image1 = image1
+        self.image2 = image2
 
     def __str__(self):
         return str(self.value)
