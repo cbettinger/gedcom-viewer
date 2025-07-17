@@ -63,7 +63,7 @@ public class Analyzer extends BackgroundWorker {
 			throw new AnalysisException("Failed to write input file");
 		}
 
-		final String scriptPath = FileUtils.getPath(System.getProperty("user.dir"), "src", "main", "resources", "tools", "facialfeatureanalysis", "facialFeatureAnalysis.py");
+		final String scriptPath = FileUtils.getPath(System.getProperty("user.dir"), "src", "main", "resources", "tools", "facialfeatureanalysis", "main.py");
 
 		List<String> output = null;
 		try {
@@ -82,7 +82,7 @@ public class Analyzer extends BackgroundWorker {
 		}
 
 		if (jsonOutput.get("success") != null) {
-			final var outputFilePath = Paths.get(jsonOutput.get("file").asText());
+			final var outputFilePath = Paths.get(jsonOutput.get("filepath").asText());
 
 			JsonNode jsonResults = null;
 			try {
