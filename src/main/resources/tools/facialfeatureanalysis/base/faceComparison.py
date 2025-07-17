@@ -10,7 +10,7 @@ def getFaceAnalysisResult(proband, maxDepth=DEFAULT_DEPTH):
 
     if results is None:
         return {"error": True, "message": "Insufficient number of portraits"}
-    paths = proband.get_paths(maxDepth)
+    paths = proband.paths(maxDepth)
 
     similarities = dictUtils.dicts(FACIAL_FEATURES)
     lineSimilarities = dictUtils.dicts(FACIAL_FEATURES)

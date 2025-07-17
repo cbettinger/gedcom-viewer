@@ -12,7 +12,7 @@ class BinaryTreeNode:
             s += "\n  mother: {}".format(self.mother.value)
         return s
 
-    def get_paths(self, max_depth=None, include_self=False):
+    def paths(self, max_depth=None, include_self=False):
         if include_self:
             return list(BinaryTreeNode._paths(self, max_depth=max_depth))
         else:
