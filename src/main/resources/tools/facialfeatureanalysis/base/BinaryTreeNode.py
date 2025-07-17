@@ -10,9 +10,9 @@ class BinaryTreeNode:
     def __str__(self):
         s = "ID: {}".format(self.id)
         if self.parent1:
-            s += "\nparent1: {}".format(self.parent1.value)
+            s += "\nparent1: {}".format(self.parent1.id)
         if self.parent2:
-            s += "\nparent2: {}".format(self.parent2.value)
+            s += "\nparent2: {}".format(self.parent2.id)
         return s
 
     def tree(self, indentation=""):
@@ -29,21 +29,21 @@ class BinaryTreeNode:
 
     def get_paths(self, include_self=False, max_depth=DEFAULT_DEPTH):
         if include_self:
-            return list(BinaryTreeNode._paths(self, max_depth))
+            return list(BinaryTreeNode._paths(self, max_depth=max_depth))
         else:
-            return [p[1:] for p in BinaryTreeNode._paths(self, max_depth)]
+            return [p[1:] for p in BinaryTreeNode._paths(self, max_depth=max_depth)]
 
     @classmethod
     def _paths(cls, node, depth=0, max_depth=None):
         if node is None:
             return
 
-        v = node.value
+        nid = node.id
         parents = [node.parent1, node.parent2]
 
         if any(parents) and (max_depth is None or depth < max_depth):
-            for p in parents:
-                for path in BinaryTreeNode._paths(p, depth + 1, max_depth):
-                    yield [v] + path
+            for parent in parents:
+                for path in BinaryTreeNode._paths(parent, depth + 1, max_depth):
+                    yield [nid] + path
         else:
-            yield [v]
+            yield [nid]
