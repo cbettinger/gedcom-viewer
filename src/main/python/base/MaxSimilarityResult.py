@@ -1,4 +1,4 @@
-class SimilarityResult:
+class MaxSimilarityResult:
     def __init__(self, value, srcImg1, srcImg2):
         self.value = value
         self.img1 = srcImg1

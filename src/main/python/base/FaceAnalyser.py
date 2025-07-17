@@ -1,4 +1,4 @@
-from base.SimilarityResult import SimilarityResult
+from base.MaxSimilarityResult import MaxSimilarityResult
 from base.config import MAX_COMPARISON_DEPTH, FACE_CHARACTERISTICS_OF_INTEREST
 from utils import dictUtils
 
@@ -45,9 +45,6 @@ class FaceAnalyser:
         avgSimilarities = dictUtils.getZeros(FACE_CHARACTERISTICS_OF_INTEREST)
         avgResult = {}
 
-        avgMaxSimilarities = dictUtils.getZeros(FACE_CHARACTERISTICS_OF_INTEREST)
-        avgMaxResult = {}
-
         if cls._isComparable(other):
             for ownFace in targetPerson.faces:
                 maxSims = dictUtils.getZeros(FACE_CHARACTERISTICS_OF_INTEREST)
@@ -64,19 +61,15 @@ class FaceAnalyser:
                         if s > maxSims[c]:
                             maxSims[c] = s
                     comparedPairs.append({ownFace, otherFace})
-                for c in avgMaxSimilarities.keys():
-                    avgMaxSimilarities[c] += maxSims[c]
 
         for c, s in maxSimilarities.items():
             faces = mostSimilarFaces.get(c)
             if faces is None:
-                maxResult.update({c: SimilarityResult(None, None, None)})
+                maxResult.update({c: MaxSimilarityResult(None, None, None)})
                 avgResult.update({c: None})
-                avgMaxResult.update({c: SimilarityResult(None, None, None)})
             else:
                 f1, f2 = faces
-                maxResult.update({c: SimilarityResult(s, f1.srcImg, f2.srcImg)})
+                maxResult.update({c: MaxSimilarityResult(s, f1.srcImg, f2.srcImg)})
                 avgResult.update({c: avgSimilarities[c]/len(comparedPairs)})
-                avgMaxResult.update({c: SimilarityResult(avgMaxSimilarities[c]/len(targetPerson.faces), f1.srcImg, f2.srcImg)})
-            
+
         return maxResult, avgResult
