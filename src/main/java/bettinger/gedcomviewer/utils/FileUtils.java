@@ -2,7 +2,7 @@ package bettinger.gedcomviewer.utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -60,12 +60,17 @@ public interface FileUtils {
 		return getPath(getFile(filePath).getParentFile());
 	}
 
-	public static String getPath(final String firstSegment, final String... moreSegments) {
-		return getPath(Paths.get(firstSegment, moreSegments).toFile());
+	public static String getPathRelativeToExecutable(final String... segments) throws URISyntaxException {
+		final var executable = new File(FileUtils.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+		if (executable.isDirectory()) {
+			return getPath(executable.getPath(), segments);
+		} else {
+			return getPath(getDirectoryPath(executable), segments);
+		}
 	}
 
-	public static String getPath(final URL url) {
-		return getPath(getFile(url.getPath()));
+	public static String getPath(final String firstSegment, final String... moreSegments) {
+		return getPath(Paths.get(firstSegment, moreSegments).toFile());
 	}
 
 	public static String getPath(final File file) {
@@ -103,7 +108,7 @@ public interface FileUtils {
 			tempFile.toFile().deleteOnExit();
 			return tempFile;
 		} catch (final IOException e) {
-			Logger.getLogger(JSONUtils.class.getName()).log(Level.SEVERE, "Failed to create temporary file", e);
+			Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, "Failed to create temporary file", e);
 			return null;
 		}
 	}

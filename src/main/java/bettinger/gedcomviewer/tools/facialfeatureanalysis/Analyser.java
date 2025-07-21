@@ -2,6 +2,7 @@ package bettinger.gedcomviewer.tools.facialfeatureanalysis;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -62,12 +63,12 @@ public class Analyser extends BackgroundWorker {
 			throw new AnalysisException("Failed to write input file");
 		}
 
-		final String scriptPath = FileUtils.getPath(getClass().getClassLoader().getResource("tools/facialfeatureanalysis/main.py"));
-
 		String output = null;
 		try {
+			final String scriptPath = FileUtils.getPathRelativeToExecutable("tools", "facialfeatureanalysis", "main.py");
+			System.out.println(scriptPath);	// TODO: test on macOS
 			output = PythonUtils.executeScript(scriptPath, inputFile.getAbsolutePath(), Integer.toString(numberOfPortraits), Integer.toString(depth));
-		} catch (final IOException e) {
+		} catch (final IOException | URISyntaxException e) {
 			throw new AnalysisException(e.getMessage(), e);
 		}
 
