@@ -1,9 +1,9 @@
 from face import meshTriangles
-from face.FaceCharacteristic import FaceCharacteristic
+from face.FacePart import FacePart
 import numpy as np
 
 
-class OneElementalFacePart(FaceCharacteristic):
+class OneElementalFacePart(FacePart):
 
     Z_LOW = -1
 

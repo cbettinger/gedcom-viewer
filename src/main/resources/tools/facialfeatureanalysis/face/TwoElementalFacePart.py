@@ -1,8 +1,8 @@
-from face.FaceCharacteristic import FaceCharacteristic
+from face.FacePart import FacePart
 from face.OneElementalFacePart import OneElementalFacePart
 
 
-class TwoElementalFacePart(FaceCharacteristic):
+class TwoElementalFacePart(FacePart):
 
     def __init__(
         self,

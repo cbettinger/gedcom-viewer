@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class FaceCharacteristic(ABC):
+class FacePart(ABC):
 
     def __init__(self, name):
         super().__init__()
