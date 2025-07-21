@@ -21,12 +21,12 @@ import bettinger.gedcomviewer.utils.PythonUtils;
 import bettinger.gedcomviewer.views.MainFrame;
 import bettinger.gedcomviewer.views.MainFrame.BackgroundWorker;
 
-public class Analyzer extends BackgroundWorker {
+public class Analyser extends BackgroundWorker {
 	private final Individual proband;
 	private final int depth;
 	private final int numberOfPortraits;
 
-	public Analyzer(final Individual proband, final int depth, final int numberOfPortraits) {
+	public Analyser(final Individual proband, final int depth, final int numberOfPortraits) {
 		MainFrame.getInstance().super(I18N.get("FacialFeatureAnalysis"));
 
 		this.proband = proband;

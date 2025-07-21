@@ -14,7 +14,7 @@ import javax.swing.SpinnerNumberModel;
 import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Individual;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.Analyzer;
+import bettinger.gedcomviewer.tools.facialfeatureanalysis.Analyser;
 import bettinger.gedcomviewer.views.MainFrame;
 import bettinger.gedcomviewer.views.icons.MaterialIcons;
 import jiconfont.swing.IconFontSwing;
@@ -61,7 +61,7 @@ public class ConfigurationDialog extends JDialog {
 
 		final var startButton = new JButton(I18N.get("Start"), IconFontSwing.buildIcon(MaterialIcons.PLAY_ARROW, Constants.DEFAULT_ICON_SIZE));
 		startButton.addActionListener(_ -> {
-			new Analyzer(individual, (int) generationsSpinner.getValue(), (int) numberOfPortraitsSpinner.getValue()).execute();
+			new Analyser(individual, (int) generationsSpinner.getValue(), (int) numberOfPortraitsSpinner.getValue()).execute();
 			dispose();
 			setVisible(false);
 		});
