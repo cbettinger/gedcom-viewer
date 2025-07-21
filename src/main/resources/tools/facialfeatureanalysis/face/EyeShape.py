@@ -1,5 +1,5 @@
 from classifier.xgb_models.XGBModels import XGB_MODELS
-from faceCharacteristics.TwoElementalFacePart import TwoElementalFacePart
+from face.TwoElementalFacePart import TwoElementalFacePart
 
 
 class EyeShape(TwoElementalFacePart):

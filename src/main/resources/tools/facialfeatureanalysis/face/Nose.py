@@ -1,5 +1,5 @@
 from classifier.xgb_models.XGBModels import XGB_MODELS
-from faceCharacteristics.OneElementalFacePart import OneElementalFacePart
+from face.OneElementalFacePart import OneElementalFacePart
 
 
 class Nose(OneElementalFacePart):
