@@ -8,43 +8,44 @@ class TwoElementalCharacteristic(Characteristic):
         self,
         name,
         landmarks,
-        name_right,
-        name_left,
-        landmark_indices_right,
-        landmark_indices_left,
-        all_align_index_right,
-        all_align_index_left,
-        z_align_index_right,
-        z_align_index_left,
-        additional_faces_right=None,
-        additional_faces_left=None,
-        classifier_right=None,
-        classifier_left=None,
+        name_1,
+        name_2,
+        landmark_indices_1,
+        landmark_indices_2,
+        all_align_index_1,
+        all_align_index_2,
+        z_align_index_1,
+        z_align_index_2,
+        additional_faces_1=None,
+        additional_faces_2=None,
+        classifier_1=None,
+        classifier_2=None,
     ):
         super().__init__(name)
 
-        self.firstPart = OneElementalCharacteristic(
-            name_right,
+        self.element_1 = OneElementalCharacteristic(
+            name_1,
             landmarks,
-            landmark_indices_right,
-            all_align_index_right,
-            z_align_index_right,
-            additional_faces_right,
-            classifier_right,
+            landmark_indices_1,
+            all_align_index_1,
+            z_align_index_1,
+            additional_faces_1,
+            classifier_1,
         )
-        self.secondPart = OneElementalCharacteristic(
-            name_left,
+
+        self.element_2 = OneElementalCharacteristic(
+            name_2,
             landmarks,
-            landmark_indices_left,
-            all_align_index_left,
-            z_align_index_left,
-            additional_faces_left,
-            classifier_left,
+            landmark_indices_2,
+            all_align_index_2,
+            z_align_index_2,
+            additional_faces_2,
+            classifier_2,
         )
 
     def similarity(self, other):
         assert type(self) is type(other)
         return (
-            self.firstPart.similarity(other.firstPart)
-            + self.secondPart.similarity(other.secondPart)
+            self.element_1.similarity(other.element_1)
+            + self.element_2.similarity(other.element_2)
         ) / 2
