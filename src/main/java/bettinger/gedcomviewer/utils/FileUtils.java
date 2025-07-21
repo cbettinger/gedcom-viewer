@@ -2,6 +2,7 @@ package bettinger.gedcomviewer.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -61,6 +62,10 @@ public interface FileUtils {
 
 	public static String getPath(final String firstSegment, final String... moreSegments) {
 		return getPath(Paths.get(firstSegment, moreSegments).toFile());
+	}
+
+	public static String getPath(final URL url) {
+		return getPath(getFile(url.getPath()));
 	}
 
 	public static String getPath(final File file) {

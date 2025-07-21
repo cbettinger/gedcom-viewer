@@ -62,7 +62,7 @@ public class Analyser extends BackgroundWorker {
 			throw new AnalysisException("Failed to write input file");
 		}
 
-		final String scriptPath = FileUtils.getPath(System.getProperty("user.dir"), "src", "main", "resources", "tools", "facialfeatureanalysis", "main.py");
+		final String scriptPath = FileUtils.getPath(getClass().getClassLoader().getResource("tools/facialfeatureanalysis/main.py"));
 
 		String output = null;
 		try {
