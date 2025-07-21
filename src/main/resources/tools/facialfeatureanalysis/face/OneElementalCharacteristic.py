@@ -1,8 +1,8 @@
-from face.FacePart import FacePart
+from face.Characteristic import Characteristic
 import numpy as np
 
 
-class OneElementalFacePart(FacePart):
+class OneElementalCharacteristic(Characteristic):
 
     Z_LOW = -1
 
@@ -950,7 +950,7 @@ class OneElementalFacePart(FacePart):
         landmarks = np.asarray(
             [np.subtract(l, originalRealLandmarks[allAlignIndex]) for l in landmarks]
         )
-        scalingFactor = OneElementalFacePart.Z_LOW / landmarks[zAlignIndex][2]
+        scalingFactor = OneElementalCharacteristic.Z_LOW / landmarks[zAlignIndex][2]
         landmarks = landmarks * scalingFactor
         return landmarks
 
@@ -959,7 +959,7 @@ class OneElementalFacePart(FacePart):
         newIndexList = np.arange(478)[self.landmarkIndices]
         mesh = []
         meshTris = []
-        for originalFace in OneElementalFacePart.FACES:
+        for originalFace in OneElementalCharacteristic.FACES:
             if all(np.isin(originalFace, self.landmarkIndices)):
                 i1 = np.where(newIndexList == originalFace[0])[0][0]
                 i2 = np.where(newIndexList == originalFace[1])[0][0]

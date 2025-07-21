@@ -1,8 +1,8 @@
 from classifier.xgb_models.XGBModels import XGB_MODELS
-from face.TwoElementalFacePart import TwoElementalFacePart
+from face.TwoElementalCharacteristic import TwoElementalCharacteristic
 
 
-class EyeShape(TwoElementalFacePart):
+class EyeShape(TwoElementalCharacteristic):
     right_eye_indices = [
         33,
         7,

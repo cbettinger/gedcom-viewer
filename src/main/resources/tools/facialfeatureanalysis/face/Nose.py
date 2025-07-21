@@ -1,8 +1,8 @@
 from classifier.xgb_models.XGBModels import XGB_MODELS
-from face.OneElementalFacePart import OneElementalFacePart
+from face.OneElementalCharacteristic import OneElementalCharacteristic
 
 
-class Nose(OneElementalFacePart):
+class Nose(OneElementalCharacteristic):
     indices = [
         241,
         458,

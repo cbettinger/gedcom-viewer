@@ -1,8 +1,8 @@
 from classifier.xgb_models.XGBModels import XGB_MODELS
-from face.TwoElementalFacePart import TwoElementalFacePart
+from face.TwoElementalCharacteristic import TwoElementalCharacteristic
 
 
-class Cheeks(TwoElementalFacePart):
+class Cheeks(TwoElementalCharacteristic):
 
     right_indices = [
         233,

@@ -1,8 +1,8 @@
 from classifier.xgb_models.XGBModels import XGB_MODELS
-from face.TwoElementalFacePart import TwoElementalFacePart
+from face.TwoElementalCharacteristic import TwoElementalCharacteristic
 
 
-class Eyebrows(TwoElementalFacePart):
+class Eyebrows(TwoElementalCharacteristic):
 
     right_indices = [
         70,

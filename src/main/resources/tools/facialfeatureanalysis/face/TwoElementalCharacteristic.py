@@ -1,8 +1,8 @@
-from face.FacePart import FacePart
-from face.OneElementalFacePart import OneElementalFacePart
+from face.Characteristic import Characteristic
+from face.OneElementalCharacteristic import OneElementalCharacteristic
 
 
-class TwoElementalFacePart(FacePart):
+class TwoElementalCharacteristic(Characteristic):
 
     def __init__(
         self,
@@ -23,7 +23,7 @@ class TwoElementalFacePart(FacePart):
     ):
         super().__init__(name)
 
-        self.firstPart = OneElementalFacePart(
+        self.firstPart = OneElementalCharacteristic(
             name_right,
             landmarks,
             landmark_indices_right,
@@ -32,7 +32,7 @@ class TwoElementalFacePart(FacePart):
             additional_faces_right,
             classifier_right,
         )
-        self.secondPart = OneElementalFacePart(
+        self.secondPart = OneElementalCharacteristic(
             name_left,
             landmarks,
             landmark_indices_left,

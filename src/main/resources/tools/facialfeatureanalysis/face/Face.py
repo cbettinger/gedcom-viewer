@@ -24,8 +24,8 @@ class Face:
         landmarks = Landmarks(image)
 
         self.characteristics = {}
-        for c in Face.FEATURES.keys():
-            self.characteristics.update({c: Face.FEATURES.get(c)(landmarks)})
+        for feature, characteristic in Face.FEATURES.items():
+            self.characteristics.update({feature: characteristic(landmarks)})
 
     def similarities(self, other):
         assert (
@@ -33,9 +33,9 @@ class Face:
             and self.characteristics.keys() == other.characteristics.keys()
         )
 
-        similarities = {}
+        result = {}
 
-        for c, o in self.characteristics.items():
-            similarities.update({c: o.similarity(other.characteristics.get(c))})
+        for feature, characteristic in self.characteristics.items():
+            result.update({feature: characteristic.similarity(other.characteristics.get(feature))})
 
-        return similarities
+        return result
