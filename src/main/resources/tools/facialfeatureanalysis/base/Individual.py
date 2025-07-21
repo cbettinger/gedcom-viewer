@@ -6,6 +6,8 @@ import json
 
 class Individual(BinaryTreeNode):
 
+    PARSE_LOG = []
+
     DEFAULT_NUM_PORTRAITS = 5
 
     LIST = {}
@@ -29,7 +31,7 @@ class Individual(BinaryTreeNode):
 
             for p in portraits:
                 if num_portraits is not None and len(self.faces) == num_portraits:
-                    print(
+                    Individual.PARSE_LOG.append(
                         "For the individual {} there are more portraits than configured to use. The following portraits are used: {}".format(
                             id, considered_filepaths
                         )
@@ -46,8 +48,8 @@ class Individual(BinaryTreeNode):
                     )
                     considered_filepaths.append(filepath)
                 except Exception as e:
-                    print(
-                        "Unable to load portrait {}: {}".format(filepath, e),
+                    Individual.PARSE_LOG.append(
+                        "Ignoring portrait {}: {}".format(filepath, e)
                     )
 
     def hasFaces(self):
@@ -55,10 +57,12 @@ class Individual(BinaryTreeNode):
 
     @classmethod
     def parse(cls, filepath, num_portraits=DEFAULT_NUM_PORTRAITS):
+        Individual.PARSE_LOG = []
+
         f = open(filepath, encoding="utf-8")
         json_object = json.load(f)
         f.close()
-        return Individual._parse(json_object, num_portraits)
+        return Individual._parse(json_object, num_portraits), Individual.PARSE_LOG
 
     @classmethod
     def _parse(cls, json_object, num_portraits):
