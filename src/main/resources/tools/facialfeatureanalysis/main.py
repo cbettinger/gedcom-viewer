@@ -1,7 +1,7 @@
 from base import DictUtils
 from base.Individual import Individual
 from base.Similarity import Similarity
-from faceCharacteristics.Face import Face
+from face.Face import Face
 import json
 import sys
 

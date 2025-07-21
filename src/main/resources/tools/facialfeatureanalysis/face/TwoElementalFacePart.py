@@ -1,5 +1,5 @@
-from faceCharacteristics.FaceCharacteristic import FaceCharacteristic
-from faceCharacteristics.OneElementalFacePart import OneElementalFacePart
+from face.FaceCharacteristic import FaceCharacteristic
+from face.OneElementalFacePart import OneElementalFacePart
 
 
 class TwoElementalFacePart(FaceCharacteristic):

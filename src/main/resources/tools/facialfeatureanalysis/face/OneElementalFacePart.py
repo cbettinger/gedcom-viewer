@@ -1,5 +1,5 @@
-from faceCharacteristics import meshTriangles
-from faceCharacteristics.FaceCharacteristic import FaceCharacteristic
+from face import meshTriangles
+from face.FaceCharacteristic import FaceCharacteristic
 import numpy as np
 
 

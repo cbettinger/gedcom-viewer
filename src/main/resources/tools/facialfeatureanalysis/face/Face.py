@@ -1,4 +1,4 @@
-from faceCharacteristics.faceCharacteristics import CHARACTERISTICS
+from face.faceCharacteristics import CHARACTERISTICS
 from landmarkdetection.Landmarks import Landmarks
 
 
