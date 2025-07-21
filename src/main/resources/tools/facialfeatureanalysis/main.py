@@ -78,8 +78,6 @@ def _similarities(proband, other):
 
     most_similar_faces = {}
 
-    avg_max_similarities = DictUtils.zeros(Face.FEATURES)
-
     if _is_comparable(other):
         for proband_face in proband.faces:
             max_sims = DictUtils.zeros(Face.FEATURES)
@@ -103,9 +101,6 @@ def _similarities(proband, other):
                         max_sims[c] = s
 
                 done.append({proband_face, other_face})
-
-            for c in avg_max_similarities.keys():
-                avg_max_similarities[c] += max_sims[c]
 
     for c, s in max_similarities.items():
         faces = most_similar_faces.get(c)
