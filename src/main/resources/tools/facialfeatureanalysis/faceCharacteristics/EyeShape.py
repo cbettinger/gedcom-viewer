@@ -1,4 +1,4 @@
-from classifiers.xgb_models.XGBModels import XGB_MODELS
+from classifier.xgb_models.XGBModels import XGB_MODELS
 from faceCharacteristics.TwoElementalFacePart import TwoElementalFacePart
 
 
