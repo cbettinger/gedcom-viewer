@@ -1,4 +1,4 @@
-from landmarkdetection.LandmarkDetector import LandmarkDetector
+from landmarks.LandmarkDetector import LandmarkDetector
 import math
 import numpy as np
 

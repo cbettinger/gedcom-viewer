@@ -5,7 +5,7 @@ from face.EyeShape import EyeShape
 from face.FaceShape import FaceShape
 from face.Lips import Lips
 from face.Nose import Nose
-from landmarkdetection.Landmarks import Landmarks
+from landmarks.Landmarks import Landmarks
 
 
 class Face:
