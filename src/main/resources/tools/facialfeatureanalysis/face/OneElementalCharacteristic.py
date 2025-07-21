@@ -944,7 +944,9 @@ class OneElementalCharacteristic(Characteristic):
 
     def _aligned_landmarks(self, real_landmarks, all_align_index, z_align_index):
         result = np.asarray(real_landmarks)
-        result = np.asarray([np.subtract(l, real_landmarks[all_align_index]) for l in result])
+        result = np.asarray(
+            [np.subtract(l, real_landmarks[all_align_index]) for l in result]
+        )
 
         scaling = OneElementalCharacteristic.Z_LOW / result[z_align_index][2]
         result = result * scaling

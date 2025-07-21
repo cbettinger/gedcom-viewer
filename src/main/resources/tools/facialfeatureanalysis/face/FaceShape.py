@@ -4,7 +4,7 @@ import numpy as np
 
 
 class FaceShape(OneElementalCharacteristic):
-    contourLineIndices = [
+    contour_indices = [
         [
             10,
             338,
@@ -47,7 +47,8 @@ class FaceShape(OneElementalCharacteristic):
         [103, 68, 70, 35, 117, 50, 207, 214, 210, 211, 32, 140, 176],
         [332, 298, 300, 265, 346, 280, 427, 434, 430, 431, 262, 369, 400],
     ]
-    landmarkIndices = [
+
+    indices = [
         10,
         338,
         297,
@@ -109,40 +110,47 @@ class FaceShape(OneElementalCharacteristic):
     ]
 
     def __init__(self, landmarks):
-        self.contourLineIndices = self._generateContourLineIndices(
-            FaceShape.contourLineIndices
+        self.contour_indices = self._generateContourLineIndices(
+            FaceShape.contour_indices
         )
         super().__init__(
-            "Gesichtsform",
+            "face shape",
             landmarks,
-            FaceShape.landmarkIndices,
+            FaceShape.indices,
             10,
             152,
             None,
             XGB_MODELS["FACESHAPE"],
         )
 
-    def _generateContourLineIndices(self, originalIndices):
-        if originalIndices is None:
+    def _generateContourLineIndices(self, contour_indices):
+        if contour_indices is None:
             return None
-        lines = []
-        newIndexList = np.arange(478)[self.landmarkIndices]
-        for line in originalIndices:
+
+        result = []
+
+        new_indices = np.arange(478)[self.indices]
+
+        for line in contour_indices:
             l = []
+
             for i in line:
-                l.append(np.nonzero(newIndexList == i)[0][0])
-            lines.append(l)
-        return lines
+                l.append(np.nonzero(new_indices == i)[0][0])
+
+            result.append(l)
+
+        return result
 
     def _mesh(self):
         return [None, None]
 
     def _edges(self):
-        flatEdges = []
-        for line in self.contourLineIndices:
+        result = []
+
+        for line in self.contour_indices:
             for i in range(len(line) - 1):
-                i1 = line[i]
-                i2 = line[i + 1]
-                edge = self.real_landmarks[i1] - self.real_landmarks[i2]
-                flatEdges.extend(edge)
-        return flatEdges
+                result.extend(
+                    self.real_landmarks[line[i]] - self.real_landmarks[line[i + 1]]
+                )
+
+        return result
