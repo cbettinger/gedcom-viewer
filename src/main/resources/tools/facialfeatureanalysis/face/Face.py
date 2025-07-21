@@ -7,6 +7,7 @@ from face.Lips import Lips
 from face.Nose import Nose
 from landmarkdetection.Landmarks import Landmarks
 
+
 class Face:
     FEATURES = {
         "CHEEKS": Cheeks,
@@ -36,6 +37,8 @@ class Face:
         result = {}
 
         for feature, characteristic in self.characteristics.items():
-            result.update({feature: characteristic.similarity(other.characteristics.get(feature))})
+            result.update(
+                {feature: characteristic.similarity(other.characteristics.get(feature))}
+            )
 
         return result

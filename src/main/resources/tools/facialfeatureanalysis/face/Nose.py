@@ -108,7 +108,7 @@ class Nose(OneElementalCharacteristic):
 
     def __init__(self, landmarks):
         super().__init__(
-            "Nose",
+            "nose",
             landmarks,
             Nose.indices,
             168,
