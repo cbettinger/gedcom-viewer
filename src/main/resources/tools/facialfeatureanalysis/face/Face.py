@@ -8,17 +8,7 @@ from face.Nose import Nose
 from landmarkdetection.Landmarks import Landmarks
 
 class Face:
-    FEATURES = [
-        "CHEEKS",
-        "CHIN",
-        "EYEBROWS",
-        "EYESHAPE",
-        "FACESHAPE",
-        "LIPS",
-        "NOSE",
-    ]
-
-    PARTS = {
+    FEATURES = {
         "CHEEKS": Cheeks,
         "CHIN": Chin,
         "EYEBROWS": Eyebrows,
@@ -34,8 +24,8 @@ class Face:
         landmarks = Landmarks(image)
 
         self.characteristics = {}
-        for c in Face.FEATURES:
-            self.characteristics.update({c: Face.PARTS.get(c)(landmarks)})
+        for c in Face.FEATURES.keys():
+            self.characteristics.update({c: Face.FEATURES.get(c)(landmarks)})
 
     def similarities(self, other):
         assert (

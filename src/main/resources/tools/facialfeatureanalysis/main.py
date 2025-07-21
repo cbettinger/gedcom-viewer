@@ -27,7 +27,7 @@ def _results(results, proband, max_depth):
 
     paths = proband.paths(max_depth)
 
-    for feature in Face.FEATURES:
+    for feature in Face.FEATURES.keys():
         avg_similarities = {}
 
         for id, result in results.items():

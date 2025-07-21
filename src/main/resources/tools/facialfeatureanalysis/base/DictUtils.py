@@ -1,16 +1,16 @@
-def zeros(keys):
-    d = {}
+def zeros(dict):
+    result = {}
 
-    for k in keys:
-        d.update({k: 0})
+    for key in dict.keys():
+        result.update({key: 0})
 
-    return d
+    return result
 
 
-def dicts(keys):
-    d = {}
+def dicts(dict):
+    result = {}
 
-    for k in keys:
-        d.update({k: {}})
+    for key in dict.keys():
+        result.update({key: {}})
 
-    return d
+    return result
