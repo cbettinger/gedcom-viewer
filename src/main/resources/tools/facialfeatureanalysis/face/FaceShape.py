@@ -134,7 +134,7 @@ class FaceShape(OneElementalCharacteristic):
             lines.append(l)
         return lines
 
-    def _generateRealMesh(self):
+    def _mesh(self):
         return [None, None]
 
     def _edges(self):

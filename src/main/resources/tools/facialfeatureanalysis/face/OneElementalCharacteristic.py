@@ -940,7 +940,7 @@ class OneElementalCharacteristic(Characteristic):
             landmark_indices.index(all_align_index),
             landmark_indices.index(z_align_index),
         )
-        self.mesh, self.meshTriangles = self._generateRealMesh()
+        self.mesh, self.meshTriangles = self._mesh()
         self.edges = self._edges()
 
     def _getAlignedRealLandmarks(
@@ -954,7 +954,7 @@ class OneElementalCharacteristic(Characteristic):
         landmarks = landmarks * scalingFactor
         return landmarks
 
-    def _generateRealMesh(self):
+    def _mesh(self):
         vertices = self.realLandmarks
         newIndexList = np.arange(478)[self.landmarkIndices]
         mesh = []
