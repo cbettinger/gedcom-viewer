@@ -31,8 +31,6 @@ class Face:
         similarities = {}
 
         for c, o in self.characteristics.items():
-            similarities.update(
-                {c: o.similarity(other.characteristics.get(c))}
-            )
+            similarities.update({c: o.similarity(other.characteristics.get(c))})
 
         return similarities

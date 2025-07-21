@@ -1,6 +1,6 @@
 from base.BinaryTreeNode import BinaryTreeNode
-from base.Face import Face
 from base.Image import Image
+from faceCharacteristics.Face import Face
 import json
 
 
