@@ -960,17 +960,17 @@ class OneElementalCharacteristic(Characteristic):
 
         for face in OneElementalCharacteristic.FACES:
             if all(np.isin(face, self.landmark_indices)):
-                i1 = np.where(new_indices == face[0])[0][0]
-                i2 = np.where(new_indices == face[1])[0][0]
-                i3 = np.where(new_indices == face[2])[0][0]
+                i1 = np.nonzero(new_indices == face[0])[0][0]
+                i2 = np.nonzero(new_indices == face[1])[0][0]
+                i3 = np.nonzero(new_indices == face[2])[0][0]
                 mesh.append([vertices[i1], vertices[i2], vertices[i3]])
                 triangles.append([i1, i2, i3])
 
         if self.additional_faces:
             for additional_face in self.additional_faces:
-                i1 = np.where(new_indices == additional_face[0])[0][0]
-                i2 = np.where(new_indices == additional_face[1])[0][0]
-                i3 = np.where(new_indices == additional_face[2])[0][0]
+                i1 = np.nonzero(new_indices == additional_face[0])[0][0]
+                i2 = np.nonzero(new_indices == additional_face[1])[0][0]
+                i3 = np.nonzero(new_indices == additional_face[2])[0][0]
                 mesh.append([vertices[i1], vertices[i2], vertices[i3]])
                 triangles.append([i1, i2, i3])
 

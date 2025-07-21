@@ -130,7 +130,7 @@ class FaceShape(OneElementalCharacteristic):
         for line in originalIndices:
             l = []
             for i in line:
-                l.append(np.where(newIndexList == i)[0][0])
+                l.append(np.nonzero(newIndexList == i)[0][0])
             lines.append(l)
         return lines
 
