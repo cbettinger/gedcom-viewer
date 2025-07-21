@@ -148,44 +148,39 @@ def _analyse(proband, max_depth):
         queue = next_level_queue
         depth += 1
 
-    return result
+    return _results(result, proband, max_depth)
 
 
-def _on_error(results):
-    print(json.dumps(results))
+def _on_success(filepath):
+    print(json.dumps({"success": True, "filepath": filepath}))
+    sys.exit(0)
+
+
+def _on_error(message):
+    print(json.dumps({"error": True, "message": message}))
     sys.exit(1)
 
 
-def _check_result(results):
-    if "error" in results:
-        _on_error(results)
-
-
 if len(sys.argv) < 4:
-    _on_error({"error": True, "message": "Invalid number of arguments"})
+    _on_error("Invalid number of arguments")
 else:
     proband = Individual.parse(sys.argv[1], int(sys.argv[2]))
-    depth = int(sys.argv[3])
 
     if len(sys.argv) > 4:
+        id = sys.argv[4]
         try:
-            proband = Individual.LIST[sys.argv[4]]
+            proband = Individual.LIST[id]
         except:
-            _on_error(
-                {
-                    "error": True,
-                    "message": "Proband {} not found".format(sys.argv[4]),
-                }
-            )
+            _on_error("Proband {} not found".format(id))
+
+    depth = int(sys.argv[3])
 
     results = _analyse(proband, depth)
-    _check_result(results)
-
-    results = _results(results, proband, int(sys.argv[3]))
+    if "error" in results and "message" in results:
+        _on_error(results.message)
 
     filepath = sys.argv[1].replace(".json", "-result.json")
     with open(filepath, "w", encoding="utf-8") as file:
         json.dump(results, file, ensure_ascii=False, indent=4)
 
-    print(json.dumps({"success": True, "filepath": filepath}))
-    sys.exit(0)
+    _on_success(filepath)
