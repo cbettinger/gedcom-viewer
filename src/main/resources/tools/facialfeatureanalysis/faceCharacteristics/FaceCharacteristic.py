@@ -5,8 +5,9 @@ class FaceCharacteristic(ABC):
 
     def __init__(self, name):
         super().__init__()
+
         self.name = name
 
     @abstractmethod
-    def calculate_similarity(self, other):
+    def similarity(self, other):
         pass
