@@ -32,6 +32,6 @@ public class Similarity {
 	}
 
 	public static Similarity fromJSON(final JsonNode json) {
-		return json.properties().isEmpty() ? null : new Similarity(Float.parseFloat(json.get("avgSimilarity").asText()), Float.parseFloat(json.get("maxSimilarity").asText()), json.get("maxSimilarProbandPortraitFilePath").asText(), json.get("maxSimilarAncestorPortraitFilePath").asText());
+		return json.properties().isEmpty() ? null : new Similarity(Float.parseFloat(json.get("avg_similarity").asText()), Float.parseFloat(json.get("max_similarity").asText()), json.get("max_similar_proband_portrait_filepath").asText(), json.get("max_similar_ancestor_portrait_filepath").asText());
 	}
 }

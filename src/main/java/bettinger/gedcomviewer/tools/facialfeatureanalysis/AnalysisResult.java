@@ -79,7 +79,7 @@ public class AnalysisResult {
 		}
 
 		final Map<AncestralLine, Float> lineSimilarities = new HashMap<>();
-		final var lineSimilarityProperties = json.get("lineSimilarities").get(facialFeature.name()).properties();
+		final var lineSimilarityProperties = json.get("line_similarities").get(facialFeature.name()).properties();
 		for (final var entry : lineSimilarityProperties) {
 			lineSimilarities.put(AncestralLine.parse(entry.getKey()), Float.parseFloat(entry.getValue().asText()));
 		}
