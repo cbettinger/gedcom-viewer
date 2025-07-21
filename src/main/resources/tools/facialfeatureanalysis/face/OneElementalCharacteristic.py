@@ -929,51 +929,52 @@ class OneElementalCharacteristic(Characteristic):
     ):
         super().__init__(name)
 
-        self.classifier = classifier
+        self.landmark_indices = np.asarray(landmark_indices)
+        self.additional_faces = additional_faces
 
-        self.landmarkIndices = np.asarray(landmark_indices)
-        self.additionalFaces = additional_faces
-
-        # so skalieren, dass alle Instanzen eines Gesichtsteils aligned sind
-        self.realLandmarks = self._getAlignedRealLandmarks(
-            landmarks.real_landmarks[self.landmarkIndices],
+        self.real_landmarks = self._aligned_landmarks(
+            landmarks.real_landmarks[self.landmark_indices],
             landmark_indices.index(all_align_index),
             landmark_indices.index(z_align_index),
         )
-        self.mesh, self.meshTriangles = self._mesh()
+        self.mesh, self.triangles = self._mesh()
         self.edges = self._edges()
 
-    def _getAlignedRealLandmarks(
-        self, originalRealLandmarks, allAlignIndex, zAlignIndex
-    ):
-        landmarks = np.asarray(originalRealLandmarks)
-        landmarks = np.asarray(
-            [np.subtract(l, originalRealLandmarks[allAlignIndex]) for l in landmarks]
-        )
-        scalingFactor = OneElementalCharacteristic.Z_LOW / landmarks[zAlignIndex][2]
-        landmarks = landmarks * scalingFactor
-        return landmarks
+        self.classifier = classifier
+
+    def _aligned_landmarks(self, real_landmarks, all_align_index, z_align_index):
+        result = np.asarray(real_landmarks)
+        result = np.asarray([np.subtract(l, real_landmarks[all_align_index]) for l in result])
+
+        scaling = OneElementalCharacteristic.Z_LOW / result[z_align_index][2]
+        result = result * scaling
+
+        return result
 
     def _mesh(self):
-        vertices = self.realLandmarks
-        newIndexList = np.arange(478)[self.landmarkIndices]
+        vertices = self.real_landmarks
+        new_indices = np.arange(478)[self.landmark_indices]
+
         mesh = []
-        meshTris = []
-        for originalFace in OneElementalCharacteristic.FACES:
-            if all(np.isin(originalFace, self.landmarkIndices)):
-                i1 = np.where(newIndexList == originalFace[0])[0][0]
-                i2 = np.where(newIndexList == originalFace[1])[0][0]
-                i3 = np.where(newIndexList == originalFace[2])[0][0]
+        triangles = []
+
+        for face in OneElementalCharacteristic.FACES:
+            if all(np.isin(face, self.landmark_indices)):
+                i1 = np.where(new_indices == face[0])[0][0]
+                i2 = np.where(new_indices == face[1])[0][0]
+                i3 = np.where(new_indices == face[2])[0][0]
                 mesh.append([vertices[i1], vertices[i2], vertices[i3]])
-                meshTris.append([i1, i2, i3])
-        if self.additionalFaces:
-            for f in self.additionalFaces:
-                i1 = np.where(newIndexList == f[0])[0][0]
-                i2 = np.where(newIndexList == f[1])[0][0]
-                i3 = np.where(newIndexList == f[2])[0][0]
+                triangles.append([i1, i2, i3])
+
+        if self.additional_faces:
+            for additional_face in self.additional_faces:
+                i1 = np.where(new_indices == additional_face[0])[0][0]
+                i2 = np.where(new_indices == additional_face[1])[0][0]
+                i3 = np.where(new_indices == additional_face[2])[0][0]
                 mesh.append([vertices[i1], vertices[i2], vertices[i3]])
-                meshTris.append([i1, i2, i3])
-        return mesh, meshTris
+                triangles.append([i1, i2, i3])
+
+        return mesh, triangles
 
     def _edges(self):
         result = []

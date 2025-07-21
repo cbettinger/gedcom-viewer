@@ -143,6 +143,6 @@ class FaceShape(OneElementalCharacteristic):
             for i in range(len(line) - 1):
                 i1 = line[i]
                 i2 = line[i + 1]
-                edge = self.realLandmarks[i1] - self.realLandmarks[i2]
+                edge = self.real_landmarks[i1] - self.real_landmarks[i2]
                 flatEdges.extend(edge)
         return flatEdges
