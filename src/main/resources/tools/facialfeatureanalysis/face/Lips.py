@@ -3,7 +3,7 @@ from face.TwoElementalFacePart import TwoElementalFacePart
 
 
 class Lips(TwoElementalFacePart):
-    upperLipIndices = [
+    upper_indices = [
         61,
         185,
         40,
@@ -49,7 +49,8 @@ class Lips(TwoElementalFacePart):
         292,
         306,
     ]
-    lowerLipIndices = [
+
+    lower_indices = [
         61,
         146,
         91,
@@ -96,20 +97,20 @@ class Lips(TwoElementalFacePart):
         292,
     ]
 
-    def __init__(self, faceLandmarks):
+    def __init__(self, landmarks):
         super().__init__(
-            "Lippen",
-            faceLandmarks,
-            "Oberlippe",
-            "Unterlippe",
-            Lips.upperLipIndices,
-            Lips.lowerLipIndices,
+            "lips",
+            landmarks,
+            "upper lip",
+            "lower lip",
+            Lips.upper_indices,
+            Lips.lower_indices,
             0,
             14,
             13,
             17,
             None,
             None,
-            classifier1=XGB_MODELS["LIPS"]["first"],
-            classifier2=XGB_MODELS["LIPS"]["second"],
+            XGB_MODELS["LIPS"]["first"],
+            XGB_MODELS["LIPS"]["second"],
         )

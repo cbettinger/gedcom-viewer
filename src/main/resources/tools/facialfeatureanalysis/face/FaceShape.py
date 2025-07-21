@@ -108,13 +108,13 @@ class FaceShape(OneElementalFacePart):
         369,
     ]
 
-    def __init__(self, faceLandmarks):
+    def __init__(self, landmarks):
         self.contourLineIndices = self._generateContourLineIndices(
             FaceShape.contourLineIndices
         )
         super().__init__(
             "Gesichtsform",
-            faceLandmarks,
+            landmarks,
             FaceShape.landmarkIndices,
             10,
             152,

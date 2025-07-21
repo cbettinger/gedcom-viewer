@@ -3,7 +3,7 @@ from face.OneElementalFacePart import OneElementalFacePart
 
 
 class Nose(OneElementalFacePart):
-    landmarkIndices = [
+    indices = [
         241,
         458,
         331,
@@ -103,15 +103,16 @@ class Nose(OneElementalFacePart):
         358,
         129,
     ]
-    additionalFaces = [[417, 351, 412], [193, 188, 122]]
 
-    def __init__(self, faceLandmarks):
+    additional_faces = [[417, 351, 412], [193, 188, 122]]
+
+    def __init__(self, landmarks):
         super().__init__(
-            "Nase",
-            faceLandmarks,
-            Nose.landmarkIndices,
+            "Nose",
+            landmarks,
+            Nose.indices,
             168,
             2,
-            Nose.additionalFaces,
+            Nose.additional_faces,
             XGB_MODELS["NOSE"],
         )

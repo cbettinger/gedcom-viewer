@@ -3,7 +3,8 @@ from face.OneElementalFacePart import OneElementalFacePart
 
 
 class Chin(OneElementalFacePart):
-    landmarkIndices = [
+
+    indices = [
         335,
         424,
         431,
@@ -41,11 +42,11 @@ class Chin(OneElementalFacePart):
         149,
     ]
 
-    def __init__(self, faceLandmarks):
+    def __init__(self, landmarks):
         super().__init__(
-            "Kinn",
-            faceLandmarks,
-            Chin.landmarkIndices,
+            "chin",
+            landmarks,
+            Chin.indices,
             18,
             152,
             classifier=XGB_MODELS["CHIN"],

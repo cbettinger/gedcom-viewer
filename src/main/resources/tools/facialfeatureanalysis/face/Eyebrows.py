@@ -3,34 +3,8 @@ from face.TwoElementalFacePart import TwoElementalFacePart
 
 
 class Eyebrows(TwoElementalFacePart):
-    leftIndices = [
-        336,
-        296,
-        334,
-        293,
-        300,
-        276,
-        283,
-        282,
-        295,
-        285,
-        8,
-        9,
-        337,
-        299,
-        333,
-        298,
-        301,
-        368,
-        383,
-        353,
-        445,
-        444,
-        443,
-        442,
-        441,
-    ]
-    rightIndices = [
+
+    right_indices = [
         70,
         63,
         105,
@@ -58,23 +32,52 @@ class Eyebrows(TwoElementalFacePart):
         8,
     ]
 
-    leftAdditionalFaces = [[337, 9, 336], [445, 353, 276]]
-    rightAdditionalFaces = [[108, 107, 9], [46, 124, 225]]
+    left_indices = [
+        336,
+        296,
+        334,
+        293,
+        300,
+        276,
+        283,
+        282,
+        295,
+        285,
+        8,
+        9,
+        337,
+        299,
+        333,
+        298,
+        301,
+        368,
+        383,
+        353,
+        445,
+        444,
+        443,
+        442,
+        441,
+    ]
 
-    def __init__(self, faceLandmarks):
+    right_additional_faces = [[108, 107, 9], [46, 124, 225]]
+
+    left_additional_faces = [[337, 9, 336], [445, 353, 276]]
+
+    def __init__(self, landmarks):
         super().__init__(
-            "Augenbrauen",
-            faceLandmarks,
-            "rechte Augenbraue",
-            "linke Augenbraue",
-            Eyebrows.rightIndices,
-            Eyebrows.leftIndices,
+            "eyebrows",
+            landmarks,
+            "right eyebrow",
+            "left eyebrow",
+            Eyebrows.right_indices,
+            Eyebrows.left_indices,
             66,
             296,
             65,
             295,
-            Eyebrows.rightAdditionalFaces,
-            Eyebrows.leftAdditionalFaces,
-            classifier1=XGB_MODELS["EYEBROWS"]["first"],
-            classifier2=XGB_MODELS["EYEBROWS"]["second"],
+            Eyebrows.right_additional_faces,
+            Eyebrows.left_additional_faces,
+            XGB_MODELS["EYEBROWS"]["first"],
+            XGB_MODELS["EYEBROWS"]["second"],
         )

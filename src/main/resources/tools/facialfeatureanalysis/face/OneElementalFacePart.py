@@ -10,25 +10,25 @@ class OneElementalFacePart(FacePart):
     def __init__(
         self,
         name,
-        faceLandmarks,
-        landmarkIndices,
-        allAlignIndex,
-        zAlignIndex,
-        additionalFaces=None,
+        landmarks,
+        landmark_indices,
+        all_align_index,
+        z_align_index,
+        additional_faces=None,
         classifier=None,
     ):
         super().__init__(name)
 
         self.classifier = classifier
 
-        self.landmarkIndices = np.asarray(landmarkIndices)
-        self.additionalFaces = additionalFaces
+        self.landmarkIndices = np.asarray(landmark_indices)
+        self.additionalFaces = additional_faces
 
         # so skalieren, dass alle Instanzen eines Gesichtsteils aligned sind
         self.realLandmarks = self._getAlignedRealLandmarks(
-            faceLandmarks.real_landmarks[self.landmarkIndices],
-            landmarkIndices.index(allAlignIndex),
-            landmarkIndices.index(zAlignIndex),
+            landmarks.real_landmarks[self.landmarkIndices],
+            landmark_indices.index(all_align_index),
+            landmark_indices.index(z_align_index),
         )
         self.mesh, self.meshTriangles = self._generateRealMesh()
         self.edgesVector = self._generateEdgesVector()
