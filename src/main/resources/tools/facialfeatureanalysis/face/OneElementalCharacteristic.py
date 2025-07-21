@@ -941,7 +941,7 @@ class OneElementalCharacteristic(Characteristic):
             landmark_indices.index(z_align_index),
         )
         self.mesh, self.meshTriangles = self._generateRealMesh()
-        self.edgesVector = self._generateEdgesVector()
+        self.edges = self._edges()
 
     def _getAlignedRealLandmarks(
         self, originalRealLandmarks, allAlignIndex, zAlignIndex
@@ -975,37 +975,43 @@ class OneElementalCharacteristic(Characteristic):
                 meshTris.append([i1, i2, i3])
         return mesh, meshTris
 
-    def _generateEdgesVector(self):
-        flatEdges = []
-        doneEdges = []
+    def _edges(self):
+        result = []
+        done = []
+
         for face in self.mesh:
             v0, v1, v2 = face
             a0 = v0.tolist()
             a1 = v1.tolist()
             a2 = v2.tolist()
-            if [a0, a1] not in doneEdges:
+
+            if [a0, a1] not in done:
                 edge = v0 - v1
-                flatEdges.extend(edge)
-                doneEdges.extend([[a0, a1], [a1, a0]])
-            if [a0, a2] not in doneEdges:
+                result.extend(edge)
+                done.extend([[a0, a1], [a1, a0]])
+
+            if [a0, a2] not in done:
                 edge = v0 - v2
-                flatEdges.extend(edge)
-                doneEdges.extend([[a0, a2], [a2, a0]])
-            if [a2, a1] not in doneEdges:
+                result.extend(edge)
+                done.extend([[a0, a2], [a2, a0]])
+
+            if [a2, a1] not in done:
                 edge = v1 - v2
-                flatEdges.extend(edge)
-                doneEdges.extend([[a1, a2], [a2, a1]])
-        return flatEdges
+                result.extend(edge)
+                done.extend([[a1, a2], [a2, a1]])
+
+        return result
 
     def similarity(self, other):
         if self.classifier is None:
             return None
 
-        inputData = []
-        fx = self.edgesVector
-        fy = other.edgesVector
-        for i in range(len(fx)):
-            inputData.append(fx[i] - fy[i])
-        inputData = np.asarray([inputData])
+        data = []
 
-        return self.classifier.match_probability(inputData)[0]
+        fx = self.edges
+        fy = other.edges
+
+        for i in range(len(fx)):
+            data.append(fx[i] - fy[i])
+
+        return self.classifier.match_probability(np.asarray([data]))[0]

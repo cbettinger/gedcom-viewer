@@ -137,7 +137,7 @@ class FaceShape(OneElementalCharacteristic):
     def _generateRealMesh(self):
         return [None, None]
 
-    def _generateEdgesVector(self):
+    def _edges(self):
         flatEdges = []
         for line in self.contourLineIndices:
             for i in range(len(line) - 1):
