@@ -12,6 +12,7 @@ public abstract class Format {
 
 	public static final String KEY_VALUE = "%s: %s";
 	public static final String KEY_VALUE_TRAILING_TRIPLE_DOT = "%s: %s…";
+	public static final String KEY_VALUE_PARAGRAPH = "%s:%n%n%s";
 
 	public static final String TWO_STRINGS = "%s%s";
 	public static final String SPACED = "%s %s";

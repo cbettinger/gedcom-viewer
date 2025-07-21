@@ -5,7 +5,6 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -44,7 +43,7 @@ public class Analyser extends BackgroundWorker {
 				new ResultsFrame(proband, depth, results);
 			}
 		} catch (final AnalysisException e) {
-			onError(new AnalysisException(String.format(Format.KEY_VALUE, I18N.get("FacialFeatureAnalysisFailed"), e.getMessage())));
+			onError(new AnalysisException(String.format(Format.KEY_VALUE_PARAGRAPH, I18N.get("FacialFeatureAnalysisFailed"), e.getMessage())));
 		}
 
 		return uri;
@@ -65,7 +64,7 @@ public class Analyser extends BackgroundWorker {
 
 		final String scriptPath = FileUtils.getPath(System.getProperty("user.dir"), "src", "main", "resources", "tools", "facialfeatureanalysis", "main.py");
 
-		List<String> output = null;
+		String output = null;
 		try {
 			output = PythonUtils.executeScript(scriptPath, inputFile.getAbsolutePath(), Integer.toString(numberOfPortraits), Integer.toString(depth));
 		} catch (final IOException e) {
@@ -76,7 +75,7 @@ public class Analyser extends BackgroundWorker {
 			throw new AnalysisException("Empty output");
 		}
 
-		final var jsonOutput = JSONUtils.fromString(output.getLast());
+		final var jsonOutput = JSONUtils.fromString(output);
 		if (jsonOutput.get("error") != null) {
 			throw new AnalysisException(jsonOutput.get("message").asText());
 		}
