@@ -19,18 +19,30 @@ The following third-party software products and media assets are redistributed a
 * jackson: <https://github.com/FasterXML/jackson>
 * javatuples: <https://github.com/javatuples/javatuples>
 * material-design-icons: <https://github.com/google/material-design-icons>
+* mediapipe: <https://github.com/google-ai-edge/mediapipe>
+* xgboost: <https://github.com/dmlc/xgboost>
 
 ## BSD 2-Clause License
 
 * leaflet: Copyright (c) 2010-2025 Volodymyr Agafonkin, Copyright (c) 2010-2011 CloudMade, <https://github.com/Leaflet/Leaflet>
 
+## BSD 3-Clause License
+
+* numpy: Copyright (c) 2005-2025 NumPy Developers, <https://github.com/numpy/numpy>
+* pandas: Copyright (c) 2008-2011 AQR Capital Management, LLC, Lambda Foundry, Inc. and PyData Development Team, Copyright (c) 2011-2025 Open source contributors, <https://github.com/pandas-dev/pandas>
+* scikit-learn: Copyright (c) 2007-2024 The scikit-learn developers, <https://github.com/scikit-learn/scikit-learn>
+
 ## GNU General Public License 2 with Classpath Exception
 
-* openjfx: Copyright (C) 1989, 1991 Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA, <https://github.com/openjdk/jfx>
+* openjfx: Copyright (c) 1989, 1991 Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA, <https://github.com/openjdk/jfx>
 
 ## GNU Lesser General Public License 3
 
-* openhtmltopdf: Copyright (C) 2016 Patrick Wright and others, <https://github.com/danfickle/openhtmltopdf>
+* openhtmltopdf: Copyright (c) 2016 Patrick Wright and others, <https://github.com/danfickle/openhtmltopdf>
+
+## Python License 2
+
+* python: Copyright (c) Python Software Foundation, <https://github.com/python/cpython>
 
 ## DejaVu Fonts License
 
