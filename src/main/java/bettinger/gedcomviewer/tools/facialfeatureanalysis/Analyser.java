@@ -66,7 +66,6 @@ public class Analyser extends BackgroundWorker {
 		String output = null;
 		try {
 			final String scriptPath = FileUtils.getPathRelativeToExecutable("tools", "facialfeatureanalysis", "main.py");
-			System.out.println(scriptPath);	// TODO: test on macOS
 			output = PythonUtils.executeScript(scriptPath, inputFile.getAbsolutePath(), Integer.toString(numberOfPortraits), Integer.toString(depth));
 		} catch (final IOException | URISyntaxException e) {
 			throw new AnalysisException(e.getMessage(), e);

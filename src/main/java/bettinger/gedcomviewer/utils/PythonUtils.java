@@ -8,9 +8,41 @@ import java.util.Arrays;
 import java.util.List;
 
 @SuppressWarnings("java:S1192")
-public interface PythonUtils {
+public abstract class PythonUtils {
 
-	static final Runtime runtime = Runtime.getRuntime();
+	private static final String[] EXECUTABLES = new String[] { "python3", "python"};
+	private static int foundExecutableIndex = -1;
+
+	static {
+		for (int i = 0; i < EXECUTABLES.length; i++) {
+			if (canExecute(i)) {
+				foundExecutableIndex = i;
+				break;
+			}
+		}
+	}
+
+	private static boolean canExecute(final int executableIndex) {
+		if (executableIndex < 0 || executableIndex >= EXECUTABLES.length) {
+			return false;
+		}
+
+		final List<String> versionCmd = new ArrayList<>();
+		versionCmd.addAll(Arrays.asList(EXECUTABLES[executableIndex], "--version"));
+
+		final var processBuilder = new ProcessBuilder(versionCmd);
+
+		try {
+			final var process = processBuilder.start();
+			process.waitFor();
+			return process.exitValue() == 0;
+		} catch (final InterruptedException _) {
+			Thread.currentThread().interrupt();
+			return false;
+		} catch (final IOException _) {
+			return false;
+		}
+	}
 
 	public static String executeScript(final String path, final String... args) throws IOException {
 		final var pipFileDirectory = FileUtils.getDirectoryPath(path);
@@ -36,8 +68,14 @@ public interface PythonUtils {
 	}
 
 	private static String executeCommand(final String workingDirectory, final String... cmdArray) throws IOException {
+		if (foundExecutableIndex == -1) {
+			throw new IOException("No python executable found");
+		}
+
+		final var python = EXECUTABLES[foundExecutableIndex];
+
 		final List<String> fullCmd = new ArrayList<>();
-		fullCmd.addAll(Arrays.asList("python", "-m"));
+		fullCmd.addAll(Arrays.asList(python, "-m"));
 		fullCmd.addAll(Arrays.asList(cmdArray));
 
 		final var fullCmdArray = fullCmd.toArray(new String[0]);
@@ -66,4 +104,6 @@ public interface PythonUtils {
 
 		return result;
 	}
+
+	private PythonUtils() {}
 }
