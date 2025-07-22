@@ -9,6 +9,7 @@
 	<version>1.0.0-pre</version>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.release>23</maven.compiler.release>
 		<maven.compiler.source>23</maven.compiler.source>
 		<maven.compiler.target>23</maven.compiler.target>
 		<exec.mainClass>bettinger.gedcomviewer.Main</exec.mainClass>
@@ -165,9 +166,9 @@
 			<version>1.0.2</version>
 		</dependency>
 		<dependency>
-			<groupId>com.github.nigel-parker</groupId>
+			<groupId>com.github.cbettinger</groupId>
 			<artifactId>gedinline</artifactId>
-			<version>v4-main-SNAPSHOT</version>
+			<version>-dfdc479752-1</version>
 		</dependency>
 	</dependencies>
 </project>
