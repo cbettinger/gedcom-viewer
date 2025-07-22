@@ -8,7 +8,7 @@ The aim of this project is to realize a cross-platform and multi-language viewer
 
 * Display of all GEDCOM record types
 * Visualization of and fast navigation through a proband's lineage (name or male line), ancestors or/and descendants
-* Display of fact locations within a map
+* Display of main fact locations within a map
 * Quick overview of the source qualities
 * Export to HTML or PDF (including media attachments)
 * Conversion to GEDCOM 7 file format
