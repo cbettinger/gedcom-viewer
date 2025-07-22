@@ -146,6 +146,7 @@ public class MainFrame extends Frame {
 			}
 		});
 
+		// TODO: swap
 		// gedcom.unload();
 		try {
 			gedcom.load(new File("../family-bettinger/ChristianBettinger_19841002_Trier.ged"));
