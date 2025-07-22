@@ -12,6 +12,7 @@ The aim of this project is to realize a cross-platform and multi-language viewer
 * Quick overview of the source qualities
 * Export to HTML or PDF (including media attachments)
 * Conversion to GEDCOM 7 file format
+* Facial feature analysis to find out from which ancestors a proband inherited his facial features (such as the shape of the eyes or nose)
 * Currently supported languages: English, German, French
 
 ## Screenshots
