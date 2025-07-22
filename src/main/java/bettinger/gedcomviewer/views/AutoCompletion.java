@@ -33,7 +33,7 @@ public class AutoCompletion extends PlainDocument {
 		this.comboBox = comboBox;
 		this.model = comboBox.getModel();
 
-		comboBox.addActionListener(_ -> {
+		comboBox.addActionListener(x -> {
 			if (!selecting) {
 				highlightCompletedText(0);
 			}

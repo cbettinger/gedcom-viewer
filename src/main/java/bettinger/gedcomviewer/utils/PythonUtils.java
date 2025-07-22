@@ -36,10 +36,10 @@ public abstract class PythonUtils {
 			final var process = processBuilder.start();
 			process.waitFor();
 			return process.exitValue() == 0;
-		} catch (final InterruptedException _) {
+		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
 			return false;
-		} catch (final IOException _) {
+		} catch (final IOException e) {
 			return false;
 		}
 	}

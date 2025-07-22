@@ -135,7 +135,7 @@ public class Media extends Structure implements Record, NoteContainer, SourceCit
 	public String getURL() {
 		try {
 			return getFile().toURI().toURL().toString();
-		} catch (final Exception _) {
+		} catch (final Exception e) {
 			return "";
 		}
 	}
@@ -162,7 +162,7 @@ public class Media extends Structure implements Record, NoteContainer, SourceCit
 		if (isImage()) {
 			try {
 				result = ImageIO.read(getFile());
-			} catch (final IOException _) {
+			} catch (final IOException e) {
 				// intentionally left blank
 			}
 		}

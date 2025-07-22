@@ -69,7 +69,7 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 		descendantsRadioButton = new RadioButton(I18N.get("Descendants"));
 
 		radioButtons = new ToggleGroup();
-		radioButtons.selectedToggleProperty().addListener(_ -> update());
+		radioButtons.selectedToggleProperty().addListener(x -> update());
 		locationsRadioButton.setToggleGroup(radioButtons);
 		lineageRadioButton.setToggleGroup(radioButtons);
 		ancestorsRadioButton.setToggleGroup(radioButtons);
@@ -78,12 +78,12 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 		individualsComboBox = new IndividualsComboBox();
 		pathsCheckBox = new CheckBox(I18N.get("Paths"));
 
-		individualsComboBox.valueProperty().addListener((ObservableValue<? extends Individual> _, Individual _, Individual newValue) -> {
+		individualsComboBox.valueProperty().addListener((ObservableValue<? extends Individual> v, Individual oldValue, Individual newValue) -> {
 			proband = newValue;
 			update();
 		});
 
-		pathsCheckBox.setOnAction(_ -> update());
+		pathsCheckBox.setOnAction(x -> update());
 
 		configPane.setPadding(new Insets(PADDING, PADDING, PADDING, PADDING));
 		configPane.setSpacing(PADDING);

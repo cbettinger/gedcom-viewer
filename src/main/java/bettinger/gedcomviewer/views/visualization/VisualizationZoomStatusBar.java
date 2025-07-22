@@ -31,7 +31,7 @@ public class VisualizationZoomStatusBar extends JPanel {
 		final var zoomOutButton = new JButton(IconFontSwing.buildIcon(MaterialIcons.REMOVE, Constants.MENU_ICON_SIZE));
 		zoomOutButton.setToolTipText(I18N.get("ZoomOut"));
 		zoomOutButton.putClientProperty("JButton.buttonType", "toolBarButton");
-		zoomOutButton.addActionListener(_ -> visualization.zoomOut());
+		zoomOutButton.addActionListener(x -> visualization.zoomOut());
 		zoomBox.add(zoomOutButton);
 
 		final var zoomLabel = new JLabel();
@@ -50,12 +50,12 @@ public class VisualizationZoomStatusBar extends JPanel {
 		final var zoomInButton = new JButton(IconFontSwing.buildIcon(MaterialIcons.ADD, Constants.MENU_ICON_SIZE));
 		zoomInButton.putClientProperty("JButton.buttonType", "toolBarButton");
 		zoomInButton.setToolTipText(I18N.get("ZoomIn"));
-		zoomInButton.addActionListener(_ -> visualization.zoomIn());
+		zoomInButton.addActionListener(x -> visualization.zoomIn());
 		zoomBox.add(zoomInButton);
 
 		add(zoomBox, BorderLayout.EAST);
 
-		visualization.addPropertyChangeListener(_ -> {
+		visualization.addPropertyChangeListener(x -> {
 			zoomOutButton.setEnabled(visualization.canZoomOut());
 			zoomLabel.setText(String.format("%d %%", visualization.getZoom()));
 			zoomInButton.setEnabled(visualization.canZoomIn());

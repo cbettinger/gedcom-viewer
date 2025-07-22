@@ -21,3 +21,8 @@ The aim of this project is to realize a cross-platform and multi-language viewer
 ![Visualization: Ancestors](screenshots/ancestors.png)
 ![Locations](screenshots/locations.png)
 ![Map: Lineage](screenshots/map.png)
+
+## Requirements
+
+* Java 16+
+* Python 3.12 (only for facial feature analysis)

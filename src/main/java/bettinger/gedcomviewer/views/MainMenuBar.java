@@ -229,7 +229,7 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 			for (final var language : languages.entrySet()) {
 				final var localeMenuItem = new JRadioButtonMenuItem(language.getValue());
 				localeMenuItem.setIcon(I18N.getLocaleIcon(language.getKey(), Constants.MENU_ICON_SIZE));
-				localeMenuItem.addActionListener(_ -> I18N.setCurrentLocale(language.getKey()));
+				localeMenuItem.addActionListener(x -> I18N.setCurrentLocale(language.getKey()));
 				languageMenu.add(localeMenuItem);
 			}
 		}
@@ -242,12 +242,12 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 		final var lineageMode = Preferences.getLineageMode();
 
 		final var nameLineCheckbox = new JRadioButtonMenuItem(I18N.get("NameLine"), lineageMode == LineageMode.NAME_LINE);
-		nameLineCheckbox.addActionListener(_ -> Preferences.setLineageMode(LineageMode.NAME_LINE));
+		nameLineCheckbox.addActionListener(x -> Preferences.setLineageMode(LineageMode.NAME_LINE));
 		lineageGroup.add(nameLineCheckbox);
 		lineageMenu.add(nameLineCheckbox);
 
 		final var maleLineCheckbox = new JRadioButtonMenuItem(I18N.get("MaleLine"), lineageMode == LineageMode.MALE_LINE);
-		maleLineCheckbox.addActionListener(_ -> Preferences.setLineageMode(LineageMode.MALE_LINE));
+		maleLineCheckbox.addActionListener(x -> Preferences.setLineageMode(LineageMode.MALE_LINE));
 		lineageGroup.add(maleLineCheckbox);
 		lineageMenu.add(maleLineCheckbox);
 
@@ -292,7 +292,7 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 		final var recentFiles = Preferences.getRecentFiles();
 		for (final var recentFile : recentFiles) {
 			final var recentFileMenuItem = new JMenuItem(FileUtils.getFileName(recentFile));
-			recentFileMenuItem.addActionListener(_ -> Events.post(new UI.LoadFileCommand(recentFile)));
+			recentFileMenuItem.addActionListener(x -> Events.post(new UI.LoadFileCommand(recentFile)));
 			recentFilesMenuItem.add(recentFileMenuItem);
 		}
 

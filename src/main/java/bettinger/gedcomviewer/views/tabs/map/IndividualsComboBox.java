@@ -12,7 +12,7 @@ import javafx.scene.control.ListCell;
 class IndividualsComboBox extends ComboBox<Individual> {
 
 	public IndividualsComboBox() {
-		setCellFactory(_ -> new ListCell<Individual>() {
+		setCellFactory(x -> new ListCell<Individual>() {
 			@Override
 			protected void updateItem(Individual t, boolean bln) {
 				super.updateItem(t, bln);

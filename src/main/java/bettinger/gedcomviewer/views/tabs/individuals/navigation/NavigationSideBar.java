@@ -26,7 +26,7 @@ public class NavigationSideBar extends JPanel {
 		setLayout(new BorderLayout());
 
 		final var probandComboBox = new IndividualsComboBox();
-		probandComboBox.addActionListener(_ -> Preferences.setProband((Individual) probandComboBox.getSelectedItem()));
+		probandComboBox.addActionListener(x -> Preferences.setProband((Individual) probandComboBox.getSelectedItem()));
 		add(probandComboBox, BorderLayout.NORTH);
 
 		final var tabbedPane = new JTabbedPane();
@@ -36,7 +36,7 @@ public class NavigationSideBar extends JPanel {
 		tabbedPane.addTab(null, new FlatSVGIcon("icons/ancestors.svg", Constants.DEFAULT_ICON_SIZE, Constants.DEFAULT_ICON_SIZE), new AncestorsTab(), I18N.get("AncestorsList"));
 		tabbedPane.addTab(null, new FlatSVGIcon("icons/descendants.svg", Constants.DEFAULT_ICON_SIZE, Constants.DEFAULT_ICON_SIZE), new DescendantsTab(), I18N.get("DescendantsList"));
 		tabbedPane.setSelectedIndex(Preferences.getNavigationTab());
-		tabbedPane.addChangeListener(_ -> Preferences.setNavigationTab(tabbedPane.getSelectedIndex()));
+		tabbedPane.addChangeListener(x -> Preferences.setNavigationTab(tabbedPane.getSelectedIndex()));
 		add(tabbedPane, BorderLayout.CENTER);
 
 		Events.register(new Object() {

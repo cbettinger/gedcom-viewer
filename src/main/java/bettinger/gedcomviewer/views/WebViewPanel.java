@@ -69,7 +69,7 @@ public class WebViewPanel extends JFXPanel {
 
 			final var webEngine = webView.getEngine();
 
-			webEngine.getLoadWorker().stateProperty().addListener((_, _, newState) -> {
+			webEngine.getLoadWorker().stateProperty().addListener((o, oldState, newState) -> {
 				if (newState == Worker.State.SUCCEEDED) {
 					this.js = (JSObject) webEngine.executeScript("getExports()");
 					onLoad();

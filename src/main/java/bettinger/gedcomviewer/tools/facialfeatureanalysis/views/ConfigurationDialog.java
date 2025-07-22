@@ -60,7 +60,7 @@ public class ConfigurationDialog extends JDialog {
 		c.insets = new Insets(0, Constants.DIALOG_PADDING, 2 * Constants.DIALOG_PADDING, Constants.DIALOG_PADDING);
 
 		final var startButton = new JButton(I18N.get("Start"), IconFontSwing.buildIcon(MaterialIcons.PLAY_ARROW, Constants.DEFAULT_ICON_SIZE));
-		startButton.addActionListener(_ -> {
+		startButton.addActionListener(x -> {
 			new Analyser(individual, (int) generationsSpinner.getValue(), (int) numberOfPortraitsSpinner.getValue()).execute();
 			dispose();
 			setVisible(false);

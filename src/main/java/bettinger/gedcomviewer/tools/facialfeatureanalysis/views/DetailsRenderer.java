@@ -44,7 +44,7 @@ class DetailsRenderer extends AncestorsRenderer {
 			final var lineSimilarity = entry.getValue();
 
 			var edge = new Pair<String, String>(proband.getId(), lineIds.get(0));
-			coloredEdges.computeIfAbsent(edge, _ -> 0.0f);
+			coloredEdges.computeIfAbsent(edge, x -> 0.0f);
 			coloredEdges.put(edge, Math.max(coloredEdges.get(edge), lineSimilarity));
 
 			if (result.getSimilarities().get(lineIds.get(0)) != null) {
@@ -65,7 +65,7 @@ class DetailsRenderer extends AncestorsRenderer {
 				}
 
 				edge = new Pair<String, String>(lineIds.get(i), lineIds.get(i + 1));
-				coloredEdges.computeIfAbsent(edge, _ -> 0.0f);
+				coloredEdges.computeIfAbsent(edge, x -> 0.0f);
 				coloredEdges.put(edge, Math.max(coloredEdges.get(edge), lineSimilarity));
 			}
 

@@ -113,7 +113,7 @@ public class AutoFitTable extends JTable {
 		super.setModel(dataModel == null ? new DefaultTableModel() : dataModel);
 
 		if (dataModel != null) {
-			dataModel.addTableModelListener(_ -> {
+			dataModel.addTableModelListener(x -> {
 				resizeColumnWidth();
 				setPreferredScrollableViewportSize(getPreferredSize());
 			});

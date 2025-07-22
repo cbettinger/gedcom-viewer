@@ -389,9 +389,9 @@ public class Individual extends IndividualFamilyCommonStructure {
 
 	public List<Quintet<String, Individual, Family, Individual, Integer>> getLineage(final LineageMode mode, final int generations) {
 		List<Quintet<String, Individual, Family, Individual, Integer>> result = switch (mode) {
-		case LineageMode.NAME_LINE -> getNameLine();
-		case LineageMode.MALE_LINE -> getMaleLine();
-		default -> new ArrayList<>();
+			case NAME_LINE -> getNameLine();
+			case MALE_LINE -> getMaleLine();
+			default -> new ArrayList<>();
 		};
 
 		if (generations > 0) {

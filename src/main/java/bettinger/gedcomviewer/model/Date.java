@@ -55,7 +55,7 @@ public class Date implements Comparable<Date> {
 	public static Date parse(final String raw) {
 		try {
 			return new Date(raw);
-		} catch (final ParseException _) {
+		} catch (final ParseException e) {
 			return null;
 		}
 	}
@@ -136,7 +136,7 @@ public class Date implements Comparable<Date> {
 	private static LocalDate parseTimestamp(final String[] components) {
 		try {
 			return LocalDate.of(Integer.parseInt(components[3]), components[2] == null ? 1 : Integer.parseInt(components[2]), components[1] == null ? 1 : Integer.parseInt(components[1]));
-		} catch (final Exception _) {
+		} catch (final Exception e) {
 			return null;
 		}
 	}

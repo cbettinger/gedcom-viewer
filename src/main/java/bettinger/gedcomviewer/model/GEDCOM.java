@@ -303,7 +303,7 @@ public class GEDCOM {
 		for (final var individual : individuals) {
 			final var occupationValues = individual.getFacts(Occupation.TAG).stream().map(Fact::getValue).filter(s -> !s.isEmpty()).distinct().toList();
 			for (final var occupationValue : occupationValues) {
-				map.computeIfAbsent(occupationValue, _ -> new ArrayList<>()).add(individual);
+				map.computeIfAbsent(occupationValue, x -> new ArrayList<>()).add(individual);
 			}
 		}
 

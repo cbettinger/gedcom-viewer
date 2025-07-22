@@ -142,8 +142,8 @@ public abstract class ExportUtils {
 		pdfBuilder.useFastMode();
 		pdfBuilder.useCacheStore(CacheStore.PDF_FONT_METRICS, new FSDefaultCacheStore());
 		pdfBuilder.useFont(PDF_FONT_SUPPLIER, "DejaVuSansCondensed");
-		pdfBuilder.useExternalResourceAccessControl((_, _) -> true, ExternalResourceControlPriority.RUN_AFTER_RESOLVING_URI);
-		pdfBuilder.useExternalResourceAccessControl((_, _) -> true, ExternalResourceControlPriority.RUN_BEFORE_RESOLVING_URI);
+		pdfBuilder.useExternalResourceAccessControl((x, y) -> true, ExternalResourceControlPriority.RUN_AFTER_RESOLVING_URI);
+		pdfBuilder.useExternalResourceAccessControl((x, y) -> true, ExternalResourceControlPriority.RUN_BEFORE_RESOLVING_URI);
 		pdfBuilder.withW3cDocument(new W3CDom().fromJsoup(Jsoup.parse(sanitizedHtml)), null);
 		pdfBuilder.toStream(output);
 		pdfBuilder.run();

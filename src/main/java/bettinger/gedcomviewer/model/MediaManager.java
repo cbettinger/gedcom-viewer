@@ -80,7 +80,7 @@ class MediaManager {
 							final var y2 = Integer.parseInt(coordinates[3]);
 
 							imageClips.put(medium, new Rectangle(x1, y1, x2 - x1, y2 - y1));
-						} catch (final NumberFormatException _) {
+						} catch (final NumberFormatException e) {
 							// intentionally left blank
 						}
 					}
