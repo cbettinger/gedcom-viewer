@@ -22,6 +22,7 @@ The aim of this project is to realize a cross-platform and multi-language viewer
 ![Visualization: Ancestors](screenshots/ancestors.png)
 ![Locations](screenshots/locations.png)
 ![Map: Lineage](screenshots/map.png)
+![Tools: Validation](screenshots/validation.png)
 ![Tools: Facial feature analysis](screenshots/facialfeatureanalysis.png)
 
 ## Requirements
