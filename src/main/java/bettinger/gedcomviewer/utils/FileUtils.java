@@ -2,6 +2,7 @@ package bettinger.gedcomviewer.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -48,6 +49,14 @@ public interface FileUtils {
 		return new File(filePath);
 	}
 
+	public static File getFile(final String parent, final String child) {
+		return new File(parent, child);
+	}
+
+	public static File getFile(final URI uri) {
+		return new File(uri);
+	}
+
 	public static boolean exists(final File file) {
 		return file.exists() && !file.isDirectory() && file.canRead();
 	}
@@ -61,7 +70,7 @@ public interface FileUtils {
 	}
 
 	public static String getPathRelativeToExecutable(final String... segments) throws URISyntaxException {
-		final var executable = new File(FileUtils.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+		final var executable = getFile(FileUtils.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 		if (executable.isDirectory()) {
 			return getPath(executable.getPath(), segments);
 		} else {

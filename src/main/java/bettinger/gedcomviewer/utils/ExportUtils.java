@@ -207,7 +207,7 @@ public abstract class ExportUtils {
 				sb.append(String.format("%s|%s|%s|%s|%s|%s|%s|%n", reference, i.getSurname(), i.getRawName(), birthDateStr, birthPlaceStr, deathDateStr, deathPlaceStr));
 			}
 
-			try (final var writer = new FileWriter(new File(FileUtils.getDirectoryPath(target), "gendex.txt"))) {
+			try (final var writer = new FileWriter(FileUtils.getFile(FileUtils.getDirectoryPath(target), "gendex.txt"))) {
 				writer.write(sb.toString());
 			}
 		}
@@ -236,7 +236,7 @@ public abstract class ExportUtils {
 
 			final var assets = HTMLUtils.getDownloadLinks(html).stream().map(File::new).toList();
 			if (!assets.isEmpty()) {
-				final var assetDirectory = new File(fileDirectory, ASSETS_FOLDER_NAME);
+				final var assetDirectory = FileUtils.getFile(fileDirectory, ASSETS_FOLDER_NAME);
 				if (!assetDirectory.exists()) {
 					assetDirectory.mkdirs();
 				}

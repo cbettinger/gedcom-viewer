@@ -145,7 +145,7 @@ public class Media extends Structure implements Record, NoteContainer, SourceCit
 	}
 
 	public File getFile() {
-		return new File(filePath);
+		return FileUtils.getFile(filePath);
 	}
 
 	public String getFilePath() {

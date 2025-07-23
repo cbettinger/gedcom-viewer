@@ -24,7 +24,7 @@ public interface JSONUtils {
 
 	public static File toJSONFile(final Object input, final String filePath) {
 		final var writer = new ObjectMapper().writer().withDefaultPrettyPrinter();
-		final var file = new File(filePath);
+		final var file = FileUtils.getFile(filePath);
 
 		try {
 			writer.writeValue(file, input);

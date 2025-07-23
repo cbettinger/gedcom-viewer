@@ -2,7 +2,6 @@ package bettinger.gedcomviewer.utils;
 
 import java.awt.Desktop;
 import java.awt.desktop.AboutHandler;
-import java.io.File;
 import java.net.URI;
 import java.net.URL;
 import java.util.logging.Level;
@@ -13,7 +12,7 @@ public interface DesktopUtils {
 	public static void openFileURI(final URI uri) {
 		try {
 			if (Desktop.isDesktopSupported()) {
-				Desktop.getDesktop().open(new File(uri));
+				Desktop.getDesktop().open(FileUtils.getFile(uri));
 			}
 		} catch (final Exception e) {
 			Logger.getLogger(DesktopUtils.class.getName()).log(Level.SEVERE, String.format("Failed to open URI '%s'", uri), e);
