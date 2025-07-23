@@ -13,6 +13,9 @@ public abstract class PythonUtils {
 	private static final String[] EXECUTABLES = new String[] { "python3", "python"};
 	private static int foundExecutableIndex = -1;
 
+	private static final String VERSION_PREFIX = "Python ";
+	private static String foundVersion = "";
+
 	static {
 		for (int i = 0; i < EXECUTABLES.length; i++) {
 			if (canExecute(i)) {
@@ -35,13 +38,29 @@ public abstract class PythonUtils {
 		try {
 			final var process = processBuilder.start();
 			process.waitFor();
-			return process.exitValue() == 0;
+
+			final List<String> output = new ArrayList<>();
+			final var stream = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			stream.lines().forEach(output::add);
+			final var outputLine = String.join(" ", output);
+
+			final var result = process.exitValue() == 0;
+
+			if (result && outputLine.startsWith(VERSION_PREFIX)) {
+				foundVersion = outputLine.substring(VERSION_PREFIX.length());
+			}
+
+			return result;
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
 			return false;
 		} catch (final IOException e) {
 			return false;
 		}
+	}
+
+	public static String getVersion() {
+		return foundVersion;
 	}
 
 	public static String executeScript(final String path, final String... args) throws IOException {

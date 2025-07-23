@@ -63,6 +63,11 @@ public class Analyser extends BackgroundWorker {
 			throw new AnalysisException("Failed to write input file");
 		}
 
+		final var pythonVersion = PythonUtils.getVersion();
+		if (!pythonVersion.startsWith("3.12.")) {
+			throw new AnalysisException(String.format("Incompatible python version %s found", pythonVersion));
+		}
+
 		String output = null;
 		try {
 			final String scriptPath = FileUtils.getPathRelativeToExecutable("tools", "facialfeatureanalysis", "main.py");
