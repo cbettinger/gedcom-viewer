@@ -109,7 +109,7 @@ public class VisualizationToolBar extends ToolBar {
 		void onExportError(final Exception e) {
 			onAfterExport();
 
-			JOptionPane.showMessageDialog(null, e.getMessage(), I18N.get("Export"), JOptionPane.OK_OPTION);
+			JOptionPane.showMessageDialog(null, e.getMessage(), I18N.get("Export"), JOptionPane.ERROR_MESSAGE);
 		}
 
 		void onAfterExport() {
