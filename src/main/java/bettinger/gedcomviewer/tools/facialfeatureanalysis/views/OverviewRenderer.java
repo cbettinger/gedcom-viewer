@@ -88,9 +88,6 @@ class OverviewRenderer extends AncestorsRenderer {
 			final var fatherNode = edge.getValue1();
 			final var motherNode = edge.getValue2();
 
-			final boolean fatherExists = fatherNode != null && fatherNode.getIndividual() != null;
-			final boolean motherExists = motherNode != null && motherNode.getIndividual() != null;
-
 			boolean fatherExcludedEverywhere = true;
 			boolean motherExcludedEverywhere = true;
 
@@ -99,16 +96,16 @@ class OverviewRenderer extends AncestorsRenderer {
 				final var lineIds = entry.getValue();
 
 				final var excluded = excludedIds.get(facialFeature);
-				if (fatherExists && lineIds.contains(fatherNode.getIndividual().getId()) && !excluded.contains(fatherNode.getIndividual().getId())) {
+				if (fatherNode != null && fatherNode.getIndividual() != null && lineIds.contains(fatherNode.getIndividual().getId()) && !excluded.contains(fatherNode.getIndividual().getId())) {
 					fatherExcludedEverywhere = false;
 				}
-				if (motherExists && lineIds.contains(motherNode.getIndividual().getId()) && !excluded.contains(motherNode.getIndividual().getId())) {
+				if (motherNode != null && motherNode.getIndividual() != null && lineIds.contains(motherNode.getIndividual().getId()) && !excluded.contains(motherNode.getIndividual().getId())) {
 					motherExcludedEverywhere = false;
 				}
 			}
 
-			boolean renderEdgeToFather = fatherExists && !fatherExcludedEverywhere && maxSimilarLineEdges.containsKey(new Pair<String, String>(childNode.getIndividual().getId(), fatherNode.getIndividual().getId()));
-			boolean renderEdgeToMother = motherExists && !motherExcludedEverywhere && maxSimilarLineEdges.containsKey(new Pair<String, String>(childNode.getIndividual().getId(), motherNode.getIndividual().getId()));
+			boolean renderEdgeToFather = fatherNode != null && fatherNode.getIndividual() != null && !fatherExcludedEverywhere && maxSimilarLineEdges.containsKey(new Pair<String, String>(childNode.getIndividual().getId(), fatherNode.getIndividual().getId()));
+			boolean renderEdgeToMother = motherNode != null && motherNode.getIndividual() != null && !motherExcludedEverywhere && maxSimilarLineEdges.containsKey(new Pair<String, String>(childNode.getIndividual().getId(), motherNode.getIndividual().getId()));
 
 			final Point parentsPoint = renderEdge(fatherNode, motherNode);
 			if (parentsPoint != null) {
