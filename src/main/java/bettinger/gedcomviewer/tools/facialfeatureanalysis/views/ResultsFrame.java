@@ -31,7 +31,7 @@ public class ResultsFrame extends Frame {
 		tabbedPane.addTab(I18N.get("Overview"), new OverviewPane(proband, depth, results));
 		results.entrySet().forEach(entry -> tabbedPane.addTab(I18N.get(entry.getKey().name()), new DetailsPane(proband, depth, entry.getKey(), entry.getValue())));
 
-		tabbedPane.addChangeListener(x -> update());
+		tabbedPane.addChangeListener(_ -> update());
 		update();
 
 		add(tabbedPane);

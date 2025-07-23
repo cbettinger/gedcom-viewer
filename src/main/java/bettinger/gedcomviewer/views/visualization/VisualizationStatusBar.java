@@ -38,7 +38,7 @@ class VisualizationStatusBar extends VisualizationZoomStatusBar {
 
 		final var generationsComboBox = new GenerationsComboBox();
 		generationsComboBox.setSelectedIndex(0);
-		generationsComboBox.addActionListener(x -> {
+		generationsComboBox.addActionListener(_ -> {
 			final var oldValue = generations;
 			generations = (int) generationsComboBox.getSelectedItem();
 			firePropertyChange(PROPERTY_GENERATIONS, oldValue, generations);

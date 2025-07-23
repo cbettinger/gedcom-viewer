@@ -41,7 +41,7 @@ public class VisualizationToolBar extends ToolBar {
 
 		final var saveAsButton = new JButton(IconFontSwing.buildIcon(MaterialIcons.SAVE_AS, Constants.TOOLBAR_ICON_SIZE));
 		saveAsButton.setToolTipText(String.format(Format.TRAILING_TRIPLE_DOT, I18N.get("SaveAs")));
-		saveAsButton.addActionListener(x -> showSaveAsFileChooser());
+		saveAsButton.addActionListener(_ -> showSaveAsFileChooser());
 		add(saveAsButton);
 	}
 

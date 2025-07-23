@@ -27,5 +27,5 @@ The aim of this project is to realize a cross-platform and multi-language viewer
 
 ## Requirements
 
-* Java 16+
+* Java 22+
 * Python 3.12 (only for facial feature analysis)

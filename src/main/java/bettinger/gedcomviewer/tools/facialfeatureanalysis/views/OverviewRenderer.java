@@ -50,7 +50,7 @@ class OverviewRenderer extends AncestorsRenderer {
 				maxSimilarLineIds.get(facialFeature).addAll(lineIds);
 
 				Pair<String, String> edge = new Pair<>(proband.getId(), lineIds.get(0));
-				maxSimilarLineEdges.computeIfAbsent(edge, x -> new HashSet<>());
+				maxSimilarLineEdges.computeIfAbsent(edge, _ -> new HashSet<>());
 				maxSimilarLineEdges.get(edge).add(facialFeature);
 
 				final ArrayList<String> excluded = new ArrayList<>();
@@ -62,11 +62,11 @@ class OverviewRenderer extends AncestorsRenderer {
 					}
 
 					edge = new Pair<>(lineIds.get(i), lineIds.get(i + 1));
-					maxSimilarLineEdges.computeIfAbsent(edge, x -> new HashSet<>());
+					maxSimilarLineEdges.computeIfAbsent(edge, _ -> new HashSet<>());
 					maxSimilarLineEdges.get(edge).add(facialFeature);
 				}
 
-				excludedIds.computeIfAbsent(facialFeature, x -> new ArrayList<>());
+				excludedIds.computeIfAbsent(facialFeature, _ -> new ArrayList<>());
 				excludedIds.get(facialFeature).addAll(excluded);
 			}
 		}

@@ -77,7 +77,7 @@ public class MainFrame extends Frame {
 				if (SystemInfo.isMacOS) {
 					Taskbar.getTaskbar().setIconImage(icon);
 				}
-			} catch (final IOException e) {
+			} catch (final IOException _) {
 				// intentionally left blank
 			}
 		}
@@ -104,7 +104,7 @@ public class MainFrame extends Frame {
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		if (SystemInfo.isMacOS) {
-			DesktopUtils.setAboutHandler(x -> showAboutDialog());
+			DesktopUtils.setAboutHandler(_ -> showAboutDialog());
 		}
 
 		Events.register(new Object() {
@@ -576,9 +576,9 @@ public class MainFrame extends Frame {
 
 			try {
 				onSuccess(get());
-			} catch (final InterruptedException e) {
+			} catch (final InterruptedException _) {
 				Thread.currentThread().interrupt();
-			} catch (final ExecutionException e) {
+			} catch (final ExecutionException _) {
 				// intentionally left blank
 			}
 		}

@@ -47,7 +47,7 @@ public abstract class NavigationTab extends JPanel {
 		generationsBox.add(label);
 
 		generationsComboBox = new GenerationsComboBox();
-		generationsComboBox.addActionListener(x -> Preferences.setGenerations(this, (int) generationsComboBox.getSelectedItem()));
+		generationsComboBox.addActionListener(_ -> Preferences.setGenerations(this, (int) generationsComboBox.getSelectedItem()));
 		generationsComboBox.setSelectedItem(Preferences.getGenerations(this));
 		generationsBox.add(generationsComboBox);
 

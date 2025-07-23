@@ -55,7 +55,7 @@ class TabbedPane extends JTabbedPane {
 		tableContainers = new HashMap<>();
 
 		searchField = new SearchField();
-		searchField.addActionListener(x -> Events.post(new UI.SearchCommand(gedcom, searchField.getText())));
+		searchField.addActionListener(_ -> Events.post(new UI.SearchCommand(gedcom, searchField.getText())));
 
 		final var trailingToolBar = new JToolBar();
 		trailingToolBar.add(Box.createHorizontalGlue());
@@ -72,7 +72,7 @@ class TabbedPane extends JTabbedPane {
 		addTab(I18N.get("Repositories"), new DefaultTableContainer(RepositoriesTableModel.class), Repository.class);
 		addTab(I18N.get("Notes"), new DefaultTableContainer(NotesTableModel.class), Note.class);
 
-		addChangeListener(x -> {
+		addChangeListener(_ -> {
 			for (final var tableContainer : tableContainers.values()) {
 				tableContainer.clearSelection();
 			}
