@@ -153,7 +153,7 @@ def _on_success(filepath, log=None):
 
 def _on_error(message, log=None):
     print(json.dumps({"error": True, "message": message, "log": log}))
-    sys.exit(1)
+    sys.exit(0)
 
 
 if len(sys.argv) < 4:
@@ -172,7 +172,7 @@ else:
 
     results = _analyse(proband, depth)
     if "error" in results and "message" in results:
-        _on_error(results.message, log)
+        _on_error(results["message"], log)
 
     filepath = sys.argv[1].replace(".json", "-result.json")
     with open(filepath, "w", encoding="utf-8") as file:
