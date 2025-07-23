@@ -168,7 +168,7 @@
 		<dependency>
 			<groupId>com.github.cbettinger</groupId>
 			<artifactId>gedinline</artifactId>
-			<version>-dfdc479752-1</version>
+			<version>v4-main-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>
