@@ -140,7 +140,7 @@ public class MainFrame extends Frame {
 
 			@Subscribe
 			void onLocaleChangedEvent(final Preferences.LocaleChangedEvent event) {
-				JOptionPane.showMessageDialog(MainFrame.getInstance(), I18N.get("RestartToApplyChanges"), I18N.get("Language"), JOptionPane.OK_OPTION);
+				JOptionPane.showMessageDialog(MainFrame.getInstance(), I18N.get("RestartToApplyChanges"), I18N.get("Language"), JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 
@@ -553,7 +553,7 @@ public class MainFrame extends Frame {
 		protected void onError(final Exception e) {
 			after();
 
-			JOptionPane.showMessageDialog(MainFrame.getInstance(), e.getMessage(), label, JOptionPane.OK_OPTION);
+			JOptionPane.showMessageDialog(MainFrame.getInstance(), e.getMessage(), label, JOptionPane.ERROR_MESSAGE);
 		}
 
 		private void before() {
