@@ -4,6 +4,7 @@ The following third-party software products and media assets are redistributed a
 
 ## MIT License
 
+* gedinline: Copyright (c) 2019 Nigel Munro Parker, <https://github.com/nigel-parker/gedinline>
 * jiconfont-swing: Copyright (c) 2016 jIconFont, <https://github.com/jIconFont/jiconfont-swing>
 * jsoup: Copyright (c) 2009-2025 Jonathan Hedley, <https://jsoup.org>
 * leaflet.markercluster: Copyright (c) 2012 David Leaver, <https://github.com/Leaflet/Leaflet.markercluster>

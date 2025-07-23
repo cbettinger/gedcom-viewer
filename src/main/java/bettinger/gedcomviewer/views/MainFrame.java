@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Taskbar;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
@@ -35,6 +36,7 @@ import bettinger.gedcomviewer.model.GEDCOM.GEDCOMEvent;
 import bettinger.gedcomviewer.model.GEDCOM.GEDCOMException;
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.views.ConfigurationDialog;
+import bettinger.gedcomviewer.tools.validator.ValidationDialog;
 import bettinger.gedcomviewer.utils.DesktopUtils;
 import bettinger.gedcomviewer.utils.ExportUtils;
 import bettinger.gedcomviewer.utils.FileUtils;
@@ -130,6 +132,7 @@ public class MainFrame extends Frame {
 					case "EXPORT_LINEAGE" -> showExportLineageFileChooser();
 					case "EXPORT_ANCESTORS" -> showExportAncestorsFileChooser();
 					case "EXPORT_DESCENDANTS" -> showExportDescendantsFileChooser();
+					case "VALIDATION" -> validateFile();
 					case "FACIAL_FEATURE_ANALYSIS" -> showFacialFeatureAnalysis();
 					case "SHOW_ABOUT" -> showAboutDialog();
 				}
@@ -496,6 +499,34 @@ public class MainFrame extends Frame {
 				}.execute();
 			}
 		}
+	}
+
+	private void validateFile() {
+		new BackgroundWorker(I18N.get("Validation")) {
+			private ValidationDialog dialog;
+
+			@Override
+			protected URI doInBackground() throws Exception {
+				final var uri = super.doInBackground();
+
+				try {
+					dialog = new ValidationDialog(gedcom);
+				} catch (final FileNotFoundException e) {
+					onError(e);
+				}
+
+				return uri;
+			}
+
+			@Override
+			protected void onSuccess(final URI uri) {
+				super.onSuccess(uri);
+
+				if (dialog != null) {
+					dialog.open();
+				}
+			}
+		}.execute();
 	}
 
 	private void showFacialFeatureAnalysis() {

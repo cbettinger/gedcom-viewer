@@ -17,6 +17,9 @@ public abstract class Constants {
 	public static final int DEFAULT_MODAL_DIALOG_WIDTH = 640;
 	public static final int DEFAULT_MODAL_DIALOG_HEIGHT = 480;
 
+	public static final int DEFAULT_LARGE_MODAL_DIALOG_WIDTH = DEFAULT_FRAME_WIDTH / 2;
+	public static final int DEFAULT_LARGE_MODAL_DIALOG_HEIGHT = DEFAULT_FRAME_HEIGHT / 2;
+
 	public static final int BORDER_SIZE = 5;
 	public static final int DIALOG_PADDING = 4 * BORDER_SIZE;
 	public static final int TEXT_PANE_MARGIN = 2 * BORDER_SIZE;

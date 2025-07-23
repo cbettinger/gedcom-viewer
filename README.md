@@ -11,6 +11,7 @@ The aim of this project is to realize a cross-platform and multi-language viewer
 * Display of main fact locations within a map
 * Quick overview of the source qualities
 * Export to HTML or PDF (including media attachments)
+* GEDCOM 5.5.1 validation
 * Conversion to GEDCOM 7 file format
 * Facial feature analysis to find out from which ancestors a proband inherited his facial features (such as the shape of the eyes or nose)
 * Currently supported languages: English, German, French
