@@ -15,10 +15,10 @@ import bettinger.gedcomviewer.views.AutoFitTable;
 import bettinger.gedcomviewer.views.MainFrame;
 import bettinger.gedcomviewer.views.TableModel;
 
-public class ValidateDialog extends JDialog {
+public class ValidationDialog extends JDialog {
 
-	public ValidateDialog(final GEDCOM gedcom) throws FileNotFoundException {
-		setTitle(I18N.get("Validate"));
+	public ValidationDialog(final GEDCOM gedcom) throws FileNotFoundException {
+		setTitle(I18N.get("Validation"));
 		setModal(true);
 
 		setLayout(new BorderLayout());
@@ -32,7 +32,7 @@ public class ValidateDialog extends JDialog {
 		setLocationRelativeTo(MainFrame.getInstance());
 
 		if (gedcom != null) {
-			table.setModel(new IssuesTableModel(GedInlineValidator.validate(gedcom)));
+			table.setModel(new IssuesTableModel(GedInlineValidator.execute(gedcom)));
 		}
 	}
 
@@ -51,17 +51,17 @@ public class ValidateDialog extends JDialog {
 			final var issue = getItemAt(row);
 
 			return switch (col) {
-				case 0 -> issue.getLine();
-				case 1 -> issue.getMessage();
-				default -> "";
+			case 0 -> issue.getLine();
+			case 1 -> issue.getMessage();
+			default -> "";
 			};
 		}
 
 		@Override
 		public Class<?> getColumnClass(final int column) {
 			return switch (column) {
-				case 0 -> Integer.class;
-				default -> super.getColumnClass(column);
+			case 0 -> Integer.class;
+			default -> super.getColumnClass(column);
 			};
 		}
 	}

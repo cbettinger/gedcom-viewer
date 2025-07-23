@@ -35,7 +35,7 @@ import bettinger.gedcomviewer.model.GEDCOM;
 import bettinger.gedcomviewer.model.GEDCOM.GEDCOMEvent;
 import bettinger.gedcomviewer.model.GEDCOM.GEDCOMException;
 import bettinger.gedcomviewer.model.Individual;
-import bettinger.gedcomviewer.tools.validator.ValidateDialog;
+import bettinger.gedcomviewer.tools.validator.ValidationDialog;
 import bettinger.gedcomviewer.utils.DesktopUtils;
 import bettinger.gedcomviewer.utils.ExportUtils;
 import bettinger.gedcomviewer.utils.FileUtils;
@@ -131,7 +131,7 @@ public class MainFrame extends Frame {
 					case "EXPORT_LINEAGE" -> showExportLineageFileChooser();
 					case "EXPORT_ANCESTORS" -> showExportAncestorsFileChooser();
 					case "EXPORT_DESCENDANTS" -> showExportDescendantsFileChooser();
-					case "VALIDATE" -> showValidateDialog();
+					case "VALIDATION" -> validateFile();
 					case "SHOW_ABOUT" -> showAboutDialog();
 				}
 			}
@@ -493,16 +493,16 @@ public class MainFrame extends Frame {
 		}
 	}
 
-	private void showValidateDialog() {
-		new BackgroundWorker(I18N.get("Validate")) {
-			private ValidateDialog dialog;
+	private void validateFile() {
+		new BackgroundWorker(I18N.get("Validation")) {
+			private ValidationDialog dialog;
 
 			@Override
 			protected URI doInBackground() throws Exception {
 				final var uri = super.doInBackground();
 
 				try {
-					dialog = new ValidateDialog(gedcom);
+					dialog = new ValidationDialog(gedcom);
 				} catch (final FileNotFoundException e) {
 					onError(e);
 				}

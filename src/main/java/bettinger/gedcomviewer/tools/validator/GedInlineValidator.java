@@ -15,7 +15,7 @@ public class GedInlineValidator {
 
 	private GedInlineValidator() {}
 
-	public static List<Issue> validate(final GEDCOM gedcom) throws FileNotFoundException {
+	public static List<Issue> execute(final GEDCOM gedcom) throws FileNotFoundException {
 
 		final var stringWriter = new StringWriter();
 		final var printWriter = new PrintWriter(stringWriter);
