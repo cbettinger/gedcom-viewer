@@ -51,17 +51,17 @@ public class ValidationDialog extends JDialog {
 			final var issue = getItemAt(row);
 
 			return switch (col) {
-			case 0 -> issue.getLine();
-			case 1 -> issue.getMessage();
-			default -> "";
+				case 0 -> issue.getLine();
+				case 1 -> issue.getMessage();
+				default -> "";
 			};
 		}
 
 		@Override
 		public Class<?> getColumnClass(final int column) {
 			return switch (column) {
-			case 0 -> Integer.class;
-			default -> super.getColumnClass(column);
+				case 0 -> Integer.class;
+				default -> super.getColumnClass(column);
 			};
 		}
 	}
