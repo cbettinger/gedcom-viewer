@@ -44,7 +44,7 @@ public abstract class I18N {
 	public static String get(final String key) {
 		try {
 			return bundle.getString(key);
-		} catch (final Exception e) {
+		} catch (final Exception _) {
 			Logger.getLogger(I18N.class.getName()).log(Level.SEVERE, String.format("Ressource string '%s' with locale '%s' not found", key, getCurrentLocale().toString()));
 			return key;
 		}
@@ -54,7 +54,7 @@ public abstract class I18N {
 		byte[] data;
 		try {
 			data = I18N.class.getClassLoader().getResourceAsStream(String.format("locales/%s.png", locale.getLanguage())).readAllBytes();
-		} catch (final IOException e) {
+		} catch (final IOException _) {
 			return null;
 		}
 

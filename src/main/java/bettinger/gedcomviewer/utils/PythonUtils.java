@@ -51,10 +51,10 @@ public abstract class PythonUtils {
 			}
 
 			return result;
-		} catch (final InterruptedException e) {
+		} catch (final InterruptedException _) {
 			Thread.currentThread().interrupt();
 			return false;
-		} catch (final IOException e) {
+		} catch (final IOException _) {
 			return false;
 		}
 	}

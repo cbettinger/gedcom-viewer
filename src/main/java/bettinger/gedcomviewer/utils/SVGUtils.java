@@ -51,7 +51,7 @@ public interface SVGUtils {
 			final var transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.transform(new DOMSource(doc.getDocumentElement()), new StreamResult(writer));
 			result = writer.toString();
-		} catch (final Exception e) {
+		} catch (final Exception _) {
 			// intentionally left blank
 		}
 

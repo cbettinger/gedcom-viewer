@@ -239,7 +239,7 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 	static float parseLatitude(final GedcomTag mapTag) {
 		try {
 			return Float.parseFloat(parseMapCoordinate(mapTag, "LATI"));
-		} catch (final NumberFormatException e) {
+		} catch (final NumberFormatException _) {
 			return 0;
 		}
 	}
@@ -247,7 +247,7 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 	static float parseLongitude(final GedcomTag mapTag) {
 		try {
 			return Float.parseFloat(parseMapCoordinate(mapTag, "LONG"));
-		} catch (final NumberFormatException e) {
+		} catch (final NumberFormatException _) {
 			return 0;
 		}
 	}

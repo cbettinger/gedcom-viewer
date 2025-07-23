@@ -245,7 +245,7 @@ public abstract class HTMLUtils {
 	public static String encode(final String html) {
 		try {
 			return URLEncoder.encode(html, StandardCharsets.UTF_8.toString());
-		} catch (final UnsupportedEncodingException e) {
+		} catch (final UnsupportedEncodingException _) {
 			return html;
 		}
 	}
