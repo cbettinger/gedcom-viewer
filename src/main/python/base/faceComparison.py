@@ -32,7 +32,7 @@ def getFaceAnalysisResult(targetPerson, maxDepth=None):
 
             avgPersonSimilarities.update({id: avgSim})
 
-            if maxSimRes.value is None:
+            if maxSimRes is None:
                 nodes[c].update({id: ""})
             else:
                 individualResult = {"maxSimilarity": str(maxSimRes.value), "avgSimilarity": str(avgSim), "maxMatchImgTarget": maxSimRes.img1.fileName, "maxMatchImgAncestor": maxSimRes.img2.fileName}
