@@ -18,8 +18,6 @@ class Landmarks:
         dn = max(img_width, img_height)
 
         real_landmarks = []
-        img_landmarks = []
-        norm_landmarks = []
 
         for lm in landmarks:
             real_landmarks.append(
@@ -29,17 +27,8 @@ class Landmarks:
                     lm.z * img_width / dn,
                 ]
             )
-            img_landmarks.append(
-                [
-                    min(math.floor(lm.x * img_width), img_width - 1),
-                    min(math.floor(lm.y * img_height), img_height - 1),
-                ]
-            )
-            norm_landmarks.append([lm.x, lm.y, lm.z])
 
         self.real_landmarks = np.asarray(real_landmarks)
-        self.img_landmarks = np.asarray(img_landmarks)
-        self.norm_landmarks = np.asarray(norm_landmarks)
 
         self._rotate_real_landmarks()
 
