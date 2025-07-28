@@ -15,11 +15,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 
-import org.javatuples.Pair;
-
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Individual;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.AncestralLine;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureAnalysisResult;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatures;
 import bettinger.gedcomviewer.views.AutoFitTable;
@@ -33,8 +30,6 @@ public class OverviewPane extends JPanel {
         setLayout(new BorderLayout());
 
         this.visualization = new WebViewPanel();
-        TreeMap<FacialFeatures, Pair<ArrayList<AncestralLine>, Float>> maxPathSimilarities = new TreeMap<>();
-        TreeMap<FacialFeatures, Pair<ArrayList<String>, Float>> maxPersonSimilarities = new TreeMap<>();
         final String[] columns = { I18N.get("FacialFeature"), I18N.get("LineColor"), I18N.get("MaxPathSimilarity"), I18N.get("MaxSimilarity") };
         ArrayList<Object[]> tableData = new ArrayList<>();
 
@@ -42,9 +37,7 @@ public class OverviewPane extends JPanel {
             final var feature = entry.getKey();
             final var featureResult = entry.getValue();
             final var maxPathSimilarity = featureResult.getMaxPathSimilarity();
-            maxPathSimilarities.put(feature, maxPathSimilarity);
             final var maxPersonSimilarity = featureResult.getMaxPersonSimilarity();
-            maxPersonSimilarities.put(feature, maxPersonSimilarity);
 
             Object[] row = { I18N.get(feature.name()), feature, String.format("%.2f%%", maxPathSimilarity.getValue1() * 100), String.format("%.2f%%", maxPersonSimilarity.getValue1() * 100) };
             tableData.add(row);
