@@ -36,7 +36,7 @@ def _results(results, proband, max_depth):
 
             avg_similarities.update({id: avg_similarity})
 
-            if max_similarity.value is None:
+            if max_similarity is None:
                 similarities[feature].update({id: ""})
             else:
                 similarities[feature].update(
@@ -71,8 +71,6 @@ def _similarities(proband, other):
     max_result = {}
     avg_result = {}
 
-    done = []
-
     max_similarities = DictUtils.zeros(Face.FEATURES)
     avg_similarities = DictUtils.zeros(Face.FEATURES)
 
@@ -80,12 +78,7 @@ def _similarities(proband, other):
 
     if _is_comparable(other):
         for proband_face in proband.faces:
-            max_sims = DictUtils.zeros(Face.FEATURES)
-
             for other_face in other.faces:
-                if proband_face is other_face or {proband_face, other_face} in done:
-                    continue
-
                 similarities = proband_face.similarities(other_face)
 
                 for c in proband_face.characteristics.keys():
@@ -97,21 +90,18 @@ def _similarities(proband, other):
                         max_similarities.update({c: s})
                         most_similar_faces.update({c: [proband_face, other_face]})
 
-                    if s > max_sims[c]:
-                        max_sims[c] = s
-
-                done.append({proband_face, other_face})
-
     for c, s in max_similarities.items():
         faces = most_similar_faces.get(c)
 
         if faces is None:
-            max_result.update({c: Similarity(None, None, None)})
+            max_result.update({c: None})
             avg_result.update({c: None})
         else:
             f1, f2 = faces
             max_result.update({c: Similarity(f1.image, f2.image, s)})
-            avg_result.update({c: avg_similarities[c] / len(done)})
+            avg_result.update(
+                {c: avg_similarities[c] / (len(proband.faces) * len(other.faces))}
+            )
 
     return {"max": max_result, "avg": avg_result}
 
