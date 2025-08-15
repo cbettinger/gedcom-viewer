@@ -5,14 +5,13 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
-
-import org.folg.gedcom.model.Person;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
@@ -29,7 +28,7 @@ public class PersonInput {
 	@JsonProperty
 	private final String id;
 	@JsonProperty
-	private final List<String> portraits;
+	private final List<PortraitInput> portraits;
 	@JsonProperty
 	private PersonInput father;
 	@JsonProperty
@@ -42,26 +41,31 @@ public class PersonInput {
 		this.father = null;
 
 		Map<Media, Rectangle> portraitData = individual.getFacialPortraits();
+		int portraitNumber = 0;
 		for (Map.Entry<Media, Rectangle> entry : portraitData.entrySet()) {
 			Media medium = entry.getKey();
 			Rectangle clip = entry.getValue();
 
 			String fileName = medium.getFileName();
+			Date date = new Date();
+        	long timeMillis = date.getTime();
+			String clipFilePath = String.format("tmp/%s-%d-%d.jpg", this.id, portraitNumber, timeMillis);
+			var image = (BufferedImage) medium.getImage(); 
 
 			if (clip != null) {
-				fileName = String.format("tmp/%s-%s.jpg", FileUtils.getBaseName(FileUtils.getFileName(fileName)), this.id);
-				var image = (BufferedImage) medium.getImage();
 				image = image.getSubimage(clip.x, clip.y, clip.width, clip.height);
-				File clippedImageFile = new File(fileName);
-				try {
-					ImageIO.write(image, "jpg", clippedImageFile);
-					temporaryFiles.add(clippedImageFile);
-				} catch (IOException e) {
-					Logger.getLogger(PersonInput.class.getName()).log(Level.SEVERE, "Failed to write temporary image clip file");
-				}
+			} 
+
+			File clippedImageFile = new File(clipFilePath);
+			try {
+				ImageIO.write(image, "jpg", clippedImageFile);
+				temporaryFiles.add(clippedImageFile);
+			} catch (IOException e) {
+				Logger.getLogger(PersonInput.class.getName()).log(Level.SEVERE, "Failed to write temporary image clip file");
 			}
 
-			this.portraits.add(fileName);
+			this.portraits.add(new PortraitInput(fileName, clipFilePath));
+			portraitNumber++;
 		}
 	}
 

@@ -15,15 +15,17 @@ class Person(BinaryTreeItem):
         self.faces = []
         if portraits is not None:
             usedFiles = []
-            for filePath in portraits:
+            for p in portraits:
                 if maxNumPortraits is not None and len(self.faces) == maxNumPortraits:
                     print("Für Individuum {} sind mehr Fotos verfügbar als verwendet werden. Es werden die folgenden Fotos genutzt: {}".format(id, usedFiles))
                     break
+                clipFilePath = p.get("imageClipFilePath")
+                originalFilePath = p.get("originalFilePath")
                 try:
-                    self.faces.append(Face(Image(filePath), FACE_CHARACTERISTICS_OF_INTEREST))
-                    usedFiles.append(filePath)
+                    self.faces.append(Face(Image(clipFilePath, originalFilePath), FACE_CHARACTERISTICS_OF_INTEREST))
+                    usedFiles.append(clipFilePath)
                 except Exception as e:
-                    print(filePath, "konnte nicht geladen werden oder es war kein Gesicht erkennbar ({})".format(e))
+                    print(clipFilePath, "konnte nicht geladen werden oder es war kein Gesicht erkennbar ({})".format(e))
 
     def hasFaces(self):
         return len(self.faces) > 0
