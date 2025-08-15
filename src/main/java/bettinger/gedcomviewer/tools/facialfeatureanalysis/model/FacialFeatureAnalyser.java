@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TreeMap;
@@ -25,8 +26,9 @@ public abstract class FacialFeatureAnalyser {
         var defaultException = new FacialFeatureAnalysisException(I18N.get("FacialFeatureAnalysisFailed"));
 
         File inputFile;
+        ArrayList<File> temporaryImageFiles = new ArrayList<>();
         try {
-            inputFile = createInputFile(individual, maxDepth);
+            inputFile = createInputFile(individual, maxDepth, temporaryImageFiles);
         } catch (IOException e) {
             Logger.getLogger(FacialFeatureAnalyser.class.getName()).log(Level.SEVERE, defaultException.getMessage());
             throw defaultException;
@@ -37,6 +39,9 @@ public abstract class FacialFeatureAnalyser {
 
         final String[] args = { inputFile.getAbsolutePath(), Integer.toString(maxNumPortraits), Integer.toString(maxDepth) };
         final List<String> outputs = PythonUtils.callScript(pathToScript, args);
+        for (File tmpFile : temporaryImageFiles) {
+            tmpFile.delete();
+        }
         inputFile.delete();
 
         if (outputs.size() < 1) {
@@ -70,11 +75,11 @@ public abstract class FacialFeatureAnalyser {
         return results;
     }
 
-    private static File createInputFile(final Individual individual, final int maxDepth) throws IOException {
-        PersonInput inputObject = new PersonInput(individual, 0, maxDepth);
+    private static File createInputFile(final Individual individual, final int maxDepth, ArrayList<File> temporaryFiles) throws IOException {
+        Files.createDirectories(Paths.get("tmp"));
+        PersonInput inputObject = new PersonInput(individual, 0, maxDepth, temporaryFiles);
         Date date = new Date();
         long timeMillis = date.getTime();
-        Files.createDirectories(Paths.get("tmp"));
         return JSONUtils.toJSONFile(inputObject, String.format("tmp/%d-%s.json", timeMillis, individual.getName()));
     }
 }
