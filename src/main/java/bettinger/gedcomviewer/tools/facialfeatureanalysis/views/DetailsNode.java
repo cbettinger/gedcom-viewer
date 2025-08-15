@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.apache.batik.svggen.SVGGraphics2D;
+import org.javatuples.Pair;
 
 import bettinger.gedcomviewer.Format;
 import bettinger.gedcomviewer.I18N;
@@ -60,6 +61,11 @@ public class DetailsNode extends Node {
     }
 
     private Image getPortrait(Individual individual, String filename) {
+        Pair<String, Individual> key = new Pair<>(filename, individual);
+		if (ResultFrame.cachedPortraits.containsKey(key)) {
+			return ResultFrame.cachedPortraits.get(key);
+		}
+
         Image result = null;
 
         if (individual != null) {
@@ -75,6 +81,7 @@ public class DetailsNode extends Node {
                     }
 
                     result = image.getScaledInstance(-1, PORTRAIT_HEIGHT, Image.SCALE_FAST);
+					ResultFrame.cachedPortraits.put(key, result);
                     return result;
                 }
             }
