@@ -9,3 +9,9 @@ def getDicts(keys):
     for k in keys:
         d.update({k: {}})
     return d
+
+def getLists(keys):
+    d = {}
+    for k in keys:
+        d.update({k: []})
+    return d

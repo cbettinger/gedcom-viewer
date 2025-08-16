@@ -41,8 +41,8 @@ class FaceAnalyser:
         mostSimilarFaces = {}
         maxResult = {}
 
-        avgSimilarities = dictUtils.getZeros(FACE_CHARACTERISTICS_OF_INTEREST)
         avgResult = {}
+        threeMaxSimilarities = dictUtils.getLists(FACE_CHARACTERISTICS_OF_INTEREST)
 
         if cls._isComparable(other):
             for ownFace in targetPerson.faces:
@@ -50,10 +50,14 @@ class FaceAnalyser:
                     similarities = ownFace.getSimilaritiesTo(otherFace)
                     for c in ownFace.characteristics.keys():
                         s = similarities.get(c)
-                        avgSimilarities[c] += s
                         if s > maxSimilarities.get(c):
                             maxSimilarities.update({c: s})
                             mostSimilarFaces.update({c: [ownFace, otherFace]})
+                        if len(threeMaxSimilarities[c]) < 3:
+                            threeMaxSimilarities[c].append(s)
+                            threeMaxSimilarities[c].sort(reverse=True)
+                        elif s > threeMaxSimilarities[c][2]:
+                            threeMaxSimilarities[c][2] = s
 
         for c, s in maxSimilarities.items():
             faces = mostSimilarFaces.get(c)
@@ -63,6 +67,6 @@ class FaceAnalyser:
             else:
                 f1, f2 = faces
                 maxResult.update({c: MaxSimilarityResult(s, f1.srcImg, f2.srcImg)})
-                avgResult.update({c: avgSimilarities[c]/(len(targetPerson.faces)*len(other.faces))})
+                avgResult.update({c: sum(threeMaxSimilarities[c])/len(threeMaxSimilarities[c])})
 
         return maxResult, avgResult
