@@ -12,10 +12,22 @@ public class FacialFeatureAnalysisResult {
     
     private final HashMap<String, FacialFeatureSimilarity> personSimilarities;
     private final HashMap<AncestralLine, Float> pathSimilarities;
+    private final ArrayList<String> personsWithMaxSimOnBestPaths;
+    private final Float maxPersonSimilarityOnBestPath;
+    private final Float maxPathSimilarity;
+    private final ArrayList<AncestralLine> pathsWithMaxSim;
 
     public FacialFeatureAnalysisResult(HashMap<String, FacialFeatureSimilarity> personSimilarities, HashMap<AncestralLine, Float> pathSimilarities) {
         this.personSimilarities = personSimilarities;
         this.pathSimilarities = pathSimilarities;
+
+        var maxPathSimilarity = this.findMaxPathSimilarity();
+        this.pathsWithMaxSim = maxPathSimilarity.getValue0();
+        this.maxPathSimilarity = maxPathSimilarity.getValue1();
+
+        var maxPersonSimOnBestPaths = this.findMaxPersonSimilaritiesOnBestPaths();
+        this.personsWithMaxSimOnBestPaths = maxPersonSimOnBestPaths.getValue0();
+        this.maxPersonSimilarityOnBestPath = maxPersonSimOnBestPaths.getValue1();
     }
 
     public HashMap<String, FacialFeatureSimilarity> getPersonSimilarities() {
@@ -24,6 +36,22 @@ public class FacialFeatureAnalysisResult {
 
     public HashMap<AncestralLine, Float> getPathSimilarities() {
         return pathSimilarities;
+    }
+
+    public Float getMaxPersonSimilarityOnBestPath() {
+        return maxPersonSimilarityOnBestPath;
+    }
+
+    public Float getMaxPathSimilarity() {
+        return maxPathSimilarity;
+    }
+
+    public ArrayList<String> getPersonsWithMaxSimOnBestPaths() {
+        return personsWithMaxSimOnBestPaths;
+    }
+
+    public ArrayList<AncestralLine> getPathsWithMaxSim() {
+        return pathsWithMaxSim;
     }
 
     public static FacialFeatureAnalysisResult fromJSON(final JsonNode json, final String facialFeature) {
@@ -66,7 +94,7 @@ public class FacialFeatureAnalysisResult {
         return new Pair<ArrayList<String>, Float>(idsWithMaxSim, maxSimilarity);
     }
 
-    public Pair<ArrayList<AncestralLine>, Float> getMaxPathSimilarity() {
+    private Pair<ArrayList<AncestralLine>, Float> findMaxPathSimilarity() {
         ArrayList<AncestralLine> pathsWithMaxSim = new ArrayList<>();
         Float maxSimilarity = null;
         for (final var entry : pathSimilarities.entrySet()) {
@@ -81,5 +109,26 @@ public class FacialFeatureAnalysisResult {
             }
         }
         return new Pair<ArrayList<AncestralLine>, Float>(pathsWithMaxSim, maxSimilarity);
+    }
+
+    private Pair<ArrayList<String>, Float> findMaxPersonSimilaritiesOnBestPaths() {
+        ArrayList<String> idsWithMaxSim = new ArrayList<>();
+        Float maxSim = null;
+        for (var path : pathsWithMaxSim) {
+            for (var id : path.getAncestorIDs()) {
+                final var featureSim = personSimilarities.get(id);
+                if (featureSim != null) {
+                    final var avgSim = featureSim.getAvgSimilarity();
+                    if (maxSim == null || avgSim > maxSim) {
+                        idsWithMaxSim.clear();
+                        idsWithMaxSim.add(id);
+                        maxSim = avgSim;
+                    } else if (Math.abs(avgSim - maxSim) < EPSILON) {
+                        idsWithMaxSim.add(id);
+                    }
+                }
+            }
+        }
+        return new Pair<>(idsWithMaxSim, maxSim);
     }
 }

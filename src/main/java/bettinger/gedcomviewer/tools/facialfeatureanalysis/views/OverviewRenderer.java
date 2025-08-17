@@ -23,7 +23,7 @@ import bettinger.gedcomviewer.views.visualization.Node;
 
 class OverviewRenderer extends AncestorsRenderer {
 
-    private HashMap<Color, ArrayList<String>> maxSimilarityIndividuals;
+    private HashMap<Color, ArrayList<String>> maxSimilarityIndividualsOnBestPath;
     private HashMap<Pair<String, String>, Set<Color>> maxSimilarityEdges;
     private final int LINE_OFFSET = 5;
     private final Color DEFAULT_LINE_COLOR = Color.BLACK;
@@ -33,7 +33,7 @@ class OverviewRenderer extends AncestorsRenderer {
 
     OverviewRenderer(final Individual proband, final TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results) {
         super();
-        this.maxSimilarityIndividuals = new HashMap<>();
+        this.maxSimilarityIndividualsOnBestPath = new HashMap<>();
         this.maxSimilarityEdges = new HashMap<>();
         this.excludedIndividuals = new HashMap<>();
         this.maxPathIndividuals = new HashMap<>();
@@ -43,13 +43,13 @@ class OverviewRenderer extends AncestorsRenderer {
             var color = featureColors.get(entry.getKey());
             var res = entry.getValue();
 
-            var maxPersonSimilarityIDs = res.getMaxPersonSimilarity().getValue0();
-            this.maxSimilarityIndividuals.put(color, maxPersonSimilarityIDs);
+            var maxPersonSimilarityIDs = res.getPersonsWithMaxSimOnBestPaths();
+            this.maxSimilarityIndividualsOnBestPath.put(color, maxPersonSimilarityIDs);
             this.maxPathIndividuals.put(color, new ArrayList<>());
 
             var personSimilarities = res.getPersonSimilarities();
 
-            var maxSimilarityPaths = res.getMaxPathSimilarity().getValue0();
+            var maxSimilarityPaths = res.getPathsWithMaxSim();
             for (final var path : maxSimilarityPaths) {
                 var pathIDs = path.getAncestorIDs();
                 this.maxPathIndividuals.get(color).addAll(Arrays.asList(pathIDs));
@@ -156,8 +156,8 @@ class OverviewRenderer extends AncestorsRenderer {
         if (renderRootNode || node != rootNode) {
             node.render(node.getPosition().x, node.getPosition().y);
             int colorNum = 0;
-            for (var color : maxSimilarityIndividuals.keySet()) {
-                if (node.getIndividual() != null && maxSimilarityIndividuals.get(color).contains(node.getIndividual().getId())) {
+            for (var color : maxSimilarityIndividualsOnBestPath.keySet()) {
+                if (node.getIndividual() != null && maxSimilarityIndividualsOnBestPath.get(color).contains(node.getIndividual().getId())) {
                     int offset = colorNum * (int) LINE_THICKNESS;
                     g.setPaint(color);
                     g.setStroke(new BasicStroke(LINE_THICKNESS));

@@ -37,9 +37,9 @@ public class OverviewPane extends JPanel {
             final var feature = entry.getKey();
             final var featureResult = entry.getValue();
             final var maxPathSimilarity = featureResult.getMaxPathSimilarity();
-            final var maxPersonSimilarity = featureResult.getMaxPersonSimilarity();
+            final var maxPersonSimilarity = featureResult.getMaxPersonSimilarityOnBestPath();
 
-            Object[] row = { I18N.get(feature.name()), feature, String.format("%.2f%%", maxPathSimilarity.getValue1() * 100), String.format("%.2f%%", maxPersonSimilarity.getValue1() * 100) };
+            Object[] row = { I18N.get(feature.name()), feature, String.format("%.2f%%", maxPathSimilarity * 100), String.format("%.2f%%", maxPersonSimilarity * 100) };
             tableData.add(row);
         }
 
