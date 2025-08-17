@@ -27,6 +27,9 @@ class Person(BinaryTreeItem):
                 except Exception as e:
                     print(clipFilePath, "konnte nicht geladen werden oder es war kein Gesicht erkennbar ({})".format(e))
 
+    def isComplete(self):
+        return self.hasFaces()
+    
     def hasFaces(self):
         return len(self.faces) > 0
     

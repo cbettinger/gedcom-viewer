@@ -5,7 +5,7 @@ from utils import dictUtils
 class FaceAnalyser:
 
     @classmethod 
-    def analyse(cls, targetPerson, maxDepth=MAX_COMPARISON_DEPTH):
+    def getSimilaritiesToTargetPerson(cls, targetPerson, maxDepth=MAX_COMPARISON_DEPTH):
         if not targetPerson.hasFaces() or not cls._isComparable(targetPerson.parent1) or not cls._isComparable(targetPerson.parent2):
             return None
         
@@ -34,6 +34,36 @@ class FaceAnalyser:
     @classmethod
     def _isComparable(cls, other):
         return other is not None and other.hasFaces()
+    
+    @classmethod
+    def _isNextGenerationComplete(cls, rootPerson):
+        return rootPerson.parent1 and rootPerson.parent1.hasFaces() and rootPerson.parent2 and rootPerson.parent2.hasFaces()
+    
+    @classmethod
+    def getSimilaritiesToOwnChildInLineToTarget(cls, rootPerson, maxDepth=MAX_COMPARISON_DEPTH):
+        if not rootPerson.hasFaces() or not FaceAnalyser._isNextGenerationComplete(rootPerson):
+            return None
+        
+        depth = 0
+        similarities = {}
+        individualsToCheck = [rootPerson]
+
+        while depth < maxDepth:
+            depth += 1
+            nextIndividualsToCheck = []
+
+            for i in range(len(individualsToCheck)):
+                p = individualsToCheck[i]
+                if FaceAnalyser._isNextGenerationComplete(p):
+                    _, sAvgFather = cls._getSimilaritiesToIndividual(p, p.parent1)   
+                    similarities.update({p.parent1.value: sAvgFather})
+                    _, sAvgMother = cls._getSimilaritiesToIndividual(p, p.parent2)   
+                    similarities.update({p.parent2.value: sAvgMother})
+                    nextIndividualsToCheck.extend([p.parent1, p.parent2])
+
+            individualsToCheck = nextIndividualsToCheck
+
+        return similarities
     
     @classmethod
     def _getSimilaritiesToIndividual(cls, targetPerson, other):
