@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.model.Media;
-import bettinger.gedcomviewer.utils.FileUtils;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonAutoDetect(fieldVisibility = Visibility.NONE, getterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
