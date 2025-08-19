@@ -47,7 +47,7 @@ class OverviewRenderer extends AncestorsRenderer {
             this.maxSimilarityIndividualsOnBestPath.put(color, maxPersonSimilarityIDs);
             this.maxPathIndividuals.put(color, new ArrayList<>());
 
-            var personSimilarities = res.getPersonSimilarities();
+            var personSimilarities = res.getSimilaritiesToProband();
 
             var maxSimilarityPaths = res.getPathsWithMaxSim();
             for (final var path : maxSimilarityPaths) {

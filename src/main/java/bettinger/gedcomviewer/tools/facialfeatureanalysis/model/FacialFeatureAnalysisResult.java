@@ -10,16 +10,18 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class FacialFeatureAnalysisResult {
     private static final float EPSILON = 0.000001f; 
     
-    private final HashMap<String, FacialFeatureSimilarity> personSimilarities;
+    private final HashMap<String, FacialFeatureSimilarity> similaritiesToProband;
+    private final HashMap<String, Float> similaritiesToChild;
     private final HashMap<AncestralLine, Float> pathSimilarities;
     private final ArrayList<String> personsWithMaxSimOnBestPaths;
     private final Float maxPersonSimilarityOnBestPath;
     private final Float maxPathSimilarity;
     private final ArrayList<AncestralLine> pathsWithMaxSim;
 
-    public FacialFeatureAnalysisResult(HashMap<String, FacialFeatureSimilarity> personSimilarities, HashMap<AncestralLine, Float> pathSimilarities) {
-        this.personSimilarities = personSimilarities;
+    public FacialFeatureAnalysisResult(HashMap<String, FacialFeatureSimilarity> similariitiesToProband, HashMap<AncestralLine, Float> pathSimilarities, HashMap<String, Float> similaritiesToChild) {
+        this.similaritiesToProband = similariitiesToProband;
         this.pathSimilarities = pathSimilarities;
+        this.similaritiesToChild = similaritiesToChild;
 
         var maxPathSimilarity = this.findMaxPathSimilarity();
         this.pathsWithMaxSim = maxPathSimilarity.getValue0();
@@ -30,8 +32,12 @@ public class FacialFeatureAnalysisResult {
         this.maxPersonSimilarityOnBestPath = maxPersonSimOnBestPaths.getValue1();
     }
 
-    public HashMap<String, FacialFeatureSimilarity> getPersonSimilarities() {
-        return personSimilarities;
+    public HashMap<String, FacialFeatureSimilarity> getSimilaritiesToProband() {
+        return similaritiesToProband;
+    }
+
+    public HashMap<String, Float> getSimilaritiesToChild() {
+        return similaritiesToChild;
     }
 
     public HashMap<AncestralLine, Float> getPathSimilarities() {
@@ -57,9 +63,11 @@ public class FacialFeatureAnalysisResult {
     public static FacialFeatureAnalysisResult fromJSON(final JsonNode json, final String facialFeature) {
         final JsonNode personSimilaritiesNode = json.get("nodes").get(facialFeature);
         final JsonNode pathSimilaritiesNode = json.get("pathSimilarities").get(facialFeature);
+        final JsonNode edgeSimilaritiesNode = json.get("edgeSimilarities").get(facialFeature);
 
         HashMap<String, FacialFeatureSimilarity> personSimilarities = new HashMap<>();
         HashMap<AncestralLine, Float> pathSimilarities = new HashMap<>();
+        HashMap<String, Float> edgeSimilarities = new HashMap<>();
 
         final var personSimilarityEntries = personSimilaritiesNode.properties();
         for (final var entry : personSimilarityEntries) {
@@ -71,13 +79,18 @@ public class FacialFeatureAnalysisResult {
             pathSimilarities.put(AncestralLine.fromString(entry.getKey()), Float.parseFloat(entry.getValue().asText()));
         }
 
-        return new FacialFeatureAnalysisResult(personSimilarities, pathSimilarities);
+        final var edgeSimilarityEntries = edgeSimilaritiesNode.properties();
+        for (final var entry : edgeSimilarityEntries) {
+            edgeSimilarities.put(entry.getKey(), Float.parseFloat(entry.getValue().asText()));
+        }
+
+        return new FacialFeatureAnalysisResult(personSimilarities, pathSimilarities, edgeSimilarities);
     }
 
     public Pair<ArrayList<String>, Float> getMaxPersonSimilarity() {
         ArrayList<String> idsWithMaxSim = new ArrayList<>();
         Float maxSimilarity = null;
-        for (final var entry : personSimilarities.entrySet()) {
+        for (final var entry : similaritiesToProband.entrySet()) {
             final var id = entry.getKey();
             final var featureSim = entry.getValue();
             if (featureSim != null) {
@@ -116,7 +129,7 @@ public class FacialFeatureAnalysisResult {
         Float maxSim = null;
         for (var path : pathsWithMaxSim) {
             for (var id : path.getAncestorIDs()) {
-                final var featureSim = personSimilarities.get(id);
+                final var featureSim = similaritiesToProband.get(id);
                 if (featureSim != null) {
                     final var avgSim = featureSim.getAvgSimilarity();
                     if (maxSim == null || avgSim > maxSim) {
