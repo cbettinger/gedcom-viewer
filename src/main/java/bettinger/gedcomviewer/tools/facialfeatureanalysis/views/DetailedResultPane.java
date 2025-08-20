@@ -2,14 +2,19 @@ package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Individual;
@@ -21,7 +26,7 @@ public class DetailedResultPane extends JPanel {
   static final Color PERFECT_MATCH_COLOR = Color.GREEN;
   static final Color NO_MATCH_COLOR = Color.DARK_GRAY;
   static final Color PERFECT_MATCH_COLOR_BEST_PATH = Color.RED;
-  static final int LEGEND_WIDTH = 200;
+  static final int COLOR_RAMP_WIDTH = 200;
   static final int COLOR_RAMP_HEIGHT = 20;
 
   private final WebViewPanel visualization;
@@ -46,6 +51,7 @@ public class DetailedResultPane extends JPanel {
     legend.add(colorRampBest);
     legend.add(colorRampPaneDefault);
     legend.add(explanations);
+    legend.setBorder(new EmptyBorder(5, 5, 5, 5));
 
     add(legend, BorderLayout.EAST);
     add(visualization, BorderLayout.CENTER);
@@ -56,17 +62,22 @@ public class DetailedResultPane extends JPanel {
   private JPanel getColorRampPane(final String title, final Color perfectMatchColor) {
     var colorRampPane = new JPanel();
     colorRampPane.setLayout(new BoxLayout(colorRampPane, BoxLayout.Y_AXIS));
-    colorRampPane.add(new JLabel(title + ":"));
+    var titlePane = new JPanel();
+    titlePane.setLayout(new BoxLayout(titlePane, BoxLayout.X_AXIS));
+    var label = new JLabel(title + ":");
+    label.setAlignmentX(Component.LEFT_ALIGNMENT);
+    titlePane.add(label);
+    titlePane.add(Box.createHorizontalGlue());
     var ramp = new ColorRamp(NO_MATCH_COLOR, perfectMatchColor);
-    ramp.setPreferredSize(new Dimension(LEGEND_WIDTH, COLOR_RAMP_HEIGHT));
-    //colorRampPane.add(ramp);
+    ramp.setMinimumSize(new Dimension(COLOR_RAMP_WIDTH, COLOR_RAMP_HEIGHT));
+    colorRampPane.add(titlePane);
+    colorRampPane.add(ramp);
     var colorRampDescription = new JPanel();
-    colorRampDescription.setLayout(new BorderLayout());
-    colorRampDescription.add(ramp, BorderLayout.NORTH);
-    colorRampDescription.add(new JLabel("100%"), BorderLayout.EAST);
-    colorRampDescription.add(new JLabel("0%"), BorderLayout.WEST);
+    colorRampDescription.setLayout(new BoxLayout(colorRampDescription, BoxLayout.X_AXIS));
+    colorRampDescription.add(new JLabel("0%"));
+    colorRampDescription.add(Box.createHorizontalGlue());
+    colorRampDescription.add(new JLabel("100%"));
     colorRampPane.add(colorRampDescription);
-    colorRampPane.setPreferredSize(new Dimension(LEGEND_WIDTH, COLOR_RAMP_HEIGHT));
     return colorRampPane;
   }
 

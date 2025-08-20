@@ -13,6 +13,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import bettinger.gedcomviewer.I18N;
@@ -57,6 +58,7 @@ public class OverviewPane extends JPanel {
         legend.setLayout(new BoxLayout(legend, BoxLayout.Y_AXIS));
         legend.add(new JScrollPane(table));
         legend.add(explanations);
+        legend.setBorder(new EmptyBorder(5, 5, 5, 5));
 
         add(legend, BorderLayout.EAST);
         add(visualization, BorderLayout.CENTER);
