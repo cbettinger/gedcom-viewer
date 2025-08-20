@@ -1,7 +1,10 @@
 package bettinger.gedcomviewer.tools.facialfeatureanalysis.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class AncestralLine {
 
@@ -15,8 +18,11 @@ public class AncestralLine {
         return ancestorIDs;
     }
 
-    public static AncestralLine fromString(final String bottomUpLine) {
-        List<String> pathArray = Arrays.asList(bottomUpLine.split("\\s*,\\s*"));
+    public static AncestralLine fromJSON(final JsonNode json) {
+        List<String> pathArray = new ArrayList<>();
+        for (final var node : json) {
+            pathArray.add(node.asText());
+        }
         return new AncestralLine(pathArray.toArray(new String[0]));
     }
 

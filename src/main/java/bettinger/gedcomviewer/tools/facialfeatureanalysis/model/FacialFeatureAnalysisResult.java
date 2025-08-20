@@ -12,20 +12,14 @@ public class FacialFeatureAnalysisResult {
     
     private final HashMap<String, FacialFeatureSimilarity> similaritiesToProband;
     private final HashMap<String, Float> similaritiesToChild;
-    private final HashMap<AncestralLine, Float> pathSimilarities;
     private final ArrayList<String> personsWithMaxSimOnBestPaths;
     private final Float maxPersonSimilarityOnBestPath;
-    private final Float maxPathSimilarity;
     private final ArrayList<AncestralLine> pathsWithMaxSim;
 
-    public FacialFeatureAnalysisResult(HashMap<String, FacialFeatureSimilarity> similariitiesToProband, HashMap<AncestralLine, Float> pathSimilarities, HashMap<String, Float> similaritiesToChild) {
+    public FacialFeatureAnalysisResult(HashMap<String, FacialFeatureSimilarity> similariitiesToProband, ArrayList<AncestralLine> bestPaths, HashMap<String, Float> similaritiesToChild) {
         this.similaritiesToProband = similariitiesToProband;
-        this.pathSimilarities = pathSimilarities;
         this.similaritiesToChild = similaritiesToChild;
-
-        var maxPathSimilarity = this.findMaxPathSimilarity();
-        this.pathsWithMaxSim = maxPathSimilarity.getValue0();
-        this.maxPathSimilarity = maxPathSimilarity.getValue1();
+        this.pathsWithMaxSim = bestPaths;
 
         var maxPersonSimOnBestPaths = this.findMaxPersonSimilaritiesOnBestPaths();
         this.personsWithMaxSimOnBestPaths = maxPersonSimOnBestPaths.getValue0();
@@ -40,16 +34,8 @@ public class FacialFeatureAnalysisResult {
         return similaritiesToChild;
     }
 
-    public HashMap<AncestralLine, Float> getPathSimilarities() {
-        return pathSimilarities;
-    }
-
     public Float getMaxPersonSimilarityOnBestPath() {
         return maxPersonSimilarityOnBestPath;
-    }
-
-    public Float getMaxPathSimilarity() {
-        return maxPathSimilarity;
     }
 
     public ArrayList<String> getPersonsWithMaxSimOnBestPaths() {
@@ -62,11 +48,11 @@ public class FacialFeatureAnalysisResult {
 
     public static FacialFeatureAnalysisResult fromJSON(final JsonNode json, final String facialFeature) {
         final JsonNode personSimilaritiesNode = json.get("nodes").get(facialFeature);
-        final JsonNode pathSimilaritiesNode = json.get("pathSimilarities").get(facialFeature);
+        final JsonNode bestPathsNode = json.get("bestPaths").get(facialFeature);
         final JsonNode edgeSimilaritiesNode = json.get("edgeSimilarities").get(facialFeature);
 
         HashMap<String, FacialFeatureSimilarity> personSimilarities = new HashMap<>();
-        HashMap<AncestralLine, Float> pathSimilarities = new HashMap<>();
+        ArrayList<AncestralLine> bestPaths = new ArrayList<>();
         HashMap<String, Float> edgeSimilarities = new HashMap<>();
 
         final var personSimilarityEntries = personSimilaritiesNode.properties();
@@ -74,9 +60,8 @@ public class FacialFeatureAnalysisResult {
             personSimilarities.put(entry.getKey(), FacialFeatureSimilarity.fromJSON(entry.getValue()));
         }
 
-        final var pathSimilarityEntries = pathSimilaritiesNode.properties();
-        for (final var entry : pathSimilarityEntries) {
-            pathSimilarities.put(AncestralLine.fromString(entry.getKey()), Float.parseFloat(entry.getValue().asText()));
+        for (final var bestPath : bestPathsNode) {
+            bestPaths.add(AncestralLine.fromJSON(bestPath));
         }
 
         final var edgeSimilarityEntries = edgeSimilaritiesNode.properties();
@@ -84,7 +69,7 @@ public class FacialFeatureAnalysisResult {
             edgeSimilarities.put(entry.getKey(), Float.parseFloat(entry.getValue().asText()));
         }
 
-        return new FacialFeatureAnalysisResult(personSimilarities, pathSimilarities, edgeSimilarities);
+        return new FacialFeatureAnalysisResult(personSimilarities, bestPaths, edgeSimilarities);
     }
 
     public Pair<ArrayList<String>, Float> getMaxPersonSimilarity() {
@@ -105,23 +90,6 @@ public class FacialFeatureAnalysisResult {
             }
         }
         return new Pair<ArrayList<String>, Float>(idsWithMaxSim, maxSimilarity);
-    }
-
-    private Pair<ArrayList<AncestralLine>, Float> findMaxPathSimilarity() {
-        ArrayList<AncestralLine> pathsWithMaxSim = new ArrayList<>();
-        Float maxSimilarity = null;
-        for (final var entry : pathSimilarities.entrySet()) {
-            final var path = entry.getKey();
-            final var avgSim = entry.getValue();
-            if (maxSimilarity == null || avgSim > maxSimilarity) {
-                pathsWithMaxSim.clear();
-                pathsWithMaxSim.add(path);
-                maxSimilarity = avgSim;
-            } else if (Math.abs(avgSim - maxSimilarity) < EPSILON) {
-                pathsWithMaxSim.add(path);
-            }
-        }
-        return new Pair<ArrayList<AncestralLine>, Float>(pathsWithMaxSim, maxSimilarity);
     }
 
     private Pair<ArrayList<String>, Float> findMaxPersonSimilaritiesOnBestPaths() {

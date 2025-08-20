@@ -31,16 +31,15 @@ public class OverviewPane extends JPanel {
         setLayout(new BorderLayout());
 
         this.visualization = new WebViewPanel();
-        final String[] columns = { I18N.get("FacialFeature"), I18N.get("LineColor"), I18N.get("MaxPathSimilarity"), I18N.get("MaxSimilarity") };
+        final String[] columns = { I18N.get("FacialFeature"), I18N.get("LineColor"), I18N.get("MaxSimilarity") };
         ArrayList<Object[]> tableData = new ArrayList<>();
 
         for (final var entry : results.entrySet()) {
             final var feature = entry.getKey();
             final var featureResult = entry.getValue();
-            final var maxPathSimilarity = featureResult.getMaxPathSimilarity();
             final var maxPersonSimilarity = featureResult.getMaxPersonSimilarityOnBestPath();
 
-            Object[] row = { I18N.get(feature.name()), feature, String.format("%.2f%%", maxPathSimilarity * 100), String.format("%.2f%%", maxPersonSimilarity * 100) };
+            Object[] row = { I18N.get(feature.name()), feature, String.format("%.2f%%", maxPersonSimilarity * 100) };
             tableData.add(row);
         }
 

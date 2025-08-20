@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import org.javatuples.Pair;
-
 import bettinger.gedcomviewer.Constants;
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureAnalysisResult;
@@ -24,7 +22,7 @@ public class DetailsRenderer extends AncestorsRenderer {
 
     private final Individual targetPerson;
     private final HashMap<String, FacialFeatureSimilarity> personSimilarities;
-    private HashMap<Pair<String, String>, Float> coloredEdges;
+    private final HashMap<String, Float> childSimilarities;
     private final ArrayList<String> idsOnBestPaths;
     private final ArrayList<String> idsWithMaxSimOnBestPath;
     private final Float maxPersonSimOnBestPath;
@@ -32,32 +30,13 @@ public class DetailsRenderer extends AncestorsRenderer {
     public DetailsRenderer(final Individual proband, final FacialFeatureAnalysisResult result) {
         this.targetPerson = proband;
         this.personSimilarities = result.getSimilaritiesToProband();
-        this.coloredEdges = new HashMap<>();
         this.idsOnBestPaths = new ArrayList<>();
         this.idsWithMaxSimOnBestPath = result.getPersonsWithMaxSimOnBestPaths();
         this.maxPersonSimOnBestPath = result.getMaxPersonSimilarityOnBestPath();
-
-        var edgeSimilarities = result.getSimilaritiesToChild();
-
-        for (final var entry : result.getPathSimilarities().entrySet()) {
-            var ancestralLine = entry.getKey();
-            var pathIDs = ancestralLine.getAncestorIDs();
-
-            if (result.getPathsWithMaxSim().contains(ancestralLine)) {
-                this.idsOnBestPaths.addAll(Arrays.asList(pathIDs));
-            }
-
-            var tuple = new Pair<String, String>(proband.getId(), pathIDs[0]);
-            if (!this.coloredEdges.containsKey(tuple)) {
-                this.coloredEdges.put(tuple, edgeSimilarities.get(pathIDs[0]));
-            }
-
-            for (int i = 0; i < pathIDs.length - 1; i++) {
-                tuple = new Pair<String, String>(pathIDs[i], pathIDs[i + 1]);
-                if (!this.coloredEdges.containsKey(tuple)) {
-                    this.coloredEdges.put(tuple, edgeSimilarities.get(pathIDs[i+1]));
-                }
-            }
+        this.childSimilarities = result.getSimilaritiesToChild();
+        
+        for (final var bestPath : result.getPathsWithMaxSim()) {
+            idsOnBestPaths.addAll(Arrays.asList(bestPath.getAncestorIDs()));
         }
     }
 
@@ -71,8 +50,8 @@ public class DetailsRenderer extends AncestorsRenderer {
             final boolean considerFather = fatherNode != null && fatherNode.getIndividual() != null;
             final boolean considerMother = motherNode != null && motherNode.getIndividual() != null;
 
-            boolean drawLeft = considerFather && coloredEdges.containsKey(new Pair<String, String>(rootNode.getIndividual().getId(), fatherNode.getIndividual().getId()));
-            boolean drawRight = considerMother && coloredEdges.containsKey(new Pair<String, String>(rootNode.getIndividual().getId(), motherNode.getIndividual().getId()));
+            boolean drawLeft = considerFather && childSimilarities.containsKey(fatherNode.getIndividual().getId());
+            boolean drawRight = considerMother && childSimilarities.containsKey(motherNode.getIndividual().getId());
 
             g.setPaint(Constants.DEFAULT_CONTENT_COLOR);
             final Point parentsPoint = renderEdge(fatherNode, motherNode);
@@ -83,24 +62,23 @@ public class DetailsRenderer extends AncestorsRenderer {
                     g.drawLine(parentsPoint.x, parentsPoint.y, parentsPoint.x, rootNode.getPosition().y);
                 }
                 if (drawLeft) {
-                    final Pair<String, String> tuple = new Pair<String, String>(rootNode.getIndividual().getId(), fatherNode.getIndividual().getId());
-                    renderColoredEdge(rootNode, fatherNode, parentsPoint, tuple, true);
+                    renderColoredEdge(rootNode, fatherNode, parentsPoint, true);
                 }
                 if (drawRight) {
-                    final Pair<String, String> tuple = new Pair<String, String>(rootNode.getIndividual().getId(), motherNode.getIndividual().getId());
-                    renderColoredEdge(rootNode, motherNode, parentsPoint, tuple, false);
+                    renderColoredEdge(rootNode, motherNode, parentsPoint, false);
                 }
             }
         }
     }
 
-    private void renderColoredEdge(final Node rootNode, final Node parentNode, final Point parentsPoint, final Pair<String, String> tuple, final boolean left) {
+    private void renderColoredEdge(final Node rootNode, final Node parentNode, final Point parentsPoint, final boolean left) {
+        final String parentId = parentNode.getIndividual().getId();
         final Point parentNodePosition = parentNode.getPosition();
-        float similarity = coloredEdges.get(tuple);
+        float similarity = childSimilarities.get(parentId);
 
         final Stroke defaultStroke = g.getStroke();
 
-        Color perfectMatchColor = idsOnBestPaths.contains(tuple.getValue1()) ? DetailedResultPane.PERFECT_MATCH_COLOR_BEST_PATH : DetailedResultPane.PERFECT_MATCH_COLOR;
+        Color perfectMatchColor = idsOnBestPaths.contains(parentId) ? DetailedResultPane.PERFECT_MATCH_COLOR_BEST_PATH : DetailedResultPane.PERFECT_MATCH_COLOR;
 
         var color = getColor(similarity, perfectMatchColor);
 
