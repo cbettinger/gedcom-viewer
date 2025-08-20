@@ -390,32 +390,13 @@ public class Individual extends IndividualFamilyCommonStructure {
 	public List<Quintet<String, Individual, Family, Individual, Integer>> getLineage(final LineageMode mode, final int generations) {
 		List<Quintet<String, Individual, Family, Individual, Integer>> result = switch (mode) {
 			case NAME_LINE -> getNameLine();
-			case MALE_LINE -> getMaleLine();
+			case PATRILINEAL -> getMaleLine();
+			case MATRILINEAL -> getFemaleLine();
 			default -> new ArrayList<>();
 		};
 
 		if (generations > 0) {
 			result = result.stream().filter(q -> q.getValue4() <= generations).toList();
-		}
-
-		return result;
-	}
-
-	private List<Quintet<String, Individual, Family, Individual, Integer>> getMaleLine() {
-		final List<Quintet<String, Individual, Family, Individual, Integer>> result = new ArrayList<>();
-
-		var kekule = 1;
-		var individual = this;
-		result.add(new Quintet<>(Integer.toString(kekule), individual, individual.getFamilies().stream().min(Comparator.comparing(Family::getMarriageQuality)).orElse(null), null, Numbering.getGeneration(kekule)));
-
-		var father = individual.getFather();
-
-		while (father != null) {
-			kekule *= 2;
-			result.add(new Quintet<>(Integer.toString(kekule), father, individual.getParents(), individual, Numbering.getGeneration(kekule)));
-
-			individual = father;
-			father = individual.getFather();
 		}
 
 		return result;
@@ -467,6 +448,46 @@ public class Individual extends IndividualFamilyCommonStructure {
 		}
 
 		return null;
+	}
+
+	private List<Quintet<String, Individual, Family, Individual, Integer>> getMaleLine() {
+		final List<Quintet<String, Individual, Family, Individual, Integer>> result = new ArrayList<>();
+
+		var kekule = 1;
+		var individual = this;
+		result.add(new Quintet<>(Integer.toString(kekule), individual, individual.getFamilies().stream().min(Comparator.comparing(Family::getMarriageQuality)).orElse(null), null, Numbering.getGeneration(kekule)));
+
+		var father = individual.getFather();
+
+		while (father != null) {
+			kekule *= 2;
+			result.add(new Quintet<>(Integer.toString(kekule), father, individual.getParents(), individual, Numbering.getGeneration(kekule)));
+
+			individual = father;
+			father = individual.getFather();
+		}
+
+		return result;
+	}
+
+	private List<Quintet<String, Individual, Family, Individual, Integer>> getFemaleLine() {
+		final List<Quintet<String, Individual, Family, Individual, Integer>> result = new ArrayList<>();
+
+		var kekule = 1;
+		var individual = this;
+		result.add(new Quintet<>(Integer.toString(kekule), individual, individual.getFamilies().stream().min(Comparator.comparing(Family::getMarriageQuality)).orElse(null), null, Numbering.getGeneration(kekule)));
+
+		var mother = individual.getMother();
+
+		while (mother != null) {
+			kekule = (kekule * 2) + 1;
+			result.add(new Quintet<>(Integer.toString(kekule), mother, individual.getParents(), individual, Numbering.getGeneration(kekule)));
+
+			individual = mother;
+			mother = individual.getMother();
+		}
+
+		return result;
 	}
 
 	public List<Quintet<String, Individual, Family, Individual, Integer>> getAncestorsList() {

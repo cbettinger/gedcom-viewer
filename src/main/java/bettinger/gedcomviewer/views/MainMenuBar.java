@@ -253,10 +253,15 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 		lineageGroup.add(nameLineCheckbox);
 		lineageMenu.add(nameLineCheckbox);
 
-		final var maleLineCheckbox = new JRadioButtonMenuItem(I18N.get("MaleLine"), lineageMode == LineageMode.MALE_LINE);
-		maleLineCheckbox.addActionListener(_ -> Preferences.setLineageMode(LineageMode.MALE_LINE));
-		lineageGroup.add(maleLineCheckbox);
-		lineageMenu.add(maleLineCheckbox);
+		final var patrilinealCheckbox = new JRadioButtonMenuItem(I18N.get("Patrilineal"), lineageMode == LineageMode.PATRILINEAL);
+		patrilinealCheckbox.addActionListener(_ -> Preferences.setLineageMode(LineageMode.PATRILINEAL));
+		lineageGroup.add(patrilinealCheckbox);
+		lineageMenu.add(patrilinealCheckbox);
+
+		final var matrilinealCheckbox = new JRadioButtonMenuItem(I18N.get("Matrilineal"), lineageMode == LineageMode.MATRILINEAL);
+		matrilinealCheckbox.addActionListener(_ -> Preferences.setLineageMode(LineageMode.MATRILINEAL));
+		lineageGroup.add(matrilinealCheckbox);
+		lineageMenu.add(matrilinealCheckbox);
 
 		if (!SystemInfo.isMacOS) {
 			final var helpMenu = new JMenu(I18N.get("Help"));

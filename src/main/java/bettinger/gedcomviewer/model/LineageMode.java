@@ -1,5 +1,5 @@
 package bettinger.gedcomviewer.model;
 
 public enum LineageMode {
-	NAME_LINE, MALE_LINE;
+	NAME_LINE, PATRILINEAL, MATRILINEAL;
 }
