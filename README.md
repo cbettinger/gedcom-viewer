@@ -29,3 +29,9 @@ The aim of this project is to realize a cross-platform and multi-language viewer
 
 * Java 22+
 * Python 3.12 (only for facial feature analysis)
+
+## Changelog
+
+### 1.1.0
+
+* Added matrilineal lineage
