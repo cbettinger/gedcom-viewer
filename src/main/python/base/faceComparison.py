@@ -14,26 +14,29 @@ def getAvgPathSimilarity(path, personSimilarities):
             pathSim += s
     return pathSim/numEntries
 
-def getAverageSim(path, similartiesToTarget):
-    sim = 0
-    for id in path:
-        sim += similartiesToTarget[id]
-    return sim/len(path)
+def getAverageSim(path, similaritiesToTarget):
+    return getPathSum(path, similaritiesToTarget)/len(path)
 
-def getProductSim(path, similartiesToTarget):
+def getPathSum(path, similaritiesToTarget):
+    result = 0
+    for id in path:
+        result += similaritiesToTarget[id]
+    return result
+
+def getProductSim(path, similaritiesToTarget):
     sim = 1
     for id in path:
-        sim *= similartiesToTarget[id]
+        sim *= similaritiesToTarget[id]
     return sim
 
 def getPathSimilarityIndex(path, similartiesToTarget):
-    # TODO entweder multiplizieren oder Durchschnitt bilden
-    return getAverageSim(path, similartiesToTarget)
+    # TODO entweder multiplizieren oder Summe bilden (oder gewichtete Summe)
+    return getPathSum(path, similartiesToTarget)
 
 def getBestPaths(paths, similaritiesToTarget):
     paths.sort(key=len)
     decisionPathLen = len(paths[0])
-    pathsToConsider = paths[:, decisionPathLen]
+    pathsToConsider = [p[:decisionPathLen] for p in paths]
     pathsWithMaxSimIndex = []
     consideredOriginalPaths = paths
 
@@ -60,7 +63,7 @@ def getBestPaths(paths, similaritiesToTarget):
         
         decisionPathLen = len(nextOriginalPathsToConsider[0])
         consideredOriginalPaths = nextOriginalPathsToConsider
-        pathsToConsider = nextOriginalPathsToConsider[:, decisionPathLen]
+        pathsToConsider = [p[:decisionPathLen] for p in nextOriginalPathsToConsider]
 
 
 
@@ -92,8 +95,6 @@ def getFaceAnalysisResult(targetPerson, maxDepth=None):
                 individualResult = {"maxSimilarity": str(maxSimRes.value), "avgSimilarity": str(avgSim), "maxMatchImgTarget": maxSimRes.img1.fileName, "maxMatchImgAncestor": maxSimRes.img2.fileName}
                 nodes[c].update({id: individualResult})
         
-        bestPathsForCharacteristic = getBestPaths(paths, correctedSimilaritiesForCharacteristic)
-        for path in bestPathsForCharacteristic:
-            bestPaths[c].append({str(path).replace("[", "").replace("]", "").replace("'", "")})
+        bestPaths[c] = getBestPaths(paths, correctedSimilaritiesForCharacteristic)
 
     return {"bestPaths": bestPaths, "nodes": nodes, "edgeSimilarities": edgeSimilarities}
