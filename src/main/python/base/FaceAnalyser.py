@@ -45,7 +45,7 @@ class FaceAnalyser:
         simToChild = simsToChildren[currentId]
         correctedChildSim = correctedSims[childId]
         correctedSim = dictUtils.getZeros(FACE_CHARACTERISTICS_OF_INTEREST)
-        correctionFactor = 1/2**(depth-1)
+        correctionFactor = 1/2**(depth)
         for c in FACE_CHARACTERISTICS_OF_INTEREST:
             corrected = (correctedChildSim[c] * simToChild[c] + correctionFactor * simToTarget["avg"][c]) / (1 + correctionFactor)
             correctedSim[c] = corrected
