@@ -45,7 +45,7 @@ public class DetailsNode extends Node {
             portraitTargetPerson = getPortrait(target, similarity.getMaxMatchTargetFileName());
             portraitTargetPersonWidth = portraitTargetPerson == null ? 0 : portraitTargetPerson.getWidth(null);
 
-            text = getTextLines(similarity.getAvgSimilarity(), similarity.getMaxSimilarity());
+            text = getTextLines(similarity.getAvgSimilarity());
 
             g.setFont(Renderer.BOLD_FONT);
             final var fontMetrics = g.getFontMetrics();
@@ -90,7 +90,7 @@ public class DetailsNode extends Node {
         return result;
     }
 
-    private List<String> getTextLines(Float avgSimilarity, Float maxSimilarity) {
+    private List<String> getTextLines(Float avgSimilarity) {
         final List<String> result = new ArrayList<>();
 
         if (individual == null) {
@@ -101,9 +101,6 @@ public class DetailsNode extends Node {
 
             final var avgSim = String.format("%s: %.2f%%", I18N.get("AvgSimilarity"), avgSimilarity * 100);
             result.add(avgSim);
-
-            final var maxSim = String.format("%s: %.2f%%", I18N.get("MaxSimilarity"), maxSimilarity * 100);
-            result.add(maxSim);
         }
 
         return result;

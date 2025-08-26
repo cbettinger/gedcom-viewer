@@ -3,20 +3,14 @@ package bettinger.gedcomviewer.tools.facialfeatureanalysis.model;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class FacialFeatureSimilarity {
-    private final Float maxSimilarity;
     private final Float avgSimilarity;
     private final String maxMatchTargetFileName;
     private final String maxMatchAncestorFileName;
 
-    public FacialFeatureSimilarity(Float maxSimilarity, Float avgSimilarity, String maxMatchTargetFileName, String maxMatchAncestorFileName) {
-        this.maxSimilarity = maxSimilarity;
+    public FacialFeatureSimilarity(Float avgSimilarity, String maxMatchTargetFileName, String maxMatchAncestorFileName) {
         this.avgSimilarity = avgSimilarity;
         this.maxMatchTargetFileName = maxMatchTargetFileName;
         this.maxMatchAncestorFileName = maxMatchAncestorFileName;
-    }
-
-    public Float getMaxSimilarity() {
-        return maxSimilarity;
     }
 
     public Float getAvgSimilarity() {
@@ -35,8 +29,7 @@ public class FacialFeatureSimilarity {
         if (json.properties().isEmpty()) {
             return null;
         }
-        Float maxSim = Float.parseFloat(json.get("maxSimilarity").asText());
         Float avgSim = Float.parseFloat(json.get("avgSimilarity").asText());
-        return new FacialFeatureSimilarity(maxSim, avgSim, json.get("maxMatchImgTarget").asText(), json.get("maxMatchImgAncestor").asText());
+        return new FacialFeatureSimilarity(avgSim, json.get("maxMatchImgTarget").asText(), json.get("maxMatchImgAncestor").asText());
     }
 }
