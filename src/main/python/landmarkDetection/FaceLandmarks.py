@@ -22,7 +22,7 @@ class FaceLandmarks:
         realLandmarks = []
         dn = max(imgWidth, imgHeight)
         for lm in normalizedLandmarks:
-            realLandmarks.append([lm.x*imgWidth/dn, (1.0-lm.y)*imgHeight/dn, lm.z*imgWidth/dn])
+            realLandmarks.append([lm.x*imgWidth/dn, lm.y*imgHeight/dn, lm.z*imgWidth/dn])
   
         self.realLandmarks = np.asarray(realLandmarks)
 
@@ -41,7 +41,7 @@ class FaceLandmarks:
             r[i] = np.matmul(matToAlignUp, r[i])
 
         faceSide = np.subtract(r[263], r[33])
-        matToAlignSide = getRotationMatrixToAlignVectors([faceSide[0], faceSide[1], 0], [0, -1, 0])
+        matToAlignSide = getRotationMatrixToAlignVectors([faceSide[0], faceSide[1], 0], [0, 1, 0])
 
         self.realLandmarks = [ np.matmul(matToAlignSide, lm) for lm in r ]
         self.realLandmarks = np.asarray(self.realLandmarks)
