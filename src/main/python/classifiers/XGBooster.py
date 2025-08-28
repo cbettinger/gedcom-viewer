@@ -5,7 +5,7 @@ from utils import csvUtils
 
 class XGBooster(Classifier):
     def __init__(self, name, pretrainedFilename=None, numTrees=100, treeDepth=6):
-        super().__init__(name, xgb.XGBClassifier(max_depth=treeDepth, n_estimators=numTrees), pretrainedFilename)
+        super().__init__(name, xgb.XGBClassifier(max_depth=treeDepth, n_estimators=numTrees, random_state=12), pretrainedFilename)
 
     def fit(self, x, y):
         return self.model.fit(x, y)
