@@ -21,17 +21,19 @@ public interface PythonUtils {
             p.waitFor();
             Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "pip installed");
 
-            String[] pipenvInstall = { "pip", "install", "--user", "pipenv" };
+            String[] pipenvInstall = {"python", "-m", "pip", "install", "--user", "pipenv" };
             p = runtime.exec(pipenvInstall);
             p.waitFor();
             Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "pipenv installed");
 
-            String[] requirementsInstall = { "pipenv", "install" };
+            String[] requirementsInstall = { "python", "-m", "pipenv", "install" };
             p = runtime.exec(requirementsInstall);
             p.waitFor();
             Logger.getLogger(PythonUtils.class.getName()).log(Level.INFO, "requirements installed");
 
             ArrayList<String> command = new ArrayList<String>();
+            command.add("python");
+            command.add("-m");
             command.add("pipenv");
             command.add("run");
             command.add("python");
