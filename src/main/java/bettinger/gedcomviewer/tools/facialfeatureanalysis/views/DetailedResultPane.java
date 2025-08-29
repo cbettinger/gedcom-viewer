@@ -44,7 +44,8 @@ public class DetailedResultPane extends JPanel {
     var explanations = new JTextArea();
     explanations.setEditable(false);
     explanations.setLineWrap(true);
-    explanations.setText(String.format("\n%s\n\n%s: %s\n\n%s: %s", I18N.get("PathSimilarityDetailsExplanation"), I18N.get("AvgSimilarity"), I18N.get("AvgSimilarityDetailsExplanation"), I18N.get("MaxSimilarity"), I18N.get("MaxSimilarityDetailsExplanation")));
+    explanations.setWrapStyleWord(true);
+    explanations.setText(String.format("\n%s\n\n%s: %s", I18N.get("PathSimilarityDetailsExplanation"), I18N.get("AvgSimilarity"), I18N.get("AvgSimilarityDetailsExplanation")));
 
     legend.add(colorRampBest);
     legend.add(colorRampPaneDefault);

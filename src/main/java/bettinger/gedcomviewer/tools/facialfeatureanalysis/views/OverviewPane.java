@@ -51,7 +51,8 @@ public class OverviewPane extends JPanel {
         var explanations = new JTextArea();
         explanations.setEditable(false);
         explanations.setLineWrap(true);
-        explanations.setText(String.format("%s\n\n%s: %s", I18N.get("MaxPathSimilarityOverviewExplanation"), I18N.get("MaxSimilarityOnPath"), I18N.get("MaxSimilarityOverviewExplanation")));
+        explanations.setWrapStyleWord(true);
+        explanations.setText(String.format("\n%s\n\n%s: %s", I18N.get("MaxPathSimilarityOverviewExplanation"), I18N.get("MaxSimilarityOnPath"), I18N.get("MaxSimilarityOverviewExplanation")));
 
         var legend = new JPanel();
         legend.setLayout(new BoxLayout(legend, BoxLayout.Y_AXIS));
