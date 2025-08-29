@@ -1,9 +1,6 @@
 package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Image;
-import java.awt.Stroke;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -27,14 +24,11 @@ public class DetailsNode extends Node {
     private Image portraitTargetPerson;
     private int portraitTargetPersonWidth;
 
-    private Color borderColor;
-
     public DetailsNode(SVGGraphics2D g, Individual individual, boolean isClone, Node parentNode) {
         super(g, individual, isClone, parentNode);
 
         this.portraitTargetPerson = null;
         this.portraitTargetPersonWidth = 0;
-        this.borderColor = null;
     }
 
     public void init(Individual target, FacialFeatureSimilarity similarity) {
@@ -52,11 +46,6 @@ public class DetailsNode extends Node {
             final var maximalLineWidth = fontMetrics.stringWidth(text.stream().max(Comparator.comparing(fontMetrics::stringWidth)).orElse(""));
             this.width = Math.max(MINIMAL_WIDTH, maximalLineWidth + 3 * PADDING + (this.portrait == null ? 0 : this.portraitWidth + PADDING) + (this.portraitTargetPerson == null ? 0 : this.portraitTargetPersonWidth + PADDING));
             this.height = Math.max(MINIMAL_HEIGHT, text.size() * (lineHeight + PADDING) + 2 * PADDING);
-
-            int red = Math.min(255, (int) (DetailedResultPane.NO_MATCH_COLOR.getRed() + similarity.getAvgSimilarity() * DetailedResultPane.PERFECT_MATCH_COLOR.getRed()));
-            int green = Math.min(255, (int) (DetailedResultPane.NO_MATCH_COLOR.getGreen() + similarity.getAvgSimilarity() * DetailedResultPane.PERFECT_MATCH_COLOR.getGreen()));
-            int blue = Math.min(255, (int) (DetailedResultPane.NO_MATCH_COLOR.getBlue() + similarity.getAvgSimilarity() * DetailedResultPane.PERFECT_MATCH_COLOR.getBlue()));
-            this.borderColor = new Color(red, green, blue, 255);
         }
     }
 
@@ -111,19 +100,6 @@ public class DetailsNode extends Node {
         super.renderImages();
         if (portraitTargetPerson != null) {
             g.drawImage(portraitTargetPerson, x + portraitWidth + 2 * PADDING, y + PADDING, portraitTargetPersonWidth, PORTRAIT_HEIGHT, null);
-        }
-    }
-
-    @Override
-    public void render(int x, int y) {
-        super.render(x, y);
-        if (borderColor != null) {
-            final Stroke defaultStroke = g.getStroke();
-            g.setStroke(new BasicStroke(BORDER_THICKNESS));
-            g.setPaint(borderColor);
-            g.drawRect(this.x, this.y, this.width, this.height);
-            g.setPaint(Color.BLACK);
-            g.setStroke(defaultStroke);
         }
     }
 

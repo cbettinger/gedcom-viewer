@@ -78,9 +78,7 @@ public class DetailsRenderer extends AncestorsRenderer {
 
         final Stroke defaultStroke = g.getStroke();
 
-        Color perfectMatchColor = idsOnBestPaths.contains(parentId) ? DetailedResultPane.PERFECT_MATCH_COLOR_BEST_PATH : DetailedResultPane.PERFECT_MATCH_COLOR;
-
-        var color = getColor(similarity, perfectMatchColor);
+        Color color = idsOnBestPaths.contains(parentId) ? getColor(similarity, DetailedResultPane.PERFECT_MATCH_COLOR_BEST_PATH) : Color.BLACK;
 
         if (parentsPoint != null) {
             final int offsetX = left ? -LINE_THICKNESS / 2 : LINE_THICKNESS / 2;
@@ -118,11 +116,10 @@ public class DetailsRenderer extends AncestorsRenderer {
         if (renderRootNode || node != rootNode) {
             node.render(node.getPosition().x, node.getPosition().y);
             if (node.getIndividual() != null && idsWithMaxSimOnBestPath.contains(node.getIndividual().getId())) {
-                int offset = LINE_THICKNESS;
                 g.setPaint(getColor(maxPersonSimOnBestPath, DetailedResultPane.PERFECT_MATCH_COLOR_BEST_PATH));
                 g.setStroke(new BasicStroke(LINE_THICKNESS));
                 final Rectangle rect = node.getRectangle();
-                g.drawRect(rect.x - offset, rect.y - offset, rect.width + 2 * offset, rect.height + 2 * offset);
+                g.drawRect(rect.x, rect.y, rect.width, rect.height);
                 g.setPaint(Color.BLACK);
             }
             g.setStroke(defaultStroke);

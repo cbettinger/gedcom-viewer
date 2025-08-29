@@ -20,10 +20,8 @@ import bettinger.gedcomviewer.tools.facialfeatureanalysis.model.FacialFeatureAna
 import bettinger.gedcomviewer.views.WebViewPanel;
 
 public class DetailedResultPane extends JPanel {
-
-  static final Color PERFECT_MATCH_COLOR = Color.GREEN;
   static final Color NO_MATCH_COLOR = Color.DARK_GRAY;
-  static final Color PERFECT_MATCH_COLOR_BEST_PATH = Color.RED;
+  static final Color PERFECT_MATCH_COLOR_BEST_PATH = Color.GREEN;
   static final int COLOR_RAMP_WIDTH = 200;
   static final int COLOR_RAMP_HEIGHT = 20;
 
@@ -39,7 +37,6 @@ public class DetailedResultPane extends JPanel {
     legend.setLayout(new BoxLayout(legend, BoxLayout.Y_AXIS));
 
     var colorRampBest = getColorRampPane(I18N.get("BestPathColor"), PERFECT_MATCH_COLOR_BEST_PATH);
-    var colorRampPaneDefault = getColorRampPane(I18N.get("DefaultPathColor"), PERFECT_MATCH_COLOR);
 
     var explanations = new JTextArea();
     explanations.setEditable(false);
@@ -48,7 +45,6 @@ public class DetailedResultPane extends JPanel {
     explanations.setText(String.format("\n%s\n\n%s: %s", I18N.get("PathSimilarityDetailsExplanation"), I18N.get("AvgSimilarity"), I18N.get("AvgSimilarityDetailsExplanation")));
 
     legend.add(colorRampBest);
-    legend.add(colorRampPaneDefault);
     legend.add(explanations);
     legend.setBorder(new EmptyBorder(5, 5, 5, 5));
 
