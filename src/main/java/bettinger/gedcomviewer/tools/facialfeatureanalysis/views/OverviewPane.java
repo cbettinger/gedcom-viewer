@@ -31,7 +31,7 @@ public class OverviewPane extends JPanel {
         setLayout(new BorderLayout());
 
         this.visualization = new WebViewPanel();
-        final String[] columns = { I18N.get("FacialFeature"), I18N.get("LineColor"), I18N.get("MaxSimilarity") };
+        final String[] columns = { I18N.get("FacialFeature"), I18N.get("LineColor"), I18N.get("MaxSimilarityOnPath") };
         ArrayList<Object[]> tableData = new ArrayList<>();
 
         for (final var entry : results.entrySet()) {
@@ -51,7 +51,7 @@ public class OverviewPane extends JPanel {
         var explanations = new JTextArea();
         explanations.setEditable(false);
         explanations.setLineWrap(true);
-        explanations.setText(String.format("\n%s: %s\n\n%s: %s", I18N.get("MaxPathSimilarity"), I18N.get("MaxPathSimilarityOverviewExplanation"), I18N.get("MaxSimilarityOnPath"), I18N.get("MaxSimilarityOverviewExplanation")));
+        explanations.setText(String.format("%s\n\n%s: %s", I18N.get("MaxPathSimilarityOverviewExplanation"), I18N.get("MaxSimilarityOnPath"), I18N.get("MaxSimilarityOverviewExplanation")));
 
         var legend = new JPanel();
         legend.setLayout(new BoxLayout(legend, BoxLayout.Y_AXIS));
