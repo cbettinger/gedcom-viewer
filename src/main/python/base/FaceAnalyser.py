@@ -115,6 +115,7 @@ class FaceAnalyser:
                             threeMaxSimilarities[c].sort(reverse=True)
                         elif s > threeMaxSimilarities[c][2]:
                             threeMaxSimilarities[c][2] = s
+                            threeMaxSimilarities[c].sort(reverse=True)
 
         for c, s in maxSimilarities.items():
             faces = mostSimilarFaces.get(c)
