@@ -26,6 +26,27 @@ public class FacialFeatureAnalysisResult {
         this.maxPersonSimilarityOnBestPath = maxPersonSimOnBestPaths.getValue1();
     }
 
+    private Pair<ArrayList<String>, Float> findMaxPersonSimilaritiesOnBestPaths() {
+        ArrayList<String> idsWithMaxSim = new ArrayList<>();
+        Float maxSim = null;
+        for (var path : pathsWithMaxSim) {
+            for (var id : path.getAncestorIDs()) {
+                final var featureSim = similaritiesToProband.get(id);
+                if (featureSim != null) {
+                    final var avgSim = featureSim.getAvgSimilarity();
+                    if (maxSim == null || avgSim > maxSim) {
+                        idsWithMaxSim.clear();
+                        idsWithMaxSim.add(id);
+                        maxSim = avgSim;
+                    } else if (Math.abs(avgSim - maxSim) < EPSILON) {
+                        idsWithMaxSim.add(id);
+                    }
+                }
+            }
+        }
+        return new Pair<>(idsWithMaxSim, maxSim);
+    }
+
     public HashMap<String, FacialFeatureSimilarity> getSimilaritiesToProband() {
         return similaritiesToProband;
     }
@@ -70,46 +91,5 @@ public class FacialFeatureAnalysisResult {
         }
 
         return new FacialFeatureAnalysisResult(personSimilarities, bestPaths, edgeSimilarities);
-    }
-
-    public Pair<ArrayList<String>, Float> getMaxPersonSimilarity() {
-        ArrayList<String> idsWithMaxSim = new ArrayList<>();
-        Float maxSimilarity = null;
-        for (final var entry : similaritiesToProband.entrySet()) {
-            final var id = entry.getKey();
-            final var featureSim = entry.getValue();
-            if (featureSim != null) {
-                final var avgSim = featureSim.getAvgSimilarity();
-                if (maxSimilarity == null || avgSim > maxSimilarity) {
-                    idsWithMaxSim.clear();
-                    idsWithMaxSim.add(id);
-                    maxSimilarity = avgSim;
-                } else if (Math.abs(avgSim - maxSimilarity) < EPSILON) {
-                    idsWithMaxSim.add(id);
-                }
-            }
-        }
-        return new Pair<ArrayList<String>, Float>(idsWithMaxSim, maxSimilarity);
-    }
-
-    private Pair<ArrayList<String>, Float> findMaxPersonSimilaritiesOnBestPaths() {
-        ArrayList<String> idsWithMaxSim = new ArrayList<>();
-        Float maxSim = null;
-        for (var path : pathsWithMaxSim) {
-            for (var id : path.getAncestorIDs()) {
-                final var featureSim = similaritiesToProband.get(id);
-                if (featureSim != null) {
-                    final var avgSim = featureSim.getAvgSimilarity();
-                    if (maxSim == null || avgSim > maxSim) {
-                        idsWithMaxSim.clear();
-                        idsWithMaxSim.add(id);
-                        maxSim = avgSim;
-                    } else if (Math.abs(avgSim - maxSim) < EPSILON) {
-                        idsWithMaxSim.add(id);
-                    }
-                }
-            }
-        }
-        return new Pair<>(idsWithMaxSim, maxSim);
     }
 }
