@@ -12,6 +12,35 @@ class BinaryTreeItem:
 
     def isComplete(self):
         return self.value is not None
+    
+    def getComparablePaths(self, maxDepth=MAX_COMPARISON_DEPTH):
+        return [p[1:] for p in BinaryTreeItem._paths(self, maxDepth=maxDepth, conditionToGoDeeper=lambda parents: BinaryTreeItem._areComparable(parents))]
+
+    @classmethod
+    def _paths(cls, node, depth=0, maxDepth=None, conditionToGoDeeper = lambda parents: any(parents)):
+        if node is None:
+            return
+        v = node.value
+        parents = [node.parent1, node.parent2]
+        if conditionToGoDeeper(parents) and (maxDepth is None or depth < maxDepth):
+            for p in parents:
+                for path in BinaryTreeItem._paths(p, depth+1, maxDepth, conditionToGoDeeper):
+                    yield [v] + path
+        else:
+            yield [v]
+
+    @classmethod
+    def _areComparable(cls, parents):
+        for p in parents:
+            if p is None or not p.isComplete():
+                return False
+        return True
+    
+    def getPaths(self, includeSelf=False, maxDepth=MAX_COMPARISON_DEPTH):
+        if includeSelf:
+            return [p for p in BinaryTreeItem._paths(self, maxDepth=maxDepth)]
+        else:
+            return [p[1:] for p in BinaryTreeItem._paths(self, maxDepth=maxDepth)]
 
     def __str__(self):
         s = s = "{}: {}".format(self.name, self.value)
@@ -29,31 +58,3 @@ class BinaryTreeItem:
             s += "\n{t}{n}: {v}".format(t=tabbing, n=self.parent2Name, v=self.parent2.tree(tabbing+"  "))
         return s
     
-    def getPaths(self, includeSelf=False, maxDepth=MAX_COMPARISON_DEPTH):
-        if includeSelf:
-            return [p for p in BinaryTreeItem._paths(self, maxDepth=maxDepth)]
-        else:
-            return [p[1:] for p in BinaryTreeItem._paths(self, maxDepth=maxDepth)]
-        
-    def getComparablePaths(self, maxDepth=MAX_COMPARISON_DEPTH):
-        return [p[1:] for p in BinaryTreeItem._paths(self, maxDepth=maxDepth, conditionToGoDeeper=lambda parents: BinaryTreeItem._areComparable(parents))]
-    
-    @classmethod
-    def _areComparable(cls, parents):
-        for p in parents:
-            if p is None or not p.isComplete():
-                return False
-        return True
-
-    @classmethod
-    def _paths(cls, node, depth=0, maxDepth=None, conditionToGoDeeper = lambda parents: any(parents)):
-        if node is None:
-            return
-        v = node.value
-        parents = [node.parent1, node.parent2]
-        if conditionToGoDeeper(parents) and (maxDepth is None or depth < maxDepth):
-            for p in parents:
-                for path in BinaryTreeItem._paths(p, depth+1, maxDepth, conditionToGoDeeper):
-                    yield [v] + path
-        else:
-            yield [v]

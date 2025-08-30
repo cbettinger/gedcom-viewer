@@ -1,5 +1,3 @@
-import math
-
 import numpy as np
 from landmarkDetection.LandmarkDetector import LandmarkDetector
 from utils.mathUtils import getRotationMatrixToAlignVectors

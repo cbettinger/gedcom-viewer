@@ -11,6 +11,14 @@ class Classifier(ABC):
             self.load(pretrainedFilename)
 
     @abstractmethod
+    def load(self, filename):
+        pass
+
+    @abstractmethod
+    def getMatchProbability(self, input):
+        pass
+
+    @abstractmethod
     def fit(self, x, y):
         pass
 
@@ -19,15 +27,7 @@ class Classifier(ABC):
         pass
 
     @abstractmethod
-    def getMatchProbability(self, input):
-        pass
-
-    @abstractmethod
     def save(self, filename):
-        pass
-
-    @abstractmethod
-    def load(self, filename):
         pass
 
     @classmethod

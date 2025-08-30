@@ -3,6 +3,7 @@ from faceCharacteristics.TwoElementalFacePart import TwoElementalFacePart
 
 
 class Eyes(TwoElementalFacePart):
+    
     rightEyeIndices = [33, 7, 163, 144, 145, 153, 154, 155, 133, 246, 161, 160, 159, 158, 157, 173, 468, 469, 471]
     leftEyeIndices = [263, 249, 390, 373, 374, 380, 381, 382, 362, 398, 384, 385, 386, 387, 388, 466, 473, 476, 474]
     rightEyeLidsIndices = [*rightEyeIndices, 113, 130, 25, 110, 24, 23, 22, 26, 112, 243, 190, 56, 28, 27, 29, 30, 247, 226, 31, 228, 229, 230, 231, 232, 233, 244]

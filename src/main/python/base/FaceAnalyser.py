@@ -4,6 +4,51 @@ from utils import dictUtils
 
 class FaceAnalyser:
 
+    @classmethod
+    def analyse(cls, rootPerson, maxDepth=MAX_COMPARISON_DEPTH):
+        if not rootPerson.hasFaces() or not FaceAnalyser._isNextGenerationComplete(rootPerson):
+            return None, None, None
+        
+        directSimilaritiesToTarget = FaceAnalyser.getSimilaritiesToTargetPerson(rootPerson, maxDepth)
+        
+        depth = 0
+        similaritiesToChildren = {}
+        correctedSimilaritiesToTarget = {}
+        individualsToCheck = [rootPerson]
+
+        while depth < maxDepth:
+            depth += 1
+            nextIndividualsToCheck = []
+
+            for i in range(len(individualsToCheck)):
+                p = individualsToCheck[i]
+                if FaceAnalyser._isNextGenerationComplete(p):
+                    fatherId = p.parent1.value
+                    _, sAvgFather = FaceAnalyser._getSimilaritiesToIndividual(p, p.parent1)   
+                    similaritiesToChildren.update({fatherId: sAvgFather})
+                    motherId = p.parent2.value
+                    _, sAvgMother = FaceAnalyser._getSimilaritiesToIndividual(p, p.parent2)   
+                    similaritiesToChildren.update({motherId: sAvgMother})
+
+                    if depth == 1:
+                        correctedSimilaritiesToTarget.update({fatherId: sAvgFather})
+                        correctedSimilaritiesToTarget.update({motherId: sAvgMother})
+                    else:
+                        correctedSimFather = FaceAnalyser._getCorrectedSimilarity(directSimilaritiesToTarget, similaritiesToChildren, fatherId, p.value, depth, correctedSimilaritiesToTarget)
+                        correctedSimilaritiesToTarget.update({fatherId: correctedSimFather})
+                        correctedSimMother = FaceAnalyser._getCorrectedSimilarity(directSimilaritiesToTarget, similaritiesToChildren, motherId, p.value, depth, correctedSimilaritiesToTarget)
+                        correctedSimilaritiesToTarget.update({motherId: correctedSimMother})
+
+                    nextIndividualsToCheck.extend([p.parent1, p.parent2])
+
+            individualsToCheck = nextIndividualsToCheck
+
+        return directSimilaritiesToTarget, similaritiesToChildren, correctedSimilaritiesToTarget
+    
+    @classmethod
+    def _isNextGenerationComplete(cls, rootPerson):
+        return rootPerson.parent1 and rootPerson.parent1.hasFaces() and rootPerson.parent2 and rootPerson.parent2.hasFaces()
+
     @classmethod 
     def getSimilaritiesToTargetPerson(cls, targetPerson, maxDepth=MAX_COMPARISON_DEPTH):
         if not targetPerson.hasFaces() or not cls._isComparable(targetPerson.parent1) or not cls._isComparable(targetPerson.parent2):
@@ -34,63 +79,6 @@ class FaceAnalyser:
     @classmethod
     def _isComparable(cls, other):
         return other is not None and other.hasFaces()
-    
-    @classmethod
-    def _isNextGenerationComplete(cls, rootPerson):
-        return rootPerson.parent1 and rootPerson.parent1.hasFaces() and rootPerson.parent2 and rootPerson.parent2.hasFaces()
-    
-    @classmethod
-    def _getCorrectedSimilarity(cls, simsToTarget, simsToChildren, currentId, childId, depth, correctedSims):
-        simToTarget = simsToTarget[currentId]
-        simToChild = simsToChildren[currentId]
-        correctedChildSim = correctedSims[childId]
-        correctedSim = dictUtils.getZeros(FACE_CHARACTERISTICS_OF_INTEREST)
-        correctionFactor = 1/2**(depth)
-        for c in FACE_CHARACTERISTICS_OF_INTEREST:
-            corrected = (correctedChildSim[c] * simToChild[c] + correctionFactor * simToTarget["avg"][c]) / (1 + correctionFactor)
-            correctedSim[c] = corrected
-        return correctedSim
-    
-    @classmethod
-    def analyse(cls, rootPerson, maxDepth=MAX_COMPARISON_DEPTH):
-        if not rootPerson.hasFaces() or not FaceAnalyser._isNextGenerationComplete(rootPerson):
-            return None, None, None
-        
-        directSimilaritiesToTarget = FaceAnalyser.getSimilaritiesToTargetPerson(rootPerson, maxDepth)
-        
-        depth = 0
-        similaritiesToChildren = {}
-        correctedSimilaritiesToTarget = {}
-        individualsToCheck = [rootPerson]
-
-        while depth < maxDepth:
-            depth += 1
-            nextIndividualsToCheck = []
-
-            for i in range(len(individualsToCheck)):
-                p = individualsToCheck[i]
-                if FaceAnalyser._isNextGenerationComplete(p):
-                    fatherId = p.parent1.value
-                    _, sAvgFather = cls._getSimilaritiesToIndividual(p, p.parent1)   
-                    similaritiesToChildren.update({fatherId: sAvgFather})
-                    motherId = p.parent2.value
-                    _, sAvgMother = cls._getSimilaritiesToIndividual(p, p.parent2)   
-                    similaritiesToChildren.update({motherId: sAvgMother})
-
-                    if depth == 1:
-                        correctedSimilaritiesToTarget.update({fatherId: sAvgFather})
-                        correctedSimilaritiesToTarget.update({motherId: sAvgMother})
-                    else:
-                        correctedSimFather = cls._getCorrectedSimilarity(directSimilaritiesToTarget, similaritiesToChildren, fatherId, p.value, depth, correctedSimilaritiesToTarget)
-                        correctedSimilaritiesToTarget.update({fatherId: correctedSimFather})
-                        correctedSimMother = cls._getCorrectedSimilarity(directSimilaritiesToTarget, similaritiesToChildren, motherId, p.value, depth, correctedSimilaritiesToTarget)
-                        correctedSimilaritiesToTarget.update({motherId: correctedSimMother})
-
-                    nextIndividualsToCheck.extend([p.parent1, p.parent2])
-
-            individualsToCheck = nextIndividualsToCheck
-
-        return directSimilaritiesToTarget, similaritiesToChildren, correctedSimilaritiesToTarget
     
     @classmethod
     def _getSimilaritiesToIndividual(cls, targetPerson, other):
@@ -128,3 +116,16 @@ class FaceAnalyser:
                 avgResult.update({c: sum(threeMaxSimilarities[c])/len(threeMaxSimilarities[c])})
 
         return maxResult, avgResult
+    
+    @classmethod
+    def _getCorrectedSimilarity(cls, simsToTarget, simsToChildren, currentId, childId, depth, correctedSims):
+        simToTarget = simsToTarget[currentId]
+        simToChild = simsToChildren[currentId]
+        correctedChildSim = correctedSims[childId]
+        correctedSim = dictUtils.getZeros(FACE_CHARACTERISTICS_OF_INTEREST)
+        correctionFactor = 1/2**(depth)
+        for c in FACE_CHARACTERISTICS_OF_INTEREST:
+            corrected = (correctedChildSim[c] * simToChild[c] + correctionFactor * simToTarget["avg"][c]) / (1 + correctionFactor)
+            correctedSim[c] = corrected
+        return correctedSim
+    

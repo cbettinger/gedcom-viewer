@@ -6,6 +6,7 @@ from utils import meshTriangles
 class OneElementalFacePart(FaceCharacteristic):
 
     Z_LOW = -1
+
     def __init__(self, name, faceLandmarks, landmarkIndices,  allAlignIndex, zAlignIndex, additionalFaces=None, classifier=None):
         super().__init__(name)
 
@@ -14,7 +15,6 @@ class OneElementalFacePart(FaceCharacteristic):
         self.landmarkIndices = np.asarray(landmarkIndices)
         self.additionalFaces = additionalFaces
 
-        # so skalieren, dass alle Instanzen eines Gesichtsteils aligned sind
         self.realLandmarks = self._getAlignedRealLandmarks(faceLandmarks.realLandmarks[self.landmarkIndices], landmarkIndices.index(allAlignIndex), landmarkIndices.index(zAlignIndex))
         self.mesh, self.meshTriangles = self._generateRealMesh()
         self.edgesVector = self._generateEdgesVector()
