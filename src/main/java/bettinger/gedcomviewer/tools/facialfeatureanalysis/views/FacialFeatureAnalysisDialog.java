@@ -19,6 +19,8 @@ import jiconfont.swing.IconFontSwing;
 
 public class FacialFeatureAnalysisDialog extends JDialog {
 
+    private static final int DIALOG_HEIGHT = 360;
+
     private final HTMLTextPane infoPane;
     private final IntegerPicker maxDepthPicker;
     private final IntegerPicker maxNumPortraitsPicker;
@@ -62,7 +64,7 @@ public class FacialFeatureAnalysisDialog extends JDialog {
 
         pack();
 
-        setSize(Constants.DEFAULT_MODAL_DIALOG_WIDTH, Constants.DEFAULT_MODAL_DIALOG_HEIGHT);
+        setSize(Constants.DEFAULT_MODAL_DIALOG_WIDTH, DIALOG_HEIGHT);
         setLocationRelativeTo(MainFrame.getInstance());
 
         setVisible(true);
