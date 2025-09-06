@@ -3,7 +3,7 @@ from faceCharacteristics.FaceCharacteristic import FaceCharacteristic
 from utils import meshTriangles
 
 
-class OneElementalFacePart(FaceCharacteristic):
+class OneElementalFaceCharacteristic(FaceCharacteristic):
 
     Z_LOW = -1
 
@@ -22,7 +22,7 @@ class OneElementalFacePart(FaceCharacteristic):
     def _getAlignedRealLandmarks(self, originalRealLandmarks, allAlignIndex, zAlignIndex):
         landmarks = np.asarray(originalRealLandmarks)
         landmarks = np.asarray([np.subtract(l, originalRealLandmarks[allAlignIndex]) for l in landmarks])
-        scalingFactor = OneElementalFacePart.Z_LOW / landmarks[zAlignIndex][2]
+        scalingFactor = OneElementalFaceCharacteristic.Z_LOW / landmarks[zAlignIndex][2]
         landmarks = landmarks * scalingFactor
         return landmarks
 

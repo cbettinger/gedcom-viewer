@@ -1,8 +1,8 @@
 from classifiers.classifiers import XGB_CLASSIFIERS
-from faceCharacteristics.TwoElementalFacePart import TwoElementalFacePart
+from main.python.faceCharacteristics.TwoElementalFaceCharacteristic import TwoElementalFaceCharacteristic
 
 
-class Eyes(TwoElementalFacePart):
+class Eyes(TwoElementalFaceCharacteristic):
     
     rightEyeIndices = [33, 7, 163, 144, 145, 153, 154, 155, 133, 246, 161, 160, 159, 158, 157, 173, 468, 469, 471]
     leftEyeIndices = [263, 249, 390, 373, 374, 380, 381, 382, 362, 398, 384, 385, 386, 387, 388, 466, 473, 476, 474]
