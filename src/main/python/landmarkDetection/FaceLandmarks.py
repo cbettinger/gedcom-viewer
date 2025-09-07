@@ -18,11 +18,17 @@ class FaceLandmarks:
         imgHeight = img.shape[0]
 
         realLandmarks = []
+        imageLandmarks = []
         dn = max(imgWidth, imgHeight)
         for lm in normalizedLandmarks:
-            realLandmarks.append([lm.x*imgWidth/dn, lm.y*imgHeight/dn, lm.z*imgWidth/dn])
+            x = lm.x*imgWidth
+            y = lm.y*imgHeight
+            z = lm.z*imgWidth
+            realLandmarks.append([x/dn, y/dn, z/dn])
+            imageLandmarks.append([min(max(0, round(x)), imgWidth-1), min(max(0, round(y)), imgHeight-1)])
   
         self.realLandmarks = np.asarray(realLandmarks)
+        self.imageLandmarks = np.asarray(imageLandmarks)
 
         self._rotateRealLandmarks()
 

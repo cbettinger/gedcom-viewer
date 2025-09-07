@@ -10,3 +10,7 @@ class FaceCharacteristic(ABC):
     @abstractmethod
     def calculateSimilarityTo(self, other):
         pass
+
+    @abstractmethod
+    def getImageBoundingBox(self):
+        pass

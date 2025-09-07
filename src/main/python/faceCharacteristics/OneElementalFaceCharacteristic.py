@@ -1,6 +1,6 @@
 import numpy as np
 from faceCharacteristics.FaceCharacteristic import FaceCharacteristic
-from utils import meshTriangles
+from utils import meshTriangles, mathUtils
 
 
 class OneElementalFaceCharacteristic(FaceCharacteristic):
@@ -14,6 +14,7 @@ class OneElementalFaceCharacteristic(FaceCharacteristic):
         
         self.landmarkIndices = np.asarray(landmarkIndices)
         self.additionalFaces = additionalFaces
+        self.imageBoundingBox = mathUtils.getBoundingBox(faceLandmarks.imageLandmarks[self.landmarkIndices])
 
         self.realLandmarks = self._getAlignedRealLandmarks(faceLandmarks.realLandmarks[self.landmarkIndices], landmarkIndices.index(allAlignIndex), landmarkIndices.index(zAlignIndex))
         self.mesh, self.meshTriangles = self._generateRealMesh()
@@ -81,3 +82,6 @@ class OneElementalFaceCharacteristic(FaceCharacteristic):
         inputData = np.asarray([inputData])
 
         return self.classifier.getMatchProbability(inputData)[0]
+    
+    def getImageBoundingBox(self):
+        return self.imageBoundingBox

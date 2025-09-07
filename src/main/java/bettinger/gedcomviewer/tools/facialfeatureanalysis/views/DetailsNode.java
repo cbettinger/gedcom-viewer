@@ -1,6 +1,7 @@
 package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -24,20 +25,27 @@ public class DetailsNode extends Node {
     private Image portraitTargetPerson;
     private int portraitTargetPersonWidth;
 
+    private int portraitHeight;
+    private int portraitTargetPersonHeight;
+
     public DetailsNode(SVGGraphics2D g, Individual individual, boolean isClone, Node parentNode) {
         super(g, individual, isClone, parentNode);
 
         this.portraitTargetPerson = null;
         this.portraitTargetPersonWidth = 0;
+        this.portraitHeight = portrait == null ? 0 : portrait.getHeight(null);
+        this.portraitTargetPersonHeight = 0;
     }
 
     public void init(Individual target, FacialFeatureSimilarity similarity) {
         if (similarity != null) {
-            portrait = getPortrait(individual, similarity.getMaxMatchAncestorFileName());
+            portrait = getPortrait(individual, similarity.getMaxMatchAncestorFileName(), similarity.getAncestorClip());
             portraitWidth = portrait == null ? 0 : portrait.getWidth(null);
+            portraitHeight = portrait == null ? 0 : portrait.getHeight(null);
 
-            portraitTargetPerson = getPortrait(target, similarity.getMaxMatchTargetFileName());
+            portraitTargetPerson = getPortrait(target, similarity.getMaxMatchTargetFileName(), similarity.getTargetClip());
             portraitTargetPersonWidth = portraitTargetPerson == null ? 0 : portraitTargetPerson.getWidth(null);
+            portraitTargetPersonHeight = portraitTargetPerson == null ? 0 : portraitTargetPerson.getHeight(null);
 
             text = getTextLines(similarity.getAvgSimilarity());
 
@@ -49,8 +57,8 @@ public class DetailsNode extends Node {
         }
     }
 
-    private Image getPortrait(Individual individual, String filename) {
-        Pair<String, Individual> key = new Pair<>(filename, individual);
+    private Image getPortrait(Individual individual, String filename, Rectangle featureClip) {
+        Pair<String, Rectangle> key = new Pair<>(filename, featureClip);
 		if (ResultFrame.cachedPortraits.containsKey(key)) {
 			return ResultFrame.cachedPortraits.get(key);
 		}
@@ -69,7 +77,15 @@ public class DetailsNode extends Node {
                         image = image.getSubimage(clip.x, clip.y, clip.width, clip.height);
                     }
 
-                    result = image.getScaledInstance(-1, PORTRAIT_HEIGHT, Image.SCALE_FAST);
+                    int x1 = Math.max(0, featureClip.x-10);
+                    int y1 = Math.max(0, featureClip.y-10);
+                    int x2 = Math.min(image.getWidth(), featureClip.x + featureClip.width + 10);
+                    int y2 = Math.min(image.getHeight(), featureClip.y + featureClip.height + 10);
+                    image = image.getSubimage(x1, y1, x2-x1, y2-y1);
+                    
+                    int scaledWidth = featureClip.width > featureClip.height ? PORTRAIT_HEIGHT: -1;
+                    int scaledHeight = featureClip.width > featureClip.height ? -1: PORTRAIT_HEIGHT;
+                    result = image.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_FAST);
 					ResultFrame.cachedPortraits.put(key, result);
                     return result;
                 }
@@ -97,9 +113,11 @@ public class DetailsNode extends Node {
 
     @Override
     protected void renderImages() {
-        super.renderImages();
+        if (portrait != null) {
+            g.drawImage(portrait, x + PADDING, y + PADDING, portraitWidth, portraitHeight, null);
+        }
         if (portraitTargetPerson != null) {
-            g.drawImage(portraitTargetPerson, x + portraitWidth + 2 * PADDING, y + PADDING, portraitTargetPersonWidth, PORTRAIT_HEIGHT, null);
+            g.drawImage(portraitTargetPerson, x + portraitWidth + 2 * PADDING, y + PADDING, portraitTargetPersonWidth, portraitTargetPersonHeight, null);
         }
     }
 

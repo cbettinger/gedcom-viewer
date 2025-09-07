@@ -13,3 +13,9 @@ class TwoElementalFaceCharacteristic(FaceCharacteristic):
     def calculateSimilarityTo(self, other):
         assert(type(self) is type(other))
         return (self.firstPart.calculateSimilarityTo(other.firstPart) + self.secondPart.calculateSimilarityTo(other.secondPart))/2
+
+    def getImageBoundingBox(self):
+        [x11, y11], [x12, y12] = self.firstPart.getImageBoundingBox()
+        [x21, y21], [x22, y22] = self.secondPart.getImageBoundingBox()
+
+        return [[min(x11, x21), min(y11, y21)], [max(x12, x22), max(y12, y22)]]

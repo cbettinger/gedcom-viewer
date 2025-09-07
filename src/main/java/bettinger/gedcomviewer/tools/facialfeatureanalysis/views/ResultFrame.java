@@ -1,6 +1,7 @@
 package bettinger.gedcomviewer.tools.facialfeatureanalysis.views;
 
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.TreeMap;
 
@@ -18,7 +19,7 @@ import bettinger.gedcomviewer.views.MainFrame;
 
 public class ResultFrame extends Frame {
 
-    static HashMap<Pair<String, Individual>, Image> cachedPortraits;
+    static HashMap<Pair<String, Rectangle>, Image> cachedPortraits;
 
     public ResultFrame(final Individual proband, final int numGenerations, final TreeMap<FacialFeatures, FacialFeatureAnalysisResult> results) {
         super();

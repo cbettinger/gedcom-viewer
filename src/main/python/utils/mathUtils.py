@@ -9,3 +9,7 @@ def getRotationMatrixToAlignVectors(src, dst):
     kmat = np.array([[0, -k[2], k[1]], [k[2], 0, -k[0]], [-k[1], k[0], 0]])
     rotationMatrix = np.eye(3) + s*kmat + (1-c) * kmat.dot(kmat)
     return rotationMatrix
+
+def getBoundingBox(points):
+    xCoords, yCoords = zip(*points)
+    return [[min(xCoords), min(yCoords)], [max(xCoords), max(yCoords)]]

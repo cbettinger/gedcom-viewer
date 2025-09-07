@@ -112,7 +112,9 @@ class FaceAnalyser:
                 avgResult.update({c: None})
             else:
                 f1, f2 = faces
-                maxResult.update({c: MaxSimilarityResult(s, f1.srcImg, f2.srcImg)})
+                bbox1 = f1.characteristics.get(c).getImageBoundingBox()
+                bbox2 = f2.characteristics.get(c).getImageBoundingBox()
+                maxResult.update({c: MaxSimilarityResult(s, f1.srcImg, f2.srcImg, bbox1, bbox2)})
                 avgResult.update({c: sum(threeMaxSimilarities[c])/len(threeMaxSimilarities[c])})
 
         return maxResult, avgResult

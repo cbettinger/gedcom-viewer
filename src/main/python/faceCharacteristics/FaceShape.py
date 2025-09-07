@@ -1,6 +1,7 @@
 import numpy as np
 from classifiers.classifiers import XGB_CLASSIFIERS
 from main.python.faceCharacteristics.OneElementalFaceCharacteristic import OneElementalFaceCharacteristic
+from utils import mathUtils
 
 
 class FaceShape(OneElementalFaceCharacteristic):
@@ -13,6 +14,7 @@ class FaceShape(OneElementalFaceCharacteristic):
     def __init__(self, faceLandmarks):
         self.contourLineIndices = self._generateContourLineIndices(FaceShape.contourLineIndices)
         super().__init__("Gesichtsform", faceLandmarks, FaceShape.landmarkIndices, 10, 152, None, XGB_CLASSIFIERS["FACESHAPE"])
+        self.imageBoundingBox = mathUtils.getBoundingBox(faceLandmarks.imageLandmarks)
 
     def _generateContourLineIndices(self, originalIndices):
         if originalIndices is None:
