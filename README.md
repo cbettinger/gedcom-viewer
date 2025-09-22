@@ -13,7 +13,6 @@ The aim of this project is to realize a cross-platform and multi-language viewer
 * Export to HTML or PDF (including media attachments)
 * GEDCOM 5 validation
 * Conversion to GEDCOM 7 file format
-* Facial feature analysis to find out from which ancestors a proband inherited his facial features (such as the shape of the eyes or nose)
 * Currently supported languages: English, German, French
 
 ## Screenshots
@@ -23,15 +22,14 @@ The aim of this project is to realize a cross-platform and multi-language viewer
 ![Locations](screenshots/locations.png)
 ![Map: Lineage](screenshots/map.png)
 ![Tools: Validation](screenshots/validation.png)
-![Tools: Facial feature analysis](screenshots/facialfeatureanalysis.png)
 
 ## Requirements
 
 * Java 22+
-* Python 3.12 (only for facial feature analysis)
 
 ## Changelog
 
 ### 1.1.0
 
 * Added matrilineal lineage
+* Temporarily removed tool *Facial feature analysis* due to ongoing development

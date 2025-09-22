@@ -31,10 +31,5 @@ public abstract class Constants {
 	public static final int PREVIEW_IMAGE_WIDTH = 350;
 	public static final int PORTRAIT_WIDTH = 200;
 
-	public static final int MIN_FACIAL_FEATURE_ANALYSIS_DEPTH = 1;
-	public static final int MAX_FACIAL_FEATURE_ANALYSIS_DEPTH = 10;
-	public static final int MIN_FACIAL_FEATURE_ANALYSIS_NUM_PORTRAITS = 1;
-	public static final int MAX_FACIAL_FEATURE_ANALYSIS_NUM_PORTRAITS = 5;
-
 	private Constants() {}
 }

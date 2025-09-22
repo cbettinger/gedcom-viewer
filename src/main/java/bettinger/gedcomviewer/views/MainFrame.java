@@ -35,7 +35,6 @@ import bettinger.gedcomviewer.model.GEDCOM;
 import bettinger.gedcomviewer.model.GEDCOM.GEDCOMEvent;
 import bettinger.gedcomviewer.model.GEDCOM.GEDCOMException;
 import bettinger.gedcomviewer.model.Individual;
-import bettinger.gedcomviewer.tools.facialfeatureanalysis.views.ConfigurationDialog;
 import bettinger.gedcomviewer.tools.validator.ValidationDialog;
 import bettinger.gedcomviewer.utils.DesktopUtils;
 import bettinger.gedcomviewer.utils.ExportUtils;
@@ -133,7 +132,6 @@ public class MainFrame extends Frame {
 					case "EXPORT_ANCESTORS" -> showExportAncestorsFileChooser();
 					case "EXPORT_DESCENDANTS" -> showExportDescendantsFileChooser();
 					case "VALIDATION" -> validateFile();
-					case "FACIAL_FEATURE_ANALYSIS" -> showFacialFeatureAnalysis();
 					case "SHOW_ABOUT" -> showAboutDialog();
 				}
 			}
@@ -521,13 +519,6 @@ public class MainFrame extends Frame {
 				}
 			}
 		}.execute();
-	}
-
-	private void showFacialFeatureAnalysis() {
-		final var selectedRecord = tabbedPane.getSelectedRecord();
-		if (selectedRecord instanceof Individual individual) {
-			new ConfigurationDialog(individual);
-		}
 	}
 
 	private void showAboutDialog() {

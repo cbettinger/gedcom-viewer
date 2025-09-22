@@ -3,7 +3,6 @@ package bettinger.gedcomviewer.model;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +25,6 @@ class MediaManager {
 
 	private final List<Media> media;
 	private Media primaryImage;
-	private final List<Media> facialPortraits;
 	private final Map<Media, Rectangle> imageClips;
 	private final Map<Triplet<Media, Integer, Integer>, Image> cachedClippedImages;
 
@@ -47,7 +45,6 @@ class MediaManager {
 	}
 
 	MediaManager(final Structure referencingStructure, final GEDCOM gedcom, final List<MediaRef> mediaRefs) {
-		this.facialPortraits = new ArrayList<>();
 		this.imageClips = new HashMap<>();
 		this.cachedClippedImages = new HashMap<>();
 
@@ -62,11 +59,6 @@ class MediaManager {
 				final var primary = TagUtils.getFirstExtensionTagValue(mr, "_PRIM");
 				if (primary.equals("Y")) {
 					primaryImage = medium;
-				}
-
-				final var facial = TagUtils.getFirstExtensionTagValue(mr, "_FACIAL");
-				if (facial.equals("Y")) {
-					facialPortraits.add(medium);
 				}
 
 				final var clip = TagUtils.getFirstExtensionTagValue(mr, "_POSITION");
@@ -154,10 +146,6 @@ class MediaManager {
 		}
 
 		return result;
-	}
-
-	public List<Media> getFacialPortraits() {
-		return facialPortraits;
 	}
 
 	public String toHTML(final Set<HTMLOption> options) {
