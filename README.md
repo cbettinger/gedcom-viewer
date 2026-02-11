@@ -29,6 +29,11 @@ The aim of this project is to realize a cross-platform and multi-language viewer
 
 ## Changelog
 
+### 1.1.1
+
+* Handle GEDKeeper-specific media file paths starting with "rel:"
+* Ignore extension tags without value
+
 ### 1.1.0
 
 * Added matrilineal lineage
