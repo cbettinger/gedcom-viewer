@@ -136,7 +136,7 @@ class MediaManager {
 
 		final var clip = imageClips.get(image);
 		if (result != null && clip != null) {
-			result = ((BufferedImage) result).getSubimage(clip.x, clip.y, clip.width, clip.height);
+			result = ((BufferedImage) result).getSubimage(clip.x, clip.y, clip.width - 1, clip.height - 1);
 
 			if (width != -1 || height != -1) {
 				result = result.getScaledInstance(width, height, Image.SCALE_FAST);
