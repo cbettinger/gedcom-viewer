@@ -34,7 +34,7 @@ public abstract class IndividualFamilyCommonStructure extends Structure implemen
 
 		this.facts = new ArrayList<>();
 		this.facts.addAll(personFamilyCommonContainer.getEventsFacts().stream().map(eventFact -> new Fact(gedcom, eventFact, this)).toList());
-		this.facts.addAll(getExtensionTags().stream().filter(tag -> !tag.getTag().isEmpty() && !tag.getValue().isEmpty()).map(tag -> new Fact(gedcom, tag, this)).toList());
+		this.facts.addAll(getExtensionTags().stream().filter(tag -> tag.getTag() != null && !tag.getTag().isEmpty() && tag.getValue() != null && !tag.getValue().isEmpty()).map(tag -> new Fact(gedcom, tag, this)).toList());
 	}
 
 	/* #region container */
