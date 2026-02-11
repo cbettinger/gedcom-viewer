@@ -23,6 +23,7 @@ public class Media extends Structure implements Record, NoteContainer, SourceCit
 	static final String TAG = "OBJE";
 
 	private static final List<String> DISPLAYABLE_IMAGE_FORMATS = Arrays.asList("jpg", "jpeg", "png", "gif");
+	private static final String REL_PREFIX = "rel:";
 	private static final String STG_PREFIX = "stg:";
 
 	private final RecordManager recordManager;
@@ -47,7 +48,9 @@ public class Media extends Structure implements Record, NoteContainer, SourceCit
 		}
 
 		final var mediaFilePath = media.getFile();
-		if (mediaFilePath.startsWith(STG_PREFIX)) {
+		if (mediaFilePath.startsWith(REL_PREFIX)) {
+			this.filePath = FileUtils.getPath(gedcom.getDirectoryPath(), mediaFilePath.replaceFirst(REL_PREFIX, ""));
+		} else if (mediaFilePath.startsWith(STG_PREFIX)) {
 			final String gedcomFileBaseName = FileUtils.getBaseName(gedcom.getFileName());
 			this.filePath = FileUtils.getPath(gedcom.getDirectoryPath(), gedcomFileBaseName, mediaFilePath.replaceFirst(STG_PREFIX, ""));
 		} else {
