@@ -29,6 +29,10 @@ The aim of this project is to realize a cross-platform and multi-language viewer
 
 ## Changelog
 
+### 1.1.2
+
+* Fixed bug that caused rendering of portraits withiin visualizations to fail 
+
 ### 1.1.1
 
 * Handle GEDKeeper-specific media file paths starting with "rel:"
