@@ -31,7 +31,7 @@ The aim of this project is to realize a cross-platform and multi-language viewer
 
 ### 1.1.2
 
-* Fixed bug that caused rendering of portraits withiin visualizations to fail 
+* Fixed bug that caused rendering of portraits within visualizations to fail 
 
 ### 1.1.1
 
