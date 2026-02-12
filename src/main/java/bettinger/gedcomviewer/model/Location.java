@@ -203,6 +203,8 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 			HTMLUtils.appendText(sb, String.format(Format.SPACED, Math.abs(longitude), longitudeSuffix));
 		}
 
+		// TODO: Location-to-Location references
+
 		String urlEncodedName = HTMLUtils.encode(name);
 
 		HTMLUtils.appendH2(sb, I18N.get("Maps"));
