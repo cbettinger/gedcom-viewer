@@ -29,6 +29,10 @@ The aim of this project is to realize a cross-platform and multi-language viewer
 
 ## Changelog
 
+### 1.1.3
+
+* Hide frame title on macOS
+
 ### 1.1.2
 
 * Fixed bug that caused rendering of portraits within visualizations to fail 
