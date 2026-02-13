@@ -427,7 +427,7 @@ public class Individual extends IndividualFamilyCommonStructure {
 		var distanceFather = Integer.MAX_VALUE;
 		if (father != null) {
 			distanceFather = LevenshteinDistance.getDefaultInstance().apply(individual.getSurname().toLowerCase(), father.getSurname().toLowerCase());
-		}
+		}	// TODO: Use soundex instead?
 
 		final var mother = individual.getMother();
 		var distanceMother = Integer.MAX_VALUE;
