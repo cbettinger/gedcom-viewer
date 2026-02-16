@@ -40,7 +40,10 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 	@JsonProperty
 	private final String imageURL;
 
-	private final boolean isStructure;
+	private final GedcomTag tag;
+
+	private List<Location> superordinateLocations;
+	//private final List<Location> subordinateLocations;
 
 	Location(final GEDCOM gedcom, final GedcomTag tag) {
 		super(gedcom, tag.getId(), null);
@@ -58,7 +61,7 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 		final var image = getPrimaryImage(false);
 		this.imageURL = image != null && image.exists() ? image.getURL() : "";
 
-		this.isStructure = true;
+		this.tag = tag;
 	}
 
 	Location(final GEDCOM gedcom, final String place, final float latitude, final float longitude) {
@@ -76,7 +79,15 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 		final var image = getPrimaryImage(false);
 		this.imageURL = image != null && image.exists() ? image.getURL() : "";
 
-		this.isStructure = false;
+		this.tag = null;
+	}
+
+	void setReferencedLocations() {
+		if (this.tag != null) {
+			this.superordinateLocations = TagUtils.getChildTags(tag, Location.TAG).stream().map(locTag -> {
+				return (Location) gedcom.getRecord(locTag.getRef());
+			}).toList();
+		}
 	}
 
 	/* #region container */
@@ -87,7 +98,7 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 
 	@Override
 	public boolean hasXRef() {
-		return isStructure;
+		return isStructure();
 	}
 
 	@Override
@@ -99,7 +110,7 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 	public LocalDateTime getLastChange() {
 		var result = recordManager.getLastChange();
 
-		if (!isStructure) {
+		if (!isStructure()) {
 			final Structure newestReference = recordManager.getReferences().stream().filter(Fact.class::isInstance).max(Comparator.comparing(f -> ((Fact) f).getLastChange())).orElse(null);
 			if (newestReference instanceof Fact f) {
 				result = f.getLastChange();
@@ -157,7 +168,7 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 
 	/* #region getter & setter */
 	boolean isStructure() {
-		return isStructure;
+		return this.tag != null;
 	}
 
 	public String getName() {
@@ -203,7 +214,9 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 			HTMLUtils.appendText(sb, String.format(Format.SPACED, Math.abs(longitude), longitudeSuffix));
 		}
 
-		// TODO: Location-to-Location references
+		if (!options.contains(HTMLOption.EXPORT) && !this.superordinateLocations.isEmpty()) {
+			// TODO: Location-to-Location references
+		}
 
 		String urlEncodedName = HTMLUtils.encode(name);
 

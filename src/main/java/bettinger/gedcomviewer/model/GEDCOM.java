@@ -110,6 +110,10 @@ public class GEDCOM {
 				if (r instanceof SourceCitationContainer sc) {
 					sc.setSources();
 				}
+
+				if (r instanceof Location l) {
+					l.setReferencedLocations();
+				}
 			}
 
 			for (final var i : this.individuals) {
