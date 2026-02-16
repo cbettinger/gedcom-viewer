@@ -23,7 +23,7 @@ public class LocationsTableModel extends TableModel<Location> {
 			case 3 -> location.getLongitude();
 			case 4 -> location.getMedia().size();
 			case 5 -> location.getNotes().size();
-			case 6 -> location.getReferences().size();
+			case 6 -> location.getReferences().size();	// TODO: handle location-to-location refs
 			case 7 -> location.getLastChange();
 			default -> "";
 		};

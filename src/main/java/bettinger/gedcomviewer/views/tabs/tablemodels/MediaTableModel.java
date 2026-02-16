@@ -23,7 +23,7 @@ public class MediaTableModel extends TableModel<Media> {
 			case 0 -> media.getNumber();
 			case 1 -> media.getTitle();
 			case 2 -> media.getFormat();
-			case 3 -> media.getFile();
+			case 3 -> media.getFile();	// TODO: handle rel paths
 			case 4 -> type == null ? "" : I18N.get(type.toString());
 			case 5 -> media.getNotes().size();
 			case 6 -> media.getReferences().size();
