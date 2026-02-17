@@ -29,6 +29,10 @@ The aim of this project is to realize a cross-platform and multi-language viewer
 
 ## Changelog
 
+### 1.2.0
+* Added support for superordinate and subordinate locations 
+* Fixed but that caused errorneous media file paths on non-Windows platforms
+
 ### 1.1.3
 
 * Hide frame title on macOS
