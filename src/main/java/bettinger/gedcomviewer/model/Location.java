@@ -196,6 +196,14 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 	private List<String> getFacts() {
 		return getReferences().stream().filter(Fact.class::isInstance).map(f -> ((Fact) f).toString()).toList();
 	}
+
+	public List<Location> getSuperordinateLocations() {
+		return superordinateLocations.stream().sorted(DEFAULT_COMPARATOR).toList();
+	}
+
+	public List<Location> getSubordinateLocations() {
+		return subordinateLocations.stream().sorted(DEFAULT_COMPARATOR).toList();
+	}
 	/* #endregion */
 
 	/* #region toString & toHTML */
@@ -216,20 +224,17 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 		}
 
 		if ((!superordinateLocations.isEmpty() || !subordinateLocations.isEmpty()) && !options.contains(HTMLOption.EXPORT)) {
-			superordinateLocations.sort(DEFAULT_COMPARATOR);
-			subordinateLocations.sort(DEFAULT_COMPARATOR);
-
 			if (wasAppended) {
 				HTMLUtils.appendLineBreaks(sb, 2);
 			}
 
-			HTMLUtils.appendText(sb, HTMLUtils.createList(superordinateLocations, Structure::getLink, SUPER_SIGN));
+			HTMLUtils.appendText(sb, HTMLUtils.createList(getSuperordinateLocations(), Structure::getLink, SUPER_SIGN));
 
 			if (!superordinateLocations.isEmpty() && !subordinateLocations.isEmpty()) {
 				HTMLUtils.appendLineBreak(sb);
 			}
 
-			HTMLUtils.appendText(sb, HTMLUtils.createList(subordinateLocations, Structure::getLink, SUB_SIGN));
+			HTMLUtils.appendText(sb, HTMLUtils.createList(getSubordinateLocations(), Structure::getLink, SUB_SIGN));
 		}
 
 		if (Math.signum(latitude) != 0 && Math.signum(longitude) != 0) {
