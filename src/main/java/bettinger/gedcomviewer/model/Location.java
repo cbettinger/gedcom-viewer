@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.folg.gedcom.model.GedcomTag;
 
@@ -43,7 +44,7 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 	private final GedcomTag tag;
 
 	private List<Location> superordinateLocations;
-	//private final List<Location> subordinateLocations;	// TODO
+	private List<Location> subordinateLocations;
 
 	Location(final GEDCOM gedcom, final GedcomTag tag) {
 		super(gedcom, tag.getId(), null);
@@ -64,6 +65,7 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 		this.tag = tag;
 
 		this.superordinateLocations = new ArrayList<>();
+		this.subordinateLocations = new ArrayList<>();
 	}
 
 	Location(final GEDCOM gedcom, final String place, final float latitude, final float longitude) {
@@ -84,13 +86,16 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 		this.tag = null;
 
 		this.superordinateLocations = new ArrayList<>();
+		this.subordinateLocations = new ArrayList<>();
 	}
 
 	void setReferencedLocations() {
 		if (this.tag != null) {
 			this.superordinateLocations = TagUtils.getChildTags(tag, Location.TAG).stream().map(locTag -> {
-				return (Location) gedcom.getRecord(locTag.getRef());
-			}).toList();
+				final var sup = (Location) gedcom.getRecord(locTag.getRef());
+				sup.subordinateLocations.add(this);
+				return sup;
+			}).collect(Collectors.toList());
 		}
 	}
 
@@ -210,11 +215,21 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 			wasAppended = mediaManager.appendPrimaryImage(sb);
 		}
 
-		if (!superordinateLocations.isEmpty() && !options.contains(HTMLOption.EXPORT)) {
+		if ((!superordinateLocations.isEmpty() || !subordinateLocations.isEmpty()) && !options.contains(HTMLOption.EXPORT)) {
+			superordinateLocations.sort(DEFAULT_COMPARATOR);
+			subordinateLocations.sort(DEFAULT_COMPARATOR);
+
 			if (wasAppended) {
 				HTMLUtils.appendLineBreaks(sb, 2);
 			}
-			HTMLUtils.appendText(sb, HTMLUtils.createList(superordinateLocations, Structure::getLink, "↑"));
+
+			HTMLUtils.appendText(sb, HTMLUtils.createList(superordinateLocations, Structure::getLink, SUPER_SIGN));
+
+			if (!superordinateLocations.isEmpty() && !subordinateLocations.isEmpty()) {
+				HTMLUtils.appendLineBreak(sb);
+			}
+
+			HTMLUtils.appendText(sb, HTMLUtils.createList(subordinateLocations, Structure::getLink, SUB_SIGN));
 		}
 
 		if (Math.signum(latitude) != 0 && Math.signum(longitude) != 0) {

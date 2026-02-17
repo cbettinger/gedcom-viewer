@@ -1,6 +1,7 @@
 package bettinger.gedcomviewer.model;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,9 @@ import bettinger.gedcomviewer.utils.TagUtils;
 
 @JsonAutoDetect(fieldVisibility = Visibility.NONE, getterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
 public abstract class Structure {
+
+	public static final Comparator<Record> DEFAULT_COMPARATOR = (o1, o2) -> o1.toString().compareTo(o2.toString());
+
 	public static final String UNKNOWN_STRING = "?";
 
 	public static final String MALE_SIGN = "♂";
@@ -29,6 +33,8 @@ public abstract class Structure {
 	public static final String BURIAL_SIGN = "\u25AF";
 	public static final String MARRIAGE_SIGN = "⚭";
 	public static final String DIVORCE_SIGN = "⚮";
+	public static final String SUPER_SIGN = "↑";
+	public static final String SUB_SIGN = "↳";
 
 	protected final GEDCOM gedcom;
 

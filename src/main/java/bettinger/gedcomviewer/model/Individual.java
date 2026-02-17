@@ -684,7 +684,7 @@ public class Individual extends IndividualFamilyCommonStructure {
 	}
 
 	static String formatChild(final Individual child) {
-		return String.format("↳ %s", formatWithSexAndLifeData(child));
+		return String.format(Format.SPACED, SUB_SIGN, formatWithSexAndLifeData(child));
 	}
 
 	static String formatWithSexAndLifeData(final Individual individual) {
