@@ -43,7 +43,7 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 	private final GedcomTag tag;
 
 	private List<Location> superordinateLocations;
-	//private final List<Location> subordinateLocations;
+	//private final List<Location> subordinateLocations;	// TODO
 
 	Location(final GEDCOM gedcom, final GedcomTag tag) {
 		super(gedcom, tag.getId(), null);
@@ -62,6 +62,8 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 		this.imageURL = image != null && image.exists() ? image.getURL() : "";
 
 		this.tag = tag;
+
+		this.superordinateLocations = new ArrayList<>();
 	}
 
 	Location(final GEDCOM gedcom, final String place, final float latitude, final float longitude) {
@@ -80,6 +82,8 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 		this.imageURL = image != null && image.exists() ? image.getURL() : "";
 
 		this.tag = null;
+
+		this.superordinateLocations = new ArrayList<>();
 	}
 
 	void setReferencedLocations() {
@@ -201,8 +205,16 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 
 		HTMLUtils.appendH1(sb, getName());
 
+		var wasAppended = false;
 		if (!options.contains(HTMLOption.EXPORT)) {
-			mediaManager.appendPrimaryImage(sb);
+			wasAppended = mediaManager.appendPrimaryImage(sb);
+		}
+
+		if (!superordinateLocations.isEmpty() && !options.contains(HTMLOption.EXPORT)) {
+			if (wasAppended) {
+				HTMLUtils.appendLineBreaks(sb, 2);
+			}
+			HTMLUtils.appendText(sb, HTMLUtils.createList(superordinateLocations, Structure::getLink, "↑"));
 		}
 
 		if (Math.signum(latitude) != 0 && Math.signum(longitude) != 0) {
@@ -212,10 +224,6 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 			final var longitudeSuffix = longitude < 0 ? "W" : "E";
 			HTMLUtils.appendLine(sb, String.format(Format.SPACED, Math.abs(latitude), latitudeSuffix));
 			HTMLUtils.appendText(sb, String.format(Format.SPACED, Math.abs(longitude), longitudeSuffix));
-		}
-
-		if (!options.contains(HTMLOption.EXPORT) && !this.superordinateLocations.isEmpty()) {
-			// TODO: Location-to-Location references
 		}
 
 		String urlEncodedName = HTMLUtils.encode(name);
