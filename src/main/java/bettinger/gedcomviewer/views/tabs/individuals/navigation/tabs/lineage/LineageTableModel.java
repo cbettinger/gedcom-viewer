@@ -27,7 +27,7 @@ class LineageTableModel extends TableModel<Quintet<String, Individual, Family, I
 		return switch (column) {
 			case 1 -> Integer.class;
 			case 3, 4, 5 -> Quality.class;
-			default -> super.getColumnClass(column);
+			default -> super.getColumnClass(column);	// TODO: media indicator
 		};
 	}
 
