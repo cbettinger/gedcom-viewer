@@ -427,7 +427,7 @@ public class Individual extends IndividualFamilyCommonStructure {
 		var distanceFather = Integer.MAX_VALUE;
 		if (father != null) {
 			distanceFather = LevenshteinDistance.getDefaultInstance().apply(individual.getSurname().toLowerCase(), father.getSurname().toLowerCase());
-		}
+		}	// TODO: Use soundex instead?
 
 		final var mother = individual.getMother();
 		var distanceMother = Integer.MAX_VALUE;
@@ -684,7 +684,7 @@ public class Individual extends IndividualFamilyCommonStructure {
 	}
 
 	static String formatChild(final Individual child) {
-		return String.format("↳ %s", formatWithSexAndLifeData(child));
+		return String.format(Format.SPACED, SUB_SIGN, formatWithSexAndLifeData(child));
 	}
 
 	static String formatWithSexAndLifeData(final Individual individual) {

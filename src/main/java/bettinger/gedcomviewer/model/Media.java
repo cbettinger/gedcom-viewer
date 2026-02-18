@@ -47,7 +47,7 @@ public class Media extends Structure implements Record, NoteContainer, SourceCit
 			this.title = getFirstExtensionTagValue("TITL");
 		}
 
-		final var mediaFilePath = media.getFile();
+		final var mediaFilePath = media.getFile().replace("/", File.separator).replace("\\", File.separator);
 		if (mediaFilePath.startsWith(REL_PREFIX)) {
 			this.filePath = FileUtils.getPath(gedcom.getDirectoryPath(), mediaFilePath.replaceFirst(REL_PREFIX, ""));
 		} else if (mediaFilePath.startsWith(STG_PREFIX)) {

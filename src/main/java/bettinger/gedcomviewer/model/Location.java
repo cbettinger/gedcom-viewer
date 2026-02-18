@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.folg.gedcom.model.GedcomTag;
 
@@ -40,7 +41,10 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 	@JsonProperty
 	private final String imageURL;
 
-	private final boolean isStructure;
+	private final GedcomTag tag;
+
+	private List<Location> superordinateLocations;
+	private List<Location> subordinateLocations;
 
 	Location(final GEDCOM gedcom, final GedcomTag tag) {
 		super(gedcom, tag.getId(), null);
@@ -58,7 +62,10 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 		final var image = getPrimaryImage(false);
 		this.imageURL = image != null && image.exists() ? image.getURL() : "";
 
-		this.isStructure = true;
+		this.tag = tag;
+
+		this.superordinateLocations = new ArrayList<>();
+		this.subordinateLocations = new ArrayList<>();
 	}
 
 	Location(final GEDCOM gedcom, final String place, final float latitude, final float longitude) {
@@ -76,7 +83,20 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 		final var image = getPrimaryImage(false);
 		this.imageURL = image != null && image.exists() ? image.getURL() : "";
 
-		this.isStructure = false;
+		this.tag = null;
+
+		this.superordinateLocations = new ArrayList<>();
+		this.subordinateLocations = new ArrayList<>();
+	}
+
+	void setReferencedLocations() {
+		if (this.tag != null) {
+			this.superordinateLocations = TagUtils.getChildTags(tag, Location.TAG).stream().map(locTag -> {
+				final var sup = (Location) gedcom.getRecord(locTag.getRef());
+				sup.subordinateLocations.add(this);
+				return sup;
+			}).collect(Collectors.toList());
+		}
 	}
 
 	/* #region container */
@@ -87,7 +107,7 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 
 	@Override
 	public boolean hasXRef() {
-		return isStructure;
+		return isStructure();
 	}
 
 	@Override
@@ -99,7 +119,7 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 	public LocalDateTime getLastChange() {
 		var result = recordManager.getLastChange();
 
-		if (!isStructure) {
+		if (!isStructure()) {
 			final Structure newestReference = recordManager.getReferences().stream().filter(Fact.class::isInstance).max(Comparator.comparing(f -> ((Fact) f).getLastChange())).orElse(null);
 			if (newestReference instanceof Fact f) {
 				result = f.getLastChange();
@@ -157,7 +177,7 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 
 	/* #region getter & setter */
 	boolean isStructure() {
-		return isStructure;
+		return this.tag != null;
 	}
 
 	public String getName() {
@@ -176,6 +196,14 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 	private List<String> getFacts() {
 		return getReferences().stream().filter(Fact.class::isInstance).map(f -> ((Fact) f).toString()).toList();
 	}
+
+	public List<Location> getSuperordinateLocations() {
+		return superordinateLocations.stream().sorted(DEFAULT_COMPARATOR).toList();
+	}
+
+	public List<Location> getSubordinateLocations() {
+		return subordinateLocations.stream().sorted(DEFAULT_COMPARATOR).toList();
+	}
 	/* #endregion */
 
 	/* #region toString & toHTML */
@@ -190,8 +218,23 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 
 		HTMLUtils.appendH1(sb, getName());
 
+		var wasAppended = false;
 		if (!options.contains(HTMLOption.EXPORT)) {
-			mediaManager.appendPrimaryImage(sb);
+			wasAppended = mediaManager.appendPrimaryImage(sb);
+		}
+
+		if ((!superordinateLocations.isEmpty() || !subordinateLocations.isEmpty()) && !options.contains(HTMLOption.EXPORT)) {
+			if (wasAppended) {
+				HTMLUtils.appendLineBreaks(sb, 2);
+			}
+
+			HTMLUtils.appendText(sb, HTMLUtils.createList(getSuperordinateLocations(), Structure::getLink, SUPER_SIGN));
+
+			if (!superordinateLocations.isEmpty() && !subordinateLocations.isEmpty()) {
+				HTMLUtils.appendLineBreak(sb);
+			}
+
+			HTMLUtils.appendText(sb, HTMLUtils.createList(getSubordinateLocations(), Structure::getLink, SUB_SIGN));
 		}
 
 		if (Math.signum(latitude) != 0 && Math.signum(longitude) != 0) {
@@ -202,8 +245,6 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 			HTMLUtils.appendLine(sb, String.format(Format.SPACED, Math.abs(latitude), latitudeSuffix));
 			HTMLUtils.appendText(sb, String.format(Format.SPACED, Math.abs(longitude), longitudeSuffix));
 		}
-
-		// TODO: Location-to-Location references
 
 		String urlEncodedName = HTMLUtils.encode(name);
 

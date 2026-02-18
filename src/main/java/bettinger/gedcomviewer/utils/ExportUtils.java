@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -63,8 +62,6 @@ public abstract class ExportUtils {
 	private static final String ASSETS_FOLDER_NAME = "assets";
 
 	private static final String HTML_TITLE_FORMAT = String.format("<h1>%%s<a href='#top' title='%s'>\u25B2</a></h1>", I18N.get("ToTop"));
-
-	private static final Comparator<Record> APPENDIX_COMPARATOR = (o1, o2) -> o1.toString().compareTo(o2.toString());
 
 	@SuppressWarnings("java:S3008")
 	private static String HTML_TEMPLATE = "";
@@ -454,19 +451,19 @@ public abstract class ExportUtils {
 	}
 
 	private static List<Record> getLocations(final Set<Record> appendices) {
-		return appendices.stream().filter(Location.class::isInstance).sorted(APPENDIX_COMPARATOR).toList();
+		return appendices.stream().filter(Location.class::isInstance).sorted(Structure.DEFAULT_COMPARATOR).toList();
 	}
 
 	private static List<Record> getMedia(final Set<Record> appendices) {
-		return appendices.stream().filter(Media.class::isInstance).sorted(APPENDIX_COMPARATOR).toList();
+		return appendices.stream().filter(Media.class::isInstance).sorted(Structure.DEFAULT_COMPARATOR).toList();
 	}
 
 	private static List<Record> getSources(final Set<Record> appendices) {
-		return appendices.stream().filter(Source.class::isInstance).sorted(APPENDIX_COMPARATOR).toList();
+		return appendices.stream().filter(Source.class::isInstance).sorted(Structure.DEFAULT_COMPARATOR).toList();
 	}
 
 	private static List<Record> getRepositories(final Set<Record> appendices) {
-		return appendices.stream().filter(Repository.class::isInstance).sorted(APPENDIX_COMPARATOR).toList();
+		return appendices.stream().filter(Repository.class::isInstance).sorted(Structure.DEFAULT_COMPARATOR).toList();
 	}
 
 	private static String createFooter(final GEDCOM gedcom, final Set<HTMLOption> options) {

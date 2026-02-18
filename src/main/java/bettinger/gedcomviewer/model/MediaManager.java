@@ -95,27 +95,29 @@ class MediaManager {
 		return excludeConfidential ? media.stream().filter(Predicate.not(Structure::isConfidential)).toList() : media;
 	}
 
-	public void appendPortrait(final StringBuilder sb) {
-		appendPrimaryImage(sb, true, Constants.PORTRAIT_WIDTH);
+	public boolean appendPortrait(final StringBuilder sb) {
+		return appendPrimaryImage(sb, true, Constants.PORTRAIT_WIDTH);
 	}
 
-	public void appendPrimaryPhoto(final StringBuilder sb) {
-		appendPrimaryImage(sb, true, Constants.PREVIEW_IMAGE_WIDTH);
+	public boolean appendPrimaryPhoto(final StringBuilder sb) {
+		return appendPrimaryImage(sb, true, Constants.PREVIEW_IMAGE_WIDTH);
 	}
 
-	public void appendPrimaryImage(final StringBuilder sb) {
-		appendPrimaryImage(sb, false, Constants.PREVIEW_IMAGE_WIDTH);
+	public boolean appendPrimaryImage(final StringBuilder sb) {
+		return appendPrimaryImage(sb, false, Constants.PREVIEW_IMAGE_WIDTH);
 	}
 
-	public void appendPrimaryImage(final StringBuilder sb, final boolean onlyPhoto, final int width) {
+	public boolean appendPrimaryImage(final StringBuilder sb, final boolean onlyPhoto, final int width) {
 		final var image = getPrimaryImage(onlyPhoto);
 		if (image != null && image.exists()) {
 			final var imageURL = image.getURL();
 			if (!imageURL.isEmpty()) {
 				HTMLUtils.appendLineBreak(sb);
 				HTMLUtils.appendImage(sb, imageURL, width);
+				return true;
 			}
 		}
+		return false;
 	}
 
 	public Media getPrimaryImage(final boolean onlyPhoto) {
