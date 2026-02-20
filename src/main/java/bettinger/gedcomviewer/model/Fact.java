@@ -215,7 +215,10 @@ public class Fact extends Substructure implements NoteContainer, MediaContainer,
 
 		final var media = getMedia();
 		for (final var medium : media) {
-			final var mediumSourcesQuality = getQuality(medium.getSourceCitations()).getValue();
+			var mediumSourcesQuality = getQuality(medium.getSourceCitations()).getValue();
+			if (mediumSourcesQuality == 3) {
+				mediumSourcesQuality = 4;	// increase quality if there is a medium linked to primary source
+			}
 			if (mediumSourcesQuality > qualityValue) {
 				qualityValue = mediumSourcesQuality;
 			}

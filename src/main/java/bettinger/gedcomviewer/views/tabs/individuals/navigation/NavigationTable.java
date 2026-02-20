@@ -32,7 +32,7 @@ public class NavigationTable extends AutoFitTable {
 				Color backgroundColor = TRANSPARENT;
 				Color foregroundColor = Color.BLACK;
 
-				if (quality == Quality.PRIMARY) {
+				if (quality == Quality.PRIMARY || quality == Quality.PRIMARY_WITH_MEDIUM) {
 					backgroundColor = GREEN;
 				} else if (quality == Quality.SECONDARY) {
 					backgroundColor = YELLOW;
@@ -46,7 +46,7 @@ public class NavigationTable extends AutoFitTable {
 				label.setBackground(backgroundColor);
 				label.setForeground(foregroundColor);
 
-				label.setText("");
+				label.setText(quality == Quality.PRIMARY_WITH_MEDIUM ? "📷" : "");
 			}
 
 			return component;

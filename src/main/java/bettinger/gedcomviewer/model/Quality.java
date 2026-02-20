@@ -5,7 +5,7 @@ import java.util.Map;
 
 public enum Quality {
 
-	UNKNOWN(-1), UNRELIABLE(0), QUESTIONABLE(1), SECONDARY(2), PRIMARY(3);
+	UNKNOWN(-1), UNRELIABLE(0), QUESTIONABLE(1), SECONDARY(2), PRIMARY(3), PRIMARY_WITH_MEDIUM(4);
 
 	private static final Map<Integer, Quality> VALUES = new HashMap<>();
 
