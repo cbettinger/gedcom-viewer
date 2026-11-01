@@ -4,6 +4,8 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -33,7 +35,7 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 	private final MediaManager mediaManager;
 
 	@JsonProperty
-	private final String name;
+	private final List<String> names;
 	@JsonProperty("lat")
 	private final float latitude;
 	@JsonProperty("lng")
@@ -53,7 +55,7 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 		this.noteManager = new NoteManager(this, gedcom, tag);
 		this.mediaManager = new MediaManager(this, gedcom, tag);
 
-		this.name = parseName(tag);
+		this.names = parseNames(tag);
 
 		final var mapTag = TagUtils.getChildTag(tag, "MAP");
 		this.latitude = parseLatitude(mapTag);
@@ -75,7 +77,7 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 		this.noteManager = new NoteManager(this, gedcom, new ArrayList<>());
 		this.mediaManager = new MediaManager(this, gedcom, new ArrayList<>());
 
-		this.name = place;
+		this.names = new ArrayList<String>(Arrays.asList(place));
 
 		this.latitude = latitude;
 		this.longitude = longitude;
@@ -181,7 +183,19 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 	}
 
 	public String getName() {
-		return name;
+		if (names == null || names.isEmpty()) {
+			return UNKNOWN_STRING;
+		} else {
+			return names.get(0);
+		}
+	}
+
+	public String getHistoricalNames() {
+		if (names == null || names.size() < 2) {
+			return "";
+		} else {
+			return String.join(Format.TRAILING_SPACE_COMMA, names.stream().skip(1).toList());
+		}
 	}
 
 	public float getLatitude() {
@@ -219,7 +233,17 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 		HTMLUtils.appendH1(sb, getName());
 
 		var wasAppended = false;
+		final var historicalNames = getHistoricalNames();
+		if (!historicalNames.isEmpty()) {
+			HTMLUtils.appendText(sb, historicalNames);
+			wasAppended = true;
+		}
+
 		if (!options.contains(HTMLOption.EXPORT)) {
+			if (wasAppended) {
+				HTMLUtils.appendLineBreak(sb);
+			}
+
 			wasAppended = mediaManager.appendPrimaryImage(sb);
 		}
 
@@ -246,7 +270,7 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 			HTMLUtils.appendText(sb, String.format(Format.SPACED, Math.abs(longitude), longitudeSuffix));
 		}
 
-		String urlEncodedName = HTMLUtils.encode(name);
+		String urlEncodedName = HTMLUtils.encode(getName());
 
 		HTMLUtils.appendH2(sb, I18N.get("Maps"));
 		if (Math.signum(latitude) != 0 && Math.signum(longitude) != 0) {
@@ -274,9 +298,17 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 	}
 	/* #endregion */
 
-	private static String parseName(final GedcomTag tag) {
-		final var name = TagUtils.parseChildTagValue(tag, "NAME");
-		return name == null ? UNKNOWN_STRING : name;
+	private static List<String> parseNames(final GedcomTag tag) {
+		final var result = new ArrayList<String>();
+
+		final var nameTags = TagUtils.getChildTags(tag, "NAME");
+		for (final var nameTag : nameTags) {
+			result.add(nameTag.getValue());
+		}
+
+		Collections.reverse(result);
+
+		return result;
 	}
 
 	static float parseLatitude(final GedcomTag mapTag) {

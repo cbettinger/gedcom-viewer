@@ -29,8 +29,14 @@ The aim of this project is to realize a cross-platform and multi-language viewer
 
 ## Changelog
 
+### 1.3.0
+
+* Added an indicator for facts with a primary source and a linked media file
+* Added support for historical location names
+
 ### 1.2.0
-* Added support for superordinate and subordinate locations 
+
+* Added support for superordinate and subordinate locations
 * Fixed but that caused errorneous media file paths on non-Windows platforms
 
 ### 1.1.3
@@ -39,7 +45,7 @@ The aim of this project is to realize a cross-platform and multi-language viewer
 
 ### 1.1.2
 
-* Fixed bug that caused rendering of portraits within visualizations to fail 
+* Fixed bug that caused rendering of portraits within visualizations to fail
 
 ### 1.1.1
 
