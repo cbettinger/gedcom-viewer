@@ -58,6 +58,10 @@ public class Individual extends IndividualFamilyCommonStructure {
 	}
 
 	/* #region getter & setter */
+	public boolean isBookmarked() {
+		return getFirstExtensionTag("_BOOKMARK") != null;
+	}
+
 	public String getNameAndNumber() {
 		return String.format(Format.STRING_WITH_PARENTHESED_SUFFIX, getName(), getNumber());
 	}

@@ -11,7 +11,7 @@ import bettinger.gedcomviewer.views.TableModel;
 public class IndividualsTableModel extends TableModel<Individual> {
 
 	public IndividualsTableModel(final GEDCOM gedcom, final String searchQuery) {
-		super(new String[] { I18N.get("No"), I18N.get("Name"), I18N.get("DateOfBirth"), I18N.get("PlaceOfBirth"), I18N.get("DateOfDeath"), I18N.get("PlaceOfDeath"), I18N.get("LastChange") }, gedcom.getIndividuals(searchQuery));
+		super(new String[] { I18N.get("No"), I18N.get("Name"), I18N.get("DateOfBirth"), I18N.get("PlaceOfBirth"), I18N.get("DateOfDeath"), I18N.get("PlaceOfDeath"), "🔖", I18N.get("LastChange") }, gedcom.getIndividuals(searchQuery));
 	}
 
 	@Override
@@ -36,7 +36,8 @@ public class IndividualsTableModel extends TableModel<Individual> {
 			case 3 -> birthPlaceStr;
 			case 4 -> deathDate;
 			case 5 -> deathPlaceStr;
-			case 6 -> individual.getLastChange();
+			case 6 -> individual.isBookmarked() ? "✓" : "";
+			case 7 -> individual.getLastChange();
 			default -> "";
 		};
 	}
@@ -46,7 +47,7 @@ public class IndividualsTableModel extends TableModel<Individual> {
 		return switch (column) {
 			case 0 -> Integer.class;
 			case 2, 4 -> Date.class;
-			case 6 -> LocalDateTime.class;
+			case 7 -> LocalDateTime.class;
 			default -> super.getColumnClass(column);
 		};
 	}

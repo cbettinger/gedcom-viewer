@@ -32,6 +32,7 @@ The aim of this project is to realize a cross-platform and multi-language viewer
 ### 1.3.0
 
 * Added an indicator for facts with a primary source and a linked media file
+* Added an indicator for bookmarked individuals
 * Added support for historical location names
 
 ### 1.2.0

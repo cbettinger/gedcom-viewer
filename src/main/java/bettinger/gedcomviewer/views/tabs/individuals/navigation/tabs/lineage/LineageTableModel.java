@@ -9,6 +9,7 @@ import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.model.Family;
 import bettinger.gedcomviewer.model.Individual;
 import bettinger.gedcomviewer.model.Quality;
+import bettinger.gedcomviewer.model.Structure;
 import bettinger.gedcomviewer.utils.Numbering;
 import bettinger.gedcomviewer.views.TableModel;
 
@@ -19,7 +20,7 @@ class LineageTableModel extends TableModel<Quintet<String, Individual, Family, I
 	}
 
 	LineageTableModel(final List<Quintet<String, Individual, Family, Individual, Integer>> lineage) {
-		super(new String[] { I18N.get("GenerationAbbreviation"), I18N.get("Kekule"), I18N.get("Name"), I18N.get("BirthAbbreviation"), I18N.get("MarriageAbbreviation"), I18N.get("DeathAbbreviation") }, lineage);
+		super(new String[] { I18N.get("GenerationAbbreviation"), I18N.get("Kekule"), I18N.get("Name"), Structure.BIRTH_SIGN, Structure.MARRIAGE_SIGN, Structure.DEATH_SIGN, "🔖" }, lineage);
 	}
 
 	@Override
@@ -46,6 +47,7 @@ class LineageTableModel extends TableModel<Quintet<String, Individual, Family, I
 			case 3 -> individual.getBirthQuality();
 			case 4 -> family != null ? family.getMarriageQuality() : Quality.UNKNOWN;
 			case 5 -> individual.getDeathQuality();
+			case 6 -> individual.isBookmarked() ? "✓" : "";
 			default -> "";
 		};
 	}
