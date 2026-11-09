@@ -252,13 +252,13 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 				HTMLUtils.appendLineBreaks(sb, 2);
 			}
 
-			HTMLUtils.appendText(sb, HTMLUtils.createList(getSuperordinateLocations(), Structure::getLink, SUPER_SIGN));
+			HTMLUtils.appendText(sb, HTMLUtils.createList(getSuperordinateLocations(), Location::getLink, SUPER_SIGN));
 
 			if (!superordinateLocations.isEmpty() && !subordinateLocations.isEmpty()) {
 				HTMLUtils.appendLineBreak(sb);
 			}
 
-			HTMLUtils.appendText(sb, HTMLUtils.createList(getSubordinateLocations(), Structure::getLink, SUB_SIGN));
+			HTMLUtils.appendText(sb, HTMLUtils.createList(getSubordinateLocations(), Location::getLink, SUB_SIGN));
 		}
 
 		if (Math.signum(latitude) != 0 && Math.signum(longitude) != 0) {
