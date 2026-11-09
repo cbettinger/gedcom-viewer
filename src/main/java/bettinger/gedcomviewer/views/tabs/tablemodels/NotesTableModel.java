@@ -10,7 +10,7 @@ import bettinger.gedcomviewer.views.TableModel;
 public class NotesTableModel extends TableModel<Note> {
 
 	public NotesTableModel(final GEDCOM gedcom, final String searchQuery) {
-		super(new String[] { I18N.get("No"), I18N.get("Text"), I18N.get("References"), I18N.get("LastChange") }, gedcom.getNotes(searchQuery));
+		super(new String[] { I18N.get("No"), I18N.get("Text"), I18N.get("Sources"), I18N.get("References"), I18N.get("LastChange") }, gedcom.getNotes(searchQuery));
 	}
 
 	@Override
@@ -19,8 +19,9 @@ public class NotesTableModel extends TableModel<Note> {
 		return switch (col) {
 			case 0 -> note.getNumber();
 			case 1 -> note.getText();
-			case 2 -> note.getReferences().size();
-			case 3 -> note.getLastChange();
+			case 2 -> note.getSourceCitations().size();
+			case 3 -> note.getReferences().size();
+			case 4 -> note.getLastChange();
 			default -> "";
 		};
 	}
@@ -28,8 +29,8 @@ public class NotesTableModel extends TableModel<Note> {
 	@Override
 	public Class<?> getColumnClass(final int column) {
 		return switch (column) {
-			case 0, 2 -> Integer.class;
-			case 3 -> LocalDateTime.class;
+			case 0, 2, 3 -> Integer.class;
+			case 4 -> LocalDateTime.class;
 			default -> super.getColumnClass(column);
 		};
 	}
