@@ -82,7 +82,7 @@ public class Address extends Substructure {
 
 		final var phon = getParentStructure().getExtensionTags(TAG_PHONE);
 		if (!phon.isEmpty()) {
-			phon.stream().forEach(t -> {
+			phon.forEach(t -> {
 				final var p = t.getValue();
 				if (p != null && !p.isEmpty()) {
 					phoneNumbers.add(p);
@@ -92,7 +92,7 @@ public class Address extends Substructure {
 
 		final var email = getParentStructure().getExtensionTags(TAG_EMAIL);
 		if (!email.isEmpty()) {
-			email.stream().forEach(t -> {
+			email.forEach(t -> {
 				final var m = t.getValue();
 				if (m != null && !m.isEmpty()) {
 					eMailAddresses.add(m);
@@ -102,7 +102,7 @@ public class Address extends Substructure {
 
 		final var urls = getParentStructure().getExtensionTags(TAG_WWW);
 		if (!urls.isEmpty()) {
-			urls.stream().forEach(t -> {
+			urls.forEach(t -> {
 				final var w = t.getValue();
 				if (w != null && !w.isEmpty()) {
 					www.add(w);

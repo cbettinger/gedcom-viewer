@@ -51,7 +51,7 @@ public class Submitter extends Structure implements Record, NoteContainer, Media
 
 		final var langs = getExtensionTags(TAG_LANGUAGE);
 		if (!langs.isEmpty()) {
-			langs.stream().forEach(t -> {
+			langs.forEach(t -> {
 				final var l = t.getValue();
 				if (l != null && !l.isEmpty()) {
 					languages.add(l);
