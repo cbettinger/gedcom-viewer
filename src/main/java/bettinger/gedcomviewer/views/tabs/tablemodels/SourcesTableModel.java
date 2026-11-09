@@ -10,18 +10,25 @@ import bettinger.gedcomviewer.views.TableModel;
 public class SourcesTableModel extends TableModel<Source> {
 
 	public SourcesTableModel(final GEDCOM gedcom, final String searchQuery) {
-		super(new String[] { I18N.get("No"), I18N.get("Abbreviation"), I18N.get("Author"), I18N.get("Title"), I18N.get("Repository"), I18N.get("Media"), I18N.get("Notes"), I18N.get("References"), I18N.get("LastChange") }, gedcom.getSources(searchQuery));
+		super(new String[] { I18N.get("No"), I18N.get("Abbreviation"), I18N.get("Author"), I18N.get("Title"), I18N.get("Repositories"), I18N.get("Media"), I18N.get("Notes"), I18N.get("References"), I18N.get("LastChange") }, gedcom.getSources(searchQuery));
 	}
 
 	@Override
 	public Object getValueAt(final int row, final int col) {
 		final var source = getItemAt(row);
+
+		final var repo = switch (source.getRepositories().size()) {
+			case 0 -> "";
+			case 1 -> source.getRepositories().getFirst().getName();
+			default -> Integer.toString(source.getRepositories().size());
+		};
+
 		return switch (col) {
 			case 0 -> source.getNumber();
 			case 1 -> source.getAbbreviation();
 			case 2 -> source.getAuthor();
 			case 3 -> source.getTitle();
-			case 4 -> source.getRepository() != null && !source.getRepository().getName().isEmpty() ? source.getRepository().getName() : "";
+			case 4 -> repo;
 			case 5 -> source.getMedia().size();
 			case 6 -> source.getNotes().size();
 			case 7 -> source.getReferences().size();

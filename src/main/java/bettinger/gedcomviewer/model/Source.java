@@ -3,11 +3,13 @@ package bettinger.gedcomviewer.model;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import bettinger.gedcomviewer.I18N;
 import bettinger.gedcomviewer.utils.HTMLUtils;
+import bettinger.gedcomviewer.utils.TagUtils;
 
 public class Source extends Structure implements Record, NoteContainer, MediaContainer {
 
@@ -19,7 +21,7 @@ public class Source extends Structure implements Record, NoteContainer, MediaCon
 
 	final org.folg.gedcom.model.Source wrappedSource;
 
-	private Repository repository;
+	private final List<Repository> repositories;
 
 	public Source(final GEDCOM gedcom, final org.folg.gedcom.model.Source source) {
 		super(gedcom, source.getId(), source);
@@ -30,10 +32,15 @@ public class Source extends Structure implements Record, NoteContainer, MediaCon
 
 		this.wrappedSource = source;
 
-		final var repositoryRef = source.getRepositoryRef();
-		this.repository = repositoryRef == null ? null : (Repository) gedcom.getRecord(repositoryRef.getRef());
-		if (this.repository != null) {
-			this.repository.addReference(this);
+		repositories = new ArrayList<>();
+
+		parse();
+	}
+
+	private void parse() {
+		final var repoTags = TagUtils.getChildTags(gedcom.getTag(wrappedSource.getId()), Repository.TAG);
+		for (final var repoTag : repoTags) {
+			repositories.add((Repository) gedcom.getRecord(repoTag.getRef()));
 		}
 	}
 
@@ -149,20 +156,8 @@ public class Source extends Structure implements Record, NoteContainer, MediaCon
 		wrappedSource.setText(value == null ? "" : value);
 	}
 
-	public void setRepository(final Repository value) {
-		if (value == null) {
-			wrappedSource.setRepositoryRef(null);
-			repository = null;
-		} else if (getGEDCOM().getRepositories().contains(value)) {
-			final var repositoryRef = new org.folg.gedcom.model.RepositoryRef();
-			repositoryRef.setRef(value.getId());
-			wrappedSource.setRepositoryRef(repositoryRef);
-			repository = value;
-		}
-	}
-
-	public Repository getRepository() {
-		return repository;
+	public List<Repository> getRepositories() {
+		return repositories;
 	}
 	/* #endregion */
 
@@ -200,9 +195,9 @@ public class Source extends Structure implements Record, NoteContainer, MediaCon
 			HTMLUtils.appendText(sb, HTMLUtils.convertStringToHTML(getText()));
 		}
 
-		if (getRepository() != null) {
-			HTMLUtils.appendH2(sb, I18N.get("Repository"));
-			HTMLUtils.appendText(sb, getRepository().getLink());
+		if (!getRepositories().isEmpty()) {
+			HTMLUtils.appendH2(sb, I18N.get("Repositories"));
+			HTMLUtils.appendText(sb, HTMLUtils.createList(getRepositories(), Repository::getLink));
 		}
 
 		HTMLUtils.appendText(sb, noteManager.toHTML(options));
