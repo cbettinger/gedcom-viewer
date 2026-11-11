@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Objects;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -19,9 +20,7 @@ import jiconfont.swing.IconFontSwing;
 public class VisualizationZoomStatusBar extends JPanel {
 
 	public VisualizationZoomStatusBar(final WebViewPanel visualization) {
-		if (visualization == null) {
-			throw new NullPointerException();
-		}
+		Objects.requireNonNull(visualization);
 
 		setLayout(new BorderLayout());
 
