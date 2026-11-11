@@ -40,7 +40,11 @@ public class Source extends Structure implements Record, NoteContainer, MediaCon
 	private void parse() {
 		final var repoTags = TagUtils.getChildTags(gedcom.getTag(wrappedSource.getId()), Repository.TAG);
 		for (final var repoTag : repoTags) {
-			repositories.add((Repository) gedcom.getRecord(repoTag.getRef()));
+			final var repository = (Repository) gedcom.getRecord(repoTag.getRef());
+			if (repository != null) {
+				repositories.add(repository);
+				repository.addReference(this);
+			}
 		}
 	}
 
