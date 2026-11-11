@@ -35,6 +35,7 @@ The aim of this project is to realize a cross-platform and multi-language viewer
 * Added an indicator for bookmarked individuals
 * Added an column for source citations of notes
 * Added support for historical location names
+* Added support for sources with multiple repositories
 
 ### 1.2.0
 
