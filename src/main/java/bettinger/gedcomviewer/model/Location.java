@@ -43,28 +43,28 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 	@JsonProperty
 	private final String imageURL;
 
-	private final GedcomTag tag;
+	private final GedcomTag wrappedTag;
 
 	private List<Location> superordinateLocations;
 	private final List<Location> subordinateLocations;
 
-	Location(final GEDCOM gedcom, final GedcomTag tag) {
-		super(gedcom, tag.getId(), null);
+	Location(final GEDCOM gedcom, final GedcomTag wrappedTag) {
+		super(gedcom, wrappedTag.getId(), null);
 
-		this.recordManager = new RecordManager(this, gedcom, DateTimeUtils.parseLastChange(tag));
-		this.noteManager = new NoteManager(this, gedcom, tag);
-		this.mediaManager = new MediaManager(this, gedcom, tag);
+		this.recordManager = new RecordManager(this, gedcom, DateTimeUtils.parseLastChange(wrappedTag));
+		this.noteManager = new NoteManager(this, gedcom, wrappedTag);
+		this.mediaManager = new MediaManager(this, gedcom, wrappedTag);
 
-		this.names = parseNames(tag);
+		this.names = parseNames(wrappedTag);
 
-		final var mapTag = TagUtils.getChildTag(tag, "MAP");
+		final var mapTag = TagUtils.getChildTag(wrappedTag, "MAP");
 		this.latitude = parseLatitude(mapTag);
 		this.longitude = parseLongitude(mapTag);
 
 		final var image = getPrimaryImage(false);
 		this.imageURL = image != null && image.exists() ? image.getURL() : "";
 
-		this.tag = tag;
+		this.wrappedTag = wrappedTag;
 
 		this.superordinateLocations = new ArrayList<>();
 		this.subordinateLocations = new ArrayList<>();
@@ -85,15 +85,15 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 		final var image = getPrimaryImage(false);
 		this.imageURL = image != null && image.exists() ? image.getURL() : "";
 
-		this.tag = null;
+		this.wrappedTag = null;
 
 		this.superordinateLocations = new ArrayList<>();
 		this.subordinateLocations = new ArrayList<>();
 	}
 
 	void setReferencedLocations() {
-		if (this.tag != null) {
-			this.superordinateLocations = TagUtils.getChildTags(tag, Location.TAG).stream().map(locTag -> {
+		if (this.wrappedTag != null) {
+			this.superordinateLocations = TagUtils.getChildTags(wrappedTag, Location.TAG).stream().map(locTag -> {
 				final var sup = (Location) gedcom.getRecord(locTag.getRef());
 				sup.subordinateLocations.add(this);
 				return sup;
@@ -179,7 +179,7 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 
 	/* #region getter & setter */
 	boolean isStructure() {
-		return this.tag != null;
+		return this.wrappedTag != null;
 	}
 
 	public String getName() {
