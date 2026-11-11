@@ -22,7 +22,6 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import org.folg.gedcom.model.Generator;
 import org.folg.gedcom.parser.ModelParser;
@@ -297,7 +296,7 @@ public abstract class ExportUtils {
 					result.addAll(appendixSources);
 					queue.addAll(appendixSources);
 
-					final var appendixRepositories = appendixSources.stream().map(Source::getRepositories).flatMap(Collection::stream).toList(); //  .filter(r -> r != null).toList();
+					final var appendixRepositories = appendixSources.stream().map(Source::getRepositories).flatMap(Collection::stream).toList();
 					result.addAll(appendixRepositories);
 					queue.addAll(appendixRepositories);
 				}
