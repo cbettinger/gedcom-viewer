@@ -24,10 +24,10 @@ public class WebViewPanel extends JFXPanel {
 
 	private String body;
 
-	private boolean isZoomable;
+	private final boolean isZoomable;
 	private int zoom;
 
-	private AnchorPane root;
+	private final AnchorPane root;
 	private WebView webView;
 
 	protected JSObject js;

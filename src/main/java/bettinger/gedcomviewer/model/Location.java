@@ -46,7 +46,7 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 	private final GedcomTag tag;
 
 	private List<Location> superordinateLocations;
-	private List<Location> subordinateLocations;
+	private final List<Location> subordinateLocations;
 
 	Location(final GEDCOM gedcom, final GedcomTag tag) {
 		super(gedcom, tag.getId(), null);

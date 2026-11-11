@@ -20,7 +20,7 @@ public class Date implements Comparable<Date> {
 	private final String raw;
 	private final String[] components;
 	private final String formatted;
-	private LocalDate timestamp;
+	private final LocalDate timestamp;
 
 	private Date(final String raw) throws ParseException {
 		this.raw = raw == null ? "" : raw;

@@ -46,7 +46,7 @@ public class Individual extends IndividualFamilyCommonStructure {
 	private final org.folg.gedcom.model.Person wrappedPerson;
 
 	private List<Association> associations;
-	private List<Occupation> occupations;
+	private final List<Occupation> occupations;
 
 	Individual(final GEDCOM gedcom, final org.folg.gedcom.model.Person person) {
 		super(gedcom, person, person.getId());

@@ -47,14 +47,14 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 	private int locationCount;
 	private Individual proband;
 
-	private VBox configPane;
-	private ToggleGroup radioButtons;
-	private RadioButton locationsRadioButton;
-	private RadioButton lineageRadioButton;
-	private RadioButton ancestorsRadioButton;
-	private RadioButton descendantsRadioButton;
-	private IndividualsComboBox individualsComboBox;
-	private CheckBox pathsCheckBox;
+	private final VBox configPane;
+	private final ToggleGroup radioButtons;
+	private final RadioButton locationsRadioButton;
+	private final RadioButton lineageRadioButton;
+	private final RadioButton ancestorsRadioButton;
+	private final RadioButton descendantsRadioButton;
+	private final IndividualsComboBox individualsComboBox;
+	private final CheckBox pathsCheckBox;
 
 	public MapPanel() {
 		super(false, "map");

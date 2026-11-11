@@ -26,8 +26,8 @@ public class AutoCompletion extends PlainDocument {
 	private boolean hitBackspace = false;
 	private boolean hitBackspaceOnSelection;
 
-	private KeyListener editorKeyListener;
-	private FocusListener editorFocusListener;
+	private final KeyListener editorKeyListener;
+	private final FocusListener editorFocusListener;
 
 	private AutoCompletion(final JComboBox<?> comboBox) {
 		this.comboBox = comboBox;
