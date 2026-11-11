@@ -1,7 +1,6 @@
 package bettinger.gedcomviewer.views.tabs.map;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -227,7 +226,7 @@ public class MapPanel extends WebViewPanel implements IRecordCollectionView {
 						}
 					}
 
-					Collections.sort(factsOfIndividual, Comparator.comparing(Fact::getDate));
+					factsOfIndividual.sort(Comparator.comparing(Fact::getDate));
 
 					facts.add(factsOfIndividual);
 				});

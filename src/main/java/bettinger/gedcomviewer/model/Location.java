@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.folg.gedcom.model.GedcomTag;
 
@@ -97,7 +96,7 @@ public class Location extends Structure implements Record, NoteContainer, MediaC
 				final var sup = (Location) gedcom.getRecord(locTag.getRef());
 				sup.subordinateLocations.add(this);
 				return sup;
-			}).collect(Collectors.toList());
+			}).toList();
 		}
 	}
 
